@@ -1,0 +1,138 @@
+<program> -> <program> <subprogram>
+           | <subprogram>
+
+<subprogram> -> <fn> 
+              | <proc>
+<fn> -> FUNCTION ID <params_list> COLON <type> <stmts> END_FUNCTION SEMICOLON
+<proc> -> PROCEDURE ID <params_list> <stmts> END_PROCEDURE SEMICOLON
+<params_list> -> (<params>)
+               | ()
+<params> -> <params> SEMICOLON <param>
+          | <param>
+<param> -> ID COMMA <param>
+         | ID COLON <type>
+
+<subprogram_call> -> ID <call_params_list>
+<call_params_list> -> (<call_params>)
+                    | ()
+<call_params> -> <call_params> COMMA <expr>
+               | <expr>
+
+<stmts> -> <stmts> <stmt> SEMICOLON
+         | <stmt> SEMICOLON
+
+<stmt> -> <attr>
+        | <assign>
+        | <return>
+        | <if>
+        | <for>
+        | <subprogram_call>
+        | <expr>
+
+<assign> -> ID ATTR <expr>
+          | <array_access> ATTR <expr>
+          | MULT <pointer_result> ATTR <expr>
+<attr> -> VAR ID COLON <type> ATTR <expr>
+<type> -> TYPE 
+        | TYPE[]
+        | POINTER LT <type> GT
+<return> -> RETURN <expr>
+
+<if> -> IF <expr> THEN <stmts> <if_end> 
+<if_end> -> ELIF <expr> THEN <stmts> <if_end>
+          | ELSE <stmts> END_IF  
+          | END_IF
+
+<for> -> FOR ID IN <range_expr> <stmts> END_FOR
+       | FOR ID IN <array_expr> <stmts> END_FOR
+       | FOR (<attr> SEMICOLON <bool_expr> SEMICOLON <expr>) <stmts> END_FOR
+
+<expr> -> <number_expr> 
+        | <bool_expr>
+        | <string_expr>
+        | <range_expr>
+        | <array_expr>
+        | <pointer_expr>
+<comparable_expr> -> <relational_expr>
+                   | <string_expr>
+                   | <range_expr>
+                   | <array_expr>
+                   | <pointer_expr>
+
+<range_expr> -> RANGE <number_expr>
+              | <number_expr> RANGE
+              | <number_expr> RANGE <number_expr>
+              | <range_left_limit> <number_expr> RANGE <number_expr> <range_right_limit>
+              | <range_left_limit> <number_expr> RANGE <number_expr>
+              | <number_expr> RANGE <number_expr> <range_right_limit>
+<range_left_limit> -> (
+                    | [
+<range_right_limit> -> )
+                     | ]
+
+<pointer_expr> -> REF <pointer_result>
+<pointer_result> -> <primary_result>
+
+<number_expr> -> <number_expr> BAR <number_bitwise_xor_expr>
+               | <number_bitwise_xor_expr>
+<number_bitwise_xor_expr> -> <number_bitwise_xor_expr> XOR <number_bitwise_and_expr>
+                           | <number_bitwise_and_expr>
+<number_bitwise_and_expr> -> <number_bitwise_and_expr> REF <sum_expr>
+                           | <sum_expr>
+<sum_expr> -> <sum_expr> MINUS <mult_expr> 
+            | <sum_expr> PLUS <mult_expr>
+            | <mult_expr>
+<mult_expr> -> <mult_expr> DIV <sub_expr>
+             | <mult_expr> MULT <sub_expr>
+             | <mult_expr> MOD <sub_expr>
+             | <sub_expr>
+<sub_expr> -> MINUS <exp_expr>
+            | REV <exp_expr>
+            | <exp_expr>
+<exp_expr> -> <increment_expr> EXP <exp_expr>
+            | <increment_expr>
+<increment_expr> -> INCREMENT <number_result>
+                  | <number_result> INCREMENT
+                  | DECREMENT <number_result>
+                  | <number_result> DECREMENT
+                  | <number_result>
+<number_result> -> NUMBER 
+               | <primary_result>
+<bool_expr> -> <bool_expr> OR <and_expr>
+             | <and_expr>
+<and_expr> -> <and_expr> AND <bool_bitwise_or_expr>
+            | <bool_bitwise_or_expr>
+<bool_bitwise_or_expr> -> <bool_bitwise_or_expr> BAR <bool_bitwise_and_expr>
+                        | <bool_bitwise_and_expr>
+<bool_bitwise_and_expr> -> <bool_bitwise_and_expr> REF <equals_expr>
+                         | <equals_expr>
+<equals_expr> -> <equals_expr> EQ <comparable_expr>
+               | <equals_expr> NOT_EQ <comparable_expr>
+               | <comparable_expr>
+<relational_expr> -> <number_expr> LT <number_expr>
+                   | <number_expr> GT <number_expr>
+                   | <number_expr> LT_EQ <number_expr>
+                   | <number_expr> GT_EQ <number_expr>
+                   | <negative_expr>
+<negative_expr> -> NOT <bool_result>
+                 | <bool_result>
+<bool_result> -> BOOL 
+               | <primary_result>
+
+<string_expr> -> <string_expr> INCREMENT <string_result>
+               | <string_result>
+<string_result> -> STRING
+                 | CHAR
+                 | <primary_result>
+<array_expr> -> <array_result>
+<array_access> -> ID[<number_expr>]
+                | <subprogram_call>[<number_expr>]
+                | <array_access>[<number_expr>]
+<array_allocation> -> NEW <type>[<number_expr>]
+<array_result> -> <primary_result>
+                | <array_allocation>
+<primary_result> -> ID
+                | <subprogram_call>
+                | <array_access>
+                | MULT <pointer_result>
+                | (<expr>)
