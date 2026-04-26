@@ -87,7 +87,10 @@
 
 <return> -> RETURN <expr>
 <attr> -> VAR ID COLON <type> ATTR <expr>
-<type> -> TYPE | TYPE LEFT_BRACKET RIGHT_BRACKET | POINTER LT <type> GT
+<type> -> TYPE 
+        | TYPE LEFT_BRACKET RIGHT_BRACKET 
+        | POINTER LT <type> GT
+        | OPTION LT <type> GT
 <assign> -> <access> ATTR <expr>
           | <access> AND_ATTR <bool_expr>
           | <access> OR_ATTR <bool_expr>
@@ -100,10 +103,14 @@
           | <access> MINUS_ATTR <number_expr>
           | <access> MULT_ATTR <number_expr>
           | <access> DIV_ATTR <number_expr>
-
+  
 <!-- Estruturas condicionais -->
-<if> -> IF <expr> THEN <stmts> <if_end> 
+<if> -> IF <expr> THEN <stmts> <if_end>
+      | IF SOME ID IN <access> THEN <stmts> <if_end>
+      | IF NONE IN <access> THEN <stmts> <if_end>
 <if_end> -> ELIF <expr> THEN <stmts> <if_end>
+          | ELIF SOME ID IN <access> THEN <stmts> <if_end>
+          | ELIF NONE IN <access> THEN <stmts> <if_end>
           | ELSE <stmts> END_IF  
           | END_IF
 <switch> -> SWITCH <expr> <cases> END_SWITCH
@@ -113,6 +120,10 @@
 <case_list> -> <case_list> <case>
              | <case>
 <case> -> CASE <case_values> COLON <stmts>
+        | CASE SOME ID COLON <stmts>
+        | CASE NONE COLON <stmts>
+<case_values> -> <case_values> COMMA <access>
+               | <access>
 <default_case> -> DEFAULT COLON <stmts>
 
 <!-- Estruturas de repetição -->

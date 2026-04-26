@@ -69,6 +69,9 @@
 (default)                                      DEFAULT
 (endswitch)                                    END_SWITCH
 (in)                                           IN
+(some)                                         SOME
+(none)                                         NONE
+(option)                                       OPTION
 (fn)                                           FUNCTION
 (endfn)                                        END_FUNCTION
 (proc)                                         PROCEDURE
