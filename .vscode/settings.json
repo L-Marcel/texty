@@ -1,4 +1,7 @@
 {
   "html.autoClosingTags": false,
-  "html.format.enable": false
+  "html.format.enable": false,
+  "files.associations": {
+    "syntax.txt": "html"
+  }
 }

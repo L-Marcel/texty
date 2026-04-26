@@ -1,49 +1,88 @@
-# (int|float|double|long|byte|string|char|bool)  TYPE
-# (pointer)                                      POINTER
-# (\-\-)                                         DECREMENT
-# (\+\+)                                         INCREMENT
-# (\*\*)                                         EXP      
-# (==)                                           EQ
-# (&&)                                           AND
-# (\|\|)                                         OR
-# (&)                                            REF
-# (\|)                                           BAR
-# (!=)                                           NOT_EQ
-# (<=)                                           LT_EQ
-# (>=)                                           GT_EQ
-# (<)                                            LT
-# (>)                                            GT
-# (!)                                            NOT
-# (~)                                            REV
-# (%)                                            MOD
-# (^)                                            XOR
-# (=)                                            ATTR
-# (\-)                                           MINUS
-# (\+)                                           PLUS
-# (\*)                                           MULT
-# (\/)                                           DIV
-# ^"([^"\\]|\\.)*"$                              STRING
-# ^'([^"\\]|\\.)'$                               CHAR
-# [\d]*(\.[\d])?[\d]*                            NUMBER
-# (true|false)                                   BOOL
-# (new)                                          NEW
-# (var|const)                                    VAR
-# (\.\.)                                         RANGE
+(int|float|double|long|byte|string|char|bool)  TYPE
+(pointer)                                      POINTER
+(\-\-)                                         DECREMENT
+(\+\+)                                         INCREMENT
+(\*\*)                                         EXP      
+(==)                                           EQ
+(&=)                                           AND_ATTR
+(|=)                                           OR_ATTR
+(&&=)                                          LAZY_AND_ATTR
+(||=)                                          LAZY_OR_ATTR
+(%=)                                           MOD_ATTR
+(^=)                                           XOR_ATTR
+(\+=)                                          PLUS_ATTR
+(\+\+=)                                        CONCAT_ATTR
+(\-=)                                          MINUS_ATTR
+(\*=)                                          MULT_ATTR
+(\/=)                                          DIV_ATTR
+(&&)                                           AND
+(\|\|)                                         OR
+(&)                                            REF
+(\|)                                           BAR
+(!=)                                           NOT_EQ
+(<=)                                           LT_EQ
+(>=)                                           GT_EQ
+(<)                                            LT
+(>)                                            GT
+(!)                                            NOT
+(~)                                            REV
+(%)                                            MOD
+(^)                                            XOR
+(=)                                            ATTR
+(\-)                                           MINUS
+(\+)                                           PLUS
+(\*)                                           MULT
+(\/)                                           DIV
+^"([^"\\]|\\.)*"$                              STRING
+^'([^"\\]|\\.)'$                               CHAR
+[0-9]+(\.[0-9]+)?                              NUMBER
+(true|false)                                   BOOL
+(new)                                          NEW
+(var|const)                                    VAR
+(\.\.)                                         RANGE
 (\.)                                           DOT
-# (,)                                            COMMA
-# (:)                                            COLON
-# (;)                                            SEMICOLON
-# (if)                                           IF
-# (endif)                                        END_IF
-# (then)                                         THEN
-# (elif)                                         ELIF
-# (else)                                         ELSE
-# (for)                                          FOR
-# (endfor)                                       END_FOR
-# (in)                                           IN
-# (fn)                                           FUNCTION
-# (endfn)                                        END_FUNCTION
-# (proc)                                         PROCEDURE
-# (endproc)                                      END_PROCEDURE
-# (return)                                       RETURN
-# ^[_a-zA-Z][_a-zA-Z0-9]*                        ID
+(,)                                            COMMA
+(:)                                            COLON
+(::)                                           DOUBLE_COLON
+(;)                                            SEMICOLON
+(\()                                           LEFT_PAREN
+(\))                                           RIGHT_PAREN
+(\[)                                           LEFT_BRACKET
+(\])                                           RIGHT_BRACKET
+(\{)                                           LEFT_BRACE
+(\})                                           RIGHT_BRACE
+(if)                                           IF
+(endif)                                        END_IF
+(then)                                         THEN
+(elif)                                         ELIF
+(else)                                         ELSE
+(for)                                          FOR
+(while)                                        WHILE
+(endwhile)                                     END_WHILE
+(repeat)                                       REPEAT
+(until)                                        UNTIL
+(endfor)                                       END_FOR
+(break)                                        BREAK
+(continue)                                     CONTINUE
+(switch)                                       SWITCH
+(case)                                         CASE
+(default)                                      DEFAULT
+(endswitch)                                    END_SWITCH
+(in)                                           IN
+(fn)                                           FUNCTION
+(endfn)                                        END_FUNCTION
+(proc)                                         PROCEDURE
+(endproc)                                      END_PROCEDURE
+(enum)                                         ENUM
+(endenum)                                      END_ENUM
+(struct)                                       STRUCT
+(endstruct)                                    END_STRUCT
+(self)                                         SELF
+(impl)                                         IMPL
+(endimpl)                                      END_IMPL
+(trait)                                        TRAIT
+(endtrait)                                     END_TRAIT
+(return)                                       RETURN
+^[A-Z][_A-Z0-9]*                               CONST_NAME 
+^[A-Z][a-zA-Z0-9]*                             NAME
+^[_a-z][_a-zA-Z0-9]*                           ID
