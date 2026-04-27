@@ -201,7 +201,8 @@
                   | DECREMENT <number_result>
                   | <number_result> DECREMENT
                   | <number_result>
-<number_result> -> NUMBER 
+<number> -> INT | LONG | FLOAT | DOUBLE | BYTE
+<number_result> -> <number> 
                | <access>
 
 <!-- Expressões booleanas -->
@@ -238,7 +239,7 @@
 <array_expr> -> <array_expr> INCREMENT <array_result>
               | <array_result>
 <array_allocation> -> NEW <type> LEFT_BRACKET <number_expr> RIGHT_BRACKET
-                    | NEW <type> LEFT_BRACKET NUMBER RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
+                    | NEW <type> LEFT_BRACKET INT RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
 <array_allocation_values> -> <array_allocation_values> COMMA <expr> 
                            | <expr>
 <array_result> -> <access>
