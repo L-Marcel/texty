@@ -1,6 +1,6 @@
-#line 1 "grammar/build/lex.yy.c"
+#line 2 "grammar/build/lex.yy.c"
 
-#line 3 "grammar/build/lex.yy.c"
+#line 4 "grammar/build/lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -615,9 +615,9 @@ char *yytext;
   #include "syntax.tab.hh"
   #define YY_DECL yy::parser::symbol_type yylex(Context& context)
   void invalid_token(std::string token, int line);
-#line 618 "grammar/build/lex.yy.c"
+#line 619 "grammar/build/lex.yy.c"
 #define YY_NO_INPUT 1
-#line 620 "grammar/build/lex.yy.c"
+#line 621 "grammar/build/lex.yy.c"
 
 #define INITIAL 0
 
@@ -837,7 +837,7 @@ YY_DECL
 	{
 #line 10 "grammar/lexical.l"
 
-#line 840 "grammar/build/lex.yy.c"
+#line 841 "grammar/build/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1125,7 +1125,7 @@ case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
 #line 56 "grammar/lexical.l"
-{ return yy::parser::make_STRING(string(yytext)); }
+{ string content = string(yytext); return yy::parser::make_STRING(content.substr(1, content.length() - 2)); }
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
@@ -1442,7 +1442,7 @@ YY_RULE_SETUP
 #line 118 "grammar/lexical.l"
 ECHO;
 	YY_BREAK
-#line 1445 "grammar/build/lex.yy.c"
+#line 1446 "grammar/build/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

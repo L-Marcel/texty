@@ -53,7 +53,7 @@
 "+"                                            { return yy::parser::make_PLUS(); }
 "*"                                            { return yy::parser::make_MULT(); }
 "/"                                            { return yy::parser::make_DIV(); }
-\"([^"\\]|\\.)*\"                              { return yy::parser::make_STRING(string(yytext)); }
+\"([^"\\]|\\.)*\"                              { string content = string(yytext); return yy::parser::make_STRING(content.substr(1, content.length() - 2)); }
 ^'([^"\\]|\\.)'$                               { return yy::parser::make_CHAR(yytext[1]); }
 [0-9]+[lL]                                     { return yy::parser::make_LONG(stoll(yytext)); }
 [0-9]+[bB]                                     { return yy::parser::make_BYTE(stoi(yytext)); }

@@ -1,5 +1,49 @@
 #include "literals.h"
 
+#include "../references/references.hpp"
+
+// Debug
+void ByteNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": " +
+                        to_string(this->value));
+}
+void IntNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": " +
+                        to_string(this->value));
+}
+void LongNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": " +
+                        to_string(this->value));
+}
+void FloatNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": " +
+                        to_string(this->value));
+}
+void DoubleNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": " +
+                        to_string(this->value));
+}
+void BoolNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": " +
+                        to_string(this->value));
+}
+void StringNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": \\\"" +
+                        this->value + "\\\"");
+}
+void CharNode::print(ostream& os) const {
+  Debug::print_node(os, this,
+                    string(magic_enum::enum_name(this->get_type())) + ": '" +
+                        to_string(this->value) + "'");
+}
+
 // Tipagem
 NodeType ByteNode::get_type() const { return NodeType::BYTE; };
 NodeType IntNode::get_type() const { return NodeType::INT; };
