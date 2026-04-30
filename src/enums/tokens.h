@@ -1,4 +1,5 @@
-typedef enum Token {
+#pragma once
+enum class Token {
   TYPE,
   POINTER,
   DECREMENT,
@@ -94,4 +95,4 @@ typedef enum Token {
   CONST_NAME,
   NAME,
   ID
-} Token;
+};

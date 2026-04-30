@@ -1,9 +1,12 @@
+#pragma once
 #include <cstdint>
+#include <ostream>
 #include <string>
 
 using namespace std;
 
-enum NodeType {
+enum class NodeType {
+  UNKNOWN,
   VOID,
   BYTE,
   INT,
@@ -19,65 +22,56 @@ enum NodeType {
 
 struct Node {
   int line;
-  NodeType type;
 
-  virtual ~Node() = default;
+  virtual void print(ostream& os) const;
+  virtual NodeType get_type() const;
+  virtual ~Node();
 
  protected:
-  Node(int line, NodeType type) : line(line), type(type) {};
+  Node(int line);
 };
 
-struct Id : public Node {
-  string name;
+enum class BinaryOperation {
+  OR,
+  AND,
+  BITWISE_OR,
+  XOR,
+  BITWISE_AND,
+  EQ,
+  NOT_EQ,
+  LT,
+  GT,
+  LT_EQ,
+  GT_EQ,
+  IN,
+  INCREMENT,
+  PLUS,
+  MINUS,
+  MULT,
+  DIV,
+  MOD,
+  EXP
 };
 
-struct Byte : public Node {
-  Byte(int line) : Node(line, NodeType::BYTE) {};
-  uint8_t value;
+struct BinaryOperationNode : public Node {
+  BinaryOperation operation;
+  Node* left;
+  Node* right;
+
+  BinaryOperationNode(BinaryOperation operation, Node* left, Node* right);
+  void print(ostream& os) const override;
+  NodeType get_type() const override;
 };
 
-struct Int : public Node {
-  Int(int line) : Node(line, NodeType::INT) {};
-  int32_t value;
-};
+enum class UnaryOperation { MINUS, REV, NOT, REF, INCREMENT, DECREMENT };
 
-struct Long : public Node {
-  Long(int line) : Node(line, NodeType::LONG) {};
-  int64_t value;
-};
+struct UnaryOperationNode : public Node {
+  UnaryOperation operation;
+  bool postfix = false;
+  Node* node;
 
-struct Float : public Node {
-  Float(int line) : Node(line, NodeType::FLOAT) {};
-  float value;
-};
-
-struct Double : public Node {
-  Double(int line) : Node(line, NodeType::DOUBLE) {};
-  double value;
-};
-
-struct Bool : public Node {
-  Bool(int line) : Node(line, NodeType::BOOL) {};
-  bool value;
-};
-
-struct String : public Node {
-  String(int line) : Node(line, NodeType::STRING) {};
-  string value;
-};
-
-struct Char : public Node {
-  Char(int line) : Node(line, NodeType::CHAR) {};
-  char value;
-};
-
-struct Pointer : public Node {
-  Pointer(int line) : Node(line, NodeType::POINTER) {};
-  Node* value;
-};
-
-struct Option : public Node {
-  Option(int line) : Node(line, NodeType::OPTION) {};
-  bool has_value;
-  Node* value;
+  UnaryOperationNode(UnaryOperation operation, Node* node);
+  UnaryOperationNode(bool postfix, UnaryOperation operation, Node* node);
+  void print(ostream& os) const override;
+  NodeType get_type() const override;
 };

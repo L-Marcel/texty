@@ -3,5 +3,16 @@
   "html.format.enable": false,
   "files.associations": {
     "syntax.txt": "html"
+  },
+  "[bison]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
+  },
+  "[flex]": {
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false
+  },
+  "material-icon-theme.folders.associations": {
+    "grammar": "syntax"
   }
 }

@@ -1,11 +1,21 @@
-#include <references.h>
+#include "references.hpp"
+
+References* References::_instance = nullptr;
+
+References::References() {};
+References* References::get_instance() {
+  if (References::_instance == nullptr) {
+    References::_instance = new References();
+  }
+
+  return References::_instance;
+};
 
 void References::push_scope() { this->scopes.push_back(Scope()); };
 void References::pop_scope() { this->scopes.pop_back(); };
 
-void References::declare_var(string name, NodeType type) {};
-void References::declare_function(string name) {};
-void References::declare_subprogram(string name) {};
+void References::declare(string name, NodeType type, ReferenceType reference) {
+};
 
 Reference* References::get_reference(string name) {
   for (int i = this->scopes.size() - 1; i >= 0; i--) {

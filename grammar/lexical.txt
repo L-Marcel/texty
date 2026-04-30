@@ -1,5 +1,13 @@
-(int|float|double|long|byte|string|char|bool)  TYPE
-(pointer)                                      POINTER
+(int)                                          TYPE_INT
+(float)                                        TYPE_FLOAT
+(double)                                       TYPE_DOUBLE
+(long)                                         TYPE_LONG
+(byte)                                         TYPE_BYTE
+(string)                                       TYPE_STRING
+(char)                                         TYPE_CHAR
+(bool)                                         TYPE_BOOL
+(pointer)                                      TYPE_POINTER
+(option)                                       TYPE_OPTION
 (\-\-)                                         DECREMENT
 (\+\+)                                         INCREMENT
 (\*\*)                                         EXP      
@@ -42,7 +50,8 @@
 [0-9]+                                         INT
 (true|false)                                   BOOL
 (new)                                          NEW
-(var|const)                                    VAR
+(var)                                          VAR
+(const)                                        CONST
 (\.\.)                                         RANGE
 (\.)                                           DOT
 (,)                                            COMMA
@@ -75,7 +84,6 @@
 (in)                                           IN
 (some)                                         SOME
 (none)                                         NONE
-(option)                                       OPTION
 (fn)                                           FUNCTION
 (endfn)                                        END_FUNCTION
 (proc)                                         PROCEDURE
