@@ -201,9 +201,11 @@
         | BOOL 
         | STRING 
         | CHAR 
+        | NONE
         | <array_allocation> 
         | <struct_allocation> 
         | <access>
+        | SOME LEFT_PAREN <expr> RIGHT_PAREN
         | LEFT_PAREN <expr> RIGHT_PAREN
 
 <!-- Alocações -->

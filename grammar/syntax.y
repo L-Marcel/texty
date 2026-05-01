@@ -1,20 +1,18 @@
 %language "c++"
 
 %code requires {
-  #include <string>
-  #include <cstdint>
-  #include "../src/syntax/main.h"
-  #include "../src/context.h"
+  #include "../src/main.hpp"
 }
 
 %define api.token.constructor 
 %define api.value.type variant
+%define parse.error custom
 %define parse.assert
 
-%param { Context& context }
+%param { Context& ctx }
 
 %code {
-  yy::parser::symbol_type yylex(Context& context);
+  yy::parser::symbol_type yylex(Context& ctx);
 }
 
 %token <uint8_t>     BYTE
@@ -27,16 +25,16 @@
 %token <std::string> STRING
 %token <char>        CHAR
 
-%token <NodeType>    TYPE_BYTE
-%token <NodeType>    TYPE_INT
-%token <NodeType>    TYPE_LONG
-%token <NodeType>    TYPE_FLOAT
-%token <NodeType>    TYPE_DOUBLE
-%token <NodeType>    TYPE_BOOL
-%token <NodeType>    TYPE_STRING
-%token <NodeType>    TYPE_CHAR
-%token <NodeType>    TYPE_POINTER
-%token <NodeType>    TYPE_OPTION
+%token <Type>    TYPE_BYTE
+%token <Type>    TYPE_INT
+%token <Type>    TYPE_LONG
+%token <Type>    TYPE_FLOAT
+%token <Type>    TYPE_DOUBLE
+%token <Type>    TYPE_BOOL
+%token <Type>    TYPE_STRING
+%token <Type>    TYPE_CHAR
+%token <Type>    TYPE_POINTER
+%token <Type>    TYPE_OPTION
 
 %token DECREMENT INCREMENT EXP EQ AND_ATTR OR_ATTR
 %token LAZY_AND_ATTR LAZY_OR_ATTR MOD_ATTR XOR_ATTR PLUS_ATTR
@@ -55,7 +53,7 @@
 
 %%
 program: sum_expr {
-  context.root = $1; // "Entrega" a árvore pronta para o contexto
+  ctx.root = $1;
 };
 
 sum_expr: sum_expr PLUS mult_expr {
@@ -107,20 +105,20 @@ postfix_expr: term INCREMENT {
 };
 
 term: INT {
-  $$ = new IntNode(context.line, $1);
+  $$ = new IntNode(ctx.line, $1);
 } | LONG {
-  $$ = new LongNode(context.line, $1);
+  $$ = new LongNode(ctx.line, $1);
 } | FLOAT {
-  $$ = new FloatNode(context.line, $1);
+  $$ = new FloatNode(ctx.line, $1);
 } | DOUBLE {
-  $$ = new DoubleNode(context.line, $1);
+  $$ = new DoubleNode(ctx.line, $1);
 } | BYTE {
-  $$ = new ByteNode(context.line, $1);
+  $$ = new ByteNode(ctx.line, $1);
 } | BOOL {
-  $$ = new BoolNode(context.line, $1);
+  $$ = new BoolNode(ctx.line, $1);
 } | STRING {
-  $$ = new StringNode(context.line, $1);
+  $$ = new StringNode(ctx.line, $1);
 } | CHAR {
-  $$ = new CharNode(context.line, $1);
+  $$ = new CharNode(ctx.line, $1);
 };
 %%

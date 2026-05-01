@@ -1,25 +1,25 @@
 %{
-  #include "../src/syntax/main.h"
+  #include "../src/main.hpp"
   #include "syntax.tab.hh"
-  #define YY_DECL yy::parser::symbol_type yylex(Context& context)
-  void invalid_token(std::string token, int line);
+  #define YY_DECL yy::parser::symbol_type yylex(Context& ctx)
+  void invalid_token(std::string token, Context& ctx);
 %}
 
 %option noyywrap nounput noinput
 
 %%
-\n+                                            { context.line += yyleng; }
+\n+                                            { ctx.line += yyleng; }
 [ \t\r]+                                       {}
-"int"                                          { return yy::parser::make_TYPE_INT(NodeType::INT); }
-"float"                                        { return yy::parser::make_TYPE_FLOAT(NodeType::FLOAT); }
-"double"                                       { return yy::parser::make_TYPE_DOUBLE(NodeType::DOUBLE); }
-"long"                                         { return yy::parser::make_TYPE_LONG(NodeType::LONG); }
-"byte"                                         { return yy::parser::make_TYPE_BYTE(NodeType::BYTE); }
-"string"                                       { return yy::parser::make_TYPE_STRING(NodeType::STRING); }
-"char"                                         { return yy::parser::make_TYPE_CHAR(NodeType::CHAR); }
-"bool"                                         { return yy::parser::make_TYPE_BOOL(NodeType::BOOL); }
-"pointer"                                      { return yy::parser::make_TYPE_POINTER(NodeType::POINTER); }
-"option"                                       { return yy::parser::make_TYPE_OPTION(NodeType::OPTION); }
+"int"                                          { return yy::parser::make_TYPE_INT(Type::INT); }
+"float"                                        { return yy::parser::make_TYPE_FLOAT(Type::FLOAT); }
+"double"                                       { return yy::parser::make_TYPE_DOUBLE(Type::DOUBLE); }
+"long"                                         { return yy::parser::make_TYPE_LONG(Type::LONG); }
+"byte"                                         { return yy::parser::make_TYPE_BYTE(Type::BYTE); }
+"string"                                       { return yy::parser::make_TYPE_STRING(Type::STRING); }
+"char"                                         { return yy::parser::make_TYPE_CHAR(Type::CHAR); }
+"bool"                                         { return yy::parser::make_TYPE_BOOL(Type::BOOL); }
+"pointer"                                      { return yy::parser::make_TYPE_POINTER(Type::POINTER); }
+"option"                                       { return yy::parser::make_TYPE_OPTION(Type::OPTION); }
 "--"                                           { return yy::parser::make_DECREMENT(); }
 "++"                                           { return yy::parser::make_INCREMENT(); }
 "**"                                           { return yy::parser::make_EXP(); }      
@@ -114,9 +114,10 @@
 [A-Z][_A-Z0-9]*                                { return yy::parser::make_CONST_NAME(string(yytext)); } 
 [A-Z][a-zA-Z0-9]*                              { return yy::parser::make_NAME(string(yytext)); }
 [_a-z][_a-zA-Z0-9]*                            { return yy::parser::make_ID(string(yytext)); }
-.                                              { invalid_token(yytext, context.line); }
+.                                              { invalid_token(yytext, ctx); return yy::parser::make_YYerror(); }
 %%
 
-void invalid_token(std::string token, int line) {
-  printf("Erro léxico: caractere invalido '%s' na linha %d!\n", token.c_str(), line);
+void invalid_token(std::string token, Context& ctx) {
+  ctx.has_lexical_error = true;
+  fprintf(stderr, "[ERRO] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);
 }

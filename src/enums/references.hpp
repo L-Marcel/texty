@@ -1,0 +1,1 @@
+enum class ReferenceType { VARIABLE, ENUM, STRUCT, TRAIT, FUNCTION, PROCEDURE };

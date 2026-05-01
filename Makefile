@@ -8,12 +8,7 @@ BISON_CC = $(BUILD_DIR)/syntax.tab.cc
 BISON_HH = $(BUILD_DIR)/syntax.tab.hh
 FLEX_C = $(BUILD_DIR)/lex.yy.c
 
-SRCS = src/main.cpp \
-       src/syntax/tree.cpp \
-       src/syntax/literals.cpp \
-       src/syntax/specials.cpp \
-       src/references/references.cpp \
-			 src/debug/debug.cpp
+SRCS = $(shell find src -name "*.cpp")
 
 all: $(TARGET)
 
@@ -31,10 +26,10 @@ $(FLEX_C): $(GRAMMAR_DIR)/lexical.l $(BISON_HH)
 ast:
 	dot -Tpng ast.dot -o ast.png
 
-run:
+run: all
 	./$(TARGET)
 
-pendrive:
+pendrive: all
 	/lib64/ld-linux-x86-64.so.2 ./$(TARGET)
 
 clean:

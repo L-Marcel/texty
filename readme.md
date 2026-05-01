@@ -13,7 +13,7 @@ Instale:
 - bison (3.8.2)
 
 Opcionalmente:
-- dot / graphviz (2.43.0)
+- graphviz (2.43.0)
 
 ### Build
 
