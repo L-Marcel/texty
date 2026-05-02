@@ -1,6 +1,6 @@
 #include "id.hpp"
 
-#include "../references/references.hpp"
+#include "../../../references/references.hpp"
 
 // Debug
 void IdNode::print(ostream& os) const {
@@ -21,8 +21,7 @@ Value IdNode::evaluate() {
     return evaluatable->evaluate();
   };
 
-  runtime_error("[ERROR] Tentativa inválida de acesso");
-  return Value(Void{});
+  throw error("tentativa inválida de acesso", this->line);
 };
 
 // Construtores

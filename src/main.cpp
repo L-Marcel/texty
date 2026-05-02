@@ -1,5 +1,6 @@
 #include "main.hpp"
 
+#include "dot.hpp"
 #include "syntax.tab.hh"
 
 int main() {
@@ -8,14 +9,22 @@ int main() {
 
   std::cout << "Digite seu codigo (Ctrl+D para encerrar):" << std::endl;
 
-  int resultado = parser.parse();
+  try {
+    int resultado = parser.parse();
 
-  if (resultado == 0) {
-    std::cout << "[INFO] Arvore sintática montada sem erros" << std::endl;
-    print_ast(ctx);
-  } else {
-    std::cerr << "[ERRO] Falha na compilacao" << std::endl;
-  };
+    if (resultado == 0) {
+      std::cout << "[INFO] Arvore sintática montada sem erros" << std::endl;
+      Dot::create(ctx);
+    } else {
+      std::cerr << "[ERRO] Falha na compilacao" << std::endl;
+    };
 
-  return resultado;
+    return resultado;
+  } catch (const error& e) {
+    std::cerr << e.what() << std::endl;
+    return 0;
+  } catch (const std::exception& e) {
+    std::cerr << "[ERRO CRÍTICO] " << e.what() << std::endl;
+    return 0;
+  }
 };

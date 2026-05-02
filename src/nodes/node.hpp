@@ -11,3 +11,5 @@ struct Node {
  protected:
   Node(int line);
 };
+
+// TODO: Adicionar nó executável

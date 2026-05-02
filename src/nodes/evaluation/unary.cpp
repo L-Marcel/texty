@@ -9,9 +9,12 @@ void UnaryOperationNode::print(ostream& os) const {
 // Tipagem
 Type UnaryOperationNode::get_type() const { return this->node->get_type(); };
 
+// Avaliação
+Value UnaryOperationNode::evaluate() {
+  throw error("operação não definida", this->line);
+};
+
 // Construtores
-ExpressionNode::~ExpressionNode() = default;
-ExpressionNode::ExpressionNode(int line) : Node(line) {};
 UnaryOperationNode::UnaryOperationNode(UnaryOperation operation,
                                        ExpressionNode* node)
     : ExpressionNode(node->line), operation(operation), node(node) {};

@@ -1,5 +1,11 @@
+#include "errors.hpp"
+
 #include "main.hpp"
 #include "syntax.tab.hh"
+
+error::error(const std::string& message, int line)
+    : runtime_error("[ERRO] Erro semântico: " + message + " na linha " +
+                    to_string(line)) {};
 
 void yy::parser::error(const std::string& msg) {};
 void yy::parser::report_syntax_error(const yy::parser::context& yyctx) const {

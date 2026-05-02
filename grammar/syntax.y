@@ -48,12 +48,80 @@
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
-%type <Node*> program sum_expr mult_expr unary_expr exp_expr postfix_expr term
+%type <ExpressionNode*> program
+%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
+%type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
+%type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
 %start program
 
 %%
-program: sum_expr {
+program: expr {
   ctx.root = $1;
+  ctx.root->get_type();
+};
+
+// TODO: Restante das regras
+
+expr: or_expr {
+  $$ = $1;
+};
+
+or_expr: or_expr OR and_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::OR, $1, $3);
+} | and_expr {
+  $$ = $1;
+};
+
+and_expr: and_expr AND bit_or_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::AND, $1, $3);
+} | bit_or_expr {
+  $$ = $1;
+};
+
+bit_or_expr: bit_or_expr BAR bit_xor_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::BITWISE_OR, $1, $3);
+} | bit_xor_expr {
+  $$ = $1;
+};
+
+bit_xor_expr: bit_xor_expr XOR bit_and_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::XOR, $1, $3);
+} | bit_and_expr {
+  $$ = $1;
+};
+
+bit_and_expr: bit_and_expr REF equals_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::BITWISE_AND, $1, $3);
+} | equals_expr {
+  $$ = $1;
+};
+
+equals_expr: equals_expr EQ rel_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::EQ, $1, $3);
+} | equals_expr NOT_EQ rel_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::NOT_EQ, $1, $3);
+} | rel_expr {
+  $$ = $1;
+};
+
+rel_expr: rel_expr LT concat_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::LT, $1, $3);
+} | rel_expr GT concat_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::GT, $1, $3);
+} | rel_expr LT_EQ concat_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::LT_EQ, $1, $3);
+} | rel_expr GT_EQ concat_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::GT_EQ, $1, $3);
+} | rel_expr IN concat_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::IN, $1, $3);
+} | concat_expr {
+  $$ = $1;
+};
+
+concat_expr: concat_expr INCREMENT sum_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::INCREMENT, $1, $3);
+} | sum_expr {
+  $$ = $1;
 };
 
 sum_expr: sum_expr PLUS mult_expr {
@@ -120,5 +188,12 @@ term: INT {
   $$ = new StringNode(ctx.line, $1);
 } | CHAR {
   $$ = new CharNode(ctx.line, $1);
+} | NONE {
+  $$ = new OptionNode(ctx.line, Option());
+} | SOME LEFT_PAREN expr RIGHT_PAREN {
+  //Value* value = $2->evaluate();
+  $$ = new OptionNode(ctx.line, Option());
+} | LEFT_PAREN expr RIGHT_PAREN {
+  $$ = $2;
 };
 %%

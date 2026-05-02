@@ -4,6 +4,6 @@
 struct OptionNode : public ExpressionNode {
   Option value;
 
-  OptionNode(int line);
+  OptionNode(int line, Option value);
   Value evaluate() override;
 };
