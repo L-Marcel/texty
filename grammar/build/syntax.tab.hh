@@ -408,8 +408,8 @@ namespace yy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
-      // program
       // expr
+      // range_expr
       // or_expr
       // and_expr
       // bit_or_expr
@@ -426,6 +426,63 @@ namespace yy {
       // term
       char dummy1[sizeof (ExpressionNode*)];
 
+      // root
+      // program
+      // program_slice
+      // subprogram
+      // fn
+      // proc
+      // params_self_list
+      // params_list
+      // params
+      // param
+      // id_list
+      // subprogram_call
+      // call_params_list
+      // call_params
+      // enum
+      // enum_values
+      // struct
+      // struct_attrs
+      // struct_attr
+      // trait
+      // trait_subprograms
+      // trait_subprogram
+      // trait_fn
+      // trait_proc
+      // impl
+      // impl_subprograms
+      // impl_subprogram
+      // impl_fn
+      // impl_proc
+      // access
+      // access_base
+      // id
+      // name
+      // stmts
+      // stmt
+      // return
+      // attr
+      // type
+      // assign
+      // if
+      // if_end
+      // switch
+      // cases
+      // case_list
+      // case
+      // case_values
+      // default_case
+      // for
+      // while
+      // repeat
+      // range_interval
+      // array_allocation
+      // array_allocation_values
+      // struct_allocation
+      // struct_allocation_values
+      char dummy2[sizeof (Node*)];
+
       // TYPE_BYTE
       // TYPE_INT
       // TYPE_LONG
@@ -436,34 +493,34 @@ namespace yy {
       // TYPE_CHAR
       // TYPE_POINTER
       // TYPE_OPTION
-      char dummy2[sizeof (Type)];
+      char dummy3[sizeof (Type)];
 
       // BOOL
-      char dummy3[sizeof (bool)];
+      char dummy4[sizeof (bool)];
 
       // CHAR
-      char dummy4[sizeof (char)];
+      char dummy5[sizeof (char)];
 
       // DOUBLE
-      char dummy5[sizeof (double)];
+      char dummy6[sizeof (double)];
 
       // FLOAT
-      char dummy6[sizeof (float)];
+      char dummy7[sizeof (float)];
 
       // INT
-      char dummy7[sizeof (int32_t)];
+      char dummy8[sizeof (int32_t)];
 
       // LONG
-      char dummy8[sizeof (int64_t)];
+      char dummy9[sizeof (int64_t)];
 
       // ID
       // NAME
       // CONST_NAME
       // STRING
-      char dummy9[sizeof (std::string)];
+      char dummy10[sizeof (std::string)];
 
       // BYTE
-      char dummy10[sizeof (uint8_t)];
+      char dummy11[sizeof (uint8_t)];
     };
 
     /// The size of the largest semantic type.
@@ -569,51 +626,55 @@ namespace yy {
     VAR = 314,                     // VAR
     CONST = 315,                   // CONST
     RANGE = 316,                   // RANGE
-    DOT = 317,                     // DOT
-    COMMA = 318,                   // COMMA
-    COLON = 319,                   // COLON
-    DOUBLE_COLON = 320,            // DOUBLE_COLON
-    SEMICOLON = 321,               // SEMICOLON
-    LEFT_PAREN = 322,              // LEFT_PAREN
-    RIGHT_PAREN = 323,             // RIGHT_PAREN
-    LEFT_BRACKET = 324,            // LEFT_BRACKET
-    RIGHT_BRACKET = 325,           // RIGHT_BRACKET
-    LEFT_BRACE = 326,              // LEFT_BRACE
-    RIGHT_BRACE = 327,             // RIGHT_BRACE
-    IF = 328,                      // IF
-    END_IF = 329,                  // END_IF
-    THEN = 330,                    // THEN
-    ELIF = 331,                    // ELIF
-    ELSE = 332,                    // ELSE
-    FOR = 333,                     // FOR
-    WHILE = 334,                   // WHILE
-    END_WHILE = 335,               // END_WHILE
-    REPEAT = 336,                  // REPEAT
-    UNTIL = 337,                   // UNTIL
-    END_FOR = 338,                 // END_FOR
-    BREAK = 339,                   // BREAK
-    CONTINUE = 340,                // CONTINUE
-    SWITCH = 341,                  // SWITCH
-    CASE = 342,                    // CASE
-    DEFAULT = 343,                 // DEFAULT
-    END_SWITCH = 344,              // END_SWITCH
-    IN = 345,                      // IN
-    SOME = 346,                    // SOME
-    NONE = 347,                    // NONE
-    FUNCTION = 348,                // FUNCTION
-    END_FUNCTION = 349,            // END_FUNCTION
-    PROCEDURE = 350,               // PROCEDURE
-    END_PROCEDURE = 351,           // END_PROCEDURE
-    ENUM = 352,                    // ENUM
-    END_ENUM = 353,                // END_ENUM
-    STRUCT = 354,                  // STRUCT
-    END_STRUCT = 355,              // END_STRUCT
-    SELF = 356,                    // SELF
-    IMPL = 357,                    // IMPL
-    END_IMPL = 358,                // END_IMPL
-    TRAIT = 359,                   // TRAIT
-    END_TRAIT = 360,               // END_TRAIT
-    RETURN = 361                   // RETURN
+    RANGE_INC = 317,               // RANGE_INC
+    RANGE_EXC = 318,               // RANGE_EXC
+    RANGE_EXC_INC = 319,           // RANGE_EXC_INC
+    DOT = 320,                     // DOT
+    COMMA = 321,                   // COMMA
+    COLON = 322,                   // COLON
+    DOUBLE_COLON = 323,            // DOUBLE_COLON
+    SEMICOLON = 324,               // SEMICOLON
+    LEFT_PAREN = 325,              // LEFT_PAREN
+    RIGHT_PAREN = 326,             // RIGHT_PAREN
+    LEFT_BRACKET = 327,            // LEFT_BRACKET
+    RIGHT_BRACKET = 328,           // RIGHT_BRACKET
+    LEFT_BRACE = 329,              // LEFT_BRACE
+    RIGHT_BRACE = 330,             // RIGHT_BRACE
+    IF = 331,                      // IF
+    END_IF = 332,                  // END_IF
+    THEN = 333,                    // THEN
+    ELIF = 334,                    // ELIF
+    ELSE = 335,                    // ELSE
+    FOR = 336,                     // FOR
+    WHILE = 337,                   // WHILE
+    END_WHILE = 338,               // END_WHILE
+    REPEAT = 339,                  // REPEAT
+    UNTIL = 340,                   // UNTIL
+    END_FOR = 341,                 // END_FOR
+    BREAK = 342,                   // BREAK
+    CONTINUE = 343,                // CONTINUE
+    SWITCH = 344,                  // SWITCH
+    CASE = 345,                    // CASE
+    DEFAULT = 346,                 // DEFAULT
+    END_SWITCH = 347,              // END_SWITCH
+    IN = 348,                      // IN
+    SOME = 349,                    // SOME
+    NONE = 350,                    // NONE
+    FUNCTION = 351,                // FUNCTION
+    END_FUNCTION = 352,            // END_FUNCTION
+    PROCEDURE = 353,               // PROCEDURE
+    END_PROCEDURE = 354,           // END_PROCEDURE
+    ENUM = 355,                    // ENUM
+    END_ENUM = 356,                // END_ENUM
+    STRUCT = 357,                  // STRUCT
+    END_STRUCT = 358,              // END_STRUCT
+    SELF = 359,                    // SELF
+    IMPL = 360,                    // IMPL
+    END_IMPL = 361,                // END_IMPL
+    TRAIT = 362,                   // TRAIT
+    END_TRAIT = 363,               // END_TRAIT
+    RETURN = 364,                  // RETURN
+    DO = 365                       // DO
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -630,7 +691,7 @@ namespace yy {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 107, ///< Number of tokens.
+        YYNTOKENS = 111, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -694,68 +755,127 @@ namespace yy {
         S_VAR = 59,                              // VAR
         S_CONST = 60,                            // CONST
         S_RANGE = 61,                            // RANGE
-        S_DOT = 62,                              // DOT
-        S_COMMA = 63,                            // COMMA
-        S_COLON = 64,                            // COLON
-        S_DOUBLE_COLON = 65,                     // DOUBLE_COLON
-        S_SEMICOLON = 66,                        // SEMICOLON
-        S_LEFT_PAREN = 67,                       // LEFT_PAREN
-        S_RIGHT_PAREN = 68,                      // RIGHT_PAREN
-        S_LEFT_BRACKET = 69,                     // LEFT_BRACKET
-        S_RIGHT_BRACKET = 70,                    // RIGHT_BRACKET
-        S_LEFT_BRACE = 71,                       // LEFT_BRACE
-        S_RIGHT_BRACE = 72,                      // RIGHT_BRACE
-        S_IF = 73,                               // IF
-        S_END_IF = 74,                           // END_IF
-        S_THEN = 75,                             // THEN
-        S_ELIF = 76,                             // ELIF
-        S_ELSE = 77,                             // ELSE
-        S_FOR = 78,                              // FOR
-        S_WHILE = 79,                            // WHILE
-        S_END_WHILE = 80,                        // END_WHILE
-        S_REPEAT = 81,                           // REPEAT
-        S_UNTIL = 82,                            // UNTIL
-        S_END_FOR = 83,                          // END_FOR
-        S_BREAK = 84,                            // BREAK
-        S_CONTINUE = 85,                         // CONTINUE
-        S_SWITCH = 86,                           // SWITCH
-        S_CASE = 87,                             // CASE
-        S_DEFAULT = 88,                          // DEFAULT
-        S_END_SWITCH = 89,                       // END_SWITCH
-        S_IN = 90,                               // IN
-        S_SOME = 91,                             // SOME
-        S_NONE = 92,                             // NONE
-        S_FUNCTION = 93,                         // FUNCTION
-        S_END_FUNCTION = 94,                     // END_FUNCTION
-        S_PROCEDURE = 95,                        // PROCEDURE
-        S_END_PROCEDURE = 96,                    // END_PROCEDURE
-        S_ENUM = 97,                             // ENUM
-        S_END_ENUM = 98,                         // END_ENUM
-        S_STRUCT = 99,                           // STRUCT
-        S_END_STRUCT = 100,                      // END_STRUCT
-        S_SELF = 101,                            // SELF
-        S_IMPL = 102,                            // IMPL
-        S_END_IMPL = 103,                        // END_IMPL
-        S_TRAIT = 104,                           // TRAIT
-        S_END_TRAIT = 105,                       // END_TRAIT
-        S_RETURN = 106,                          // RETURN
-        S_YYACCEPT = 107,                        // $accept
-        S_program = 108,                         // program
-        S_expr = 109,                            // expr
-        S_or_expr = 110,                         // or_expr
-        S_and_expr = 111,                        // and_expr
-        S_bit_or_expr = 112,                     // bit_or_expr
-        S_bit_xor_expr = 113,                    // bit_xor_expr
-        S_bit_and_expr = 114,                    // bit_and_expr
-        S_equals_expr = 115,                     // equals_expr
-        S_rel_expr = 116,                        // rel_expr
-        S_concat_expr = 117,                     // concat_expr
-        S_sum_expr = 118,                        // sum_expr
-        S_mult_expr = 119,                       // mult_expr
-        S_unary_expr = 120,                      // unary_expr
-        S_exp_expr = 121,                        // exp_expr
-        S_postfix_expr = 122,                    // postfix_expr
-        S_term = 123                             // term
+        S_RANGE_INC = 62,                        // RANGE_INC
+        S_RANGE_EXC = 63,                        // RANGE_EXC
+        S_RANGE_EXC_INC = 64,                    // RANGE_EXC_INC
+        S_DOT = 65,                              // DOT
+        S_COMMA = 66,                            // COMMA
+        S_COLON = 67,                            // COLON
+        S_DOUBLE_COLON = 68,                     // DOUBLE_COLON
+        S_SEMICOLON = 69,                        // SEMICOLON
+        S_LEFT_PAREN = 70,                       // LEFT_PAREN
+        S_RIGHT_PAREN = 71,                      // RIGHT_PAREN
+        S_LEFT_BRACKET = 72,                     // LEFT_BRACKET
+        S_RIGHT_BRACKET = 73,                    // RIGHT_BRACKET
+        S_LEFT_BRACE = 74,                       // LEFT_BRACE
+        S_RIGHT_BRACE = 75,                      // RIGHT_BRACE
+        S_IF = 76,                               // IF
+        S_END_IF = 77,                           // END_IF
+        S_THEN = 78,                             // THEN
+        S_ELIF = 79,                             // ELIF
+        S_ELSE = 80,                             // ELSE
+        S_FOR = 81,                              // FOR
+        S_WHILE = 82,                            // WHILE
+        S_END_WHILE = 83,                        // END_WHILE
+        S_REPEAT = 84,                           // REPEAT
+        S_UNTIL = 85,                            // UNTIL
+        S_END_FOR = 86,                          // END_FOR
+        S_BREAK = 87,                            // BREAK
+        S_CONTINUE = 88,                         // CONTINUE
+        S_SWITCH = 89,                           // SWITCH
+        S_CASE = 90,                             // CASE
+        S_DEFAULT = 91,                          // DEFAULT
+        S_END_SWITCH = 92,                       // END_SWITCH
+        S_IN = 93,                               // IN
+        S_SOME = 94,                             // SOME
+        S_NONE = 95,                             // NONE
+        S_FUNCTION = 96,                         // FUNCTION
+        S_END_FUNCTION = 97,                     // END_FUNCTION
+        S_PROCEDURE = 98,                        // PROCEDURE
+        S_END_PROCEDURE = 99,                    // END_PROCEDURE
+        S_ENUM = 100,                            // ENUM
+        S_END_ENUM = 101,                        // END_ENUM
+        S_STRUCT = 102,                          // STRUCT
+        S_END_STRUCT = 103,                      // END_STRUCT
+        S_SELF = 104,                            // SELF
+        S_IMPL = 105,                            // IMPL
+        S_END_IMPL = 106,                        // END_IMPL
+        S_TRAIT = 107,                           // TRAIT
+        S_END_TRAIT = 108,                       // END_TRAIT
+        S_RETURN = 109,                          // RETURN
+        S_DO = 110,                              // DO
+        S_YYACCEPT = 111,                        // $accept
+        S_root = 112,                            // root
+        S_program = 113,                         // program
+        S_program_slice = 114,                   // program_slice
+        S_subprogram = 115,                      // subprogram
+        S_fn = 116,                              // fn
+        S_proc = 117,                            // proc
+        S_params_self_list = 118,                // params_self_list
+        S_params_list = 119,                     // params_list
+        S_params = 120,                          // params
+        S_param = 121,                           // param
+        S_id_list = 122,                         // id_list
+        S_subprogram_call = 123,                 // subprogram_call
+        S_call_params_list = 124,                // call_params_list
+        S_call_params = 125,                     // call_params
+        S_enum = 126,                            // enum
+        S_enum_values = 127,                     // enum_values
+        S_struct = 128,                          // struct
+        S_struct_attrs = 129,                    // struct_attrs
+        S_struct_attr = 130,                     // struct_attr
+        S_trait = 131,                           // trait
+        S_trait_subprograms = 132,               // trait_subprograms
+        S_trait_subprogram = 133,                // trait_subprogram
+        S_trait_fn = 134,                        // trait_fn
+        S_trait_proc = 135,                      // trait_proc
+        S_impl = 136,                            // impl
+        S_impl_subprograms = 137,                // impl_subprograms
+        S_impl_subprogram = 138,                 // impl_subprogram
+        S_impl_fn = 139,                         // impl_fn
+        S_impl_proc = 140,                       // impl_proc
+        S_access = 141,                          // access
+        S_access_base = 142,                     // access_base
+        S_id = 143,                              // id
+        S_name = 144,                            // name
+        S_stmts = 145,                           // stmts
+        S_stmt = 146,                            // stmt
+        S_return = 147,                          // return
+        S_attr = 148,                            // attr
+        S_type = 149,                            // type
+        S_assign = 150,                          // assign
+        S_if = 151,                              // if
+        S_if_end = 152,                          // if_end
+        S_switch = 153,                          // switch
+        S_cases = 154,                           // cases
+        S_case_list = 155,                       // case_list
+        S_case = 156,                            // case
+        S_case_values = 157,                     // case_values
+        S_default_case = 158,                    // default_case
+        S_for = 159,                             // for
+        S_while = 160,                           // while
+        S_repeat = 161,                          // repeat
+        S_expr = 162,                            // expr
+        S_range_expr = 163,                      // range_expr
+        S_range_interval = 164,                  // range_interval
+        S_or_expr = 165,                         // or_expr
+        S_and_expr = 166,                        // and_expr
+        S_bit_or_expr = 167,                     // bit_or_expr
+        S_bit_xor_expr = 168,                    // bit_xor_expr
+        S_bit_and_expr = 169,                    // bit_and_expr
+        S_equals_expr = 170,                     // equals_expr
+        S_rel_expr = 171,                        // rel_expr
+        S_concat_expr = 172,                     // concat_expr
+        S_sum_expr = 173,                        // sum_expr
+        S_mult_expr = 174,                       // mult_expr
+        S_unary_expr = 175,                      // unary_expr
+        S_exp_expr = 176,                        // exp_expr
+        S_postfix_expr = 177,                    // postfix_expr
+        S_term = 178,                            // term
+        S_array_allocation = 179,                // array_allocation
+        S_array_allocation_values = 180,         // array_allocation_values
+        S_struct_allocation = 181,               // struct_allocation
+        S_struct_allocation_values = 182         // struct_allocation_values
       };
     };
 
@@ -790,8 +910,8 @@ namespace yy {
       {
         switch (this->kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -807,6 +927,64 @@ namespace yy {
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.move< ExpressionNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.move< Node* > (std::move (that.value));
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -885,6 +1063,18 @@ namespace yy {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const ExpressionNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Node*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Node*& v)
         : Base (t)
         , value (v)
       {}
@@ -1022,8 +1212,8 @@ namespace yy {
         // Value type destructor.
 switch (yykind)
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -1039,6 +1229,64 @@ switch (yykind)
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.template destroy< ExpressionNode* > ();
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.template destroy< Node* > ();
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -1185,7 +1433,7 @@ switch (yykind)
 #if !defined _MSC_VER || defined __clang__
         YY_ASSERT (tok == token::YYEOF
                    || (token::YYerror <= tok && tok <= token::YYUNDEF)
-                   || (token::DECREMENT <= tok && tok <= token::RETURN));
+                   || (token::DECREMENT <= tok && tok <= token::DO));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -2276,6 +2524,51 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
+      make_RANGE_INC ()
+      {
+        return symbol_type (token::RANGE_INC);
+      }
+#else
+      static
+      symbol_type
+      make_RANGE_INC ()
+      {
+        return symbol_type (token::RANGE_INC);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RANGE_EXC ()
+      {
+        return symbol_type (token::RANGE_EXC);
+      }
+#else
+      static
+      symbol_type
+      make_RANGE_EXC ()
+      {
+        return symbol_type (token::RANGE_EXC);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_RANGE_EXC_INC ()
+      {
+        return symbol_type (token::RANGE_EXC_INC);
+      }
+#else
+      static
+      symbol_type
+      make_RANGE_EXC_INC ()
+      {
+        return symbol_type (token::RANGE_EXC_INC);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
       make_DOT ()
       {
         return symbol_type (token::DOT);
@@ -2946,6 +3239,21 @@ switch (yykind)
       make_RETURN ()
       {
         return symbol_type (token::RETURN);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_DO ()
+      {
+        return symbol_type (token::DO);
+      }
+#else
+      static
+      symbol_type
+      make_DO ()
+      {
+        return symbol_type (token::DO);
       }
 #endif
 
@@ -2976,7 +3284,7 @@ switch (yykind)
 
 
     /// Stored state numbers (used for stacks).
-    typedef signed char state_type;
+    typedef short state_type;
 
     /// Report a syntax error
     /// \param yyctx     the context in which the error occurred.
@@ -2994,7 +3302,7 @@ switch (yykind)
     /// \param yyvalue   the value to check
     static bool yy_table_value_is_error_ (int yyvalue) YY_NOEXCEPT;
 
-    static const signed char yypact_ninf_;
+    static const short yypact_ninf_;
     static const signed char yytable_ninf_;
 
     /// Convert a scanner token kind \a t to a symbol kind.
@@ -3007,32 +3315,32 @@ switch (yykind)
     // Tables.
     // YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
     // STATE-NUM.
-    static const signed char yypact_[];
+    static const short yypact_[];
 
     // YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
     // Performed when YYTABLE does not specify something else to do.  Zero
     // means the default is an error.
-    static const signed char yydefact_[];
+    static const unsigned char yydefact_[];
 
     // YYPGOTO[NTERM-NUM].
-    static const signed char yypgoto_[];
+    static const short yypgoto_[];
 
     // YYDEFGOTO[NTERM-NUM].
-    static const signed char yydefgoto_[];
+    static const short yydefgoto_[];
 
     // YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
     // positive, shift that token.  If negative, reduce the rule whose
     // number is the opposite.  If YYTABLE_NINF, syntax error.
-    static const signed char yytable_[];
+    static const short yytable_[];
 
-    static const signed char yycheck_[];
+    static const short yycheck_[];
 
     // YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
     // state STATE-NUM.
-    static const signed char yystos_[];
+    static const unsigned char yystos_[];
 
     // YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.
-    static const signed char yyr1_[];
+    static const unsigned char yyr1_[];
 
     // YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.
     static const signed char yyr2_[];
@@ -3040,7 +3348,7 @@ switch (yykind)
 
 #if YYDEBUG
     // YYRLINE[YYN] -- Source line where rule number YYN was defined.
-    static const unsigned char yyrline_[];
+    static const short yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
     virtual void yy_reduce_print_ (int r) const;
     /// Print the state stack on the debug stream.
@@ -3267,9 +3575,9 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 103,     ///< Last index in yytable_.
-      yynnts_ = 17,  ///< Number of nonterminal symbols.
-      yyfinal_ = 42 ///< Termination state number.
+      yylast_ = 2577,     ///< Last index in yytable_.
+      yynnts_ = 72,  ///< Number of nonterminal symbols.
+      yyfinal_ = 25 ///< Termination state number.
     };
 
 
@@ -3324,10 +3632,10 @@ switch (yykind)
       75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
       85,    86,    87,    88,    89,    90,    91,    92,    93,    94,
       95,    96,    97,    98,    99,   100,   101,   102,   103,   104,
-     105,   106
+     105,   106,   107,   108,   109,   110
     };
     // Last valid token kind.
-    const int code_max = 361;
+    const int code_max = 365;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -3345,8 +3653,8 @@ switch (yykind)
   {
     switch (this->kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -3362,6 +3670,64 @@ switch (yykind)
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.copy< ExpressionNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.copy< Node* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -3443,8 +3809,8 @@ switch (yykind)
     super_type::move (s);
     switch (this->kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -3460,6 +3826,64 @@ switch (yykind)
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.move< ExpressionNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.move< Node* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -3575,7 +3999,7 @@ switch (yykind)
 
 
 } // yy
-#line 3579 "grammar/build/syntax.tab.hh"
+#line 4003 "grammar/build/syntax.tab.hh"
 
 
 

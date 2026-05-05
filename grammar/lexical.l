@@ -55,7 +55,7 @@
 "*"                                            { return yy::parser::make_MULT(); }
 "/"                                            { return yy::parser::make_DIV(); }
 \"([^"\\]|\\.)*\"                              { string content = string(yytext); return yy::parser::make_STRING(content.substr(1, content.length() - 2)); }
-^'([^"\\]|\\.)'$                               { return yy::parser::make_CHAR(yytext[1]); }
+'([^"\\]|\\.)'                                 { return yy::parser::make_CHAR(yytext[1]); }
 [0-9]+[lL]                                     { return yy::parser::make_LONG(stoll(yytext)); }
 [0-9]+[bB]                                     { return yy::parser::make_BYTE(stoi(yytext)); }
 [0-9]+(\.[0-9]+)?[fF]                          { return yy::parser::make_FLOAT(stof(yytext)); }
@@ -67,6 +67,9 @@
 "var"                                          { return yy::parser::make_VAR(); }
 "const"                                        { return yy::parser::make_CONST(); }
 ".."                                           { return yy::parser::make_RANGE(); }
+"..="                                          { return yy::parser::make_RANGE_INC(); }
+"<.."                                          { return yy::parser::make_RANGE_EXC(); }
+"<..="                                         { return yy::parser::make_RANGE_EXC_INC(); }
 "."                                            { return yy::parser::make_DOT(); }
 ","                                            { return yy::parser::make_COMMA(); }
 ":"                                            { return yy::parser::make_COLON(); }

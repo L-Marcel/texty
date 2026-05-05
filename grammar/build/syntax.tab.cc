@@ -187,8 +187,8 @@ namespace yy {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -204,6 +204,64 @@ namespace yy {
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.YY_MOVE_OR_COPY< ExpressionNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.YY_MOVE_OR_COPY< Node* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -269,8 +327,8 @@ namespace yy {
   {
     switch (that.kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -286,6 +344,64 @@ namespace yy {
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.move< ExpressionNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.move< Node* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -351,8 +467,8 @@ namespace yy {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -368,6 +484,64 @@ namespace yy {
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.copy< ExpressionNode* > (that.value);
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.copy< Node* > (that.value);
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -431,8 +605,8 @@ namespace yy {
     state = that.state;
     switch (that.kind ())
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -448,6 +622,64 @@ namespace yy {
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         value.move< ExpressionNode* > (that.value);
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.move< Node* > (that.value);
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -752,8 +984,8 @@ namespace yy {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case symbol_kind::S_program: // program
       case symbol_kind::S_expr: // expr
+      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -769,6 +1001,64 @@ namespace yy {
       case symbol_kind::S_postfix_expr: // postfix_expr
       case symbol_kind::S_term: // term
         yylhs.value.emplace< ExpressionNode* > ();
+        break;
+
+      case symbol_kind::S_root: // root
+      case symbol_kind::S_program: // program
+      case symbol_kind::S_program_slice: // program_slice
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_fn: // fn
+      case symbol_kind::S_proc: // proc
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+      case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_subprogram_call: // subprogram_call
+      case symbol_kind::S_call_params_list: // call_params_list
+      case symbol_kind::S_call_params: // call_params
+      case symbol_kind::S_enum: // enum
+      case symbol_kind::S_enum_values: // enum_values
+      case symbol_kind::S_struct: // struct
+      case symbol_kind::S_struct_attrs: // struct_attrs
+      case symbol_kind::S_struct_attr: // struct_attr
+      case symbol_kind::S_trait: // trait
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl: // impl
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+      case symbol_kind::S_impl_fn: // impl_fn
+      case symbol_kind::S_impl_proc: // impl_proc
+      case symbol_kind::S_access: // access
+      case symbol_kind::S_access_base: // access_base
+      case symbol_kind::S_id: // id
+      case symbol_kind::S_name: // name
+      case symbol_kind::S_stmts: // stmts
+      case symbol_kind::S_stmt: // stmt
+      case symbol_kind::S_return: // return
+      case symbol_kind::S_attr: // attr
+      case symbol_kind::S_type: // type
+      case symbol_kind::S_assign: // assign
+      case symbol_kind::S_if: // if
+      case symbol_kind::S_if_end: // if_end
+      case symbol_kind::S_switch: // switch
+      case symbol_kind::S_cases: // cases
+      case symbol_kind::S_case_list: // case_list
+      case symbol_kind::S_case: // case
+      case symbol_kind::S_case_values: // case_values
+      case symbol_kind::S_default_case: // default_case
+      case symbol_kind::S_for: // for
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+      case symbol_kind::S_range_interval: // range_interval
+      case symbol_kind::S_array_allocation: // array_allocation
+      case symbol_kind::S_array_allocation_values: // array_allocation_values
+      case symbol_kind::S_struct_allocation: // struct_allocation
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        yylhs.value.emplace< Node* > ();
         break;
 
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
@@ -833,433 +1123,1688 @@ namespace yy {
         {
           switch (yyn)
             {
-  case 2: // program: expr
-#line 58 "grammar/syntax.y"
+  case 2: // root: program
+#line 66 "grammar/syntax.y"
               {
-  ctx.root = yystack_[0].value.as < ExpressionNode* > ();
-  ctx.root->get_type();
+  ctx.root = yystack_[0].value.as < Node* > ();
 }
-#line 843 "grammar/build/syntax.tab.cc"
+#line 1132 "grammar/build/syntax.tab.cc"
     break;
 
-  case 3: // expr: or_expr
-#line 65 "grammar/syntax.y"
-              {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 3: // program: program program_slice
+#line 70 "grammar/syntax.y"
+                               {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 851 "grammar/build/syntax.tab.cc"
+#line 1140 "grammar/build/syntax.tab.cc"
     break;
 
-  case 4: // or_expr: or_expr OR and_expr
-#line 69 "grammar/syntax.y"
-                             {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 4: // program: program_slice
+#line 72 "grammar/syntax.y"
+                  {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 859 "grammar/build/syntax.tab.cc"
+#line 1148 "grammar/build/syntax.tab.cc"
     break;
 
-  case 5: // or_expr: and_expr
-#line 71 "grammar/syntax.y"
-             {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 5: // program_slice: subprogram
+#line 76 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 867 "grammar/build/syntax.tab.cc"
+#line 1156 "grammar/build/syntax.tab.cc"
     break;
 
-  case 6: // and_expr: and_expr AND bit_or_expr
-#line 75 "grammar/syntax.y"
-                                   {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 6: // program_slice: enum
+#line 78 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 875 "grammar/build/syntax.tab.cc"
+#line 1164 "grammar/build/syntax.tab.cc"
     break;
 
-  case 7: // and_expr: bit_or_expr
-#line 77 "grammar/syntax.y"
-                {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 7: // program_slice: struct
+#line 80 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 883 "grammar/build/syntax.tab.cc"
+#line 1172 "grammar/build/syntax.tab.cc"
     break;
 
-  case 8: // bit_or_expr: bit_or_expr BAR bit_xor_expr
-#line 81 "grammar/syntax.y"
-                                          {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 8: // program_slice: trait
+#line 82 "grammar/syntax.y"
+          {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 891 "grammar/build/syntax.tab.cc"
+#line 1180 "grammar/build/syntax.tab.cc"
     break;
 
-  case 9: // bit_or_expr: bit_xor_expr
-#line 83 "grammar/syntax.y"
-                 {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 9: // program_slice: impl
+#line 84 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 899 "grammar/build/syntax.tab.cc"
+#line 1188 "grammar/build/syntax.tab.cc"
     break;
 
-  case 10: // bit_xor_expr: bit_xor_expr XOR bit_and_expr
-#line 87 "grammar/syntax.y"
-                                            {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::XOR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 10: // subprogram: fn
+#line 88 "grammar/syntax.y"
+               {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 907 "grammar/build/syntax.tab.cc"
+#line 1196 "grammar/build/syntax.tab.cc"
     break;
 
-  case 11: // bit_xor_expr: bit_and_expr
-#line 89 "grammar/syntax.y"
-                 {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 11: // subprogram: proc
+#line 90 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 915 "grammar/build/syntax.tab.cc"
+#line 1204 "grammar/build/syntax.tab.cc"
     break;
 
-  case 12: // bit_and_expr: bit_and_expr REF equals_expr
-#line 93 "grammar/syntax.y"
-                                           {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 12: // fn: FUNCTION ID params_list COLON type stmts END_FUNCTION SEMICOLON
+#line 94 "grammar/syntax.y"
+                                                                    {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 923 "grammar/build/syntax.tab.cc"
+#line 1212 "grammar/build/syntax.tab.cc"
     break;
 
-  case 13: // bit_and_expr: equals_expr
-#line 95 "grammar/syntax.y"
-                {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 13: // proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON
+#line 98 "grammar/syntax.y"
+                                                             {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 931 "grammar/build/syntax.tab.cc"
+#line 1220 "grammar/build/syntax.tab.cc"
     break;
 
-  case 14: // equals_expr: equals_expr EQ rel_expr
-#line 99 "grammar/syntax.y"
-                                     {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 14: // proc: PROCEDURE ID params_list END_PROCEDURE SEMICOLON
+#line 100 "grammar/syntax.y"
+                                                     {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 939 "grammar/build/syntax.tab.cc"
+#line 1228 "grammar/build/syntax.tab.cc"
     break;
 
-  case 15: // equals_expr: equals_expr NOT_EQ rel_expr
-#line 101 "grammar/syntax.y"
+  case 15: // params_self_list: LEFT_PAREN SELF SEMICOLON params RIGHT_PAREN
+#line 104 "grammar/syntax.y"
+                                                               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1236 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 16: // params_self_list: LEFT_PAREN SELF RIGHT_PAREN
+#line 106 "grammar/syntax.y"
                                 {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::NOT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 947 "grammar/build/syntax.tab.cc"
+#line 1244 "grammar/build/syntax.tab.cc"
     break;
 
-  case 16: // equals_expr: rel_expr
-#line 103 "grammar/syntax.y"
-             {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 17: // params_list: LEFT_PAREN params RIGHT_PAREN
+#line 110 "grammar/syntax.y"
+                                           {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 955 "grammar/build/syntax.tab.cc"
+#line 1252 "grammar/build/syntax.tab.cc"
     break;
 
-  case 17: // rel_expr: rel_expr LT concat_expr
-#line 107 "grammar/syntax.y"
-                                  {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 18: // params_list: LEFT_PAREN RIGHT_PAREN
+#line 112 "grammar/syntax.y"
+                           {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 963 "grammar/build/syntax.tab.cc"
+#line 1260 "grammar/build/syntax.tab.cc"
     break;
 
-  case 18: // rel_expr: rel_expr GT concat_expr
-#line 109 "grammar/syntax.y"
-                            {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
-}
-#line 971 "grammar/build/syntax.tab.cc"
-    break;
-
-  case 19: // rel_expr: rel_expr LT_EQ concat_expr
-#line 111 "grammar/syntax.y"
+  case 19: // params: params SEMICOLON param
+#line 116 "grammar/syntax.y"
                                {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 979 "grammar/build/syntax.tab.cc"
+#line 1268 "grammar/build/syntax.tab.cc"
     break;
 
-  case 20: // rel_expr: rel_expr GT_EQ concat_expr
-#line 113 "grammar/syntax.y"
-                               {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 20: // params: param
+#line 118 "grammar/syntax.y"
+          {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 987 "grammar/build/syntax.tab.cc"
+#line 1276 "grammar/build/syntax.tab.cc"
     break;
 
-  case 21: // rel_expr: rel_expr IN concat_expr
-#line 115 "grammar/syntax.y"
-                            {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::IN, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 21: // param: id_list COLON type
+#line 122 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 995 "grammar/build/syntax.tab.cc"
+#line 1284 "grammar/build/syntax.tab.cc"
     break;
 
-  case 22: // rel_expr: concat_expr
-#line 117 "grammar/syntax.y"
-                {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  case 22: // id_list: id_list COMMA ID
+#line 126 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1003 "grammar/build/syntax.tab.cc"
+#line 1292 "grammar/build/syntax.tab.cc"
     break;
 
-  case 23: // concat_expr: concat_expr CONCAT sum_expr
-#line 121 "grammar/syntax.y"
+  case 23: // id_list: ID
+#line 128 "grammar/syntax.y"
+       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1300 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 24: // subprogram_call: access call_params_list
+#line 132 "grammar/syntax.y"
                                          {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::CONCAT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1011 "grammar/build/syntax.tab.cc"
+#line 1308 "grammar/build/syntax.tab.cc"
     break;
 
-  case 24: // concat_expr: sum_expr
-#line 123 "grammar/syntax.y"
+  case 25: // call_params_list: LEFT_PAREN call_params RIGHT_PAREN
+#line 136 "grammar/syntax.y"
+                                                     {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1316 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 26: // call_params_list: LEFT_PAREN RIGHT_PAREN
+#line 138 "grammar/syntax.y"
+                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1324 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 27: // call_params: call_params COMMA expr
+#line 142 "grammar/syntax.y"
+                                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1332 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 28: // call_params: expr
+#line 144 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1340 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 29: // enum: ENUM name enum_values END_ENUM SEMICOLON
+#line 148 "grammar/syntax.y"
+                                               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1348 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 30: // enum: ENUM name END_ENUM SEMICOLON
+#line 150 "grammar/syntax.y"
+                                 {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1356 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 31: // enum_values: enum_values COMMA CONST_NAME
+#line 154 "grammar/syntax.y"
+                                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1364 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 32: // enum_values: CONST_NAME
+#line 156 "grammar/syntax.y"
+               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1372 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 33: // struct: STRUCT name struct_attrs END_STRUCT SEMICOLON
+#line 160 "grammar/syntax.y"
+                                                      {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1380 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 34: // struct: STRUCT name END_STRUCT SEMICOLON
+#line 162 "grammar/syntax.y"
+                                     {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1388 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 35: // struct_attrs: struct_attrs struct_attr SEMICOLON
+#line 166 "grammar/syntax.y"
+                                                 {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1396 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 36: // struct_attrs: struct_attr SEMICOLON
+#line 168 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1404 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 37: // struct_attr: id_list COLON type
+#line 172 "grammar/syntax.y"
+                                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1412 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 38: // trait: TRAIT name trait_subprograms END_TRAIT SEMICOLON
+#line 176 "grammar/syntax.y"
+                                                        {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1420 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 39: // trait: TRAIT name END_TRAIT SEMICOLON
+#line 178 "grammar/syntax.y"
+                                   {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1428 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 40: // trait_subprograms: trait_subprograms trait_subprogram
+#line 182 "grammar/syntax.y"
+                                                      {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1436 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 41: // trait_subprograms: trait_subprogram
+#line 184 "grammar/syntax.y"
+                     {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1444 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 42: // trait_subprogram: trait_fn
+#line 188 "grammar/syntax.y"
+                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1452 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 43: // trait_subprogram: trait_proc
+#line 190 "grammar/syntax.y"
+               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1460 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 44: // trait_fn: FUNCTION ID params_self_list COLON type END_FUNCTION SEMICOLON
+#line 194 "grammar/syntax.y"
+                                                                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1468 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 45: // trait_fn: FUNCTION ID params_list COLON type END_FUNCTION SEMICOLON
+#line 196 "grammar/syntax.y"
+                                                              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1476 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 46: // trait_fn: fn
+#line 198 "grammar/syntax.y"
+       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1484 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 47: // trait_proc: PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON
+#line 202 "grammar/syntax.y"
+                                                                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1492 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 48: // trait_proc: proc
+#line 204 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1500 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 49: // impl: IMPL name impl_subprograms END_IMPL SEMICOLON
+#line 208 "grammar/syntax.y"
+                                                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1508 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 50: // impl: IMPL name END_IMPL SEMICOLON
+#line 210 "grammar/syntax.y"
+                                 {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1516 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 51: // impl: IMPL name impl_subprograms FOR name END_IMPL SEMICOLON
+#line 212 "grammar/syntax.y"
+                                                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1524 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 52: // impl: IMPL name FOR name END_IMPL SEMICOLON
+#line 214 "grammar/syntax.y"
+                                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1532 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 53: // impl_subprograms: impl_subprograms impl_subprogram
+#line 218 "grammar/syntax.y"
+                                                   {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1540 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 54: // impl_subprograms: impl_subprogram
+#line 220 "grammar/syntax.y"
+                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1548 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 55: // impl_subprogram: impl_fn
+#line 224 "grammar/syntax.y"
+                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1556 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 56: // impl_subprogram: impl_proc
+#line 226 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1564 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 57: // impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON
+#line 230 "grammar/syntax.y"
+                                                                              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1572 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 58: // impl_fn: fn
+#line 232 "grammar/syntax.y"
+       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1580 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 59: // impl_proc: PROCEDURE ID params_self_list stmts END_PROCEDURE SEMICOLON
+#line 236 "grammar/syntax.y"
+                                                                       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1588 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 60: // impl_proc: PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON
+#line 238 "grammar/syntax.y"
+                                                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1596 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 61: // impl_proc: proc
+#line 240 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1604 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 62: // access: access DOT CONST_NAME
+#line 244 "grammar/syntax.y"
+                              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1612 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 63: // access: access DOT ID
+#line 246 "grammar/syntax.y"
+                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1620 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 64: // access: access LEFT_BRACKET expr RIGHT_BRACKET
+#line 248 "grammar/syntax.y"
+                                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1628 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 65: // access: access DOUBLE_COLON ID
+#line 250 "grammar/syntax.y"
+                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1636 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 66: // access: subprogram_call
+#line 252 "grammar/syntax.y"
+                    {
+  yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
+}
+#line 1644 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 67: // access: access_base
+#line 254 "grammar/syntax.y"
+                {
+  yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
+}
+#line 1652 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 68: // access_base: SELF
+#line 258 "grammar/syntax.y"
+                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1660 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 69: // access_base: id
+#line 260 "grammar/syntax.y"
+       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1668 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 70: // access_base: LEFT_PAREN expr RIGHT_PAREN
+#line 262 "grammar/syntax.y"
+                                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1676 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 71: // id: NAME
+#line 266 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1684 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 72: // id: ID
+#line 268 "grammar/syntax.y"
+       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1692 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 73: // name: NAME
+#line 272 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1700 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 74: // name: CONST_NAME
+#line 274 "grammar/syntax.y"
+               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1708 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 75: // stmts: stmts stmt SEMICOLON
+#line 278 "grammar/syntax.y"
+                            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1716 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 76: // stmts: stmt SEMICOLON
+#line 280 "grammar/syntax.y"
+                   {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1724 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 77: // stmt: BREAK
+#line 284 "grammar/syntax.y"
+            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1732 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 78: // stmt: CONTINUE
+#line 286 "grammar/syntax.y"
              {
-  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1019 "grammar/build/syntax.tab.cc"
+#line 1740 "grammar/build/syntax.tab.cc"
     break;
 
-  case 25: // sum_expr: sum_expr PLUS mult_expr
-#line 127 "grammar/syntax.y"
+  case 79: // stmt: attr
+#line 288 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1748 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 80: // stmt: assign
+#line 290 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1756 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 81: // stmt: return
+#line 292 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1764 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 82: // stmt: if
+#line 294 "grammar/syntax.y"
+       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1772 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 83: // stmt: for
+#line 296 "grammar/syntax.y"
+        {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1780 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 84: // stmt: while
+#line 298 "grammar/syntax.y"
+          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1788 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 85: // stmt: repeat
+#line 300 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1796 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 86: // stmt: switch
+#line 302 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1804 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 87: // stmt: expr
+#line 304 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1812 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 88: // return: RETURN expr
+#line 308 "grammar/syntax.y"
+                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1820 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 89: // attr: VAR ID COLON type ATTR expr
+#line 312 "grammar/syntax.y"
                                   {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::PLUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1027 "grammar/build/syntax.tab.cc"
+#line 1828 "grammar/build/syntax.tab.cc"
     break;
 
-  case 26: // sum_expr: sum_expr MINUS mult_expr
-#line 129 "grammar/syntax.y"
+  case 90: // attr: CONST ID COLON type ATTR expr
+#line 314 "grammar/syntax.y"
+                                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1836 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 91: // type: TYPE_INT
+#line 318 "grammar/syntax.y"
+               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1844 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 92: // type: TYPE_FLOAT
+#line 320 "grammar/syntax.y"
+               {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1852 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 93: // type: TYPE_DOUBLE
+#line 322 "grammar/syntax.y"
+                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1860 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 94: // type: TYPE_LONG
+#line 324 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1868 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 95: // type: TYPE_BYTE
+#line 326 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1876 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 96: // type: TYPE_STRING
+#line 328 "grammar/syntax.y"
+                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1884 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 97: // type: TYPE_CHAR
+#line 330 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1892 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 98: // type: TYPE_BOOL
+#line 332 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1900 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 99: // type: type LEFT_BRACKET RIGHT_BRACKET
+#line 334 "grammar/syntax.y"
+                                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1908 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 100: // type: TYPE_POINTER LT type GT
+#line 336 "grammar/syntax.y"
+                            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1916 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 101: // type: TYPE_OPTION LT type GT
+#line 338 "grammar/syntax.y"
+                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1924 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 102: // assign: access ATTR expr
+#line 342 "grammar/syntax.y"
+                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1932 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 103: // assign: access AND_ATTR expr
+#line 344 "grammar/syntax.y"
+                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1940 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 104: // assign: access OR_ATTR expr
+#line 346 "grammar/syntax.y"
+                        {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1948 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 105: // assign: access LAZY_AND_ATTR expr
+#line 348 "grammar/syntax.y"
+                              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1956 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 106: // assign: access LAZY_OR_ATTR expr
+#line 350 "grammar/syntax.y"
                              {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MINUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1035 "grammar/build/syntax.tab.cc"
+#line 1964 "grammar/build/syntax.tab.cc"
     break;
 
-  case 27: // sum_expr: mult_expr
-#line 131 "grammar/syntax.y"
+  case 107: // assign: access XOR_ATTR expr
+#line 352 "grammar/syntax.y"
+                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1972 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 108: // assign: access CONCAT_ATTR expr
+#line 354 "grammar/syntax.y"
+                            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1980 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 109: // assign: access MOD_ATTR expr
+#line 356 "grammar/syntax.y"
+                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1988 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 110: // assign: access PLUS_ATTR expr
+#line 358 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 1996 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 111: // assign: access MINUS_ATTR expr
+#line 360 "grammar/syntax.y"
+                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2004 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 112: // assign: access MULT_ATTR expr
+#line 362 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2012 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 113: // assign: access DIV_ATTR expr
+#line 364 "grammar/syntax.y"
+                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2020 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 114: // if: IF expr THEN stmts if_end
+#line 368 "grammar/syntax.y"
+                              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2028 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 115: // if: IF SOME ID IN access THEN stmts if_end
+#line 370 "grammar/syntax.y"
+                                           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2036 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 116: // if_end: ELIF expr THEN stmts if_end
+#line 374 "grammar/syntax.y"
+                                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2044 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 117: // if_end: ELIF SOME ID IN access THEN stmts if_end
+#line 376 "grammar/syntax.y"
+                                             {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2052 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 118: // if_end: ELIF SOME IN access THEN stmts if_end
+#line 378 "grammar/syntax.y"
+                                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2060 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 119: // if_end: ELSE stmts END_IF
+#line 380 "grammar/syntax.y"
+                      {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2068 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 120: // if_end: END_IF
+#line 382 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2076 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 121: // switch: SWITCH expr cases END_SWITCH
+#line 386 "grammar/syntax.y"
+                                     {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2084 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 122: // cases: case_list default_case
+#line 390 "grammar/syntax.y"
+                              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2092 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 123: // cases: case_list
+#line 392 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2100 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 124: // cases: default_case
+#line 394 "grammar/syntax.y"
+                 {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2108 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 125: // case_list: case_list case
+#line 398 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2116 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 126: // case_list: case
+#line 400 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2124 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 127: // case: CASE case_values COLON stmts
+#line 404 "grammar/syntax.y"
+                                   {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2132 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 128: // case: CASE SOME ID COLON stmts
+#line 406 "grammar/syntax.y"
+                             {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2140 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 129: // case: CASE NONE COLON stmts
+#line 408 "grammar/syntax.y"
+                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2148 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 130: // case_values: case_values COMMA access
+#line 412 "grammar/syntax.y"
+                                      {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2156 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 131: // case_values: access
+#line 414 "grammar/syntax.y"
+           {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2164 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 132: // default_case: DEFAULT COLON stmts
+#line 418 "grammar/syntax.y"
+                                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2172 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 133: // for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR
+#line 422 "grammar/syntax.y"
+                                                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2180 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 134: // for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN END_FOR
+#line 424 "grammar/syntax.y"
+                                                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2188 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 135: // for: FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN stmts END_FOR
+#line 426 "grammar/syntax.y"
+                                                                                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2196 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 136: // for: FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN END_FOR
+#line 428 "grammar/syntax.y"
+                                                                          {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2204 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 137: // while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE
+#line 432 "grammar/syntax.y"
+                                                         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2212 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 138: // while: WHILE LEFT_PAREN expr RIGHT_PAREN END_WHILE
+#line 434 "grammar/syntax.y"
+                                                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2220 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 139: // repeat: REPEAT stmts UNTIL expr
+#line 438 "grammar/syntax.y"
+                                {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2228 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 140: // repeat: REPEAT UNTIL expr
+#line 440 "grammar/syntax.y"
+                      {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2236 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 141: // expr: or_expr
+#line 444 "grammar/syntax.y"
               {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
-#line 1043 "grammar/build/syntax.tab.cc"
+#line 2244 "grammar/build/syntax.tab.cc"
     break;
 
-  case 28: // mult_expr: mult_expr MULT unary_expr
-#line 135 "grammar/syntax.y"
-                                     {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MULT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
-}
-#line 1051 "grammar/build/syntax.tab.cc"
-    break;
-
-  case 29: // mult_expr: mult_expr DIV unary_expr
-#line 137 "grammar/syntax.y"
-                             {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::DIV, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
-}
-#line 1059 "grammar/build/syntax.tab.cc"
-    break;
-
-  case 30: // mult_expr: mult_expr MOD unary_expr
-#line 139 "grammar/syntax.y"
-                             {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MOD, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
-}
-#line 1067 "grammar/build/syntax.tab.cc"
-    break;
-
-  case 31: // mult_expr: unary_expr
-#line 141 "grammar/syntax.y"
+  case 142: // expr: range_expr
+#line 446 "grammar/syntax.y"
                {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
-#line 1075 "grammar/build/syntax.tab.cc"
+#line 2252 "grammar/build/syntax.tab.cc"
     break;
 
-  case 32: // unary_expr: MINUS exp_expr
-#line 145 "grammar/syntax.y"
+  case 143: // range_expr: range_interval or_expr
+#line 450 "grammar/syntax.y"
+                                   {
+  yylhs.value.as < ExpressionNode* > () = nullptr;
+}
+#line 2260 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 144: // range_expr: or_expr range_interval
+#line 452 "grammar/syntax.y"
                            {
-  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::MINUS, yystack_[0].value.as < ExpressionNode* > ());
+  yylhs.value.as < ExpressionNode* > () = nullptr;
 }
-#line 1083 "grammar/build/syntax.tab.cc"
+#line 2268 "grammar/build/syntax.tab.cc"
     break;
 
-  case 33: // unary_expr: REV exp_expr
-#line 147 "grammar/syntax.y"
-                 {
-  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REV, yystack_[0].value.as < ExpressionNode* > ());
+  case 145: // range_expr: or_expr range_interval or_expr
+#line 454 "grammar/syntax.y"
+                                   {
+  yylhs.value.as < ExpressionNode* > () = nullptr;
 }
-#line 1091 "grammar/build/syntax.tab.cc"
+#line 2276 "grammar/build/syntax.tab.cc"
     break;
 
-  case 34: // unary_expr: NOT exp_expr
-#line 149 "grammar/syntax.y"
-                 {
-  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::NOT, yystack_[0].value.as < ExpressionNode* > ());
+  case 146: // range_interval: RANGE
+#line 458 "grammar/syntax.y"
+                      {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1099 "grammar/build/syntax.tab.cc"
+#line 2284 "grammar/build/syntax.tab.cc"
     break;
 
-  case 35: // unary_expr: REF exp_expr
-#line 151 "grammar/syntax.y"
-                 {
-  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REF, yystack_[0].value.as < ExpressionNode* > ());
+  case 147: // range_interval: RANGE_EXC
+#line 460 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1107 "grammar/build/syntax.tab.cc"
+#line 2292 "grammar/build/syntax.tab.cc"
     break;
 
-  case 36: // unary_expr: INCREMENT exp_expr
-#line 153 "grammar/syntax.y"
-                       {
-  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::INCREMENT, yystack_[0].value.as < ExpressionNode* > ());
+  case 148: // range_interval: RANGE_EXC_INC
+#line 462 "grammar/syntax.y"
+                  {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1115 "grammar/build/syntax.tab.cc"
+#line 2300 "grammar/build/syntax.tab.cc"
     break;
 
-  case 37: // unary_expr: DECREMENT exp_expr
-#line 155 "grammar/syntax.y"
-                       {
-  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::DECREMENT, yystack_[0].value.as < ExpressionNode* > ());
+  case 149: // range_interval: RANGE_INC
+#line 464 "grammar/syntax.y"
+              {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1123 "grammar/build/syntax.tab.cc"
+#line 2308 "grammar/build/syntax.tab.cc"
     break;
 
-  case 38: // unary_expr: exp_expr
-#line 157 "grammar/syntax.y"
+  case 150: // or_expr: or_expr OR and_expr
+#line 468 "grammar/syntax.y"
+                             {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2316 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 151: // or_expr: and_expr
+#line 470 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
-#line 1131 "grammar/build/syntax.tab.cc"
+#line 2324 "grammar/build/syntax.tab.cc"
     break;
 
-  case 39: // exp_expr: postfix_expr EXP exp_expr
-#line 161 "grammar/syntax.y"
-                                    {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EXP, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 152: // and_expr: and_expr AND bit_or_expr
+#line 474 "grammar/syntax.y"
+                                   {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
-#line 1139 "grammar/build/syntax.tab.cc"
+#line 2332 "grammar/build/syntax.tab.cc"
     break;
 
-  case 40: // exp_expr: postfix_expr
-#line 163 "grammar/syntax.y"
+  case 153: // and_expr: bit_or_expr
+#line 476 "grammar/syntax.y"
+                {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2340 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 154: // bit_or_expr: bit_or_expr BAR bit_xor_expr
+#line 480 "grammar/syntax.y"
+                                          {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2348 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 155: // bit_or_expr: bit_xor_expr
+#line 482 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
-#line 1147 "grammar/build/syntax.tab.cc"
+#line 2356 "grammar/build/syntax.tab.cc"
     break;
 
-  case 41: // postfix_expr: term INCREMENT
-#line 167 "grammar/syntax.y"
+  case 156: // bit_xor_expr: bit_xor_expr XOR bit_and_expr
+#line 486 "grammar/syntax.y"
+                                            {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::XOR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2364 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 157: // bit_xor_expr: bit_and_expr
+#line 488 "grammar/syntax.y"
+                 {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2372 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 158: // bit_and_expr: bit_and_expr REF equals_expr
+#line 492 "grammar/syntax.y"
+                                           {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2380 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 159: // bit_and_expr: equals_expr
+#line 494 "grammar/syntax.y"
+                {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2388 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 160: // equals_expr: equals_expr EQ rel_expr
+#line 498 "grammar/syntax.y"
+                                     {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2396 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 161: // equals_expr: equals_expr NOT_EQ rel_expr
+#line 500 "grammar/syntax.y"
+                                {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::NOT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2404 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 162: // equals_expr: rel_expr
+#line 502 "grammar/syntax.y"
+             {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2412 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 163: // rel_expr: rel_expr LT concat_expr
+#line 506 "grammar/syntax.y"
+                                  {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2420 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 164: // rel_expr: rel_expr GT concat_expr
+#line 508 "grammar/syntax.y"
+                            {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2428 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 165: // rel_expr: rel_expr LT_EQ concat_expr
+#line 510 "grammar/syntax.y"
+                               {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2436 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 166: // rel_expr: rel_expr GT_EQ concat_expr
+#line 512 "grammar/syntax.y"
+                               {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2444 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 167: // rel_expr: rel_expr IN concat_expr
+#line 514 "grammar/syntax.y"
+                            {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::IN, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2452 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 168: // rel_expr: concat_expr
+#line 516 "grammar/syntax.y"
+                {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2460 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 169: // concat_expr: concat_expr CONCAT sum_expr
+#line 520 "grammar/syntax.y"
+                                         {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::CONCAT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2468 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 170: // concat_expr: sum_expr
+#line 522 "grammar/syntax.y"
+             {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2476 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 171: // sum_expr: sum_expr PLUS mult_expr
+#line 526 "grammar/syntax.y"
+                                  {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::PLUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2484 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 172: // sum_expr: sum_expr MINUS mult_expr
+#line 528 "grammar/syntax.y"
+                             {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MINUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2492 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 173: // sum_expr: mult_expr
+#line 530 "grammar/syntax.y"
+              {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2500 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 174: // mult_expr: mult_expr MULT unary_expr
+#line 534 "grammar/syntax.y"
+                                     {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MULT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2508 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 175: // mult_expr: mult_expr DIV unary_expr
+#line 536 "grammar/syntax.y"
+                             {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::DIV, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2516 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 176: // mult_expr: mult_expr MOD unary_expr
+#line 538 "grammar/syntax.y"
+                             {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MOD, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2524 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 177: // mult_expr: unary_expr
+#line 540 "grammar/syntax.y"
+               {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2532 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 178: // unary_expr: MINUS exp_expr
+#line 544 "grammar/syntax.y"
+                           {
+  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::MINUS, yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2540 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 179: // unary_expr: REV exp_expr
+#line 546 "grammar/syntax.y"
+                 {
+  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REV, yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2548 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 180: // unary_expr: NOT exp_expr
+#line 548 "grammar/syntax.y"
+                 {
+  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::NOT, yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2556 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 181: // unary_expr: REF exp_expr
+#line 550 "grammar/syntax.y"
+                 {
+  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REF, yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2564 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 182: // unary_expr: INCREMENT exp_expr
+#line 552 "grammar/syntax.y"
+                       {
+  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::INCREMENT, yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2572 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 183: // unary_expr: DECREMENT exp_expr
+#line 554 "grammar/syntax.y"
+                       {
+  yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::DECREMENT, yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2580 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 184: // unary_expr: MULT exp_expr
+#line 556 "grammar/syntax.y"
+                  {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2588 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 185: // unary_expr: exp_expr
+#line 558 "grammar/syntax.y"
+             {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2596 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 186: // exp_expr: postfix_expr EXP exp_expr
+#line 562 "grammar/syntax.y"
+                                    {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EXP, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+}
+#line 2604 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 187: // exp_expr: postfix_expr
+#line 564 "grammar/syntax.y"
+                 {
+  yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
+}
+#line 2612 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 188: // postfix_expr: term INCREMENT
+#line 568 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(true, UnaryOperation::INCREMENT, yystack_[1].value.as < ExpressionNode* > ());
 }
-#line 1155 "grammar/build/syntax.tab.cc"
+#line 2620 "grammar/build/syntax.tab.cc"
     break;
 
-  case 42: // postfix_expr: term DECREMENT
-#line 169 "grammar/syntax.y"
+  case 189: // postfix_expr: term DECREMENT
+#line 570 "grammar/syntax.y"
                    {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(true, UnaryOperation::DECREMENT, yystack_[1].value.as < ExpressionNode* > ());
 }
-#line 1163 "grammar/build/syntax.tab.cc"
+#line 2628 "grammar/build/syntax.tab.cc"
     break;
 
-  case 43: // postfix_expr: term
-#line 171 "grammar/syntax.y"
+  case 190: // postfix_expr: term
+#line 572 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
-#line 1171 "grammar/build/syntax.tab.cc"
+#line 2636 "grammar/build/syntax.tab.cc"
     break;
 
-  case 44: // term: INT
-#line 175 "grammar/syntax.y"
+  case 191: // term: INT
+#line 576 "grammar/syntax.y"
           {
   yylhs.value.as < ExpressionNode* > () = new IntNode(ctx.line, yystack_[0].value.as < int32_t > ());
 }
-#line 1179 "grammar/build/syntax.tab.cc"
+#line 2644 "grammar/build/syntax.tab.cc"
     break;
 
-  case 45: // term: LONG
-#line 177 "grammar/syntax.y"
+  case 192: // term: LONG
+#line 578 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new LongNode(ctx.line, yystack_[0].value.as < int64_t > ());
 }
-#line 1187 "grammar/build/syntax.tab.cc"
+#line 2652 "grammar/build/syntax.tab.cc"
     break;
 
-  case 46: // term: FLOAT
-#line 179 "grammar/syntax.y"
+  case 193: // term: FLOAT
+#line 580 "grammar/syntax.y"
           {
   yylhs.value.as < ExpressionNode* > () = new FloatNode(ctx.line, yystack_[0].value.as < float > ());
 }
-#line 1195 "grammar/build/syntax.tab.cc"
+#line 2660 "grammar/build/syntax.tab.cc"
     break;
 
-  case 47: // term: DOUBLE
-#line 181 "grammar/syntax.y"
+  case 194: // term: DOUBLE
+#line 582 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = new DoubleNode(ctx.line, yystack_[0].value.as < double > ());
 }
-#line 1203 "grammar/build/syntax.tab.cc"
+#line 2668 "grammar/build/syntax.tab.cc"
     break;
 
-  case 48: // term: BYTE
-#line 183 "grammar/syntax.y"
+  case 195: // term: BYTE
+#line 584 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new ByteNode(ctx.line, yystack_[0].value.as < uint8_t > ());
 }
-#line 1211 "grammar/build/syntax.tab.cc"
+#line 2676 "grammar/build/syntax.tab.cc"
     break;
 
-  case 49: // term: BOOL
-#line 185 "grammar/syntax.y"
+  case 196: // term: BOOL
+#line 586 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new BoolNode(ctx.line, yystack_[0].value.as < bool > ());
 }
-#line 1219 "grammar/build/syntax.tab.cc"
+#line 2684 "grammar/build/syntax.tab.cc"
     break;
 
-  case 50: // term: STRING
-#line 187 "grammar/syntax.y"
+  case 197: // term: STRING
+#line 588 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = new StringNode(ctx.line, yystack_[0].value.as < std::string > ());
 }
-#line 1227 "grammar/build/syntax.tab.cc"
+#line 2692 "grammar/build/syntax.tab.cc"
     break;
 
-  case 51: // term: CHAR
-#line 189 "grammar/syntax.y"
+  case 198: // term: CHAR
+#line 590 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new CharNode(ctx.line, yystack_[0].value.as < char > ());
 }
-#line 1235 "grammar/build/syntax.tab.cc"
+#line 2700 "grammar/build/syntax.tab.cc"
     break;
 
-  case 52: // term: NONE
-#line 191 "grammar/syntax.y"
+  case 199: // term: NONE
+#line 592 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new OptionNode(ctx.line, Option());
 }
-#line 1243 "grammar/build/syntax.tab.cc"
+#line 2708 "grammar/build/syntax.tab.cc"
     break;
 
-  case 53: // term: SOME LEFT_PAREN expr RIGHT_PAREN
-#line 193 "grammar/syntax.y"
+  case 200: // term: array_allocation
+#line 594 "grammar/syntax.y"
+                     {
+  yylhs.value.as < ExpressionNode* > () = nullptr;
+}
+#line 2716 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 201: // term: struct_allocation
+#line 596 "grammar/syntax.y"
+                      {
+  yylhs.value.as < ExpressionNode* > () = nullptr;
+}
+#line 2724 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 202: // term: access
+#line 598 "grammar/syntax.y"
+           {
+  yylhs.value.as < ExpressionNode* > () = nullptr;
+}
+#line 2732 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 203: // term: SOME LEFT_PAREN expr RIGHT_PAREN
+#line 600 "grammar/syntax.y"
                                      {
   yylhs.value.as < ExpressionNode* > () = new OptionNode(ctx.line, Option());
 }
-#line 1251 "grammar/build/syntax.tab.cc"
+#line 2740 "grammar/build/syntax.tab.cc"
     break;
 
-  case 54: // term: LEFT_PAREN expr RIGHT_PAREN
-#line 195 "grammar/syntax.y"
-                                {
-  yylhs.value.as < ExpressionNode* > () = yystack_[1].value.as < ExpressionNode* > ();
+  case 204: // array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET
+#line 604 "grammar/syntax.y"
+                                                           {
+  yylhs.value.as < Node* > () = nullptr;
 }
-#line 1259 "grammar/build/syntax.tab.cc"
+#line 2748 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 205: // array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET LEFT_BRACE array_allocation_values RIGHT_BRACE
+#line 606 "grammar/syntax.y"
+                                                                                            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2756 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 206: // array_allocation_values: array_allocation_values COMMA expr
+#line 610 "grammar/syntax.y"
+                                                            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2764 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 207: // array_allocation_values: expr
+#line 612 "grammar/syntax.y"
+         {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2772 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 208: // struct_allocation: NEW type LEFT_BRACE struct_allocation_values RIGHT_BRACE
+#line 616 "grammar/syntax.y"
+                                                                            {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2780 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 209: // struct_allocation: NEW type LEFT_BRACE RIGHT_BRACE
+#line 618 "grammar/syntax.y"
+                                    {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2788 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 210: // struct_allocation_values: struct_allocation_values COMMA ID COLON expr
+#line 622 "grammar/syntax.y"
+                                                                       {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2796 "grammar/build/syntax.tab.cc"
+    break;
+
+  case 211: // struct_allocation_values: ID COLON expr
+#line 624 "grammar/syntax.y"
+                  {
+  yylhs.value.as < Node* > () = nullptr;
+}
+#line 2804 "grammar/build/syntax.tab.cc"
     break;
 
 
-#line 1263 "grammar/build/syntax.tab.cc"
+#line 2808 "grammar/build/syntax.tab.cc"
 
             default:
               break;
@@ -1446,17 +2991,28 @@ namespace yy {
   "CONCAT_ATTR", "MINUS_ATTR", "MULT_ATTR", "DIV_ATTR", "AND", "OR", "REF",
   "BAR", "NOT_EQ", "LT_EQ", "GT_EQ", "LT", "GT", "NOT", "REV", "MOD",
   "XOR", "ATTR", "MINUS", "PLUS", "MULT", "DIV", "NEW", "VAR", "CONST",
-  "RANGE", "DOT", "COMMA", "COLON", "DOUBLE_COLON", "SEMICOLON",
-  "LEFT_PAREN", "RIGHT_PAREN", "LEFT_BRACKET", "RIGHT_BRACKET",
-  "LEFT_BRACE", "RIGHT_BRACE", "IF", "END_IF", "THEN", "ELIF", "ELSE",
-  "FOR", "WHILE", "END_WHILE", "REPEAT", "UNTIL", "END_FOR", "BREAK",
-  "CONTINUE", "SWITCH", "CASE", "DEFAULT", "END_SWITCH", "IN", "SOME",
-  "NONE", "FUNCTION", "END_FUNCTION", "PROCEDURE", "END_PROCEDURE", "ENUM",
-  "END_ENUM", "STRUCT", "END_STRUCT", "SELF", "IMPL", "END_IMPL", "TRAIT",
-  "END_TRAIT", "RETURN", "$accept", "program", "expr", "or_expr",
-  "and_expr", "bit_or_expr", "bit_xor_expr", "bit_and_expr", "equals_expr",
-  "rel_expr", "concat_expr", "sum_expr", "mult_expr", "unary_expr",
-  "exp_expr", "postfix_expr", "term", YY_NULLPTR
+  "RANGE", "RANGE_INC", "RANGE_EXC", "RANGE_EXC_INC", "DOT", "COMMA",
+  "COLON", "DOUBLE_COLON", "SEMICOLON", "LEFT_PAREN", "RIGHT_PAREN",
+  "LEFT_BRACKET", "RIGHT_BRACKET", "LEFT_BRACE", "RIGHT_BRACE", "IF",
+  "END_IF", "THEN", "ELIF", "ELSE", "FOR", "WHILE", "END_WHILE", "REPEAT",
+  "UNTIL", "END_FOR", "BREAK", "CONTINUE", "SWITCH", "CASE", "DEFAULT",
+  "END_SWITCH", "IN", "SOME", "NONE", "FUNCTION", "END_FUNCTION",
+  "PROCEDURE", "END_PROCEDURE", "ENUM", "END_ENUM", "STRUCT", "END_STRUCT",
+  "SELF", "IMPL", "END_IMPL", "TRAIT", "END_TRAIT", "RETURN", "DO",
+  "$accept", "root", "program", "program_slice", "subprogram", "fn",
+  "proc", "params_self_list", "params_list", "params", "param", "id_list",
+  "subprogram_call", "call_params_list", "call_params", "enum",
+  "enum_values", "struct", "struct_attrs", "struct_attr", "trait",
+  "trait_subprograms", "trait_subprogram", "trait_fn", "trait_proc",
+  "impl", "impl_subprograms", "impl_subprogram", "impl_fn", "impl_proc",
+  "access", "access_base", "id", "name", "stmts", "stmt", "return", "attr",
+  "type", "assign", "if", "if_end", "switch", "cases", "case_list", "case",
+  "case_values", "default_case", "for", "while", "repeat", "expr",
+  "range_expr", "range_interval", "or_expr", "and_expr", "bit_or_expr",
+  "bit_xor_expr", "bit_and_expr", "equals_expr", "rel_expr", "concat_expr",
+  "sum_expr", "mult_expr", "unary_expr", "exp_expr", "postfix_expr",
+  "term", "array_allocation", "array_allocation_values",
+  "struct_allocation", "struct_allocation_values", YY_NULLPTR
     };
     return yy_sname[yysymbol];
   }
@@ -1510,133 +3066,795 @@ namespace yy {
 
 
 
-  const signed char parser::yypact_ninf_ = -62;
+  const short parser::yypact_ninf_ = -293;
 
   const signed char parser::yytable_ninf_ = -1;
 
-  const signed char
+  const short
   parser::yypact_[] =
   {
-      -3,   -62,   -62,   -62,   -62,   -62,   -62,   -62,   -62,    11,
-      11,    11,    11,    11,    11,    -3,   -61,   -62,    20,   -62,
-     -33,    -2,    -7,    13,     3,     8,   -14,    33,    -6,   -44,
-     -62,   -62,    24,    32,   -62,   -62,   -62,   -62,   -62,   -62,
-      -1,    -3,   -62,    -3,    -3,    -3,    -3,    -3,    -3,    -3,
-      -3,    -3,    -3,    -3,    -3,    -3,    -3,    -3,    -3,    -3,
-      -3,    11,   -62,   -62,   -62,     0,    -2,    -7,    13,     3,
-       8,   -14,   -14,    33,    33,    33,    33,    33,    -6,   -44,
-     -44,   -62,   -62,   -62,   -62,   -62
+     192,    27,    57,   139,   139,   139,   139,    70,   192,  -293,
+    -293,  -293,  -293,  -293,  -293,  -293,  -293,    10,    10,  -293,
+    -293,     6,    11,   129,   -41,  -293,  -293,    18,    24,   604,
+    -293,    32,   -33,  -293,    36,   115,    14,    84,   139,   117,
+     161,   124,  -293,  -293,   130,  -293,  -293,  -293,   191,   205,
+     137,  -293,  -293,   -27,  -293,  -293,  -293,  -293,    87,  -293,
+     167,   425,  -293,  -293,  -293,  -293,  -293,  -293,  -293,  -293,
+    -293,  -293,   182,   182,   182,   182,   182,   182,   182,   425,
+     232,   241,  -293,  -293,  -293,  -293,  2296,  2371,   201,   209,
+     711,  -293,  -293,  2296,   212,  -293,   218,  -293,  2296,  -293,
+    2472,  -293,  -293,   804,   222,  -293,  -293,  -293,  -293,  -293,
+    -293,  -293,  -293,  -293,  -293,  2473,   197,   253,   255,   244,
+     259,    58,   -16,   273,   164,    88,  -293,  -293,   283,   249,
+    -293,  -293,  -293,   302,   246,  -293,   308,   425,   250,   256,
+    -293,   224,   258,   258,  -293,   139,   262,  -293,   258,   258,
+    -293,   264,  -293,   326,  -293,   425,  -293,  -293,  -293,  -293,
+    -293,  -293,  -293,  -293,   290,   292,   911,    89,  -293,  -293,
+    -293,  -293,  -293,  -293,  -293,   125,   274,   275,   269,    55,
+     266,    13,  2296,  2296,  1004,   194,  2296,  -293,  -293,  2296,
+    2296,  2296,  2296,  2296,  2296,  2296,  2296,  2296,  2296,  2296,
+    2296,   237,   336,   159,  2296,  -293,   277,   278,  -293,   313,
+    2473,  2473,  2473,  2473,  2473,  2473,  2473,  2473,  2473,  2473,
+    2473,  2473,  2473,  2473,  2473,  2473,  2473,  2473,  2473,   182,
+    -293,  -293,  -293,  -293,  -293,   285,  -293,  -293,   280,    15,
+     288,  1097,   260,  -293,   300,   303,   272,  -293,  -293,   285,
+     425,   425,   304,  1204,  2269,    12,   425,   425,  -293,   286,
+    2176,   287,   307,   310,  -293,  2296,     5,   311,   295,   194,
+    -293,  -293,   317,  -293,  -293,  -293,  -293,  -293,  -293,  -293,
+    -293,  -293,  -293,  -293,  -293,  -293,  -293,  -293,  -293,    37,
+    -293,   309,  -293,  -293,   253,   313,   255,   244,   259,    58,
+     -16,   -16,   273,   273,   273,   273,   273,   164,    88,    88,
+    -293,  -293,  -293,  -293,  -293,   195,   425,   315,  1311,   321,
+     425,   425,   323,   -23,   -20,  -293,   325,   322,   329,  -293,
+     -10,   -19,   -18,     9,   456,  2296,  2296,  1418,  -293,   389,
+     338,    89,   240,  2176,  -293,  -293,  -293,  -293,  2296,  -293,
+    -293,   326,  -293,   911,  -293,   334,  -293,   -46,    34,  -293,
+    -293,  -293,  -293,   332,  2296,   401,  -293,  2296,  2296,    62,
+    -293,  2398,  2176,  -293,   341,   344,  -293,  1511,   347,  2176,
+       9,  2176,  2176,  -293,   198,  1604,  -293,   349,   352,  2296,
+    -293,   368,  -293,  -293,  2176,    54,   371,  1711,  1804,  2296,
+    -293,  2176,  2176,    89,  2176,  -293,   381,  -293,  -293,  -293,
+      67,  2296,   456,   359,     9,  2176,  -293,  -293,  1897,   382,
+    2176,  -293,  2296,  -293,  -293,  -293,     9,   177,   456,  -293,
+    1990,  -293,   200,  2176,  -293,  -293,  2083,  2176,   456,  -293,
+     456,  -293,  -293
   };
 
-  const signed char
+  const unsigned char
   parser::yydefact_[] =
   {
-       0,    48,    44,    45,    46,    47,    49,    50,    51,     0,
-       0,     0,     0,     0,     0,     0,     0,    52,     0,     2,
-       3,     5,     7,     9,    11,    13,    16,    22,    24,    27,
-      31,    38,    40,    43,    37,    36,    35,    34,    33,    32,
-       0,     0,     1,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     2,     4,
+       5,    10,    11,     6,     7,     8,     9,     0,     0,    73,
+      74,     0,     0,     0,     0,     1,     3,     0,     0,     0,
+      32,     0,     0,    23,     0,     0,     0,     0,     0,     0,
+       0,     0,    58,    61,     0,    54,    55,    56,     0,     0,
+       0,    46,    48,     0,    41,    42,    43,    18,     0,    20,
+       0,     0,   195,   191,   192,   193,   194,   196,    72,    71,
+     197,   198,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,   146,   149,   147,   148,     0,     0,     0,     0,
+       0,    77,    78,     0,     0,   199,     0,    68,     0,    66,
+     202,    67,    69,     0,     0,    81,    79,    80,    82,    86,
+      83,    84,    85,    87,   142,     0,   141,   151,   153,   155,
+     157,   159,   162,   168,   170,   173,   177,   185,   187,   190,
+     200,   201,    30,     0,     0,    34,     0,     0,     0,     0,
+      36,     0,     0,     0,    50,     0,     0,    53,     0,     0,
+      39,     0,    40,     0,    17,     0,    95,    91,    94,    92,
+      93,    98,    96,    97,     0,     0,     0,   202,   183,   182,
+     181,   180,   179,   178,   184,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,    14,    88,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    42,    41,    54,     0,     4,     6,     8,    10,
-      12,    14,    15,    19,    20,    17,    18,    21,    23,    26,
-      25,    30,    28,    29,    39,    53
+       0,     0,     0,     0,     0,    24,     0,     0,    76,   143,
+       0,   144,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+     189,   188,    31,    29,    22,    37,    33,    35,     0,     0,
+       0,     0,     0,    49,     0,     0,     0,    38,    19,    21,
+       0,     0,     0,     0,     0,     0,     0,     0,    70,     0,
+       0,     0,     0,     0,   140,     0,     0,     0,     0,   123,
+     126,   124,     0,   103,   104,   105,   106,   109,   107,   110,
+     108,   111,   112,   113,   102,    63,    62,    65,    26,     0,
+      28,     0,    13,    75,   150,   145,   152,   154,   156,   158,
+     160,   161,   165,   166,   163,   164,   167,   169,   172,   171,
+     176,   174,   175,   186,    52,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    99,     0,     0,     0,   209,
+       0,     0,     0,     0,     0,     0,     0,     0,   139,     0,
+       0,   131,     0,     0,   121,   125,   122,   203,     0,    25,
+      64,     0,    16,     0,    60,     0,    51,     0,     0,    47,
+     100,   101,    12,   204,     0,     0,   208,     0,     0,     0,
+     120,     0,     0,   114,     0,     0,   138,     0,     0,     0,
+       0,     0,   132,    27,     0,     0,    59,     0,     0,     0,
+     211,     0,    89,    90,     0,     0,     0,     0,     0,     0,
+     137,     0,   129,   130,   127,    15,     0,    44,    45,   207,
+       0,     0,     0,     0,     0,     0,   119,   134,     0,     0,
+     128,    57,     0,   205,   210,   115,     0,     0,     0,   133,
+       0,   206,     0,     0,   116,   136,     0,     0,     0,   135,
+       0,   118,   117
   };
 
-  const signed char
+  const short
   parser::yypgoto_[] =
   {
-     -62,   -62,    -4,   -62,    19,    22,    25,    23,    26,    10,
-     -10,    17,     4,    -5,    16,   -62,   -62
+    -293,  -293,  -293,   447,  -293,   152,   154,   108,    -7,   105,
+     314,    26,  -293,  -293,  -293,  -293,  -293,  -293,  -293,   421,
+    -293,  -293,   417,  -293,  -293,  -293,  -293,   427,  -293,  -293,
+     -29,  -293,  -293,     7,    21,  -102,  -293,   291,   -77,  -293,
+    -293,  -292,  -293,  -293,  -293,   204,  -293,   206,  -293,  -293,
+    -293,   234,  -293,   358,   -99,   267,   270,   263,   265,   268,
+      95,   141,   261,    98,   -24,   -69,  -293,  -293,  -293,  -293,
+    -293,  -293
   };
 
-  const signed char
+  const short
   parser::yydefgoto_[] =
   {
-       0,    18,    19,    20,    21,    22,    23,    24,    25,    26,
-      27,    28,    29,    30,    31,    32,    33
+       0,     7,     8,     9,    10,    11,    12,   240,    29,    58,
+      59,    60,    99,   205,   289,    13,    32,    14,    36,    37,
+      15,    53,    54,    55,    56,    16,    44,    45,    46,    47,
+     167,   101,   102,    21,   253,   104,   105,   106,   166,   107,
+     108,   373,   109,   268,   269,   270,   342,   271,   110,   111,
+     112,   113,   114,   115,   116,   117,   118,   119,   120,   121,
+     122,   123,   124,   125,   126,   127,   128,   129,   130,   410,
+     131,   330
   };
 
-  const signed char
+  const short
   parser::yytable_[] =
   {
-       1,     2,     3,     4,     5,     6,    41,    58,    43,     7,
-       8,    40,    59,    60,     1,     2,     3,     4,     5,     6,
-      42,     9,    10,     7,     8,    34,    35,    36,    37,    38,
-      39,    50,    51,    52,    53,    48,    45,    65,    44,    11,
-      73,    74,    75,    76,    77,    47,    12,    13,    56,    57,
-      61,    14,    49,    81,    82,    83,    62,    63,    71,    72,
-      79,    80,    66,    55,    15,    46,    67,    64,    85,    69,
-      68,     0,    78,    70,     0,     0,    54,    84,    15,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,    16,    17,
+     100,   207,   175,   168,   169,   170,   171,   172,   173,   174,
+      28,    22,    23,    24,    68,    69,   209,    30,    68,    69,
+      33,   328,   261,    33,    33,   360,   252,    33,   361,   218,
+     219,   220,   221,   133,   367,   368,    17,    62,    63,    64,
+      65,    66,    67,    68,    69,   141,    70,    71,    35,   252,
+     103,   387,   252,   252,   252,    48,   365,    49,    72,    73,
+     235,   100,    35,   413,   259,   366,    18,    50,   134,    48,
+      25,    49,    80,    81,   100,    86,    74,   222,   249,    86,
+      27,   151,   207,    75,    76,   216,    57,   329,    77,    57,
+      78,    61,    79,    80,    81,    82,    83,    84,    85,   339,
+     340,   132,   217,   348,    86,   135,   252,    31,   349,    97,
+      87,   184,   295,    97,    34,    88,    89,   138,    90,   315,
+     425,    91,    92,    93,   186,   186,   142,   201,    94,    95,
+     202,   388,   203,   422,   204,    28,   434,   100,    97,   226,
+     394,   245,   423,    98,   227,   228,   441,   414,   442,    19,
+      20,   207,   242,   140,   201,   100,   153,   202,   154,   203,
+     313,   204,    62,    63,    64,    65,    66,    67,    68,    69,
+     143,    70,    71,   323,   324,    42,    51,    43,    52,   331,
+     332,   136,   137,    72,    73,    62,    63,    64,    65,    66,
+      67,    68,    69,   144,    70,    71,    42,   254,    43,   255,
+     148,    74,   310,   311,   312,    51,   150,    52,    75,    76,
+      38,   145,   100,    77,   149,    78,   207,    79,   224,   225,
+      82,    83,    84,    85,   100,    39,    39,    40,    40,    86,
+     288,   100,   207,   136,   155,    41,   146,   341,   210,   353,
+      79,   176,   201,   357,   358,   202,   285,   203,   286,   204,
+     177,   241,    86,    94,    95,   433,   244,   246,    82,    83,
+      84,    85,   318,    97,   351,   201,   352,   153,   202,   405,
+     203,   181,   204,   230,   231,   207,    94,    95,   437,   182,
+     207,   334,   186,   207,   266,   267,    97,   187,     1,   100,
+       2,   208,     3,   212,     4,   207,   214,     5,   213,     6,
+     207,   215,   207,   223,   369,   100,   380,   381,   100,   229,
+     207,   300,   301,   232,   100,   233,   207,   234,   207,   236,
+     178,   180,   308,   309,   100,   237,   207,   185,   239,   100,
+     238,   243,   188,   247,   207,    33,   207,   250,   207,   251,
+     258,   256,   257,   100,   260,   287,   292,   293,   100,   314,
+     100,   403,   100,   100,   210,   316,   100,   252,   377,   302,
+     303,   304,   305,   306,   382,   100,   319,   320,   100,   100,
+     321,   322,   100,   100,   385,   100,   336,   325,   343,   333,
+     335,   337,   350,   100,   354,   427,   100,   344,   347,   100,
+     356,   100,   359,   397,   362,   363,   364,   432,   378,   100,
+     402,   100,   404,   386,   100,   379,   389,   100,   100,   100,
+     391,   100,   398,   399,   401,   412,   263,   264,   407,   418,
+     272,   408,   420,   273,   274,   275,   276,   277,   278,   279,
+     280,   281,   282,   283,   284,   411,   428,   290,   291,   156,
+     157,   158,   159,   160,   161,   162,   163,   164,   165,   415,
+     421,   436,   426,   430,   438,    26,   384,   139,   440,    62,
+      63,    64,    65,    66,    67,    68,    69,   248,    70,    71,
+     152,   147,   262,   345,   211,   346,   297,   294,     0,   298,
+      72,    73,   296,   299,   307,     0,     0,     0,   327,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    74,   338,
+       0,     0,     0,     0,     0,    75,    76,     0,     0,     0,
+      77,     0,    78,     0,    79,    80,    81,    82,    83,    84,
+      85,     0,     0,     0,     0,     0,    86,     0,     0,     0,
+       0,     0,    87,   370,     0,   371,   372,    88,    89,     0,
+      90,     0,     0,    91,    92,    93,     0,     0,     0,     0,
+      94,    95,     0,     0,     0,     0,     0,     0,     0,     0,
+      97,     0,     0,     0,     0,    98,     0,     0,     0,   374,
+     375,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,   383,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,   390,     0,
+       0,   392,   393,     0,     0,   396,     0,    62,    63,    64,
+      65,    66,    67,    68,    69,     0,    70,    71,     0,     0,
+       0,     0,     0,   409,     0,     0,     0,     0,    72,    73,
+       0,     0,     0,   419,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,   424,    74,     0,     0,     0,
+       0,     0,     0,    75,    76,     0,   431,     0,    77,     0,
+      78,     0,    79,    80,    81,    82,    83,    84,    85,     0,
+       0,     0,     0,     0,    86,     0,     0,     0,     0,     0,
+      87,     0,     0,     0,     0,    88,    89,     0,    90,     0,
+       0,    91,    92,    93,     0,     0,     0,     0,    94,    95,
+       0,     0,     0,    96,     0,     0,     0,     0,    97,     0,
+       0,     0,     0,    98,    62,    63,    64,    65,    66,    67,
+      68,    69,     0,    70,    71,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    72,    73,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,    16,    17
+       0,     0,     0,    74,     0,     0,     0,     0,     0,     0,
+      75,    76,     0,     0,     0,    77,     0,    78,     0,    79,
+      80,    81,    82,    83,    84,    85,     0,     0,     0,     0,
+       0,    86,     0,     0,     0,     0,     0,    87,     0,     0,
+       0,     0,    88,    89,     0,    90,   183,     0,    91,    92,
+      93,     0,     0,     0,     0,    94,    95,    62,    63,    64,
+      65,    66,    67,    68,    69,    97,    70,    71,     0,     0,
+      98,     0,     0,     0,     0,     0,     0,     0,    72,    73,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    74,     0,     0,     0,
+       0,     0,     0,    75,    76,     0,     0,     0,    77,     0,
+      78,     0,    79,    80,    81,    82,    83,    84,    85,     0,
+       0,     0,     0,     0,    86,     0,     0,     0,     0,     0,
+      87,     0,     0,     0,     0,    88,    89,     0,    90,     0,
+       0,    91,    92,    93,     0,     0,     0,     0,    94,    95,
+       0,     0,     0,   206,     0,     0,     0,     0,    97,     0,
+       0,     0,     0,    98,    62,    63,    64,    65,    66,    67,
+      68,    69,     0,    70,    71,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    72,    73,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    74,     0,     0,     0,     0,     0,     0,
+      75,    76,     0,     0,     0,    77,     0,    78,     0,    79,
+      80,    81,    82,    83,    84,    85,     0,     0,     0,     0,
+       0,    86,     0,   252,     0,     0,     0,    87,     0,     0,
+       0,     0,    88,    89,     0,    90,     0,     0,    91,    92,
+      93,     0,     0,     0,     0,    94,    95,    62,    63,    64,
+      65,    66,    67,    68,    69,    97,    70,    71,     0,     0,
+      98,     0,     0,     0,     0,     0,     0,     0,    72,    73,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    74,     0,     0,     0,
+       0,     0,     0,    75,    76,     0,     0,     0,    77,     0,
+      78,     0,    79,    80,    81,    82,    83,    84,    85,     0,
+       0,     0,     0,     0,    86,     0,     0,     0,     0,     0,
+      87,     0,     0,     0,     0,    88,    89,     0,    90,   265,
+       0,    91,    92,    93,     0,     0,     0,     0,    94,    95,
+      62,    63,    64,    65,    66,    67,    68,    69,    97,    70,
+      71,     0,     0,    98,     0,     0,     0,     0,     0,     0,
+       0,    72,    73,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    74,
+       0,     0,     0,     0,     0,     0,    75,    76,     0,     0,
+       0,    77,     0,    78,     0,    79,    80,    81,    82,    83,
+      84,    85,     0,     0,     0,     0,     0,    86,     0,     0,
+       0,     0,     0,    87,     0,     0,     0,     0,    88,    89,
+       0,    90,     0,     0,    91,    92,    93,     0,     0,     0,
+       0,    94,    95,     0,     0,     0,   317,     0,     0,     0,
+       0,    97,     0,     0,     0,     0,    98,    62,    63,    64,
+      65,    66,    67,    68,    69,     0,    70,    71,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    72,    73,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    74,     0,     0,     0,
+       0,     0,     0,    75,    76,     0,     0,     0,    77,     0,
+      78,     0,    79,    80,    81,    82,    83,    84,    85,     0,
+       0,     0,     0,     0,    86,     0,     0,     0,     0,     0,
+      87,     0,     0,     0,     0,    88,    89,     0,    90,     0,
+       0,    91,    92,    93,     0,     0,     0,     0,    94,    95,
+       0,   326,     0,     0,     0,     0,     0,     0,    97,     0,
+       0,     0,     0,    98,    62,    63,    64,    65,    66,    67,
+      68,    69,     0,    70,    71,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    72,    73,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    74,     0,     0,     0,     0,     0,     0,
+      75,    76,     0,     0,     0,    77,     0,    78,     0,    79,
+      80,    81,    82,    83,    84,    85,     0,     0,     0,     0,
+       0,    86,     0,     0,     0,     0,     0,    87,     0,     0,
+       0,     0,    88,    89,     0,    90,     0,     0,    91,    92,
+      93,     0,     0,     0,     0,    94,    95,     0,     0,     0,
+     355,     0,     0,     0,     0,    97,     0,     0,     0,     0,
+      98,    62,    63,    64,    65,    66,    67,    68,    69,     0,
+      70,    71,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    72,    73,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      74,     0,     0,     0,     0,     0,     0,    75,    76,     0,
+       0,     0,    77,     0,    78,     0,    79,    80,    81,    82,
+      83,    84,    85,     0,     0,     0,     0,     0,    86,     0,
+       0,     0,     0,     0,    87,     0,     0,     0,     0,    88,
+      89,   376,    90,     0,     0,    91,    92,    93,     0,     0,
+       0,     0,    94,    95,    62,    63,    64,    65,    66,    67,
+      68,    69,    97,    70,    71,     0,     0,    98,     0,     0,
+       0,     0,     0,     0,     0,    72,    73,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    74,     0,     0,     0,     0,     0,     0,
+      75,    76,     0,     0,     0,    77,     0,    78,     0,    79,
+      80,    81,    82,    83,    84,    85,     0,     0,     0,     0,
+       0,    86,     0,     0,     0,     0,     0,    87,     0,     0,
+       0,     0,    88,    89,   400,    90,     0,     0,    91,    92,
+      93,     0,     0,     0,     0,    94,    95,    62,    63,    64,
+      65,    66,    67,    68,    69,    97,    70,    71,     0,     0,
+      98,     0,     0,     0,     0,     0,     0,     0,    72,    73,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    74,     0,     0,     0,
+       0,     0,     0,    75,    76,     0,     0,     0,    77,     0,
+      78,     0,    79,    80,    81,    82,    83,    84,    85,     0,
+       0,     0,     0,     0,    86,     0,     0,     0,     0,     0,
+      87,     0,     0,     0,     0,    88,    89,     0,    90,     0,
+       0,    91,    92,    93,     0,     0,     0,     0,    94,    95,
+       0,   406,     0,     0,     0,     0,     0,     0,    97,     0,
+       0,     0,     0,    98,    62,    63,    64,    65,    66,    67,
+      68,    69,     0,    70,    71,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    72,    73,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    74,     0,     0,     0,     0,     0,     0,
+      75,    76,     0,     0,     0,    77,     0,    78,     0,    79,
+      80,    81,    82,    83,    84,    85,     0,     0,     0,     0,
+       0,    86,     0,     0,     0,     0,     0,    87,   416,     0,
+       0,     0,    88,    89,     0,    90,     0,     0,    91,    92,
+      93,     0,     0,     0,     0,    94,    95,    62,    63,    64,
+      65,    66,    67,    68,    69,    97,    70,    71,     0,     0,
+      98,     0,     0,     0,     0,     0,     0,     0,    72,    73,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    74,     0,     0,     0,
+       0,     0,     0,    75,    76,     0,     0,     0,    77,     0,
+      78,     0,    79,    80,    81,    82,    83,    84,    85,     0,
+       0,     0,     0,     0,    86,     0,     0,     0,     0,     0,
+      87,     0,     0,     0,     0,    88,    89,     0,    90,     0,
+     417,    91,    92,    93,     0,     0,     0,     0,    94,    95,
+      62,    63,    64,    65,    66,    67,    68,    69,    97,    70,
+      71,     0,     0,    98,     0,     0,     0,     0,     0,     0,
+       0,    72,    73,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,    74,
+       0,     0,     0,     0,     0,     0,    75,    76,     0,     0,
+       0,    77,     0,    78,     0,    79,    80,    81,    82,    83,
+      84,    85,     0,     0,     0,     0,     0,    86,     0,     0,
+       0,     0,     0,    87,     0,     0,     0,     0,    88,    89,
+       0,    90,     0,   429,    91,    92,    93,     0,     0,     0,
+       0,    94,    95,    62,    63,    64,    65,    66,    67,    68,
+      69,    97,    70,    71,     0,     0,    98,     0,     0,     0,
+       0,     0,     0,     0,    72,    73,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,    74,     0,     0,     0,     0,     0,     0,    75,
+      76,     0,     0,     0,    77,     0,    78,     0,    79,    80,
+      81,    82,    83,    84,    85,     0,     0,     0,     0,     0,
+      86,     0,     0,     0,     0,     0,    87,     0,     0,     0,
+       0,    88,    89,     0,    90,     0,   435,    91,    92,    93,
+       0,     0,     0,     0,    94,    95,    62,    63,    64,    65,
+      66,    67,    68,    69,    97,    70,    71,     0,     0,    98,
+       0,     0,     0,     0,     0,     0,     0,    72,    73,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,    74,     0,     0,     0,     0,
+       0,     0,    75,    76,     0,     0,     0,    77,     0,    78,
+       0,    79,    80,    81,    82,    83,    84,    85,     0,     0,
+       0,     0,     0,    86,     0,     0,     0,     0,     0,    87,
+       0,     0,     0,     0,    88,    89,     0,    90,     0,   439,
+      91,    92,    93,     0,     0,     0,     0,    94,    95,    62,
+      63,    64,    65,    66,    67,    68,    69,    97,    70,    71,
+       0,     0,    98,     0,     0,     0,     0,     0,     0,     0,
+      72,    73,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    74,     0,
+       0,     0,     0,     0,     0,    75,    76,     0,     0,     0,
+      77,     0,    78,     0,    79,    80,    81,    82,    83,    84,
+      85,     0,     0,     0,     0,     0,    86,     0,     0,     0,
+       0,     0,    87,     0,     0,     0,     0,    88,    89,     0,
+      90,     0,     0,    91,    92,    93,     0,     0,     0,     0,
+      94,    95,    62,    63,    64,    65,    66,    67,    68,    69,
+      97,    70,    71,     0,     0,    98,     0,     0,     0,     0,
+       0,     0,     0,    72,    73,     0,     0,     0,     0,    62,
+      63,    64,    65,    66,    67,    68,    69,     0,    70,    71,
+       0,    74,     0,     0,     0,     0,     0,     0,    75,    76,
+      72,    73,     0,    77,     0,    78,     0,    79,     0,     0,
+      82,    83,    84,    85,     0,     0,     0,     0,    74,    86,
+       0,     0,   325,     0,     0,    75,    76,     0,     0,     0,
+      77,     0,    78,     0,    79,     0,     0,    82,    83,    84,
+      85,     0,     0,    94,    95,     0,    86,     0,     0,     0,
+       0,     0,     0,    97,    62,    63,    64,    65,    66,    67,
+      68,    69,     0,    70,    71,     0,     0,     0,     0,     0,
+      94,    95,     0,     0,     0,    72,    73,     0,     0,     0,
+      97,    62,    63,    64,    65,    66,    67,    68,    69,     0,
+      70,    71,     0,    74,     0,     0,     0,     0,     0,     0,
+      75,    76,    72,    73,     0,    77,     0,    78,     0,    79,
+       0,     0,    82,    83,    84,    85,     0,     0,     0,     0,
+      74,    86,     0,     0,     0,     0,     0,    75,    76,     0,
+       0,     0,    77,     0,    78,     0,    79,     0,     0,    82,
+      83,    84,    85,     0,     0,   179,    95,     0,    86,     0,
+       0,     0,     0,     0,     0,    97,    62,    63,    64,    65,
+      66,    67,    68,    69,     0,    70,    71,     0,     0,     0,
+       0,     0,   395,    95,     0,     0,     0,    72,    73,     0,
+     189,   190,    97,   191,   192,   193,   194,   195,   196,   197,
+     198,   199,     0,     0,     0,    74,     0,     0,     0,     0,
+       0,     0,    75,    76,     0,   200,     0,    77,     0,    78,
+       0,    79,     0,     0,     0,     0,     0,   201,     0,     0,
+     202,     0,   203,    86,   204,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,    94,    95,     0,
+       0,     0,     0,     0,     0,     0,     0,    97
   };
 
-  const signed char
+  const short
   parser::yycheck_[] =
   {
-       3,     4,     5,     6,     7,     8,    67,    51,    41,    12,
-      13,    15,    56,    57,     3,     4,     5,     6,     7,     8,
-       0,    24,    25,    12,    13,     9,    10,    11,    12,    13,
-      14,    45,    46,    47,    48,    27,    43,    41,    40,    42,
-      50,    51,    52,    53,    54,    42,    49,    50,    54,    55,
-      26,    54,    44,    58,    59,    60,    24,    25,    48,    49,
-      56,    57,    43,    30,    67,    52,    44,    68,    68,    46,
-      45,    -1,    55,    47,    -1,    -1,    90,    61,    67,    -1,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    91,    92,
+      29,   103,    79,    72,    73,    74,    75,    76,    77,    78,
+      17,     4,     5,     6,     9,    10,   115,    11,     9,    10,
+       9,     9,     9,     9,     9,    48,    72,     9,    48,    45,
+      46,    47,    48,    66,    53,    53,     9,     3,     4,     5,
+       6,     7,     8,     9,    10,    38,    12,    13,    22,    72,
+      29,    97,    72,    72,    72,    96,    66,    98,    24,    25,
+     137,    90,    36,     9,     9,    75,     9,   108,   101,    96,
+       0,    98,    59,    60,   103,    70,    42,    93,   155,    70,
+      70,   108,   184,    49,    50,    27,    71,    75,    54,    71,
+      56,    67,    58,    59,    60,    61,    62,    63,    64,    94,
+      95,    69,    44,    66,    70,    69,    72,   101,    71,   104,
+      76,    90,   211,   104,   103,    81,    82,   103,    84,   104,
+     412,    87,    88,    89,    70,    70,     9,    65,    94,    95,
+      68,    97,    70,    66,    72,   142,   428,   166,   104,    51,
+      78,   148,    75,   109,    56,    57,   438,    93,   440,    10,
+      11,   253,   145,    69,    65,   184,    69,    68,    71,    70,
+     229,    72,     3,     4,     5,     6,     7,     8,     9,    10,
+       9,    12,    13,   250,   251,    23,    24,    23,    24,   256,
+     257,    66,    67,    24,    25,     3,     4,     5,     6,     7,
+       8,     9,    10,    69,    12,    13,    44,    72,    44,    74,
+       9,    42,   226,   227,   228,    53,    69,    53,    49,    50,
+      81,    81,   241,    54,     9,    56,   318,    58,    54,    55,
+      61,    62,    63,    64,   253,    96,    96,    98,    98,    70,
+      71,   260,   334,    66,    67,   106,   106,   266,    41,   316,
+      58,     9,    65,   320,   321,    68,     9,    70,    11,    72,
+       9,   143,    70,    94,    95,    78,   148,   149,    61,    62,
+      63,    64,   241,   104,    69,    65,    71,    69,    68,    71,
+      70,    70,    72,    24,    25,   377,    94,    95,    78,    70,
+     382,   260,    70,   385,    90,    91,   104,    69,    96,   318,
+      98,    69,   100,    40,   102,   397,    52,   105,    43,   107,
+     402,    42,   404,    30,   333,   334,    66,    67,   337,    26,
+     412,   216,   217,    11,   343,    69,   418,     9,   420,    69,
+      86,    87,   224,   225,   353,    69,   428,    93,    70,   358,
+     106,    69,    98,    69,   436,     9,   438,    47,   440,    47,
+      71,    67,    67,   372,    78,     9,    69,    69,   377,    69,
+     379,   380,   381,   382,    41,    67,   385,    72,   337,   218,
+     219,   220,   221,   222,   343,   394,   106,    67,   397,   398,
+      67,    99,   401,   402,   353,   404,    69,    73,    67,    93,
+      93,    71,    73,   412,    69,   414,   415,    92,    71,   418,
+      69,   420,    69,   372,    69,    73,    67,   426,     9,   428,
+     379,   430,   381,    69,   433,    67,    74,   436,   437,   438,
+       9,   440,    71,    69,    67,   394,   182,   183,    69,   398,
+     186,    69,   401,   189,   190,   191,   192,   193,   194,   195,
+     196,   197,   198,   199,   200,    67,   415,   203,   204,    14,
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    78,
+      69,   430,    93,    71,   433,     8,   351,    36,   437,     3,
+       4,     5,     6,     7,     8,     9,    10,   153,    12,    13,
+      53,    44,   181,   269,   116,   269,   213,   210,    -1,   214,
+      24,    25,   212,   215,   223,    -1,    -1,    -1,   254,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    42,   265,
+      -1,    -1,    -1,    -1,    -1,    49,    50,    -1,    -1,    -1,
+      54,    -1,    56,    -1,    58,    59,    60,    61,    62,    63,
+      64,    -1,    -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,
+      -1,    -1,    76,    77,    -1,    79,    80,    81,    82,    -1,
+      84,    -1,    -1,    87,    88,    89,    -1,    -1,    -1,    -1,
+      94,    95,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+     104,    -1,    -1,    -1,    -1,   109,    -1,    -1,    -1,   335,
+     336,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,   348,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,   364,    -1,
+      -1,   367,   368,    -1,    -1,   371,    -1,     3,     4,     5,
+       6,     7,     8,     9,    10,    -1,    12,    13,    -1,    -1,
+      -1,    -1,    -1,   389,    -1,    -1,    -1,    -1,    24,    25,
+      -1,    -1,    -1,   399,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,   411,    42,    -1,    -1,    -1,
+      -1,    -1,    -1,    49,    50,    -1,   422,    -1,    54,    -1,
+      56,    -1,    58,    59,    60,    61,    62,    63,    64,    -1,
+      -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,
+      76,    -1,    -1,    -1,    -1,    81,    82,    -1,    84,    -1,
+      -1,    87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,
+      -1,    -1,    -1,    99,    -1,    -1,    -1,    -1,   104,    -1,
+      -1,    -1,    -1,   109,     3,     4,     5,     6,     7,     8,
+       9,    10,    -1,    12,    13,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    -1,    91,    92
+      -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    -1,    -1,    -1,    54,    -1,    56,    -1,    58,
+      59,    60,    61,    62,    63,    64,    -1,    -1,    -1,    -1,
+      -1,    70,    -1,    -1,    -1,    -1,    -1,    76,    -1,    -1,
+      -1,    -1,    81,    82,    -1,    84,    85,    -1,    87,    88,
+      89,    -1,    -1,    -1,    -1,    94,    95,     3,     4,     5,
+       6,     7,     8,     9,    10,   104,    12,    13,    -1,    -1,
+     109,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    24,    25,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    42,    -1,    -1,    -1,
+      -1,    -1,    -1,    49,    50,    -1,    -1,    -1,    54,    -1,
+      56,    -1,    58,    59,    60,    61,    62,    63,    64,    -1,
+      -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,
+      76,    -1,    -1,    -1,    -1,    81,    82,    -1,    84,    -1,
+      -1,    87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,
+      -1,    -1,    -1,    99,    -1,    -1,    -1,    -1,   104,    -1,
+      -1,    -1,    -1,   109,     3,     4,     5,     6,     7,     8,
+       9,    10,    -1,    12,    13,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    -1,    -1,    -1,    54,    -1,    56,    -1,    58,
+      59,    60,    61,    62,    63,    64,    -1,    -1,    -1,    -1,
+      -1,    70,    -1,    72,    -1,    -1,    -1,    76,    -1,    -1,
+      -1,    -1,    81,    82,    -1,    84,    -1,    -1,    87,    88,
+      89,    -1,    -1,    -1,    -1,    94,    95,     3,     4,     5,
+       6,     7,     8,     9,    10,   104,    12,    13,    -1,    -1,
+     109,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    24,    25,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    42,    -1,    -1,    -1,
+      -1,    -1,    -1,    49,    50,    -1,    -1,    -1,    54,    -1,
+      56,    -1,    58,    59,    60,    61,    62,    63,    64,    -1,
+      -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,
+      76,    -1,    -1,    -1,    -1,    81,    82,    -1,    84,    85,
+      -1,    87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,
+       3,     4,     5,     6,     7,     8,     9,    10,   104,    12,
+      13,    -1,    -1,   109,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    24,    25,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    42,
+      -1,    -1,    -1,    -1,    -1,    -1,    49,    50,    -1,    -1,
+      -1,    54,    -1,    56,    -1,    58,    59,    60,    61,    62,
+      63,    64,    -1,    -1,    -1,    -1,    -1,    70,    -1,    -1,
+      -1,    -1,    -1,    76,    -1,    -1,    -1,    -1,    81,    82,
+      -1,    84,    -1,    -1,    87,    88,    89,    -1,    -1,    -1,
+      -1,    94,    95,    -1,    -1,    -1,    99,    -1,    -1,    -1,
+      -1,   104,    -1,    -1,    -1,    -1,   109,     3,     4,     5,
+       6,     7,     8,     9,    10,    -1,    12,    13,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    24,    25,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    42,    -1,    -1,    -1,
+      -1,    -1,    -1,    49,    50,    -1,    -1,    -1,    54,    -1,
+      56,    -1,    58,    59,    60,    61,    62,    63,    64,    -1,
+      -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,
+      76,    -1,    -1,    -1,    -1,    81,    82,    -1,    84,    -1,
+      -1,    87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,
+      -1,    97,    -1,    -1,    -1,    -1,    -1,    -1,   104,    -1,
+      -1,    -1,    -1,   109,     3,     4,     5,     6,     7,     8,
+       9,    10,    -1,    12,    13,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    -1,    -1,    -1,    54,    -1,    56,    -1,    58,
+      59,    60,    61,    62,    63,    64,    -1,    -1,    -1,    -1,
+      -1,    70,    -1,    -1,    -1,    -1,    -1,    76,    -1,    -1,
+      -1,    -1,    81,    82,    -1,    84,    -1,    -1,    87,    88,
+      89,    -1,    -1,    -1,    -1,    94,    95,    -1,    -1,    -1,
+      99,    -1,    -1,    -1,    -1,   104,    -1,    -1,    -1,    -1,
+     109,     3,     4,     5,     6,     7,     8,     9,    10,    -1,
+      12,    13,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    24,    25,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      42,    -1,    -1,    -1,    -1,    -1,    -1,    49,    50,    -1,
+      -1,    -1,    54,    -1,    56,    -1,    58,    59,    60,    61,
+      62,    63,    64,    -1,    -1,    -1,    -1,    -1,    70,    -1,
+      -1,    -1,    -1,    -1,    76,    -1,    -1,    -1,    -1,    81,
+      82,    83,    84,    -1,    -1,    87,    88,    89,    -1,    -1,
+      -1,    -1,    94,    95,     3,     4,     5,     6,     7,     8,
+       9,    10,   104,    12,    13,    -1,    -1,   109,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    -1,    -1,    -1,    54,    -1,    56,    -1,    58,
+      59,    60,    61,    62,    63,    64,    -1,    -1,    -1,    -1,
+      -1,    70,    -1,    -1,    -1,    -1,    -1,    76,    -1,    -1,
+      -1,    -1,    81,    82,    83,    84,    -1,    -1,    87,    88,
+      89,    -1,    -1,    -1,    -1,    94,    95,     3,     4,     5,
+       6,     7,     8,     9,    10,   104,    12,    13,    -1,    -1,
+     109,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    24,    25,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    42,    -1,    -1,    -1,
+      -1,    -1,    -1,    49,    50,    -1,    -1,    -1,    54,    -1,
+      56,    -1,    58,    59,    60,    61,    62,    63,    64,    -1,
+      -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,
+      76,    -1,    -1,    -1,    -1,    81,    82,    -1,    84,    -1,
+      -1,    87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,
+      -1,    97,    -1,    -1,    -1,    -1,    -1,    -1,   104,    -1,
+      -1,    -1,    -1,   109,     3,     4,     5,     6,     7,     8,
+       9,    10,    -1,    12,    13,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    -1,    -1,    -1,    54,    -1,    56,    -1,    58,
+      59,    60,    61,    62,    63,    64,    -1,    -1,    -1,    -1,
+      -1,    70,    -1,    -1,    -1,    -1,    -1,    76,    77,    -1,
+      -1,    -1,    81,    82,    -1,    84,    -1,    -1,    87,    88,
+      89,    -1,    -1,    -1,    -1,    94,    95,     3,     4,     5,
+       6,     7,     8,     9,    10,   104,    12,    13,    -1,    -1,
+     109,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    24,    25,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    42,    -1,    -1,    -1,
+      -1,    -1,    -1,    49,    50,    -1,    -1,    -1,    54,    -1,
+      56,    -1,    58,    59,    60,    61,    62,    63,    64,    -1,
+      -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,
+      76,    -1,    -1,    -1,    -1,    81,    82,    -1,    84,    -1,
+      86,    87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,
+       3,     4,     5,     6,     7,     8,     9,    10,   104,    12,
+      13,    -1,    -1,   109,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    24,    25,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    42,
+      -1,    -1,    -1,    -1,    -1,    -1,    49,    50,    -1,    -1,
+      -1,    54,    -1,    56,    -1,    58,    59,    60,    61,    62,
+      63,    64,    -1,    -1,    -1,    -1,    -1,    70,    -1,    -1,
+      -1,    -1,    -1,    76,    -1,    -1,    -1,    -1,    81,    82,
+      -1,    84,    -1,    86,    87,    88,    89,    -1,    -1,    -1,
+      -1,    94,    95,     3,     4,     5,     6,     7,     8,     9,
+      10,   104,    12,    13,    -1,    -1,   109,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,    49,
+      50,    -1,    -1,    -1,    54,    -1,    56,    -1,    58,    59,
+      60,    61,    62,    63,    64,    -1,    -1,    -1,    -1,    -1,
+      70,    -1,    -1,    -1,    -1,    -1,    76,    -1,    -1,    -1,
+      -1,    81,    82,    -1,    84,    -1,    86,    87,    88,    89,
+      -1,    -1,    -1,    -1,    94,    95,     3,     4,     5,     6,
+       7,     8,     9,    10,   104,    12,    13,    -1,    -1,   109,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    24,    25,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,
+      -1,    -1,    49,    50,    -1,    -1,    -1,    54,    -1,    56,
+      -1,    58,    59,    60,    61,    62,    63,    64,    -1,    -1,
+      -1,    -1,    -1,    70,    -1,    -1,    -1,    -1,    -1,    76,
+      -1,    -1,    -1,    -1,    81,    82,    -1,    84,    -1,    86,
+      87,    88,    89,    -1,    -1,    -1,    -1,    94,    95,     3,
+       4,     5,     6,     7,     8,     9,    10,   104,    12,    13,
+      -1,    -1,   109,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      24,    25,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    42,    -1,
+      -1,    -1,    -1,    -1,    -1,    49,    50,    -1,    -1,    -1,
+      54,    -1,    56,    -1,    58,    59,    60,    61,    62,    63,
+      64,    -1,    -1,    -1,    -1,    -1,    70,    -1,    -1,    -1,
+      -1,    -1,    76,    -1,    -1,    -1,    -1,    81,    82,    -1,
+      84,    -1,    -1,    87,    88,    89,    -1,    -1,    -1,    -1,
+      94,    95,     3,     4,     5,     6,     7,     8,     9,    10,
+     104,    12,    13,    -1,    -1,   109,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    24,    25,    -1,    -1,    -1,    -1,     3,
+       4,     5,     6,     7,     8,     9,    10,    -1,    12,    13,
+      -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,    49,    50,
+      24,    25,    -1,    54,    -1,    56,    -1,    58,    -1,    -1,
+      61,    62,    63,    64,    -1,    -1,    -1,    -1,    42,    70,
+      -1,    -1,    73,    -1,    -1,    49,    50,    -1,    -1,    -1,
+      54,    -1,    56,    -1,    58,    -1,    -1,    61,    62,    63,
+      64,    -1,    -1,    94,    95,    -1,    70,    -1,    -1,    -1,
+      -1,    -1,    -1,   104,     3,     4,     5,     6,     7,     8,
+       9,    10,    -1,    12,    13,    -1,    -1,    -1,    -1,    -1,
+      94,    95,    -1,    -1,    -1,    24,    25,    -1,    -1,    -1,
+     104,     3,     4,     5,     6,     7,     8,     9,    10,    -1,
+      12,    13,    -1,    42,    -1,    -1,    -1,    -1,    -1,    -1,
+      49,    50,    24,    25,    -1,    54,    -1,    56,    -1,    58,
+      -1,    -1,    61,    62,    63,    64,    -1,    -1,    -1,    -1,
+      42,    70,    -1,    -1,    -1,    -1,    -1,    49,    50,    -1,
+      -1,    -1,    54,    -1,    56,    -1,    58,    -1,    -1,    61,
+      62,    63,    64,    -1,    -1,    94,    95,    -1,    70,    -1,
+      -1,    -1,    -1,    -1,    -1,   104,     3,     4,     5,     6,
+       7,     8,     9,    10,    -1,    12,    13,    -1,    -1,    -1,
+      -1,    -1,    94,    95,    -1,    -1,    -1,    24,    25,    -1,
+      28,    29,   104,    31,    32,    33,    34,    35,    36,    37,
+      38,    39,    -1,    -1,    -1,    42,    -1,    -1,    -1,    -1,
+      -1,    -1,    49,    50,    -1,    53,    -1,    54,    -1,    56,
+      -1,    58,    -1,    -1,    -1,    -1,    -1,    65,    -1,    -1,
+      68,    -1,    70,    70,    72,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    94,    95,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,   104
   };
 
-  const signed char
+  const unsigned char
   parser::yystos_[] =
   {
-       0,     3,     4,     5,     6,     7,     8,    12,    13,    24,
-      25,    42,    49,    50,    54,    67,    91,    92,   108,   109,
-     110,   111,   112,   113,   114,   115,   116,   117,   118,   119,
-     120,   121,   122,   123,   121,   121,   121,   121,   121,   121,
-     109,    67,     0,    41,    40,    43,    52,    42,    27,    44,
-      45,    46,    47,    48,    90,    30,    54,    55,    51,    56,
-      57,    26,    24,    25,    68,   109,   111,   112,   113,   114,
-     115,   116,   116,   117,   117,   117,   117,   117,   118,   119,
-     119,   120,   120,   120,   121,    68
+       0,    96,    98,   100,   102,   105,   107,   112,   113,   114,
+     115,   116,   117,   126,   128,   131,   136,     9,     9,    10,
+      11,   144,   144,   144,   144,     0,   114,    70,   119,   119,
+      11,   101,   127,     9,   103,   122,   129,   130,    81,    96,
+      98,   106,   116,   117,   137,   138,   139,   140,    96,    98,
+     108,   116,   117,   132,   133,   134,   135,    71,   120,   121,
+     122,    67,     3,     4,     5,     6,     7,     8,     9,    10,
+      12,    13,    24,    25,    42,    49,    50,    54,    56,    58,
+      59,    60,    61,    62,    63,    64,    70,    76,    81,    82,
+      84,    87,    88,    89,    94,    95,    99,   104,   109,   123,
+     141,   142,   143,   145,   146,   147,   148,   150,   151,   153,
+     159,   160,   161,   162,   163,   164,   165,   166,   167,   168,
+     169,   170,   171,   172,   173,   174,   175,   176,   177,   178,
+     179,   181,    69,    66,   101,    69,    66,    67,   103,   130,
+      69,   144,     9,     9,    69,    81,   106,   138,     9,     9,
+      69,   108,   133,    69,    71,    67,    14,    15,    16,    17,
+      18,    19,    20,    21,    22,    23,   149,   141,   176,   176,
+     176,   176,   176,   176,   176,   149,     9,     9,   162,    94,
+     162,    70,    70,    85,   145,   162,    70,    69,   162,    28,
+      29,    31,    32,    33,    34,    35,    36,    37,    38,    39,
+      53,    65,    68,    70,    72,   124,    99,   146,    69,   165,
+      41,   164,    40,    43,    52,    42,    27,    44,    45,    46,
+      47,    48,    93,    30,    54,    55,    51,    56,    57,    26,
+      24,    25,    11,    69,     9,   149,    69,    69,   106,    70,
+     118,   118,   144,    69,   118,   119,   118,    69,   121,   149,
+      47,    47,    72,   145,    72,    74,    67,    67,    71,     9,
+      78,     9,   148,   162,   162,    85,    90,    91,   154,   155,
+     156,   158,   162,   162,   162,   162,   162,   162,   162,   162,
+     162,   162,   162,   162,   162,     9,    11,     9,    71,   125,
+     162,   162,    69,    69,   166,   165,   167,   168,   169,   170,
+     171,   171,   172,   172,   172,   172,   172,   173,   174,   174,
+     175,   175,   175,   176,    69,   104,    67,    99,   145,   106,
+      67,    67,    99,   149,   149,    73,    97,   162,     9,    75,
+     182,   149,   149,    93,   145,    93,    69,    71,   162,    94,
+      95,   141,   157,    67,    92,   156,   158,    71,    66,    71,
+      73,    69,    71,   149,    69,    99,    69,   149,   149,    69,
+      48,    48,    69,    73,    67,    66,    75,    53,    53,   141,
+      77,    79,    80,   152,   162,   162,    83,   145,     9,    67,
+      66,    67,   145,   162,   120,   145,    69,    97,    97,    74,
+     162,     9,   162,   162,    78,    94,   162,   145,    71,    69,
+      83,    67,   145,   141,   145,    71,    97,    69,    69,   162,
+     180,    67,   145,     9,    93,    78,    77,    86,   145,   162,
+     145,    69,    66,    75,   162,   152,    93,   141,   145,    86,
+      71,   162,   141,    78,   152,    86,   145,    78,   145,    86,
+     145,   152,   152
   };
 
-  const signed char
+  const unsigned char
   parser::yyr1_[] =
   {
-       0,   107,   108,   109,   110,   110,   111,   111,   112,   112,
-     113,   113,   114,   114,   115,   115,   115,   116,   116,   116,
-     116,   116,   116,   117,   117,   118,   118,   118,   119,   119,
-     119,   119,   120,   120,   120,   120,   120,   120,   120,   121,
-     121,   122,   122,   122,   123,   123,   123,   123,   123,   123,
-     123,   123,   123,   123,   123
+       0,   111,   112,   113,   113,   114,   114,   114,   114,   114,
+     115,   115,   116,   117,   117,   118,   118,   119,   119,   120,
+     120,   121,   122,   122,   123,   124,   124,   125,   125,   126,
+     126,   127,   127,   128,   128,   129,   129,   130,   131,   131,
+     132,   132,   133,   133,   134,   134,   134,   135,   135,   136,
+     136,   136,   136,   137,   137,   138,   138,   139,   139,   140,
+     140,   140,   141,   141,   141,   141,   141,   141,   142,   142,
+     142,   143,   143,   144,   144,   145,   145,   146,   146,   146,
+     146,   146,   146,   146,   146,   146,   146,   146,   147,   148,
+     148,   149,   149,   149,   149,   149,   149,   149,   149,   149,
+     149,   149,   150,   150,   150,   150,   150,   150,   150,   150,
+     150,   150,   150,   150,   151,   151,   152,   152,   152,   152,
+     152,   153,   154,   154,   154,   155,   155,   156,   156,   156,
+     157,   157,   158,   159,   159,   159,   159,   160,   160,   161,
+     161,   162,   162,   163,   163,   163,   164,   164,   164,   164,
+     165,   165,   166,   166,   167,   167,   168,   168,   169,   169,
+     170,   170,   170,   171,   171,   171,   171,   171,   171,   172,
+     172,   173,   173,   173,   174,   174,   174,   174,   175,   175,
+     175,   175,   175,   175,   175,   175,   176,   176,   177,   177,
+     177,   178,   178,   178,   178,   178,   178,   178,   178,   178,
+     178,   178,   178,   178,   179,   179,   180,   180,   181,   181,
+     182,   182
   };
 
   const signed char
   parser::yyr2_[] =
   {
-       0,     2,     1,     1,     3,     1,     3,     1,     3,     1,
-       3,     1,     3,     1,     3,     3,     1,     3,     3,     3,
-       3,     3,     1,     3,     1,     3,     3,     1,     3,     3,
-       3,     1,     2,     2,     2,     2,     2,     2,     1,     3,
-       1,     2,     2,     1,     1,     1,     1,     1,     1,     1,
-       1,     1,     1,     4,     3
+       0,     2,     1,     2,     1,     1,     1,     1,     1,     1,
+       1,     1,     8,     6,     5,     5,     3,     3,     2,     3,
+       1,     3,     3,     1,     2,     3,     2,     3,     1,     5,
+       4,     3,     1,     5,     4,     3,     2,     3,     5,     4,
+       2,     1,     1,     1,     7,     7,     1,     5,     1,     5,
+       4,     7,     6,     2,     1,     1,     1,     8,     1,     6,
+       5,     1,     3,     3,     4,     3,     1,     1,     1,     1,
+       3,     1,     1,     1,     1,     3,     2,     1,     1,     1,
+       1,     1,     1,     1,     1,     1,     1,     1,     2,     6,
+       6,     1,     1,     1,     1,     1,     1,     1,     1,     3,
+       4,     4,     3,     3,     3,     3,     3,     3,     3,     3,
+       3,     3,     3,     3,     5,     8,     5,     8,     7,     3,
+       1,     4,     2,     1,     1,     2,     1,     4,     5,     4,
+       3,     1,     3,     8,     7,    10,     9,     6,     5,     4,
+       3,     1,     1,     2,     2,     3,     1,     1,     1,     1,
+       3,     1,     3,     1,     3,     1,     3,     1,     3,     1,
+       3,     3,     1,     3,     3,     3,     3,     3,     1,     3,
+       1,     3,     3,     1,     3,     3,     3,     1,     2,     2,
+       2,     2,     2,     2,     2,     1,     3,     1,     2,     2,
+       1,     1,     1,     1,     1,     1,     1,     1,     1,     1,
+       1,     1,     1,     4,     5,     8,     3,     1,     5,     4,
+       5,     3
   };
 
 
 
 
 #if YYDEBUG
-  const unsigned char
+  const short
   parser::yyrline_[] =
   {
-       0,    58,    58,    65,    69,    71,    75,    77,    81,    83,
-      87,    89,    93,    95,    99,   101,   103,   107,   109,   111,
-     113,   115,   117,   121,   123,   127,   129,   131,   135,   137,
-     139,   141,   145,   147,   149,   151,   153,   155,   157,   161,
-     163,   167,   169,   171,   175,   177,   179,   181,   183,   185,
-     187,   189,   191,   193,   195
+       0,    66,    66,    70,    72,    76,    78,    80,    82,    84,
+      88,    90,    94,    98,   100,   104,   106,   110,   112,   116,
+     118,   122,   126,   128,   132,   136,   138,   142,   144,   148,
+     150,   154,   156,   160,   162,   166,   168,   172,   176,   178,
+     182,   184,   188,   190,   194,   196,   198,   202,   204,   208,
+     210,   212,   214,   218,   220,   224,   226,   230,   232,   236,
+     238,   240,   244,   246,   248,   250,   252,   254,   258,   260,
+     262,   266,   268,   272,   274,   278,   280,   284,   286,   288,
+     290,   292,   294,   296,   298,   300,   302,   304,   308,   312,
+     314,   318,   320,   322,   324,   326,   328,   330,   332,   334,
+     336,   338,   342,   344,   346,   348,   350,   352,   354,   356,
+     358,   360,   362,   364,   368,   370,   374,   376,   378,   380,
+     382,   386,   390,   392,   394,   398,   400,   404,   406,   408,
+     412,   414,   418,   422,   424,   426,   428,   432,   434,   438,
+     440,   444,   446,   450,   452,   454,   458,   460,   462,   464,
+     468,   470,   474,   476,   480,   482,   486,   488,   492,   494,
+     498,   500,   502,   506,   508,   510,   512,   514,   516,   520,
+     522,   526,   528,   530,   534,   536,   538,   540,   544,   546,
+     548,   550,   552,   554,   556,   558,   562,   564,   568,   570,
+     572,   576,   578,   580,   582,   584,   586,   588,   590,   592,
+     594,   596,   598,   600,   604,   606,   610,   612,   616,   618,
+     622,   624
   };
 
   void
@@ -1668,6 +3886,6 @@ namespace yy {
 
 
 } // yy
-#line 1672 "grammar/build/syntax.tab.cc"
+#line 3890 "grammar/build/syntax.tab.cc"
 
-#line 198 "grammar/syntax.y"
+#line 627 "grammar/syntax.y"

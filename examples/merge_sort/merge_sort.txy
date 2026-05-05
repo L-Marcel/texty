@@ -1,12 +1,12 @@
 proc swap(array: int[]; a, b: int)
 	var temp: int = array[a];
-     array[a] = array[b];
-     array[b] = temp;
+  array[a] = array[b];
+  array[b] = temp;
 endproc;
 
 fn partition(array: int[]; min, max: int): int
 	var i: int = (min - 1);
-	for j in min..max
+	for (j in min..max)
 		if array[j] <= array[max]
 		then swap(array, ++i, j);
 		endif;
@@ -26,27 +26,27 @@ endproc;
 
 
 fn main(): int
-	print(“Digite o tamanho do array: ”);
+	print("Digite o tamanho do array: ");
 	var size: int = int(input_line());
-	println(“”);
+	println("");
 
 	var array: int[] = new int[size];
-	for i in 0..size
+	for (i in 0..size)
 		print(format(
-			“Digite o valor do %int° elemento: ”,
+			"Digite o valor do %int° elemento: ",
 			i + 1
 		));
 		array[i] = int(input_line());
-		println(“”);
+		println("");
 	endfor;
 
 	println(format(
-		“Sorteando lista: %int[]”,
+		"Sorteando lista: %int[]",
 		array
 	));
 	quick_sort(array, 0, size - 1);
 	println(format(
-		“Lista sorteada: %int[]”,
+		"Lista sorteada: %int[]",
 		array
 	));
 	return 0;

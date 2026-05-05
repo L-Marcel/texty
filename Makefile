@@ -36,5 +36,8 @@ run: all
 pendrive: all
 	/lib64/ld-linux-x86-64.so.2 ./$(TARGET)
 
+check-reduce: 
+	bison -Wcounterexamples grammar/syntax.y
+
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET)

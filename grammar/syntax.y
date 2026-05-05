@@ -40,30 +40,429 @@
 %token LAZY_AND_ATTR LAZY_OR_ATTR MOD_ATTR XOR_ATTR PLUS_ATTR
 %token CONCAT_ATTR MINUS_ATTR MULT_ATTR DIV_ATTR AND OR REF BAR
 %token NOT_EQ LT_EQ GT_EQ LT GT NOT REV MOD XOR ATTR MINUS PLUS
-%token MULT DIV NEW VAR CONST RANGE DOT COMMA COLON DOUBLE_COLON
-%token SEMICOLON LEFT_PAREN RIGHT_PAREN LEFT_BRACKET RIGHT_BRACKET
-%token LEFT_BRACE RIGHT_BRACE IF END_IF THEN ELIF ELSE FOR WHILE
-%token END_WHILE REPEAT UNTIL END_FOR BREAK CONTINUE SWITCH CASE
-%token DEFAULT END_SWITCH IN SOME NONE FUNCTION END_FUNCTION
+%token MULT DIV NEW VAR CONST RANGE RANGE_INC RANGE_EXC RANGE_EXC_INC 
+%token DOT COMMA COLON DOUBLE_COLON SEMICOLON LEFT_PAREN RIGHT_PAREN 
+%token LEFT_BRACKET RIGHT_BRACKET LEFT_BRACE RIGHT_BRACE IF END_IF THEN 
+%token ELIF ELSE FOR WHILE END_WHILE REPEAT UNTIL END_FOR BREAK CONTINUE 
+%token SWITCH CASE DEFAULT END_SWITCH IN SOME NONE FUNCTION END_FUNCTION
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
-%token IMPL END_IMPL TRAIT END_TRAIT RETURN
+%token IMPL END_IMPL TRAIT END_TRAIT RETURN DO
 
-%type <ExpressionNode*> program
-%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
+%type <Node*> root program program_slice subprogram enum struct trait impl
+%type <Node*> fn proc params_self_list params_list params param id_list
+%type <Node*> type stmts stmt subprogram_call access call_params_list call_params
+%type <Node*> enum_values name struct_attrs struct_attr
+%type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
+%type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
+%type <Node*> access_base id return attr assign if if_end switch cases case_list
+%type <Node*> case case_values default_case for while repeat array_allocation array_allocation_values
+%type <Node*> struct_allocation struct_allocation_values range_interval
+%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr range_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
-%start program
+%start root
 
 %%
-program: expr {
+root: program {
   ctx.root = $1;
-  ctx.root->get_type();
+}
+
+program: program program_slice {
+  $$ = nullptr;
+} | program_slice {
+  $$ = nullptr;
 };
 
-// TODO: Restante das regras
+program_slice: subprogram {
+  $$ = nullptr;
+} | enum {
+  $$ = nullptr;
+} | struct {
+  $$ = nullptr;
+} | trait {
+  $$ = nullptr;
+} | impl {
+  $$ = nullptr;
+};
+
+subprogram: fn {
+  $$ = nullptr;
+} | proc {
+  $$ = nullptr;
+};
+
+fn: FUNCTION ID params_list COLON type stmts END_FUNCTION SEMICOLON {
+  $$ = nullptr;
+};
+
+proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON {
+  $$ = nullptr;
+} | PROCEDURE ID params_list END_PROCEDURE SEMICOLON {
+  $$ = nullptr;
+};
+
+params_self_list: LEFT_PAREN SELF SEMICOLON params RIGHT_PAREN {
+  $$ = nullptr;
+} | LEFT_PAREN SELF RIGHT_PAREN {
+  $$ = nullptr;
+};
+
+params_list: LEFT_PAREN params RIGHT_PAREN {
+  $$ = nullptr;
+} | LEFT_PAREN RIGHT_PAREN {
+  $$ = nullptr;
+};
+
+params: params SEMICOLON param {
+  $$ = nullptr;
+} | param {
+  $$ = nullptr;
+};
+
+param: id_list COLON type {
+  $$ = nullptr;
+};
+
+id_list: id_list COMMA ID {
+  $$ = nullptr;
+} | ID {
+  $$ = nullptr;
+};
+
+subprogram_call: access call_params_list {
+  $$ = nullptr;
+};
+
+call_params_list: LEFT_PAREN call_params RIGHT_PAREN {
+  $$ = nullptr;
+} | LEFT_PAREN RIGHT_PAREN {
+  $$ = nullptr;
+};
+
+call_params: call_params COMMA expr {
+  $$ = nullptr;
+} | expr {
+  $$ = nullptr;
+};
+
+enum: ENUM name enum_values END_ENUM SEMICOLON {
+  $$ = nullptr;
+} | ENUM name END_ENUM SEMICOLON {
+  $$ = nullptr;
+};
+
+enum_values: enum_values COMMA CONST_NAME {
+  $$ = nullptr;
+} | CONST_NAME {
+  $$ = nullptr;
+};
+
+struct: STRUCT name struct_attrs END_STRUCT SEMICOLON {
+  $$ = nullptr;
+} | STRUCT name END_STRUCT SEMICOLON {
+  $$ = nullptr;
+};
+
+struct_attrs: struct_attrs struct_attr SEMICOLON {
+  $$ = nullptr;
+} | struct_attr SEMICOLON {
+  $$ = nullptr;
+};
+
+struct_attr: id_list COLON type {
+  $$ = nullptr;
+};
+
+trait: TRAIT name trait_subprograms END_TRAIT SEMICOLON {
+  $$ = nullptr;
+} | TRAIT name END_TRAIT SEMICOLON {
+  $$ = nullptr;
+};
+
+trait_subprograms: trait_subprograms trait_subprogram {
+  $$ = nullptr;
+} | trait_subprogram {
+  $$ = nullptr;
+};
+
+trait_subprogram: trait_fn {
+  $$ = nullptr;
+} | trait_proc {
+  $$ = nullptr;
+};
+
+trait_fn: FUNCTION ID params_self_list COLON type END_FUNCTION SEMICOLON {
+  $$ = nullptr;
+} | FUNCTION ID params_list COLON type END_FUNCTION SEMICOLON {
+  $$ = nullptr;
+} | fn {
+  $$ = nullptr;
+};
+
+trait_proc: PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON {
+  $$ = nullptr;
+} | proc {
+  $$ = nullptr;
+};
+
+impl: IMPL name impl_subprograms END_IMPL SEMICOLON {
+  $$ = nullptr;
+} | IMPL name END_IMPL SEMICOLON {
+  $$ = nullptr;
+} | IMPL name impl_subprograms FOR name END_IMPL SEMICOLON {
+  $$ = nullptr;
+} | IMPL name FOR name END_IMPL SEMICOLON {
+  $$ = nullptr;
+};
+
+impl_subprograms: impl_subprograms impl_subprogram {
+  $$ = nullptr;
+} | impl_subprogram {
+  $$ = nullptr;
+};
+
+impl_subprogram: impl_fn {
+  $$ = nullptr;
+} | impl_proc {
+  $$ = nullptr;
+};
+
+impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON {
+  $$ = nullptr;
+} | fn {
+  $$ = nullptr;
+};
+
+impl_proc: PROCEDURE ID params_self_list stmts END_PROCEDURE SEMICOLON {
+  $$ = nullptr;
+} | PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON {
+  $$ = nullptr;
+} | proc {
+  $$ = nullptr;
+};
+
+access: access DOT CONST_NAME {
+  $$ = nullptr;
+} | access DOT ID {
+  $$ = nullptr;
+} | access LEFT_BRACKET expr RIGHT_BRACKET {
+  $$ = nullptr;
+} | access DOUBLE_COLON ID {
+  $$ = nullptr;
+} | subprogram_call {
+  $$ = $1;
+} | access_base {
+  $$ = $1;
+};
+
+access_base: SELF {
+  $$ = nullptr;
+} | id {
+  $$ = nullptr;
+} | LEFT_PAREN expr RIGHT_PAREN {
+  $$ = nullptr;
+};
+
+id: NAME {
+  $$ = nullptr;
+} | ID {
+  $$ = nullptr;
+};
+
+name: NAME {
+  $$ = nullptr;
+} | CONST_NAME {
+  $$ = nullptr;
+};
+
+stmts: stmts stmt SEMICOLON {
+  $$ = nullptr;
+} | stmt SEMICOLON {
+  $$ = nullptr;
+};
+
+stmt: BREAK {
+  $$ = nullptr;
+} | CONTINUE {
+  $$ = nullptr;
+} | attr {
+  $$ = nullptr;
+} | assign {
+  $$ = nullptr;
+} | return {
+  $$ = nullptr;
+} | if {
+  $$ = nullptr;
+} | for {
+  $$ = nullptr;
+} | while {
+  $$ = nullptr;
+} | repeat {
+  $$ = nullptr;
+} | switch {
+  $$ = nullptr;
+} | expr {
+  $$ = nullptr;
+};
+
+return: RETURN expr {
+  $$ = nullptr;
+};
+
+attr: VAR ID COLON type ATTR expr {
+  $$ = nullptr;
+} | CONST ID COLON type ATTR expr {
+  $$ = nullptr;
+};
+
+type: TYPE_INT {
+  $$ = nullptr;
+} | TYPE_FLOAT {
+  $$ = nullptr;
+} | TYPE_DOUBLE {
+  $$ = nullptr;
+} | TYPE_LONG {
+  $$ = nullptr;
+} | TYPE_BYTE {
+  $$ = nullptr;
+} | TYPE_STRING {
+  $$ = nullptr;
+} | TYPE_CHAR {
+  $$ = nullptr;
+} | TYPE_BOOL {
+  $$ = nullptr;
+} | type LEFT_BRACKET RIGHT_BRACKET {
+  $$ = nullptr;
+} | TYPE_POINTER LT type GT {
+  $$ = nullptr;
+} | TYPE_OPTION LT type GT {
+  $$ = nullptr;
+};
+
+assign: access ATTR expr {
+  $$ = nullptr;
+} | access AND_ATTR expr {
+  $$ = nullptr;
+} | access OR_ATTR expr {
+  $$ = nullptr;
+} | access LAZY_AND_ATTR expr {
+  $$ = nullptr;
+} | access LAZY_OR_ATTR expr {
+  $$ = nullptr;
+} | access XOR_ATTR expr {
+  $$ = nullptr;
+} | access CONCAT_ATTR expr {
+  $$ = nullptr;
+} | access MOD_ATTR expr {
+  $$ = nullptr;
+} | access PLUS_ATTR expr {
+  $$ = nullptr;
+} | access MINUS_ATTR expr {
+  $$ = nullptr;
+} | access MULT_ATTR expr {
+  $$ = nullptr;
+} | access DIV_ATTR expr {
+  $$ = nullptr;
+};
+
+if: IF expr THEN stmts if_end {
+  $$ = nullptr;
+} | IF SOME ID IN access THEN stmts if_end {
+  $$ = nullptr;
+};
+
+if_end: ELIF expr THEN stmts if_end {
+  $$ = nullptr;
+} | ELIF SOME ID IN access THEN stmts if_end {
+  $$ = nullptr;
+} | ELIF SOME IN access THEN stmts if_end {
+  $$ = nullptr;
+} | ELSE stmts END_IF {
+  $$ = nullptr;
+} | END_IF {
+  $$ = nullptr;
+};
+
+switch: SWITCH expr cases END_SWITCH {
+  $$ = nullptr;
+};
+
+cases: case_list default_case {
+  $$ = nullptr;
+} | case_list {
+  $$ = nullptr;
+} | default_case {
+  $$ = nullptr;
+};
+
+case_list: case_list case {
+  $$ = nullptr;
+} | case {
+  $$ = nullptr;
+};
+
+case: CASE case_values COLON stmts {
+  $$ = nullptr;
+} | CASE SOME ID COLON stmts {
+  $$ = nullptr;
+} | CASE NONE COLON stmts {
+  $$ = nullptr;
+};
+
+case_values: case_values COMMA access {
+  $$ = nullptr;
+} | access {
+  $$ = nullptr;
+};
+
+default_case: DEFAULT COLON stmts {
+  $$ = nullptr;
+};
+
+for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
+  $$ = nullptr;
+} | FOR LEFT_PAREN ID IN expr RIGHT_PAREN END_FOR {
+  $$ = nullptr;
+} | FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN stmts END_FOR {
+  $$ = nullptr;
+} | FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN END_FOR {
+  $$ = nullptr;
+};
+
+while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE {
+  $$ = nullptr;
+} | WHILE LEFT_PAREN expr RIGHT_PAREN END_WHILE {
+  $$ = nullptr;
+};
+
+repeat: REPEAT stmts UNTIL expr {
+  $$ = nullptr;
+} | REPEAT UNTIL expr {
+  $$ = nullptr;
+};
 
 expr: or_expr {
   $$ = $1;
+} | range_expr {
+  $$ = $1;
+};
+
+range_expr: range_interval or_expr {
+  $$ = nullptr;
+} | or_expr range_interval {
+  $$ = nullptr;
+} | or_expr range_interval or_expr {
+  $$ = nullptr;
+};
+
+range_interval: RANGE {
+  $$ = nullptr;
+} | RANGE_EXC {
+  $$ = nullptr;
+} | RANGE_EXC_INC {
+  $$ = nullptr;
+} | RANGE_INC {
+  $$ = nullptr;
 };
 
 or_expr: or_expr OR and_expr {
@@ -154,6 +553,8 @@ unary_expr: MINUS exp_expr {
   $$ = new UnaryOperationNode(UnaryOperation::INCREMENT, $2);
 } | DECREMENT exp_expr {
   $$ = new UnaryOperationNode(UnaryOperation::DECREMENT, $2);
+} | MULT exp_expr {
+  $$ = $2;
 } | exp_expr {
   $$ = $1;
 };
@@ -190,9 +591,37 @@ term: INT {
   $$ = new CharNode(ctx.line, $1);
 } | NONE {
   $$ = new OptionNode(ctx.line, Option());
+} | array_allocation {
+  $$ = nullptr;
+} | struct_allocation {
+  $$ = nullptr;
+} | access {
+  $$ = nullptr;
 } | SOME LEFT_PAREN expr RIGHT_PAREN {
   $$ = new OptionNode(ctx.line, Option());
-} | LEFT_PAREN expr RIGHT_PAREN {
-  $$ = $2;
+};
+
+array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET {
+  $$ = nullptr;
+} | NEW type LEFT_BRACKET expr RIGHT_BRACKET LEFT_BRACE array_allocation_values RIGHT_BRACE {
+  $$ = nullptr;
+};
+
+array_allocation_values: array_allocation_values COMMA expr {
+  $$ = nullptr;
+} | expr {
+  $$ = nullptr;
+};
+
+struct_allocation: NEW type LEFT_BRACE struct_allocation_values RIGHT_BRACE {
+  $$ = nullptr;
+} | NEW type LEFT_BRACE RIGHT_BRACE {
+  $$ = nullptr;
+};
+
+struct_allocation_values: struct_allocation_values COMMA ID COLON expr {
+  $$ = nullptr;
+} | ID COLON expr {
+  $$ = nullptr;
 };
 %%

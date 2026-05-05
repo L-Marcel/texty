@@ -40,7 +40,6 @@
             | FUNCTION ID <params_list> COLON <type> END_FUNCTION SEMICOLON
             | <fn>
 <trait_proc> -> PROCEDURE ID <params_self_list> END_PROCEDURE SEMICOLON
-              | PROCEDURE ID <params_list> END_PROCEDURE SEMICOLON
               | <proc>
 
 <!-- Implementações -->
@@ -66,7 +65,6 @@
           | <access_base>
 <access_base> -> SELF 
                | <id>  
-               | MULT <expr>
                | LEFT_PAREN <expr> RIGHT_PAREN
 
 <!-- Declarações -->
@@ -86,6 +84,7 @@
         | <expr>
 <return> -> RETURN <expr>
 <attr> -> VAR ID COLON <type> ATTR <expr>
+        | CONST ID COLON <type> ATTR <expr>
 <type> -> TYPE_INT
         | TYPE_FLOAT
         | TYPE_DOUBLE
@@ -113,7 +112,6 @@
 <!-- Estruturas condicionais -->
 <if> -> IF <expr> THEN <stmts> <if_end>
       | IF SOME ID IN <access> THEN <stmts> <if_end>
-      | IF NONE IN <access> THEN <stmts> <if_end>
 <if_end> -> ELIF <expr> THEN <stmts> <if_end>
           | ELIF SOME ID IN <access> THEN <stmts> <if_end>
           | ELIF NONE IN <access> THEN <stmts> <if_end>
@@ -133,26 +131,27 @@
 <default_case> -> DEFAULT COLON <stmts>
 
 <!-- Estruturas de repetição -->
-<for> -> FOR ID IN <expr> <stmts> END_FOR
-       | FOR ID IN <expr> END_FOR
+<for> -> FOR LEFT_PAREN ID IN <expr> RIGHT_PAREN <stmts> END_FOR
+       | FOR LEFT_PAREN ID IN <expr> RIGHT_PAREN END_FOR
        | FOR LEFT_PAREN <attr> SEMICOLON <expr> SEMICOLON <expr> RIGHT_PAREN <stmts> END_FOR
        | FOR LEFT_PAREN <attr> SEMICOLON <expr> SEMICOLON <expr> RIGHT_PAREN END_FOR
-<while> -> WHILE <expr> <stmts> END_WHILE
-         | WHILE <expr> END_WHILE
+<while> -> WHILE LEFT_PAREN <expr> RIGHT_PAREN <stmts> END_WHILE
+         | WHILE LEFT_PAREN <expr> RIGHT_PAREN END_WHILE
 <repeat> -> REPEAT <stmts> UNTIL <expr>
           | REPEAT UNTIL <expr>
 
 <!-- Expressões -->
 <expr> -> <or_expr> 
         | <range_expr>
-<range_expr> -> RANGE <or_expr>
-              | <or_expr> RANGE
-              | <or_expr> RANGE <or_expr>
-              | <range_left_limit> <or_expr> RANGE <or_expr> <range_right_limit>
-              | <range_left_limit> <or_expr> RANGE <or_expr>
-              | <or_expr> RANGE <or_expr> <range_right_limit>
-<range_left_limit> -> LEFT_PAREN | LEFT_BRACKET
-<range_right_limit> -> RIGHT_PAREN | RIGHT_BRACKET
+
+<!-- Expressões de Range -->
+<range_expr> -> <range_interval> <or_expr>
+              | <or_expr> <range_interval>
+              | <or_expr> <range_interval> <or_expr>
+<range_interval> -> RANGE
+                  | RANGE_EXC
+                  | RANGE_EXC_INC
+                  | RANGE_INC
 <or_expr> -> <or_expr> OR <and_expr> 
            | <and_expr>
 <and_expr> -> <and_expr> AND <bit_or_expr> 
@@ -172,7 +171,7 @@
             | <rel_expr> GT_EQ <concat_expr> 
             | <rel_expr> IN <concat_expr> 
             | <concat_expr>
-<concat_expr> -> <concat_expr> INCREMENT <sum_expr> 
+<concat_expr> -> <concat_expr> CONCAT <sum_expr> 
                | <sum_expr>
 <sum_expr> -> <sum_expr> PLUS <mult_expr> 
             | <sum_expr> MINUS <mult_expr> 
@@ -187,6 +186,7 @@
               | REF <exp_expr> 
               | INCREMENT <exp_expr> 
               | DECREMENT <exp_expr> 
+              | MULT <exp_expr>
               | <exp_expr>
 <exp_expr> -> <postfix_expr> EXP <exp_expr> 
             | <postfix_expr>
@@ -206,11 +206,10 @@
         | <struct_allocation> 
         | <access>
         | SOME LEFT_PAREN <expr> RIGHT_PAREN
-        | LEFT_PAREN <expr> RIGHT_PAREN
 
 <!-- Alocações -->
 <array_allocation> -> NEW <type> LEFT_BRACKET <expr> RIGHT_BRACKET
-                    | NEW <type> LEFT_BRACKET INT RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
+                    | NEW <type> LEFT_BRACKET <expr> RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
 <array_allocation_values> -> <array_allocation_values> COMMA <expr> 
                            | <expr>
 <struct_allocation> -> NEW <type> LEFT_BRACE <struct_allocation_values> RIGHT_BRACE
