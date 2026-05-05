@@ -4,16 +4,16 @@
   #include "../src/main.hpp"
 }
 
+%code {
+  yy::parser::symbol_type yylex(Context& ctx);
+}
+
 %define api.token.constructor 
 %define api.value.type variant
 %define parse.error custom
 %define parse.assert
 
 %param { Context& ctx }
-
-%code {
-  yy::parser::symbol_type yylex(Context& ctx);
-}
 
 %token <uint8_t>     BYTE
 %token <int32_t>     INT
@@ -36,7 +36,7 @@
 %token <Type>    TYPE_POINTER
 %token <Type>    TYPE_OPTION
 
-%token DECREMENT INCREMENT EXP EQ AND_ATTR OR_ATTR
+%token DECREMENT INCREMENT EXP EQ AND_ATTR OR_ATTR CONCAT
 %token LAZY_AND_ATTR LAZY_OR_ATTR MOD_ATTR XOR_ATTR PLUS_ATTR
 %token CONCAT_ATTR MINUS_ATTR MULT_ATTR DIV_ATTR AND OR REF BAR
 %token NOT_EQ LT_EQ GT_EQ LT GT NOT REV MOD XOR ATTR MINUS PLUS
@@ -118,8 +118,8 @@ rel_expr: rel_expr LT concat_expr {
   $$ = $1;
 };
 
-concat_expr: concat_expr INCREMENT sum_expr {
-  $$ = new BinaryOperationNode(BinaryOperation::INCREMENT, $1, $3);
+concat_expr: concat_expr CONCAT sum_expr {
+  $$ = new BinaryOperationNode(BinaryOperation::CONCAT, $1, $3);
 } | sum_expr {
   $$ = $1;
 };
@@ -191,7 +191,6 @@ term: INT {
 } | NONE {
   $$ = new OptionNode(ctx.line, Option());
 } | SOME LEFT_PAREN expr RIGHT_PAREN {
-  //Value* value = $2->evaluate();
   $$ = new OptionNode(ctx.line, Option());
 } | LEFT_PAREN expr RIGHT_PAREN {
   $$ = $2;

@@ -1,17 +1,19 @@
 #include "long.hpp"
 
 // Debug
-void LongNode::print(ostream& os) const {
-  Debug::print_node(os, this,
-                    string(magic_enum::enum_name(this->get_type())) + ": " +
-                        to_string(this->value));
+void LongNode::compile_dot(ostream& os) const {
+  Compiler::add_dot_node(os, this,
+                         string(magic_enum::enum_name(this->get_type())) +
+                             ": " + to_string(this->value));
+};
+
+// Código
+void LongNode::compile_code(ostream& os) const {
+  // TODO
 };
 
 // Tipagem
 Type LongNode::get_type() const { return Type::LONG; };
-
-// Avaliação
-Value LongNode::evaluate() { return Value(this->value); };
 
 // Construtores
 LongNode::LongNode(int line, int64_t value)

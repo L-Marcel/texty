@@ -1,7 +1,14 @@
 #include "option.hpp"
 
-// Avaliação
-Value OptionNode::evaluate() { return Value(this->value); };
+// Debug
+void OptionNode::compile_dot(ostream& os) const {
+  Compiler::add_dot_node(os, this, "OPTION");
+}
+
+// Código
+void OptionNode::compile_code(ostream& os) const {
+  // TODO
+}
 
 // Construtores
 OptionNode::OptionNode(int line, Option value)

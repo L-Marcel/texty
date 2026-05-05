@@ -9,6 +9,11 @@ BISON_HH = $(BUILD_DIR)/syntax.tab.hh
 FLEX_C = $(BUILD_DIR)/lex.yy.c
 
 SRCS = $(shell find src -name "*.cpp")
+EXAMPLES_DOTS = $(shell find examples -name "*.dot")
+EXAMPLES_PNGS = $(EXAMPLES_DOTS:.dot=.png)
+
+%.png: %.dot
+	dot -Tpng $< -o $@
 
 all: $(TARGET)
 
@@ -23,8 +28,7 @@ $(FLEX_C): $(GRAMMAR_DIR)/lexical.l $(BISON_HH)
 	@mkdir -p $(BUILD_DIR)
 	flex -o $(FLEX_C) $(GRAMMAR_DIR)/lexical.l
 
-ast:
-	dot -Tpng ast.dot -o ast.png
+ast: $(EXAMPLES_PNGS)
 
 run: all
 	./$(TARGET)

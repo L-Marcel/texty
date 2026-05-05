@@ -10,7 +10,7 @@ struct UnaryOperationNode : public ExpressionNode {
   UnaryOperationNode(bool postfix, UnaryOperation operation,
                      ExpressionNode* node);
 
-  void print(ostream& os) const override;
+  void compile_dot(ostream& os) const override;
+  void compile_code(ostream& os) const override;
   Type get_type() const override;
-  Value evaluate() override;
 };

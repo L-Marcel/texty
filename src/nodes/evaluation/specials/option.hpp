@@ -5,5 +5,6 @@ struct OptionNode : public ExpressionNode {
   Option value;
 
   OptionNode(int line, Option value);
-  Value evaluate() override;
+  void compile_dot(ostream& os) const override;
+  void compile_code(ostream& os) const override;
 };

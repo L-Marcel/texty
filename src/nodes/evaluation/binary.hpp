@@ -9,7 +9,7 @@ struct BinaryOperationNode : public ExpressionNode {
   BinaryOperationNode(BinaryOperation operation, ExpressionNode* left,
                       ExpressionNode* right);
 
-  void print(ostream& os) const override;
+  void compile_dot(ostream& os) const override;
+  void compile_code(ostream& os) const override;
   Type get_type() const override;
-  Value evaluate() override;
 };

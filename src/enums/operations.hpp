@@ -14,6 +14,7 @@ enum class BinaryOperation {
   GT_EQ,
   IN,
   INCREMENT,
+  CONCAT,
   PLUS,
   MINUS,
   MULT,

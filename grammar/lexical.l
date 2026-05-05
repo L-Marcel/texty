@@ -5,7 +5,7 @@
   void invalid_token(std::string token, Context& ctx);
 %}
 
-%option noyywrap nounput noinput
+%option noyywrap nounput noinput batch
 
 %%
 \n+                                            { ctx.line += yyleng; }
@@ -31,7 +31,8 @@
 "%="                                           { return yy::parser::make_MOD_ATTR(); }
 "^="                                           { return yy::parser::make_XOR_ATTR(); }
 "+="                                           { return yy::parser::make_PLUS_ATTR(); }
-"++="                                          { return yy::parser::make_CONCAT_ATTR(); }
+"<<="                                          { return yy::parser::make_CONCAT_ATTR(); }
+"<<"                                           { return yy::parser::make_CONCAT(); }
 "-="                                           { return yy::parser::make_MINUS_ATTR(); }
 "*="                                           { return yy::parser::make_MULT_ATTR(); }
 "/="                                           { return yy::parser::make_DIV_ATTR(); }

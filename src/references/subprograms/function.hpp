@@ -1,5 +1,5 @@
 #pragma once
-#include "../evaluation/variable.hpp"
+#include "../variables/variable.hpp"
 
 // TODO: Isso aqui precisa de cabeçalho
 // TODO: Isso aqui precisa ser chamável

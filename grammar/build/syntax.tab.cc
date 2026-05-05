@@ -42,7 +42,7 @@
 
 
 // Unqualified %code blocks.
-#line 14 "grammar/syntax.y"
+#line 7 "grammar/syntax.y"
 
   yy::parser::symbol_type yylex(Context& ctx);
 
@@ -843,7 +843,7 @@ namespace yy {
     break;
 
   case 3: // expr: or_expr
-#line 63 "grammar/syntax.y"
+#line 65 "grammar/syntax.y"
               {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -851,7 +851,7 @@ namespace yy {
     break;
 
   case 4: // or_expr: or_expr OR and_expr
-#line 67 "grammar/syntax.y"
+#line 69 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -859,7 +859,7 @@ namespace yy {
     break;
 
   case 5: // or_expr: and_expr
-#line 69 "grammar/syntax.y"
+#line 71 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -867,7 +867,7 @@ namespace yy {
     break;
 
   case 6: // and_expr: and_expr AND bit_or_expr
-#line 73 "grammar/syntax.y"
+#line 75 "grammar/syntax.y"
                                    {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -875,7 +875,7 @@ namespace yy {
     break;
 
   case 7: // and_expr: bit_or_expr
-#line 75 "grammar/syntax.y"
+#line 77 "grammar/syntax.y"
                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -883,7 +883,7 @@ namespace yy {
     break;
 
   case 8: // bit_or_expr: bit_or_expr BAR bit_xor_expr
-#line 79 "grammar/syntax.y"
+#line 81 "grammar/syntax.y"
                                           {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -891,7 +891,7 @@ namespace yy {
     break;
 
   case 9: // bit_or_expr: bit_xor_expr
-#line 81 "grammar/syntax.y"
+#line 83 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -899,7 +899,7 @@ namespace yy {
     break;
 
   case 10: // bit_xor_expr: bit_xor_expr XOR bit_and_expr
-#line 85 "grammar/syntax.y"
+#line 87 "grammar/syntax.y"
                                             {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::XOR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -907,7 +907,7 @@ namespace yy {
     break;
 
   case 11: // bit_xor_expr: bit_and_expr
-#line 87 "grammar/syntax.y"
+#line 89 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -915,7 +915,7 @@ namespace yy {
     break;
 
   case 12: // bit_and_expr: bit_and_expr REF equals_expr
-#line 91 "grammar/syntax.y"
+#line 93 "grammar/syntax.y"
                                            {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -923,7 +923,7 @@ namespace yy {
     break;
 
   case 13: // bit_and_expr: equals_expr
-#line 93 "grammar/syntax.y"
+#line 95 "grammar/syntax.y"
                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -931,7 +931,7 @@ namespace yy {
     break;
 
   case 14: // equals_expr: equals_expr EQ rel_expr
-#line 97 "grammar/syntax.y"
+#line 99 "grammar/syntax.y"
                                      {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -939,7 +939,7 @@ namespace yy {
     break;
 
   case 15: // equals_expr: equals_expr NOT_EQ rel_expr
-#line 99 "grammar/syntax.y"
+#line 101 "grammar/syntax.y"
                                 {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::NOT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -947,7 +947,7 @@ namespace yy {
     break;
 
   case 16: // equals_expr: rel_expr
-#line 101 "grammar/syntax.y"
+#line 103 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -955,7 +955,7 @@ namespace yy {
     break;
 
   case 17: // rel_expr: rel_expr LT concat_expr
-#line 105 "grammar/syntax.y"
+#line 107 "grammar/syntax.y"
                                   {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -963,7 +963,7 @@ namespace yy {
     break;
 
   case 18: // rel_expr: rel_expr GT concat_expr
-#line 107 "grammar/syntax.y"
+#line 109 "grammar/syntax.y"
                             {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -971,7 +971,7 @@ namespace yy {
     break;
 
   case 19: // rel_expr: rel_expr LT_EQ concat_expr
-#line 109 "grammar/syntax.y"
+#line 111 "grammar/syntax.y"
                                {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -979,7 +979,7 @@ namespace yy {
     break;
 
   case 20: // rel_expr: rel_expr GT_EQ concat_expr
-#line 111 "grammar/syntax.y"
+#line 113 "grammar/syntax.y"
                                {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -987,7 +987,7 @@ namespace yy {
     break;
 
   case 21: // rel_expr: rel_expr IN concat_expr
-#line 113 "grammar/syntax.y"
+#line 115 "grammar/syntax.y"
                             {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::IN, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -995,23 +995,23 @@ namespace yy {
     break;
 
   case 22: // rel_expr: concat_expr
-#line 115 "grammar/syntax.y"
+#line 117 "grammar/syntax.y"
                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
 #line 1003 "grammar/build/syntax.tab.cc"
     break;
 
-  case 23: // concat_expr: concat_expr INCREMENT sum_expr
-#line 119 "grammar/syntax.y"
-                                            {
-  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::INCREMENT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
+  case 23: // concat_expr: concat_expr CONCAT sum_expr
+#line 121 "grammar/syntax.y"
+                                         {
+  yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::CONCAT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
 #line 1011 "grammar/build/syntax.tab.cc"
     break;
 
   case 24: // concat_expr: sum_expr
-#line 121 "grammar/syntax.y"
+#line 123 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -1019,7 +1019,7 @@ namespace yy {
     break;
 
   case 25: // sum_expr: sum_expr PLUS mult_expr
-#line 125 "grammar/syntax.y"
+#line 127 "grammar/syntax.y"
                                   {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::PLUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1027,7 +1027,7 @@ namespace yy {
     break;
 
   case 26: // sum_expr: sum_expr MINUS mult_expr
-#line 127 "grammar/syntax.y"
+#line 129 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MINUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1035,7 +1035,7 @@ namespace yy {
     break;
 
   case 27: // sum_expr: mult_expr
-#line 129 "grammar/syntax.y"
+#line 131 "grammar/syntax.y"
               {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -1043,7 +1043,7 @@ namespace yy {
     break;
 
   case 28: // mult_expr: mult_expr MULT unary_expr
-#line 133 "grammar/syntax.y"
+#line 135 "grammar/syntax.y"
                                      {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MULT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1051,7 +1051,7 @@ namespace yy {
     break;
 
   case 29: // mult_expr: mult_expr DIV unary_expr
-#line 135 "grammar/syntax.y"
+#line 137 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::DIV, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1059,7 +1059,7 @@ namespace yy {
     break;
 
   case 30: // mult_expr: mult_expr MOD unary_expr
-#line 137 "grammar/syntax.y"
+#line 139 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MOD, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1067,7 +1067,7 @@ namespace yy {
     break;
 
   case 31: // mult_expr: unary_expr
-#line 139 "grammar/syntax.y"
+#line 141 "grammar/syntax.y"
                {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -1075,7 +1075,7 @@ namespace yy {
     break;
 
   case 32: // unary_expr: MINUS exp_expr
-#line 143 "grammar/syntax.y"
+#line 145 "grammar/syntax.y"
                            {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::MINUS, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1083,7 +1083,7 @@ namespace yy {
     break;
 
   case 33: // unary_expr: REV exp_expr
-#line 145 "grammar/syntax.y"
+#line 147 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REV, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1091,7 +1091,7 @@ namespace yy {
     break;
 
   case 34: // unary_expr: NOT exp_expr
-#line 147 "grammar/syntax.y"
+#line 149 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::NOT, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1099,7 +1099,7 @@ namespace yy {
     break;
 
   case 35: // unary_expr: REF exp_expr
-#line 149 "grammar/syntax.y"
+#line 151 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REF, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1107,7 +1107,7 @@ namespace yy {
     break;
 
   case 36: // unary_expr: INCREMENT exp_expr
-#line 151 "grammar/syntax.y"
+#line 153 "grammar/syntax.y"
                        {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::INCREMENT, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1115,7 +1115,7 @@ namespace yy {
     break;
 
   case 37: // unary_expr: DECREMENT exp_expr
-#line 153 "grammar/syntax.y"
+#line 155 "grammar/syntax.y"
                        {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::DECREMENT, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1123,7 +1123,7 @@ namespace yy {
     break;
 
   case 38: // unary_expr: exp_expr
-#line 155 "grammar/syntax.y"
+#line 157 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -1131,7 +1131,7 @@ namespace yy {
     break;
 
   case 39: // exp_expr: postfix_expr EXP exp_expr
-#line 159 "grammar/syntax.y"
+#line 161 "grammar/syntax.y"
                                     {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EXP, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -1139,7 +1139,7 @@ namespace yy {
     break;
 
   case 40: // exp_expr: postfix_expr
-#line 161 "grammar/syntax.y"
+#line 163 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -1147,7 +1147,7 @@ namespace yy {
     break;
 
   case 41: // postfix_expr: term INCREMENT
-#line 165 "grammar/syntax.y"
+#line 167 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(true, UnaryOperation::INCREMENT, yystack_[1].value.as < ExpressionNode* > ());
 }
@@ -1155,7 +1155,7 @@ namespace yy {
     break;
 
   case 42: // postfix_expr: term DECREMENT
-#line 167 "grammar/syntax.y"
+#line 169 "grammar/syntax.y"
                    {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(true, UnaryOperation::DECREMENT, yystack_[1].value.as < ExpressionNode* > ());
 }
@@ -1163,7 +1163,7 @@ namespace yy {
     break;
 
   case 43: // postfix_expr: term
-#line 169 "grammar/syntax.y"
+#line 171 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -1171,7 +1171,7 @@ namespace yy {
     break;
 
   case 44: // term: INT
-#line 173 "grammar/syntax.y"
+#line 175 "grammar/syntax.y"
           {
   yylhs.value.as < ExpressionNode* > () = new IntNode(ctx.line, yystack_[0].value.as < int32_t > ());
 }
@@ -1179,7 +1179,7 @@ namespace yy {
     break;
 
   case 45: // term: LONG
-#line 175 "grammar/syntax.y"
+#line 177 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new LongNode(ctx.line, yystack_[0].value.as < int64_t > ());
 }
@@ -1187,7 +1187,7 @@ namespace yy {
     break;
 
   case 46: // term: FLOAT
-#line 177 "grammar/syntax.y"
+#line 179 "grammar/syntax.y"
           {
   yylhs.value.as < ExpressionNode* > () = new FloatNode(ctx.line, yystack_[0].value.as < float > ());
 }
@@ -1195,7 +1195,7 @@ namespace yy {
     break;
 
   case 47: // term: DOUBLE
-#line 179 "grammar/syntax.y"
+#line 181 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = new DoubleNode(ctx.line, yystack_[0].value.as < double > ());
 }
@@ -1203,7 +1203,7 @@ namespace yy {
     break;
 
   case 48: // term: BYTE
-#line 181 "grammar/syntax.y"
+#line 183 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new ByteNode(ctx.line, yystack_[0].value.as < uint8_t > ());
 }
@@ -1211,7 +1211,7 @@ namespace yy {
     break;
 
   case 49: // term: BOOL
-#line 183 "grammar/syntax.y"
+#line 185 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new BoolNode(ctx.line, yystack_[0].value.as < bool > ());
 }
@@ -1219,7 +1219,7 @@ namespace yy {
     break;
 
   case 50: // term: STRING
-#line 185 "grammar/syntax.y"
+#line 187 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = new StringNode(ctx.line, yystack_[0].value.as < std::string > ());
 }
@@ -1227,7 +1227,7 @@ namespace yy {
     break;
 
   case 51: // term: CHAR
-#line 187 "grammar/syntax.y"
+#line 189 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new CharNode(ctx.line, yystack_[0].value.as < char > ());
 }
@@ -1235,7 +1235,7 @@ namespace yy {
     break;
 
   case 52: // term: NONE
-#line 189 "grammar/syntax.y"
+#line 191 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new OptionNode(ctx.line, Option());
 }
@@ -1243,24 +1243,23 @@ namespace yy {
     break;
 
   case 53: // term: SOME LEFT_PAREN expr RIGHT_PAREN
-#line 191 "grammar/syntax.y"
+#line 193 "grammar/syntax.y"
                                      {
-  //Value* value = $2->evaluate();
   yylhs.value.as < ExpressionNode* > () = new OptionNode(ctx.line, Option());
 }
-#line 1252 "grammar/build/syntax.tab.cc"
+#line 1251 "grammar/build/syntax.tab.cc"
     break;
 
   case 54: // term: LEFT_PAREN expr RIGHT_PAREN
-#line 194 "grammar/syntax.y"
+#line 195 "grammar/syntax.y"
                                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[1].value.as < ExpressionNode* > ();
 }
-#line 1260 "grammar/build/syntax.tab.cc"
+#line 1259 "grammar/build/syntax.tab.cc"
     break;
 
 
-#line 1264 "grammar/build/syntax.tab.cc"
+#line 1263 "grammar/build/syntax.tab.cc"
 
             default:
               break;
@@ -1442,7 +1441,7 @@ namespace yy {
   "DOUBLE", "BOOL", "ID", "NAME", "CONST_NAME", "STRING", "CHAR",
   "TYPE_BYTE", "TYPE_INT", "TYPE_LONG", "TYPE_FLOAT", "TYPE_DOUBLE",
   "TYPE_BOOL", "TYPE_STRING", "TYPE_CHAR", "TYPE_POINTER", "TYPE_OPTION",
-  "DECREMENT", "INCREMENT", "EXP", "EQ", "AND_ATTR", "OR_ATTR",
+  "DECREMENT", "INCREMENT", "EXP", "EQ", "AND_ATTR", "OR_ATTR", "CONCAT",
   "LAZY_AND_ATTR", "LAZY_OR_ATTR", "MOD_ATTR", "XOR_ATTR", "PLUS_ATTR",
   "CONCAT_ATTR", "MINUS_ATTR", "MULT_ATTR", "DIV_ATTR", "AND", "OR", "REF",
   "BAR", "NOT_EQ", "LT_EQ", "GT_EQ", "LT", "GT", "NOT", "REV", "MOD",
@@ -1511,22 +1510,22 @@ namespace yy {
 
 
 
-  const signed char parser::yypact_ninf_ = -59;
+  const signed char parser::yypact_ninf_ = -62;
 
   const signed char parser::yytable_ninf_ = -1;
 
   const signed char
   parser::yypact_[] =
   {
-      -3,   -59,   -59,   -59,   -59,   -59,   -59,   -59,   -59,    11,
-      11,    11,    11,    11,    11,    -3,   -58,   -59,    20,   -59,
-     -29,    -6,     7,     9,    21,    -2,   -10,    36,   -14,   -43,
-     -59,   -59,    38,    23,   -59,   -59,   -59,   -59,   -59,   -59,
-      -1,    -3,   -59,    -3,    -3,    -3,    -3,    -3,    -3,    -3,
+      -3,   -62,   -62,   -62,   -62,   -62,   -62,   -62,   -62,    11,
+      11,    11,    11,    11,    11,    -3,   -61,   -62,    20,   -62,
+     -33,    -2,    -7,    13,     3,     8,   -14,    33,    -6,   -44,
+     -62,   -62,    24,    32,   -62,   -62,   -62,   -62,   -62,   -62,
+      -1,    -3,   -62,    -3,    -3,    -3,    -3,    -3,    -3,    -3,
       -3,    -3,    -3,    -3,    -3,    -3,    -3,    -3,    -3,    -3,
-      -3,    11,   -59,   -59,   -59,     0,    -6,     7,     9,    21,
-      -2,   -10,   -10,    36,    36,    36,    36,    36,   -14,   -43,
-     -43,   -59,   -59,   -59,   -59,   -59
+      -3,    11,   -62,   -62,   -62,     0,    -2,    -7,    13,     3,
+       8,   -14,   -14,    33,    33,    33,    33,    33,    -6,   -44,
+     -44,   -62,   -62,   -62,   -62,   -62
   };
 
   const signed char
@@ -1546,8 +1545,8 @@ namespace yy {
   const signed char
   parser::yypgoto_[] =
   {
-     -59,   -59,    -9,   -59,    22,    24,    25,    26,    27,     8,
-       1,    14,     2,   -16,    17,   -59,   -59
+     -62,   -62,    -4,   -62,    19,    22,    25,    23,    26,    10,
+     -10,    17,     4,    -5,    16,   -62,   -62
   };
 
   const signed char
@@ -1560,58 +1559,58 @@ namespace yy {
   const signed char
   parser::yytable_[] =
   {
-       1,     2,     3,     4,     5,     6,    40,    58,    41,     7,
-       8,    43,    59,    60,     1,     2,     3,     4,     5,     6,
-      42,     9,    10,     7,     8,    48,    34,    35,    36,    37,
-      38,    39,    65,    44,    50,    51,    52,    53,    11,    56,
-      57,    49,    81,    82,    83,    12,    13,    62,    63,    45,
-      14,    73,    74,    75,    76,    77,    71,    72,    79,    80,
-      46,    55,    47,    15,    61,    66,    64,    85,    67,    78,
-      68,     0,    69,     0,    70,     0,     0,    15,    84,    54,
-       0,     0,     0,     0,     0,     0,     0,    16,    17,     0,
+       1,     2,     3,     4,     5,     6,    41,    58,    43,     7,
+       8,    40,    59,    60,     1,     2,     3,     4,     5,     6,
+      42,     9,    10,     7,     8,    34,    35,    36,    37,    38,
+      39,    50,    51,    52,    53,    48,    45,    65,    44,    11,
+      73,    74,    75,    76,    77,    47,    12,    13,    56,    57,
+      61,    14,    49,    81,    82,    83,    62,    63,    71,    72,
+      79,    80,    66,    55,    15,    46,    67,    64,    85,    69,
+      68,     0,    78,    70,     0,     0,    54,    84,    15,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    16,    17,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,    16,    17
+       0,     0,    16,    17
   };
 
   const signed char
   parser::yycheck_[] =
   {
-       3,     4,     5,     6,     7,     8,    15,    50,    66,    12,
-      13,    40,    55,    56,     3,     4,     5,     6,     7,     8,
-       0,    24,    25,    12,    13,    27,     9,    10,    11,    12,
-      13,    14,    41,    39,    44,    45,    46,    47,    41,    53,
-      54,    43,    58,    59,    60,    48,    49,    24,    25,    42,
-      53,    50,    51,    52,    53,    54,    48,    49,    56,    57,
-      51,    25,    41,    66,    26,    43,    67,    67,    44,    55,
-      45,    -1,    46,    -1,    47,    -1,    -1,    66,    61,    89,
-      -1,    -1,    -1,    -1,    -1,    -1,    -1,    90,    91,    -1,
+       3,     4,     5,     6,     7,     8,    67,    51,    41,    12,
+      13,    15,    56,    57,     3,     4,     5,     6,     7,     8,
+       0,    24,    25,    12,    13,     9,    10,    11,    12,    13,
+      14,    45,    46,    47,    48,    27,    43,    41,    40,    42,
+      50,    51,    52,    53,    54,    42,    49,    50,    54,    55,
+      26,    54,    44,    58,    59,    60,    24,    25,    48,    49,
+      56,    57,    43,    30,    67,    52,    44,    68,    68,    46,
+      45,    -1,    55,    47,    -1,    -1,    90,    61,    67,    -1,
+      -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    91,    92,
       -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,    -1,
-      -1,    90,    91
+      -1,    -1,    91,    92
   };
 
   const signed char
   parser::yystos_[] =
   {
        0,     3,     4,     5,     6,     7,     8,    12,    13,    24,
-      25,    41,    48,    49,    53,    66,    90,    91,   107,   108,
-     109,   110,   111,   112,   113,   114,   115,   116,   117,   118,
-     119,   120,   121,   122,   120,   120,   120,   120,   120,   120,
-     108,    66,     0,    40,    39,    42,    51,    41,    27,    43,
-      44,    45,    46,    47,    89,    25,    53,    54,    50,    55,
-      56,    26,    24,    25,    67,   108,   110,   111,   112,   113,
-     114,   115,   115,   116,   116,   116,   116,   116,   117,   118,
-     118,   119,   119,   119,   120,    67
+      25,    42,    49,    50,    54,    67,    91,    92,   108,   109,
+     110,   111,   112,   113,   114,   115,   116,   117,   118,   119,
+     120,   121,   122,   123,   121,   121,   121,   121,   121,   121,
+     109,    67,     0,    41,    40,    43,    52,    42,    27,    44,
+      45,    46,    47,    48,    90,    30,    54,    55,    51,    56,
+      57,    26,    24,    25,    68,   109,   111,   112,   113,   114,
+     115,   116,   116,   117,   117,   117,   117,   117,   118,   119,
+     119,   120,   120,   120,   121,    68
   };
 
   const signed char
   parser::yyr1_[] =
   {
-       0,   106,   107,   108,   109,   109,   110,   110,   111,   111,
-     112,   112,   113,   113,   114,   114,   114,   115,   115,   115,
-     115,   115,   115,   116,   116,   117,   117,   117,   118,   118,
-     118,   118,   119,   119,   119,   119,   119,   119,   119,   120,
-     120,   121,   121,   121,   122,   122,   122,   122,   122,   122,
-     122,   122,   122,   122,   122
+       0,   107,   108,   109,   110,   110,   111,   111,   112,   112,
+     113,   113,   114,   114,   115,   115,   115,   116,   116,   116,
+     116,   116,   116,   117,   117,   118,   118,   118,   119,   119,
+     119,   119,   120,   120,   120,   120,   120,   120,   120,   121,
+     121,   122,   122,   122,   123,   123,   123,   123,   123,   123,
+     123,   123,   123,   123,   123
   };
 
   const signed char
@@ -1632,12 +1631,12 @@ namespace yy {
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    58,    58,    63,    67,    69,    73,    75,    79,    81,
-      85,    87,    91,    93,    97,    99,   101,   105,   107,   109,
-     111,   113,   115,   119,   121,   125,   127,   129,   133,   135,
-     137,   139,   143,   145,   147,   149,   151,   153,   155,   159,
-     161,   165,   167,   169,   173,   175,   177,   179,   181,   183,
-     185,   187,   189,   191,   194
+       0,    58,    58,    65,    69,    71,    75,    77,    81,    83,
+      87,    89,    93,    95,    99,   101,   103,   107,   109,   111,
+     113,   115,   117,   121,   123,   127,   129,   131,   135,   137,
+     139,   141,   145,   147,   149,   151,   153,   155,   157,   161,
+     163,   167,   169,   171,   175,   177,   179,   181,   183,   185,
+     187,   189,   191,   193,   195
   };
 
   void
@@ -1669,6 +1668,6 @@ namespace yy {
 
 
 } // yy
-#line 1673 "grammar/build/syntax.tab.cc"
+#line 1672 "grammar/build/syntax.tab.cc"
 
-#line 197 "grammar/syntax.y"
+#line 198 "grammar/syntax.y"

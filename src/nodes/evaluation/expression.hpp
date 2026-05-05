@@ -1,8 +1,7 @@
 #pragma once
-#include "../context.hpp"
+#include "../compiler.hpp"
 
 struct ExpressionNode : Node {
-  virtual Value evaluate() = 0;
   virtual ~ExpressionNode() = default;
 
  protected:

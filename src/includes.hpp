@@ -17,6 +17,7 @@
 #include "enums/references.hpp"
 #include "enums/type.hpp"
 #include "errors.hpp"
+#include "lib/CLI11.hpp"
 #include "lib/magic_enum.hpp"
 
 using namespace std;

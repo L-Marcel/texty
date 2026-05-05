@@ -4,7 +4,8 @@
 struct Node {
   int line;
 
-  virtual void print(ostream& os) const;
+  virtual void compile_dot(ostream& os) const;
+  virtual void compile_code(ostream& os) const;
   virtual Type get_type() const;
   virtual ~Node() = default;
 

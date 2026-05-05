@@ -1,8 +1,14 @@
-#include "debug.hpp"
+#include "compiler.hpp"
 
 // Debug
-void Node::print(ostream& os) const {
-  Debug::print_node(os, this, string(magic_enum::enum_name(this->get_type())));
+void Node::compile_dot(ostream& os) const {
+  Compiler::add_dot_node(os, this,
+                         string(magic_enum::enum_name(this->get_type())));
+};
+
+// Código
+void Node::compile_code(ostream& os) const {
+  // TODO
 };
 
 // Tipagem

@@ -537,82 +537,83 @@ namespace yy {
     EQ = 282,                      // EQ
     AND_ATTR = 283,                // AND_ATTR
     OR_ATTR = 284,                 // OR_ATTR
-    LAZY_AND_ATTR = 285,           // LAZY_AND_ATTR
-    LAZY_OR_ATTR = 286,            // LAZY_OR_ATTR
-    MOD_ATTR = 287,                // MOD_ATTR
-    XOR_ATTR = 288,                // XOR_ATTR
-    PLUS_ATTR = 289,               // PLUS_ATTR
-    CONCAT_ATTR = 290,             // CONCAT_ATTR
-    MINUS_ATTR = 291,              // MINUS_ATTR
-    MULT_ATTR = 292,               // MULT_ATTR
-    DIV_ATTR = 293,                // DIV_ATTR
-    AND = 294,                     // AND
-    OR = 295,                      // OR
-    REF = 296,                     // REF
-    BAR = 297,                     // BAR
-    NOT_EQ = 298,                  // NOT_EQ
-    LT_EQ = 299,                   // LT_EQ
-    GT_EQ = 300,                   // GT_EQ
-    LT = 301,                      // LT
-    GT = 302,                      // GT
-    NOT = 303,                     // NOT
-    REV = 304,                     // REV
-    MOD = 305,                     // MOD
-    XOR = 306,                     // XOR
-    ATTR = 307,                    // ATTR
-    MINUS = 308,                   // MINUS
-    PLUS = 309,                    // PLUS
-    MULT = 310,                    // MULT
-    DIV = 311,                     // DIV
-    NEW = 312,                     // NEW
-    VAR = 313,                     // VAR
-    CONST = 314,                   // CONST
-    RANGE = 315,                   // RANGE
-    DOT = 316,                     // DOT
-    COMMA = 317,                   // COMMA
-    COLON = 318,                   // COLON
-    DOUBLE_COLON = 319,            // DOUBLE_COLON
-    SEMICOLON = 320,               // SEMICOLON
-    LEFT_PAREN = 321,              // LEFT_PAREN
-    RIGHT_PAREN = 322,             // RIGHT_PAREN
-    LEFT_BRACKET = 323,            // LEFT_BRACKET
-    RIGHT_BRACKET = 324,           // RIGHT_BRACKET
-    LEFT_BRACE = 325,              // LEFT_BRACE
-    RIGHT_BRACE = 326,             // RIGHT_BRACE
-    IF = 327,                      // IF
-    END_IF = 328,                  // END_IF
-    THEN = 329,                    // THEN
-    ELIF = 330,                    // ELIF
-    ELSE = 331,                    // ELSE
-    FOR = 332,                     // FOR
-    WHILE = 333,                   // WHILE
-    END_WHILE = 334,               // END_WHILE
-    REPEAT = 335,                  // REPEAT
-    UNTIL = 336,                   // UNTIL
-    END_FOR = 337,                 // END_FOR
-    BREAK = 338,                   // BREAK
-    CONTINUE = 339,                // CONTINUE
-    SWITCH = 340,                  // SWITCH
-    CASE = 341,                    // CASE
-    DEFAULT = 342,                 // DEFAULT
-    END_SWITCH = 343,              // END_SWITCH
-    IN = 344,                      // IN
-    SOME = 345,                    // SOME
-    NONE = 346,                    // NONE
-    FUNCTION = 347,                // FUNCTION
-    END_FUNCTION = 348,            // END_FUNCTION
-    PROCEDURE = 349,               // PROCEDURE
-    END_PROCEDURE = 350,           // END_PROCEDURE
-    ENUM = 351,                    // ENUM
-    END_ENUM = 352,                // END_ENUM
-    STRUCT = 353,                  // STRUCT
-    END_STRUCT = 354,              // END_STRUCT
-    SELF = 355,                    // SELF
-    IMPL = 356,                    // IMPL
-    END_IMPL = 357,                // END_IMPL
-    TRAIT = 358,                   // TRAIT
-    END_TRAIT = 359,               // END_TRAIT
-    RETURN = 360                   // RETURN
+    CONCAT = 285,                  // CONCAT
+    LAZY_AND_ATTR = 286,           // LAZY_AND_ATTR
+    LAZY_OR_ATTR = 287,            // LAZY_OR_ATTR
+    MOD_ATTR = 288,                // MOD_ATTR
+    XOR_ATTR = 289,                // XOR_ATTR
+    PLUS_ATTR = 290,               // PLUS_ATTR
+    CONCAT_ATTR = 291,             // CONCAT_ATTR
+    MINUS_ATTR = 292,              // MINUS_ATTR
+    MULT_ATTR = 293,               // MULT_ATTR
+    DIV_ATTR = 294,                // DIV_ATTR
+    AND = 295,                     // AND
+    OR = 296,                      // OR
+    REF = 297,                     // REF
+    BAR = 298,                     // BAR
+    NOT_EQ = 299,                  // NOT_EQ
+    LT_EQ = 300,                   // LT_EQ
+    GT_EQ = 301,                   // GT_EQ
+    LT = 302,                      // LT
+    GT = 303,                      // GT
+    NOT = 304,                     // NOT
+    REV = 305,                     // REV
+    MOD = 306,                     // MOD
+    XOR = 307,                     // XOR
+    ATTR = 308,                    // ATTR
+    MINUS = 309,                   // MINUS
+    PLUS = 310,                    // PLUS
+    MULT = 311,                    // MULT
+    DIV = 312,                     // DIV
+    NEW = 313,                     // NEW
+    VAR = 314,                     // VAR
+    CONST = 315,                   // CONST
+    RANGE = 316,                   // RANGE
+    DOT = 317,                     // DOT
+    COMMA = 318,                   // COMMA
+    COLON = 319,                   // COLON
+    DOUBLE_COLON = 320,            // DOUBLE_COLON
+    SEMICOLON = 321,               // SEMICOLON
+    LEFT_PAREN = 322,              // LEFT_PAREN
+    RIGHT_PAREN = 323,             // RIGHT_PAREN
+    LEFT_BRACKET = 324,            // LEFT_BRACKET
+    RIGHT_BRACKET = 325,           // RIGHT_BRACKET
+    LEFT_BRACE = 326,              // LEFT_BRACE
+    RIGHT_BRACE = 327,             // RIGHT_BRACE
+    IF = 328,                      // IF
+    END_IF = 329,                  // END_IF
+    THEN = 330,                    // THEN
+    ELIF = 331,                    // ELIF
+    ELSE = 332,                    // ELSE
+    FOR = 333,                     // FOR
+    WHILE = 334,                   // WHILE
+    END_WHILE = 335,               // END_WHILE
+    REPEAT = 336,                  // REPEAT
+    UNTIL = 337,                   // UNTIL
+    END_FOR = 338,                 // END_FOR
+    BREAK = 339,                   // BREAK
+    CONTINUE = 340,                // CONTINUE
+    SWITCH = 341,                  // SWITCH
+    CASE = 342,                    // CASE
+    DEFAULT = 343,                 // DEFAULT
+    END_SWITCH = 344,              // END_SWITCH
+    IN = 345,                      // IN
+    SOME = 346,                    // SOME
+    NONE = 347,                    // NONE
+    FUNCTION = 348,                // FUNCTION
+    END_FUNCTION = 349,            // END_FUNCTION
+    PROCEDURE = 350,               // PROCEDURE
+    END_PROCEDURE = 351,           // END_PROCEDURE
+    ENUM = 352,                    // ENUM
+    END_ENUM = 353,                // END_ENUM
+    STRUCT = 354,                  // STRUCT
+    END_STRUCT = 355,              // END_STRUCT
+    SELF = 356,                    // SELF
+    IMPL = 357,                    // IMPL
+    END_IMPL = 358,                // END_IMPL
+    TRAIT = 359,                   // TRAIT
+    END_TRAIT = 360,               // END_TRAIT
+    RETURN = 361                   // RETURN
       };
       /// Backward compatibility alias (Bison 3.6).
       typedef token_kind_type yytokentype;
@@ -629,7 +630,7 @@ namespace yy {
     {
       enum symbol_kind_type
       {
-        YYNTOKENS = 106, ///< Number of tokens.
+        YYNTOKENS = 107, ///< Number of tokens.
         S_YYEMPTY = -2,
         S_YYEOF = 0,                             // "end of file"
         S_YYerror = 1,                           // error
@@ -661,99 +662,100 @@ namespace yy {
         S_EQ = 27,                               // EQ
         S_AND_ATTR = 28,                         // AND_ATTR
         S_OR_ATTR = 29,                          // OR_ATTR
-        S_LAZY_AND_ATTR = 30,                    // LAZY_AND_ATTR
-        S_LAZY_OR_ATTR = 31,                     // LAZY_OR_ATTR
-        S_MOD_ATTR = 32,                         // MOD_ATTR
-        S_XOR_ATTR = 33,                         // XOR_ATTR
-        S_PLUS_ATTR = 34,                        // PLUS_ATTR
-        S_CONCAT_ATTR = 35,                      // CONCAT_ATTR
-        S_MINUS_ATTR = 36,                       // MINUS_ATTR
-        S_MULT_ATTR = 37,                        // MULT_ATTR
-        S_DIV_ATTR = 38,                         // DIV_ATTR
-        S_AND = 39,                              // AND
-        S_OR = 40,                               // OR
-        S_REF = 41,                              // REF
-        S_BAR = 42,                              // BAR
-        S_NOT_EQ = 43,                           // NOT_EQ
-        S_LT_EQ = 44,                            // LT_EQ
-        S_GT_EQ = 45,                            // GT_EQ
-        S_LT = 46,                               // LT
-        S_GT = 47,                               // GT
-        S_NOT = 48,                              // NOT
-        S_REV = 49,                              // REV
-        S_MOD = 50,                              // MOD
-        S_XOR = 51,                              // XOR
-        S_ATTR = 52,                             // ATTR
-        S_MINUS = 53,                            // MINUS
-        S_PLUS = 54,                             // PLUS
-        S_MULT = 55,                             // MULT
-        S_DIV = 56,                              // DIV
-        S_NEW = 57,                              // NEW
-        S_VAR = 58,                              // VAR
-        S_CONST = 59,                            // CONST
-        S_RANGE = 60,                            // RANGE
-        S_DOT = 61,                              // DOT
-        S_COMMA = 62,                            // COMMA
-        S_COLON = 63,                            // COLON
-        S_DOUBLE_COLON = 64,                     // DOUBLE_COLON
-        S_SEMICOLON = 65,                        // SEMICOLON
-        S_LEFT_PAREN = 66,                       // LEFT_PAREN
-        S_RIGHT_PAREN = 67,                      // RIGHT_PAREN
-        S_LEFT_BRACKET = 68,                     // LEFT_BRACKET
-        S_RIGHT_BRACKET = 69,                    // RIGHT_BRACKET
-        S_LEFT_BRACE = 70,                       // LEFT_BRACE
-        S_RIGHT_BRACE = 71,                      // RIGHT_BRACE
-        S_IF = 72,                               // IF
-        S_END_IF = 73,                           // END_IF
-        S_THEN = 74,                             // THEN
-        S_ELIF = 75,                             // ELIF
-        S_ELSE = 76,                             // ELSE
-        S_FOR = 77,                              // FOR
-        S_WHILE = 78,                            // WHILE
-        S_END_WHILE = 79,                        // END_WHILE
-        S_REPEAT = 80,                           // REPEAT
-        S_UNTIL = 81,                            // UNTIL
-        S_END_FOR = 82,                          // END_FOR
-        S_BREAK = 83,                            // BREAK
-        S_CONTINUE = 84,                         // CONTINUE
-        S_SWITCH = 85,                           // SWITCH
-        S_CASE = 86,                             // CASE
-        S_DEFAULT = 87,                          // DEFAULT
-        S_END_SWITCH = 88,                       // END_SWITCH
-        S_IN = 89,                               // IN
-        S_SOME = 90,                             // SOME
-        S_NONE = 91,                             // NONE
-        S_FUNCTION = 92,                         // FUNCTION
-        S_END_FUNCTION = 93,                     // END_FUNCTION
-        S_PROCEDURE = 94,                        // PROCEDURE
-        S_END_PROCEDURE = 95,                    // END_PROCEDURE
-        S_ENUM = 96,                             // ENUM
-        S_END_ENUM = 97,                         // END_ENUM
-        S_STRUCT = 98,                           // STRUCT
-        S_END_STRUCT = 99,                       // END_STRUCT
-        S_SELF = 100,                            // SELF
-        S_IMPL = 101,                            // IMPL
-        S_END_IMPL = 102,                        // END_IMPL
-        S_TRAIT = 103,                           // TRAIT
-        S_END_TRAIT = 104,                       // END_TRAIT
-        S_RETURN = 105,                          // RETURN
-        S_YYACCEPT = 106,                        // $accept
-        S_program = 107,                         // program
-        S_expr = 108,                            // expr
-        S_or_expr = 109,                         // or_expr
-        S_and_expr = 110,                        // and_expr
-        S_bit_or_expr = 111,                     // bit_or_expr
-        S_bit_xor_expr = 112,                    // bit_xor_expr
-        S_bit_and_expr = 113,                    // bit_and_expr
-        S_equals_expr = 114,                     // equals_expr
-        S_rel_expr = 115,                        // rel_expr
-        S_concat_expr = 116,                     // concat_expr
-        S_sum_expr = 117,                        // sum_expr
-        S_mult_expr = 118,                       // mult_expr
-        S_unary_expr = 119,                      // unary_expr
-        S_exp_expr = 120,                        // exp_expr
-        S_postfix_expr = 121,                    // postfix_expr
-        S_term = 122                             // term
+        S_CONCAT = 30,                           // CONCAT
+        S_LAZY_AND_ATTR = 31,                    // LAZY_AND_ATTR
+        S_LAZY_OR_ATTR = 32,                     // LAZY_OR_ATTR
+        S_MOD_ATTR = 33,                         // MOD_ATTR
+        S_XOR_ATTR = 34,                         // XOR_ATTR
+        S_PLUS_ATTR = 35,                        // PLUS_ATTR
+        S_CONCAT_ATTR = 36,                      // CONCAT_ATTR
+        S_MINUS_ATTR = 37,                       // MINUS_ATTR
+        S_MULT_ATTR = 38,                        // MULT_ATTR
+        S_DIV_ATTR = 39,                         // DIV_ATTR
+        S_AND = 40,                              // AND
+        S_OR = 41,                               // OR
+        S_REF = 42,                              // REF
+        S_BAR = 43,                              // BAR
+        S_NOT_EQ = 44,                           // NOT_EQ
+        S_LT_EQ = 45,                            // LT_EQ
+        S_GT_EQ = 46,                            // GT_EQ
+        S_LT = 47,                               // LT
+        S_GT = 48,                               // GT
+        S_NOT = 49,                              // NOT
+        S_REV = 50,                              // REV
+        S_MOD = 51,                              // MOD
+        S_XOR = 52,                              // XOR
+        S_ATTR = 53,                             // ATTR
+        S_MINUS = 54,                            // MINUS
+        S_PLUS = 55,                             // PLUS
+        S_MULT = 56,                             // MULT
+        S_DIV = 57,                              // DIV
+        S_NEW = 58,                              // NEW
+        S_VAR = 59,                              // VAR
+        S_CONST = 60,                            // CONST
+        S_RANGE = 61,                            // RANGE
+        S_DOT = 62,                              // DOT
+        S_COMMA = 63,                            // COMMA
+        S_COLON = 64,                            // COLON
+        S_DOUBLE_COLON = 65,                     // DOUBLE_COLON
+        S_SEMICOLON = 66,                        // SEMICOLON
+        S_LEFT_PAREN = 67,                       // LEFT_PAREN
+        S_RIGHT_PAREN = 68,                      // RIGHT_PAREN
+        S_LEFT_BRACKET = 69,                     // LEFT_BRACKET
+        S_RIGHT_BRACKET = 70,                    // RIGHT_BRACKET
+        S_LEFT_BRACE = 71,                       // LEFT_BRACE
+        S_RIGHT_BRACE = 72,                      // RIGHT_BRACE
+        S_IF = 73,                               // IF
+        S_END_IF = 74,                           // END_IF
+        S_THEN = 75,                             // THEN
+        S_ELIF = 76,                             // ELIF
+        S_ELSE = 77,                             // ELSE
+        S_FOR = 78,                              // FOR
+        S_WHILE = 79,                            // WHILE
+        S_END_WHILE = 80,                        // END_WHILE
+        S_REPEAT = 81,                           // REPEAT
+        S_UNTIL = 82,                            // UNTIL
+        S_END_FOR = 83,                          // END_FOR
+        S_BREAK = 84,                            // BREAK
+        S_CONTINUE = 85,                         // CONTINUE
+        S_SWITCH = 86,                           // SWITCH
+        S_CASE = 87,                             // CASE
+        S_DEFAULT = 88,                          // DEFAULT
+        S_END_SWITCH = 89,                       // END_SWITCH
+        S_IN = 90,                               // IN
+        S_SOME = 91,                             // SOME
+        S_NONE = 92,                             // NONE
+        S_FUNCTION = 93,                         // FUNCTION
+        S_END_FUNCTION = 94,                     // END_FUNCTION
+        S_PROCEDURE = 95,                        // PROCEDURE
+        S_END_PROCEDURE = 96,                    // END_PROCEDURE
+        S_ENUM = 97,                             // ENUM
+        S_END_ENUM = 98,                         // END_ENUM
+        S_STRUCT = 99,                           // STRUCT
+        S_END_STRUCT = 100,                      // END_STRUCT
+        S_SELF = 101,                            // SELF
+        S_IMPL = 102,                            // IMPL
+        S_END_IMPL = 103,                        // END_IMPL
+        S_TRAIT = 104,                           // TRAIT
+        S_END_TRAIT = 105,                       // END_TRAIT
+        S_RETURN = 106,                          // RETURN
+        S_YYACCEPT = 107,                        // $accept
+        S_program = 108,                         // program
+        S_expr = 109,                            // expr
+        S_or_expr = 110,                         // or_expr
+        S_and_expr = 111,                        // and_expr
+        S_bit_or_expr = 112,                     // bit_or_expr
+        S_bit_xor_expr = 113,                    // bit_xor_expr
+        S_bit_and_expr = 114,                    // bit_and_expr
+        S_equals_expr = 115,                     // equals_expr
+        S_rel_expr = 116,                        // rel_expr
+        S_concat_expr = 117,                     // concat_expr
+        S_sum_expr = 118,                        // sum_expr
+        S_mult_expr = 119,                       // mult_expr
+        S_unary_expr = 120,                      // unary_expr
+        S_exp_expr = 121,                        // exp_expr
+        S_postfix_expr = 122,                    // postfix_expr
+        S_term = 123                             // term
       };
     };
 
@@ -1789,6 +1791,21 @@ switch (yykind)
       make_OR_ATTR ()
       {
         return symbol_type (token::OR_ATTR);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_CONCAT ()
+      {
+        return symbol_type (token::CONCAT);
+      }
+#else
+      static
+      symbol_type
+      make_CONCAT ()
+      {
+        return symbol_type (token::CONCAT);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -3250,7 +3267,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 102,     ///< Last index in yytable_.
+      yylast_ = 103,     ///< Last index in yytable_.
       yynnts_ = 17,  ///< Number of nonterminal symbols.
       yyfinal_ = 42 ///< Termination state number.
     };
@@ -3307,10 +3324,10 @@ switch (yykind)
       75,    76,    77,    78,    79,    80,    81,    82,    83,    84,
       85,    86,    87,    88,    89,    90,    91,    92,    93,    94,
       95,    96,    97,    98,    99,   100,   101,   102,   103,   104,
-     105
+     105,   106
     };
     // Last valid token kind.
-    const int code_max = 360;
+    const int code_max = 361;
 
     if (t <= 0)
       return symbol_kind::S_YYEOF;
@@ -3558,7 +3575,7 @@ switch (yykind)
 
 
 } // yy
-#line 3562 "grammar/build/syntax.tab.hh"
+#line 3579 "grammar/build/syntax.tab.hh"
 
 
 

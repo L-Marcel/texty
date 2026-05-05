@@ -3,10 +3,16 @@
 #include "../../operations/binary/binary.hpp"
 
 // Debug
-void BinaryOperationNode::print(ostream& os) const {
-  Debug::print_node(os, this, string(magic_enum::enum_name(this->operation)));
-  if (this->left) Debug::print_relation(os, this, this->left);
-  if (this->right) Debug::print_relation(os, this, this->right);
+void BinaryOperationNode::compile_dot(ostream& os) const {
+  Compiler::add_dot_node(os, this,
+                         string(magic_enum::enum_name(this->operation)));
+  if (this->left) Compiler::add_dot_relation(os, this, this->left);
+  if (this->right) Compiler::add_dot_relation(os, this, this->right);
+}
+
+// Código
+void BinaryOperationNode::compile_code(ostream& os) const {
+  // TODO
 }
 
 // Tipagem
@@ -15,15 +21,6 @@ Type BinaryOperationNode::get_type() const {
   Type right = this->right->get_type();
   BinaryTypeCheckFunction result =
       BinaryOperations::get_type(this->operation, this->line);
-  return result(left, right, this->line);
-};
-
-// Avaliação
-Value BinaryOperationNode::evaluate() {
-  Value left = this->left->evaluate();
-  Value right = this->right->evaluate();
-  BinaryEvaluationFunction result =
-      BinaryOperations::get_function(this->operation, this->line);
   return result(left, right, this->line);
 };
 
