@@ -26,10 +26,10 @@ int main(int argc, char** argv) {
   string mime = get_mime(filename);
   FILE* source = fopen(filename.c_str(), "r");
   if (!source) {
-    std::cerr << "[ERRO] Não foi possível abrir " << filename << std::endl;
+    std::cerr << "[ ERRO ] Não foi possível abrir " << filename << std::endl;
     return 1;
   } else if (mime != "txy") {
-    std::cerr << "[ERRO] Extensão inválida do arquivo " << filename
+    std::cerr << "[ ERRO ] Extensão inválida do arquivo " << filename
               << std::endl;
     return 1;
   };
@@ -43,13 +43,13 @@ int main(int argc, char** argv) {
     int result = parser.parse();
 
     if (result == 0) {
-      std::cout << "[INFO] Arvore sintática montada sem erros" << std::endl;
-      std::cout << "[INFO] Compilando arquivos" << std::endl;
+      std::cout << "[ INFO ] Arvore sintática montada sem erros" << std::endl;
+      std::cout << "[ INFO ] Compilando arquivos" << std::endl;
       Compiler::create_dot(ctx, filename);
       Compiler::create_code(ctx, filename);
       fclose(source);
     } else {
-      std::cerr << "[ERRO] Falha na compilacao" << std::endl;
+      std::cerr << "[ ERRO ] Falha na compilacao" << std::endl;
     };
 
     return result;
@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     std::cerr << e.what() << std::endl;
     return 0;
   } catch (const std::exception& e) {
-    std::cerr << "[ERRO CRÍTICO] " << e.what() << std::endl;
+    std::cerr << "[ ERRO CRÍTICO ] " << e.what() << std::endl;
     return 0;
   }
 };

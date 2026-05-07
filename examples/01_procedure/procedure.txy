@@ -1,0 +1,2 @@
+proc swap(array: int[]; a, b: int)
+endproc;

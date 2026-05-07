@@ -3,7 +3,7 @@
 // Debug
 void IntNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": " + to_string(this->value));
 };
 
@@ -13,7 +13,7 @@ void IntNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type IntNode::get_type() const { return Type::INT; };
+Type IntNode::get_type() const { return Type(TypeKind::INT); };
 
 // Construtores
 IntNode::IntNode(int line, int32_t value)

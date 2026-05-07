@@ -3,7 +3,7 @@
 // Debug
 void StringNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": \\\"" + this->value + "\\\"");
 };
 
@@ -13,7 +13,7 @@ void StringNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type StringNode::get_type() const { return Type::STRING; };
+Type StringNode::get_type() const { return Type(TypeKind::STRING); };
 
 // Construtores
 StringNode::StringNode(int line, string value)

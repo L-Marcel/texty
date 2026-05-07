@@ -17,7 +17,7 @@ void References::pop_scope() { this->scopes.pop_back(); };
 
 // Referências
 Reference* References::get_reference(string name) {
-  for (int i = this->scopes.size() - 1; i >= 0; i--) {
+  for (size_t i = this->scopes.size() - 1; i >= 0; i--) {
     Scope& scope = this->scopes[i];
     Scope::iterator iterator = scope.find(name);
     if (iterator != scope.end()) {

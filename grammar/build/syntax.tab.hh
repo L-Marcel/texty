@@ -426,17 +426,13 @@ namespace yy {
       // term
       char dummy1[sizeof (ExpressionNode*)];
 
+      // fn
+      char dummy2[sizeof (FunctionNode*)];
+
       // root
       // program
       // program_slice
       // subprogram
-      // fn
-      // proc
-      // params_self_list
-      // params_list
-      // params
-      // param
-      // id_list
       // subprogram_call
       // call_params_list
       // call_params
@@ -463,7 +459,6 @@ namespace yy {
       // stmt
       // return
       // attr
-      // type
       // assign
       // if
       // if_end
@@ -481,7 +476,13 @@ namespace yy {
       // array_allocation_values
       // struct_allocation
       // struct_allocation_values
-      char dummy2[sizeof (Node*)];
+      char dummy3[sizeof (Node*)];
+
+      // proc
+      char dummy4[sizeof (ProcedureNode*)];
+
+      // type
+      char dummy5[sizeof (Type*)];
 
       // TYPE_BYTE
       // TYPE_INT
@@ -491,36 +492,43 @@ namespace yy {
       // TYPE_BOOL
       // TYPE_STRING
       // TYPE_CHAR
-      // TYPE_POINTER
-      // TYPE_OPTION
-      char dummy3[sizeof (Type)];
+      char dummy6[sizeof (TypeKind)];
 
       // BOOL
-      char dummy4[sizeof (bool)];
+      char dummy7[sizeof (bool)];
 
       // CHAR
-      char dummy5[sizeof (char)];
+      char dummy8[sizeof (char)];
 
       // DOUBLE
-      char dummy6[sizeof (double)];
+      char dummy9[sizeof (double)];
 
       // FLOAT
-      char dummy7[sizeof (float)];
+      char dummy10[sizeof (float)];
 
       // INT
-      char dummy8[sizeof (int32_t)];
+      char dummy11[sizeof (int32_t)];
 
       // LONG
-      char dummy9[sizeof (int64_t)];
+      char dummy12[sizeof (int64_t)];
 
       // ID
       // NAME
       // CONST_NAME
       // STRING
-      char dummy10[sizeof (std::string)];
+      char dummy13[sizeof (std::string)];
 
       // BYTE
-      char dummy11[sizeof (uint8_t)];
+      char dummy14[sizeof (uint8_t)];
+
+      // params_self_list
+      // params_list
+      // params
+      // param
+      char dummy15[sizeof (vector<Param>)];
+
+      // id_list
+      char dummy16[sizeof (vector<string>)];
     };
 
     /// The size of the largest semantic type.
@@ -929,17 +937,14 @@ namespace yy {
         value.move< ExpressionNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_fn: // fn
+        value.move< FunctionNode* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_fn: // fn
-      case symbol_kind::S_proc: // proc
-      case symbol_kind::S_params_self_list: // params_self_list
-      case symbol_kind::S_params_list: // params_list
-      case symbol_kind::S_params: // params
-      case symbol_kind::S_param: // param
-      case symbol_kind::S_id_list: // id_list
       case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_call_params_list: // call_params_list
       case symbol_kind::S_call_params: // call_params
@@ -966,7 +971,6 @@ namespace yy {
       case symbol_kind::S_stmt: // stmt
       case symbol_kind::S_return: // return
       case symbol_kind::S_attr: // attr
-      case symbol_kind::S_type: // type
       case symbol_kind::S_assign: // assign
       case symbol_kind::S_if: // if
       case symbol_kind::S_if_end: // if_end
@@ -987,6 +991,14 @@ namespace yy {
         value.move< Node* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_proc: // proc
+        value.move< ProcedureNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_type: // type
+        value.move< Type* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
       case symbol_kind::S_TYPE_INT: // TYPE_INT
       case symbol_kind::S_TYPE_LONG: // TYPE_LONG
@@ -995,9 +1007,7 @@ namespace yy {
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
-      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
-      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
-        value.move< Type > (std::move (that.value));
+        value.move< TypeKind > (std::move (that.value));
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -1035,6 +1045,17 @@ namespace yy {
         value.move< uint8_t > (std::move (that.value));
         break;
 
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+        value.move< vector<Param> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_id_list: // id_list
+        value.move< vector<string> > (std::move (that.value));
+        break;
+
       default:
         break;
     }
@@ -1069,6 +1090,18 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, FunctionNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const FunctionNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, Node*&& v)
         : Base (t)
         , value (std::move (v))
@@ -1081,12 +1114,36 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
-      basic_symbol (typename Base::kind_type t, Type&& v)
+      basic_symbol (typename Base::kind_type t, ProcedureNode*&& v)
         : Base (t)
         , value (std::move (v))
       {}
 #else
-      basic_symbol (typename Base::kind_type t, const Type& v)
+      basic_symbol (typename Base::kind_type t, const ProcedureNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Type*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Type*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, TypeKind&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const TypeKind& v)
         : Base (t)
         , value (v)
       {}
@@ -1188,6 +1245,30 @@ namespace yy {
       {}
 #endif
 
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, vector<Param>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const vector<Param>& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, vector<string>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const vector<string>& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
       /// Destroy the symbol.
       ~basic_symbol ()
       {
@@ -1231,17 +1312,14 @@ switch (yykind)
         value.template destroy< ExpressionNode* > ();
         break;
 
+      case symbol_kind::S_fn: // fn
+        value.template destroy< FunctionNode* > ();
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_fn: // fn
-      case symbol_kind::S_proc: // proc
-      case symbol_kind::S_params_self_list: // params_self_list
-      case symbol_kind::S_params_list: // params_list
-      case symbol_kind::S_params: // params
-      case symbol_kind::S_param: // param
-      case symbol_kind::S_id_list: // id_list
       case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_call_params_list: // call_params_list
       case symbol_kind::S_call_params: // call_params
@@ -1268,7 +1346,6 @@ switch (yykind)
       case symbol_kind::S_stmt: // stmt
       case symbol_kind::S_return: // return
       case symbol_kind::S_attr: // attr
-      case symbol_kind::S_type: // type
       case symbol_kind::S_assign: // assign
       case symbol_kind::S_if: // if
       case symbol_kind::S_if_end: // if_end
@@ -1289,6 +1366,14 @@ switch (yykind)
         value.template destroy< Node* > ();
         break;
 
+      case symbol_kind::S_proc: // proc
+        value.template destroy< ProcedureNode* > ();
+        break;
+
+      case symbol_kind::S_type: // type
+        value.template destroy< Type* > ();
+        break;
+
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
       case symbol_kind::S_TYPE_INT: // TYPE_INT
       case symbol_kind::S_TYPE_LONG: // TYPE_LONG
@@ -1297,9 +1382,7 @@ switch (yykind)
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
-      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
-      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
-        value.template destroy< Type > ();
+        value.template destroy< TypeKind > ();
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -1335,6 +1418,17 @@ switch (yykind)
 
       case symbol_kind::S_BYTE: // BYTE
         value.template destroy< uint8_t > ();
+        break;
+
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+        value.template destroy< vector<Param> > ();
+        break;
+
+      case symbol_kind::S_id_list: // id_list
+        value.template destroy< vector<string> > ();
         break;
 
       default:
@@ -1433,19 +1527,19 @@ switch (yykind)
 #if !defined _MSC_VER || defined __clang__
         YY_ASSERT (tok == token::YYEOF
                    || (token::YYerror <= tok && tok <= token::YYUNDEF)
-                   || (token::DECREMENT <= tok && tok <= token::DO));
+                   || (token::TYPE_POINTER <= tok && tok <= token::DO));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
-      symbol_type (int tok, Type v)
+      symbol_type (int tok, TypeKind v)
         : super_type (token_kind_type (tok), std::move (v))
 #else
-      symbol_type (int tok, const Type& v)
+      symbol_type (int tok, const TypeKind& v)
         : super_type (token_kind_type (tok), v)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT ((token::TYPE_BYTE <= tok && tok <= token::TYPE_OPTION));
+        YY_ASSERT ((token::TYPE_BYTE <= tok && tok <= token::TYPE_CHAR));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -1804,14 +1898,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_BYTE (Type v)
+      make_TYPE_BYTE (TypeKind v)
       {
         return symbol_type (token::TYPE_BYTE, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_BYTE (const Type& v)
+      make_TYPE_BYTE (const TypeKind& v)
       {
         return symbol_type (token::TYPE_BYTE, v);
       }
@@ -1819,14 +1913,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_INT (Type v)
+      make_TYPE_INT (TypeKind v)
       {
         return symbol_type (token::TYPE_INT, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_INT (const Type& v)
+      make_TYPE_INT (const TypeKind& v)
       {
         return symbol_type (token::TYPE_INT, v);
       }
@@ -1834,14 +1928,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_LONG (Type v)
+      make_TYPE_LONG (TypeKind v)
       {
         return symbol_type (token::TYPE_LONG, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_LONG (const Type& v)
+      make_TYPE_LONG (const TypeKind& v)
       {
         return symbol_type (token::TYPE_LONG, v);
       }
@@ -1849,14 +1943,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_FLOAT (Type v)
+      make_TYPE_FLOAT (TypeKind v)
       {
         return symbol_type (token::TYPE_FLOAT, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_FLOAT (const Type& v)
+      make_TYPE_FLOAT (const TypeKind& v)
       {
         return symbol_type (token::TYPE_FLOAT, v);
       }
@@ -1864,14 +1958,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_DOUBLE (Type v)
+      make_TYPE_DOUBLE (TypeKind v)
       {
         return symbol_type (token::TYPE_DOUBLE, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_DOUBLE (const Type& v)
+      make_TYPE_DOUBLE (const TypeKind& v)
       {
         return symbol_type (token::TYPE_DOUBLE, v);
       }
@@ -1879,14 +1973,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_BOOL (Type v)
+      make_TYPE_BOOL (TypeKind v)
       {
         return symbol_type (token::TYPE_BOOL, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_BOOL (const Type& v)
+      make_TYPE_BOOL (const TypeKind& v)
       {
         return symbol_type (token::TYPE_BOOL, v);
       }
@@ -1894,14 +1988,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_STRING (Type v)
+      make_TYPE_STRING (TypeKind v)
       {
         return symbol_type (token::TYPE_STRING, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_STRING (const Type& v)
+      make_TYPE_STRING (const TypeKind& v)
       {
         return symbol_type (token::TYPE_STRING, v);
       }
@@ -1909,14 +2003,14 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_CHAR (Type v)
+      make_TYPE_CHAR (TypeKind v)
       {
         return symbol_type (token::TYPE_CHAR, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_CHAR (const Type& v)
+      make_TYPE_CHAR (const TypeKind& v)
       {
         return symbol_type (token::TYPE_CHAR, v);
       }
@@ -1924,31 +2018,31 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_POINTER (Type v)
+      make_TYPE_POINTER ()
       {
-        return symbol_type (token::TYPE_POINTER, std::move (v));
+        return symbol_type (token::TYPE_POINTER);
       }
 #else
       static
       symbol_type
-      make_TYPE_POINTER (const Type& v)
+      make_TYPE_POINTER ()
       {
-        return symbol_type (token::TYPE_POINTER, v);
+        return symbol_type (token::TYPE_POINTER);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_OPTION (Type v)
+      make_TYPE_OPTION ()
       {
-        return symbol_type (token::TYPE_OPTION, std::move (v));
+        return symbol_type (token::TYPE_OPTION);
       }
 #else
       static
       symbol_type
-      make_TYPE_OPTION (const Type& v)
+      make_TYPE_OPTION ()
       {
-        return symbol_type (token::TYPE_OPTION, v);
+        return symbol_type (token::TYPE_OPTION);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -3672,17 +3766,14 @@ switch (yykind)
         value.copy< ExpressionNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_fn: // fn
+        value.copy< FunctionNode* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_fn: // fn
-      case symbol_kind::S_proc: // proc
-      case symbol_kind::S_params_self_list: // params_self_list
-      case symbol_kind::S_params_list: // params_list
-      case symbol_kind::S_params: // params
-      case symbol_kind::S_param: // param
-      case symbol_kind::S_id_list: // id_list
       case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_call_params_list: // call_params_list
       case symbol_kind::S_call_params: // call_params
@@ -3709,7 +3800,6 @@ switch (yykind)
       case symbol_kind::S_stmt: // stmt
       case symbol_kind::S_return: // return
       case symbol_kind::S_attr: // attr
-      case symbol_kind::S_type: // type
       case symbol_kind::S_assign: // assign
       case symbol_kind::S_if: // if
       case symbol_kind::S_if_end: // if_end
@@ -3730,6 +3820,14 @@ switch (yykind)
         value.copy< Node* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_proc: // proc
+        value.copy< ProcedureNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_type: // type
+        value.copy< Type* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
       case symbol_kind::S_TYPE_INT: // TYPE_INT
       case symbol_kind::S_TYPE_LONG: // TYPE_LONG
@@ -3738,9 +3836,7 @@ switch (yykind)
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
-      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
-      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
-        value.copy< Type > (YY_MOVE (that.value));
+        value.copy< TypeKind > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -3776,6 +3872,17 @@ switch (yykind)
 
       case symbol_kind::S_BYTE: // BYTE
         value.copy< uint8_t > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+        value.copy< vector<Param> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_id_list: // id_list
+        value.copy< vector<string> > (YY_MOVE (that.value));
         break;
 
       default:
@@ -3828,17 +3935,14 @@ switch (yykind)
         value.move< ExpressionNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_fn: // fn
+        value.move< FunctionNode* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_fn: // fn
-      case symbol_kind::S_proc: // proc
-      case symbol_kind::S_params_self_list: // params_self_list
-      case symbol_kind::S_params_list: // params_list
-      case symbol_kind::S_params: // params
-      case symbol_kind::S_param: // param
-      case symbol_kind::S_id_list: // id_list
       case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_call_params_list: // call_params_list
       case symbol_kind::S_call_params: // call_params
@@ -3865,7 +3969,6 @@ switch (yykind)
       case symbol_kind::S_stmt: // stmt
       case symbol_kind::S_return: // return
       case symbol_kind::S_attr: // attr
-      case symbol_kind::S_type: // type
       case symbol_kind::S_assign: // assign
       case symbol_kind::S_if: // if
       case symbol_kind::S_if_end: // if_end
@@ -3886,6 +3989,14 @@ switch (yykind)
         value.move< Node* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_proc: // proc
+        value.move< ProcedureNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_type: // type
+        value.move< Type* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_TYPE_BYTE: // TYPE_BYTE
       case symbol_kind::S_TYPE_INT: // TYPE_INT
       case symbol_kind::S_TYPE_LONG: // TYPE_LONG
@@ -3894,9 +4005,7 @@ switch (yykind)
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
-      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
-      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
-        value.move< Type > (YY_MOVE (s.value));
+        value.move< TypeKind > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -3932,6 +4041,17 @@ switch (yykind)
 
       case symbol_kind::S_BYTE: // BYTE
         value.move< uint8_t > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_params_self_list: // params_self_list
+      case symbol_kind::S_params_list: // params_list
+      case symbol_kind::S_params: // params
+      case symbol_kind::S_param: // param
+        value.move< vector<Param> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_id_list: // id_list
+        value.move< vector<string> > (YY_MOVE (s.value));
         break;
 
       default:
@@ -3999,7 +4119,7 @@ switch (yykind)
 
 
 } // yy
-#line 4003 "grammar/build/syntax.tab.hh"
+#line 4123 "grammar/build/syntax.tab.hh"
 
 
 

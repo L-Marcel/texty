@@ -3,7 +3,7 @@
 // Debug
 void LongNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": " + to_string(this->value));
 };
 
@@ -13,7 +13,7 @@ void LongNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type LongNode::get_type() const { return Type::LONG; };
+Type LongNode::get_type() const { return Type(TypeKind::LONG); };
 
 // Construtores
 LongNode::LongNode(int line, int64_t value)

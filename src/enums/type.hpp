@@ -1,4 +1,4 @@
-enum class Type {
+enum class TypeKind {
   UNKNOWN,
   VOID,
   BYTE,
@@ -10,5 +10,6 @@ enum class Type {
   STRING,
   CHAR,
   POINTER,
-  OPTION
+  OPTION,
+  ARRAY
 };

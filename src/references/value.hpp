@@ -1,6 +1,17 @@
 #pragma once
 #include "../includes.hpp"
 
+struct Type {
+  TypeKind kind;
+  Type* inner_type;
+
+  Type(TypeKind kind);
+  Type(TypeKind kind, Type* inner);
+  bool operator==(const Type& a) const;
+  bool operator<(const Type& a) const;
+  string to_string();
+};
+
 struct Record;
 struct Enum;
 struct Pointer;

@@ -10,16 +10,16 @@
 %%
 \n+                                            { ctx.line += yyleng; }
 [ \t\r]+                                       {}
-"int"                                          { return yy::parser::make_TYPE_INT(Type::INT); }
-"float"                                        { return yy::parser::make_TYPE_FLOAT(Type::FLOAT); }
-"double"                                       { return yy::parser::make_TYPE_DOUBLE(Type::DOUBLE); }
-"long"                                         { return yy::parser::make_TYPE_LONG(Type::LONG); }
-"byte"                                         { return yy::parser::make_TYPE_BYTE(Type::BYTE); }
-"string"                                       { return yy::parser::make_TYPE_STRING(Type::STRING); }
-"char"                                         { return yy::parser::make_TYPE_CHAR(Type::CHAR); }
-"bool"                                         { return yy::parser::make_TYPE_BOOL(Type::BOOL); }
-"pointer"                                      { return yy::parser::make_TYPE_POINTER(Type::POINTER); }
-"option"                                       { return yy::parser::make_TYPE_OPTION(Type::OPTION); }
+"int"                                          { return yy::parser::make_TYPE_INT(TypeKind::INT); }
+"float"                                        { return yy::parser::make_TYPE_FLOAT(TypeKind::FLOAT); }
+"double"                                       { return yy::parser::make_TYPE_DOUBLE(TypeKind::DOUBLE); }
+"long"                                         { return yy::parser::make_TYPE_LONG(TypeKind::LONG); }
+"byte"                                         { return yy::parser::make_TYPE_BYTE(TypeKind::BYTE); }
+"string"                                       { return yy::parser::make_TYPE_STRING(TypeKind::STRING); }
+"char"                                         { return yy::parser::make_TYPE_CHAR(TypeKind::CHAR); }
+"bool"                                         { return yy::parser::make_TYPE_BOOL(TypeKind::BOOL); }
+"pointer"                                      { return yy::parser::make_TYPE_POINTER(); }
+"option"                                       { return yy::parser::make_TYPE_OPTION(); }
 "--"                                           { return yy::parser::make_DECREMENT(); }
 "++"                                           { return yy::parser::make_INCREMENT(); }
 "**"                                           { return yy::parser::make_EXP(); }      
@@ -123,5 +123,5 @@
 
 void invalid_token(std::string token, Context& ctx) {
   ctx.has_lexical_error = true;
-  fprintf(stderr, "[ERRO] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);
+  fprintf(stderr, "[ ERRO ] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);
 }

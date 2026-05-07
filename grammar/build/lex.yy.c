@@ -901,52 +901,52 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 13 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_INT(Type::INT); }
+{ return yy::parser::make_TYPE_INT(TypeKind::INT); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 14 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_FLOAT(Type::FLOAT); }
+{ return yy::parser::make_TYPE_FLOAT(TypeKind::FLOAT); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
 #line 15 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_DOUBLE(Type::DOUBLE); }
+{ return yy::parser::make_TYPE_DOUBLE(TypeKind::DOUBLE); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 16 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_LONG(Type::LONG); }
+{ return yy::parser::make_TYPE_LONG(TypeKind::LONG); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 17 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_BYTE(Type::BYTE); }
+{ return yy::parser::make_TYPE_BYTE(TypeKind::BYTE); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
 #line 18 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_STRING(Type::STRING); }
+{ return yy::parser::make_TYPE_STRING(TypeKind::STRING); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
 #line 19 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_CHAR(Type::CHAR); }
+{ return yy::parser::make_TYPE_CHAR(TypeKind::CHAR); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
 #line 20 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_BOOL(Type::BOOL); }
+{ return yy::parser::make_TYPE_BOOL(TypeKind::BOOL); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 21 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_POINTER(Type::POINTER); }
+{ return yy::parser::make_TYPE_POINTER(); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 22 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_OPTION(Type::OPTION); }
+{ return yy::parser::make_TYPE_OPTION(); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
@@ -2424,5 +2424,5 @@ void yyfree (void * ptr )
 
 void invalid_token(std::string token, Context& ctx) {
   ctx.has_lexical_error = true;
-  fprintf(stderr, "[ERRO] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);
+  fprintf(stderr, "[ ERRO ] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);
 }

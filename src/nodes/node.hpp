@@ -2,6 +2,8 @@
 #include "../references/reference.hpp"
 
 struct Node {
+  vector<Node*> children;
+  string name;
   int line;
 
   virtual void compile_dot(ostream& os) const;
@@ -9,8 +11,8 @@ struct Node {
   virtual Type get_type() const;
   virtual ~Node() = default;
 
- protected:
   Node(int line);
+  Node(int line, string name);
 };
 
 // TODO: Adicionar nó executável

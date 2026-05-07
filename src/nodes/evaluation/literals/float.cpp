@@ -3,7 +3,7 @@
 // Debug
 void FloatNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": " + to_string(this->value));
 };
 
@@ -13,7 +13,7 @@ void FloatNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type FloatNode::get_type() const { return Type::FLOAT; };
+Type FloatNode::get_type() const { return Type(TypeKind::FLOAT); };
 
 // Construtores
 FloatNode::FloatNode(int line, float value)

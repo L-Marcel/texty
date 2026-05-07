@@ -3,7 +3,7 @@
 // Debug
 void BoolNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": " + to_string(this->value));
 };
 
@@ -13,7 +13,7 @@ void BoolNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type BoolNode::get_type() const { return Type::BOOL; };
+Type BoolNode::get_type() const { return Type(TypeKind::BOOL); };
 
 // Construtores
 BoolNode::BoolNode(int line, bool value)

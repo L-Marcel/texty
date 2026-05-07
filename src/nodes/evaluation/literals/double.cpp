@@ -3,7 +3,7 @@
 // Debug
 void DoubleNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": " + to_string(this->value));
 };
 
@@ -13,7 +13,7 @@ void DoubleNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type DoubleNode::get_type() const { return Type::DOUBLE; };
+Type DoubleNode::get_type() const { return Type(TypeKind::DOUBLE); };
 
 // Construtores
 DoubleNode::DoubleNode(int line, double value)

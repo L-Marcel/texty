@@ -1,8 +1,0 @@
-digraph AST {
-  node [shape=box, fontname="Courier"];
-  "0x55555da2ff50" [label="PLUS"];
-  "0x55555da2ff50" -> "0x55555da39c20";
-  "0x55555da39c20" [label="DOUBLE: 5.000000"];
-  "0x55555da2ff50" -> "0x55555da39c40";
-  "0x55555da39c40" [label="DOUBLE: 5.000000"];
-}

@@ -3,7 +3,7 @@
 // Debug
 void ByteNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
-                         string(magic_enum::enum_name(this->get_type())) +
+                         string(magic_enum::enum_name(this->get_type().kind)) +
                              ": " + to_string(this->value));
 };
 
@@ -13,7 +13,7 @@ void ByteNode::compile_code(ostream& os) const {
 };
 
 // Tipagem
-Type ByteNode::get_type() const { return Type::BYTE; };
+Type ByteNode::get_type() const { return Type(TypeKind::BYTE); };
 
 // Construtores
 ByteNode::ByteNode(int line, uint8_t value)
