@@ -1,5 +1,4 @@
 #pragma once
-#include "../../helpers/numeric.hpp"
 #include "../../nodes/evaluation/binary.hpp"
 
 using BinaryTypeCheckFunction =

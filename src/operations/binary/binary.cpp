@@ -27,7 +27,5 @@ void BinaryOperations::add_type(BinaryOperation key,
 void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::PLUS, binary_plus_get_type);
   BinaryOperations::add_type(BinaryOperation::MINUS, binary_minus_get_type);
-
   // TODO: Restante das operações
-  // TODO: Operações unárias (outro arquivo)
 };
