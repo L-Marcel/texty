@@ -13,6 +13,7 @@
 #include <variant>
 #include <vector>
 
+#include "enums/access.hpp"
 #include "enums/operations.hpp"
 #include "enums/references.hpp"
 #include "enums/type.hpp"

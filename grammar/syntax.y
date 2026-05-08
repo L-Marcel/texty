@@ -21,8 +21,8 @@
 %token <float>       FLOAT
 %token <double>      DOUBLE
 %token <bool>        BOOL
-%token <std::string> ID NAME CONST_NAME
-%token <std::string> STRING
+%token <string>      ID NAME CONST_NAME
+%token <string>      STRING
 %token <char>        CHAR
 
 %token <TypeKind>    TYPE_BYTE
@@ -46,23 +46,29 @@
 %token ELIF ELSE FOR WHILE END_WHILE REPEAT UNTIL END_FOR BREAK CONTINUE 
 %token SWITCH CASE DEFAULT END_SWITCH IN SOME NONE FUNCTION END_FUNCTION
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
-%token IMPL END_IMPL TRAIT END_TRAIT RETURN DO
+%token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
-%type <Node*> subprogram enum struct trait impl
-%type <Node*> stmts stmt subprogram_call access call_params_list call_params
-%type <Node*> enum_values name struct_attrs struct_attr
+%type <Node*> enum struct trait impl
+%type <Node*> subprogram_call
+%type <Node*> enum_values struct_attrs struct_attr
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> access_base id return attr assign if if_end switch cases case_list
+%type <Node*> return assign if if_end switch cases case_list
 %type <Node*> case case_values default_case for while repeat array_allocation array_allocation_values
 %type <Node*> struct_allocation struct_allocation_values range_interval
 
-%type <Node*> root program program_slice
+%type <string> id name
+%type <vector<Node*>> stmts
+%type <AccessBaseNode*> access_base
+%type <AttrNode*> attr
+%type <AccessNode*> access
+%type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
 %type <vector<string>> id_list
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
+%type <vector<ExpressionNode*>> call_params_list call_params
 %type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr range_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
@@ -101,10 +107,16 @@ subprogram: fn {
 
 fn: FUNCTION ID params_list COLON type stmts END_FUNCTION SEMICOLON {
   $$ = new FunctionNode(ctx.line, $2, *$5, $3);
+  for (size_t i = 0; i < $6.size(); i++) {
+    $$->children.push_back($6[i]);
+  };
 };
 
 proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON {
   $$ = new ProcedureNode(ctx.line, $2, $3);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 } | PROCEDURE ID params_list END_PROCEDURE SEMICOLON {
   $$ = new ProcedureNode(ctx.line, $2, $3);
 };
@@ -153,15 +165,17 @@ subprogram_call: access call_params_list {
 };
 
 call_params_list: LEFT_PAREN call_params RIGHT_PAREN {
-  $$ = nullptr;
+  $$ = $2;
 } | LEFT_PAREN RIGHT_PAREN {
-  $$ = nullptr;
+  $$ = vector<ExpressionNode*>();
 };
 
 call_params: call_params COMMA expr {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($3);
 } | expr {
-  $$ = nullptr;
+  $$ = vector<ExpressionNode*>();
+  $$.push_back($1);
 };
 
 enum: ENUM name enum_values END_ENUM SEMICOLON {
@@ -261,43 +275,45 @@ impl_proc: PROCEDURE ID params_self_list stmts END_PROCEDURE SEMICOLON {
 };
 
 access: access DOT CONST_NAME {
-  $$ = nullptr;
+  $$ = new AccessNode(ctx.line, $3, $1, AccessType::DOT);
 } | access DOT ID {
-  $$ = nullptr;
+  $$ = new AccessNode(ctx.line, $3, $1, AccessType::DOT);
 } | access LEFT_BRACKET expr RIGHT_BRACKET {
-  $$ = nullptr;
+  $$ = new AccessNode(ctx.line, $1, $3);
 } | access DOUBLE_COLON ID {
-  $$ = nullptr;
+  $$ = new AccessNode(ctx.line, $3, $1, AccessType::STATIC);
 } | subprogram_call {
-  $$ = $1;
+  $$ = new AccessNode(ctx.line, $1);
 } | access_base {
-  $$ = $1;
+  $$ = new AccessNode(ctx.line, $1);
 };
 
 access_base: SELF {
-  $$ = nullptr;
+  $$ = new AccessBaseNode(ctx.line);
 } | id {
-  $$ = nullptr;
+  $$ = new AccessBaseNode(ctx.line, $1);
 } | LEFT_PAREN expr RIGHT_PAREN {
-  $$ = nullptr;
+  $$ = new AccessBaseNode(ctx.line, $2);
 };
 
 id: NAME {
-  $$ = nullptr;
+  $$ = $1;
 } | ID {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 name: NAME {
-  $$ = nullptr;
+  $$ = $1;
 } | CONST_NAME {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 stmts: stmts stmt SEMICOLON {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | stmt SEMICOLON {
-  $$ = nullptr;
+  $$ = vector<Node*>();
+  $$.push_back($1);
 };
 
 stmt: BREAK {
@@ -305,23 +321,23 @@ stmt: BREAK {
 } | CONTINUE {
   $$ = nullptr;
 } | attr {
-  $$ = nullptr;
+  $$ = $1;
 } | assign {
-  $$ = nullptr;
+  $$ = $1;
 } | return {
-  $$ = nullptr;
+  $$ = $1;
 } | if {
-  $$ = nullptr;
+  $$ = $1;
 } | for {
-  $$ = nullptr;
+  $$ = $1;
 } | while {
-  $$ = nullptr;
+  $$ = $1;
 } | repeat {
-  $$ = nullptr;
+  $$ = $1;
 } | switch {
-  $$ = nullptr;
+  $$ = $1;
 } | expr {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 return: RETURN expr {
@@ -329,9 +345,9 @@ return: RETURN expr {
 };
 
 attr: VAR ID COLON type ATTR expr {
-  $$ = nullptr;
+  $$ = new AttrNode(ctx.line, $2, false, *$4, $6);
 } | CONST ID COLON type ATTR expr {
-  $$ = nullptr;
+  $$ = new AttrNode(ctx.line, $2, true, *$4, $6);
 };
 
 type: TYPE_INT {
@@ -615,7 +631,7 @@ term: INT {
 } | struct_allocation {
   $$ = nullptr;
 } | access {
-  $$ = nullptr;
+  $$ = $1;
 } | SOME LEFT_PAREN expr RIGHT_PAREN {
   $$ = new OptionNode(ctx.line, Option());
 };

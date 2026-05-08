@@ -1,6 +1,18 @@
 digraph AST {
   node [shape=box, fontname="Courier"];
-  "0x55557d265dc0" [label="PROGRAM"];
-  "0x55557d265dc0" -> "0x55557d265e30";
-  "0x55557d265e30" [label="PROCEDURE: swap(array: int[], a: int, b: int)"];
+  "0x55555ee6ceb0" [label="PROGRAM"];
+  "0x55555ee6ceb0" -> "0x55555ee6d2b0";
+  "0x55555ee6d2b0" [label="PROCEDURE: swap(array: int[], a: int, b: int)"];
+  "0x55555ee6d2b0" -> "0x55555ee6d220";
+  "0x55555ee6d220" [label="ATTR: temp"];
+  "0x55555ee6d220" -> "0x55555ee6d1b0";
+  "0x55555ee6d1b0" [label="BRACKET"];
+  "0x55555ee6d1b0" -> "0x55555ee6cf20";
+  "0x55555ee6cf20" [label="ACCESS"];
+  "0x55555ee6cf20" -> "0x55555ee6d0f0";
+  "0x55555ee6d0f0" [label="ID: array"];
+  "0x55555ee6d1b0" -> "0x55555ee6cf90";
+  "0x55555ee6cf90" [label="ACCESS"];
+  "0x55555ee6cf90" -> "0x55555ee6d150";
+  "0x55555ee6d150" [label="ID: a"];
 }

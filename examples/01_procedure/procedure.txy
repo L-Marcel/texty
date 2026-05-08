@@ -1,2 +1,3 @@
 proc swap(array: int[]; a, b: int)
+  var temp: int = array[a];
 endproc;
