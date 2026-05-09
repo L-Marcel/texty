@@ -1,4 +1,5 @@
 #include "implementations/and.hpp"
+#include "implementations/exp.hpp"
 #include "implementations/or.hpp"
 #include "implementations/sum.hpp"
 
@@ -32,5 +33,6 @@ void BinaryOperations::initialize() {
 
   BinaryOperations::add_type(BinaryOperation::AND, binary_and_get_type);
   BinaryOperations::add_type(BinaryOperation::OR, binary_or_get_type);
+  BinaryOperations::add_type(BinaryOperation::EXP, binary_exp_get_type);
   // TODO: Restante das operações
 };
