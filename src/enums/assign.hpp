@@ -1,1 +1,1 @@
-enum AssignType { SIMPLE, OPERATION };
+enum class AssignType { SIMPLE, OPERATION };

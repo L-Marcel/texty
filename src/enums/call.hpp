@@ -1,1 +1,1 @@
-enum CallType { ACCESS, CONVERTION };
+enum class CallType { ACCESS, CONVERTION };

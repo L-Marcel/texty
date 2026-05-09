@@ -52,7 +52,7 @@
 %type <Node*> enum_values struct_attrs struct_attr
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> return assign if if_end switch cases case_list
+%type <Node*> switch cases case_list
 %type <Node*> case case_values default_case for while repeat array_allocation array_allocation_values
 %type <Node*> struct_allocation struct_allocation_values range_interval
 
@@ -61,7 +61,11 @@
 %type <AccessBaseNode*> access_base
 %type <SubprogramCallNode*> subprogram_call
 %type <AttrNode*> attr
+%type <AssignNode*> assign
+%type <ReturnNode*> return
 %type <AccessNode*> access
+%type <IfNode*> if
+%type <IfEndNode*> if_end
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
@@ -343,7 +347,7 @@ stmt: BREAK {
 };
 
 return: RETURN expr {
-  $$ = nullptr;
+  $$ = new ReturnNode(ctx.line, $2);
 };
 
 attr: VAR ID COLON type ATTR expr {
@@ -403,21 +407,34 @@ assign: access ATTR expr {
 };
 
 if: IF expr THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfNode(ctx.line, $2, $5);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 } | IF SOME ID IN access THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfNode(ctx.line, $5, $3, $8);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 };
 
 if_end: ELIF expr THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line, $2, $5);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 } | ELIF SOME ID IN access THEN stmts if_end {
-  $$ = nullptr;
-} | ELIF SOME IN access THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line, $5, $3, $8);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 } | ELSE stmts END_IF {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line, new IfEndNode(ctx.line));
+  for (size_t i = 0; i < $2.size(); i++) {
+    $$->children.push_back($2[i]);
+  };
 } | END_IF {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line);
 };
 
 switch: SWITCH expr cases END_SWITCH {
