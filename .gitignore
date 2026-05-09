@@ -1,1 +1,4 @@
 /syntax.tab.cc
+
+# Arquivos compilados do Windows
+*.exe

@@ -1,4 +1,5 @@
 #include "unary.hpp"
+#include "../../operations/unary/unary.hpp"
 
 // Debug
 void UnaryOperationNode::compile_dot(ostream& os) const {
@@ -13,7 +14,11 @@ void UnaryOperationNode::compile_code(ostream& os) const {
 }
 
 // Tipagem
-Type UnaryOperationNode::get_type() const { return this->node->get_type(); };
+Type UnaryOperationNode::get_type() const {
+  Type node_type = this->node->get_type();
+  UnaryTypeCheckFunction result = UnaryOperations::get_type(this->operation, this->line);
+  return result(node_type, this->line);
+};
 
 // Construtores
 UnaryOperationNode::UnaryOperationNode(UnaryOperation operation,
