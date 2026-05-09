@@ -9,6 +9,7 @@ bool Type::operator==(const Type& a) const {
   }
   return false;
 };
+bool Type::operator!=(const Type& a) const { return !(*this == a); };
 bool Type::operator<(const Type& a) const {
   if (this->kind != a.kind) return this->kind < a.kind;
   if (this->inner_type && a.inner_type) return *inner_type < *a.inner_type;

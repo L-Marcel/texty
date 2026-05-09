@@ -1,0 +1,1 @@
+enum AssignType { SIMPLE, OPERATION };

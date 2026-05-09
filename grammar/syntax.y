@@ -49,7 +49,6 @@
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
 %type <Node*> enum struct trait impl
-%type <Node*> subprogram_call
 %type <Node*> enum_values struct_attrs struct_attr
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
@@ -60,6 +59,7 @@
 %type <string> id name
 %type <vector<Node*>> stmts
 %type <AccessBaseNode*> access_base
+%type <SubprogramCallNode*> subprogram_call
 %type <AttrNode*> attr
 %type <AccessNode*> access
 %type <Node*> root program program_slice stmt subprogram
@@ -161,7 +161,9 @@ id_list: id_list COMMA ID {
 };
 
 subprogram_call: access call_params_list {
-  $$ = nullptr;
+  $$ = new SubprogramCallNode(ctx.line, $1, $2);
+} | type call_params_list {
+  $$ = new SubprogramCallNode(ctx.line, *$1, $2);
 };
 
 call_params_list: LEFT_PAREN call_params RIGHT_PAREN {
@@ -375,29 +377,29 @@ type: TYPE_INT {
 };
 
 assign: access ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, $1, $3);
 } | access AND_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::AND, $1, $3);
 } | access OR_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::OR, $1, $3);
 } | access LAZY_AND_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::BITWISE_AND, $1, $3);
 } | access LAZY_OR_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::BITWISE_OR, $1, $3);
 } | access XOR_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::XOR, $1, $3);
 } | access CONCAT_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::CONCAT, $1, $3);
 } | access MOD_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::MOD, $1, $3);
 } | access PLUS_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::PLUS, $1, $3);
 } | access MINUS_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::MINUS, $1, $3);
 } | access MULT_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::MULT, $1, $3);
 } | access DIV_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::DIV, $1, $3);
 };
 
 if: IF expr THEN stmts if_end {

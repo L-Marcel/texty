@@ -1,3 +1,5 @@
 proc swap(array: int[]; a, b: int)
   var temp: int = array[a];
+  array[a] = array[b];
+  array[b] = temp;
 endproc;

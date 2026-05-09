@@ -1,4 +1,5 @@
 #pragma once
+#include "../nodes/access/access.hpp"
 #include "subprograms/procedure.hpp"
 
 typedef unordered_map<string, Reference*> Scope;
@@ -6,10 +7,14 @@ typedef unordered_map<string, Reference*> Scope;
 struct References {
   vector<Scope> scopes;
 
+  Scope get_scope() const;
   void push_scope();
   void pop_scope();
 
-  Reference* get_reference(string name);
+  Reference* get_reference(int line, string name);
+  void add_variable_reference(string name, Type type, bool is_const);
+  void add_procedure_reference(string name, vector<Type> params);
+  void add_function_reference(string name, Type type, vector<Type> params);
 
   static References* _instance;
   static References* get_instance();

@@ -14,6 +14,8 @@
 #include <vector>
 
 #include "enums/access.hpp"
+#include "enums/assign.hpp"
+#include "enums/call.hpp"
 #include "enums/operations.hpp"
 #include "enums/references.hpp"
 #include "enums/type.hpp"

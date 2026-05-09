@@ -442,7 +442,6 @@ namespace yy {
       // program
       // program_slice
       // subprogram
-      // subprogram_call
       // enum
       // enum_values
       // struct
@@ -482,8 +481,11 @@ namespace yy {
       // proc
       char dummy7[sizeof (ProcedureNode*)];
 
+      // subprogram_call
+      char dummy8[sizeof (SubprogramCallNode*)];
+
       // type
-      char dummy8[sizeof (Type*)];
+      char dummy9[sizeof (Type*)];
 
       // TYPE_BYTE
       // TYPE_INT
@@ -493,25 +495,25 @@ namespace yy {
       // TYPE_BOOL
       // TYPE_STRING
       // TYPE_CHAR
-      char dummy9[sizeof (TypeKind)];
+      char dummy10[sizeof (TypeKind)];
 
       // BOOL
-      char dummy10[sizeof (bool)];
+      char dummy11[sizeof (bool)];
 
       // CHAR
-      char dummy11[sizeof (char)];
+      char dummy12[sizeof (char)];
 
       // DOUBLE
-      char dummy12[sizeof (double)];
+      char dummy13[sizeof (double)];
 
       // FLOAT
-      char dummy13[sizeof (float)];
+      char dummy14[sizeof (float)];
 
       // INT
-      char dummy14[sizeof (int32_t)];
+      char dummy15[sizeof (int32_t)];
 
       // LONG
-      char dummy15[sizeof (int64_t)];
+      char dummy16[sizeof (int64_t)];
 
       // ID
       // NAME
@@ -519,26 +521,26 @@ namespace yy {
       // STRING
       // id
       // name
-      char dummy16[sizeof (string)];
+      char dummy17[sizeof (string)];
 
       // BYTE
-      char dummy17[sizeof (uint8_t)];
+      char dummy18[sizeof (uint8_t)];
 
       // call_params_list
       // call_params
-      char dummy18[sizeof (vector<ExpressionNode*>)];
+      char dummy19[sizeof (vector<ExpressionNode*>)];
 
       // stmts
-      char dummy19[sizeof (vector<Node*>)];
+      char dummy20[sizeof (vector<Node*>)];
 
       // params_self_list
       // params_list
       // params
       // param
-      char dummy20[sizeof (vector<Param>)];
+      char dummy21[sizeof (vector<Param>)];
 
       // id_list
-      char dummy21[sizeof (vector<string>)];
+      char dummy22[sizeof (vector<string>)];
     };
 
     /// The size of the largest semantic type.
@@ -965,7 +967,6 @@ namespace yy {
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -1005,6 +1006,10 @@ namespace yy {
 
       case symbol_kind::S_proc: // proc
         value.move< ProcedureNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.move< SubprogramCallNode* > (std::move (that.value));
         break;
 
       case symbol_kind::S_type: // type
@@ -1179,6 +1184,18 @@ namespace yy {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const ProcedureNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, SubprogramCallNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const SubprogramCallNode*& v)
         : Base (t)
         , value (v)
       {}
@@ -1415,7 +1432,6 @@ switch (yykind)
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -1455,6 +1471,10 @@ switch (yykind)
 
       case symbol_kind::S_proc: // proc
         value.template destroy< ProcedureNode* > ();
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.template destroy< SubprogramCallNode* > ();
         break;
 
       case symbol_kind::S_type: // type
@@ -3752,7 +3772,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 2577,     ///< Last index in yytable_.
+      yylast_ = 2947,     ///< Last index in yytable_.
       yynnts_ = 72,  ///< Number of nonterminal symbols.
       yyfinal_ = 25 ///< Termination state number.
     };
@@ -3869,7 +3889,6 @@ switch (yykind)
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -3909,6 +3928,10 @@ switch (yykind)
 
       case symbol_kind::S_proc: // proc
         value.copy< ProcedureNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.copy< SubprogramCallNode* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_type: // type
@@ -4053,7 +4076,6 @@ switch (yykind)
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -4093,6 +4115,10 @@ switch (yykind)
 
       case symbol_kind::S_proc: // proc
         value.move< ProcedureNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.move< SubprogramCallNode* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_type: // type
@@ -4232,7 +4258,7 @@ switch (yykind)
 
 
 } // yy
-#line 4236 "grammar/build/syntax.tab.hh"
+#line 4262 "grammar/build/syntax.tab.hh"
 
 
 

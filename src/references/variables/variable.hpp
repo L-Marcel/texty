@@ -2,7 +2,7 @@
 #include "../reference.hpp"
 
 struct VariableReference : public Reference {
-  Value value;
+  bool is_const;
 
-  VariableReference(int offset, Type node_type);
+  VariableReference(Type node_type, bool is_const);
 };
