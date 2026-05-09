@@ -10,6 +10,11 @@ void OptionNode::compile_code(ostream& os) const {
   // TODO
 }
 
+// Tipagem
+Type OptionNode::get_type() const {
+  return Type(TypeKind::OPTION, new Type(TypeKind::UNKNOWN));
+};
+
 // Construtores
 OptionNode::OptionNode(int line, Option value)
     : ExpressionNode(line), value(value) {};

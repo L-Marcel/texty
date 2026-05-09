@@ -1,0 +1,1 @@
+enum class ForType { SINGLE_EXPRESSION, THREE_EXPRESSION };

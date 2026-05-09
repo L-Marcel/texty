@@ -11,5 +11,6 @@ enum class TypeKind {
   CHAR,
   POINTER,
   OPTION,
+  RANGE,
   ARRAY
 };

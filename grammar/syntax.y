@@ -53,19 +53,22 @@
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
 %type <Node*> switch cases case_list
-%type <Node*> case case_values default_case for while repeat array_allocation array_allocation_values
-%type <Node*> struct_allocation struct_allocation_values range_interval
+%type <Node*> case case_values default_case while repeat array_allocation array_allocation_values
+%type <Node*> struct_allocation struct_allocation_values 
 
 %type <string> id name
 %type <vector<Node*>> stmts
 %type <AccessBaseNode*> access_base
 %type <SubprogramCallNode*> subprogram_call
+%type <pair<RangeInclusionType, RangeInclusionType>> range_interval
+%type <RangeNode*> range_expr
 %type <AttrNode*> attr
 %type <AssignNode*> assign
 %type <ReturnNode*> return
 %type <AccessNode*> access
 %type <IfNode*> if
 %type <IfEndNode*> if_end
+%type <ForNode*> for
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
@@ -73,7 +76,7 @@
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
 %type <vector<ExpressionNode*>> call_params_list call_params
-%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr range_expr
+%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
 %start root
@@ -474,13 +477,19 @@ default_case: DEFAULT COLON stmts {
 };
 
 for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 } | FOR LEFT_PAREN ID IN expr RIGHT_PAREN END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5);
 } | FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN stmts END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5, $7);
+  for (size_t i = 0; i < $9.size(); i++) {
+    $$->children.push_back($9[i]);
+  };
 } | FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5, $7);
 };
 
 while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE {
@@ -502,21 +511,21 @@ expr: or_expr {
 };
 
 range_expr: range_interval or_expr {
-  $$ = nullptr;
+  $$ = new RangeNode(ctx.line, false, $2, $1.second);
 } | or_expr range_interval {
-  $$ = nullptr;
+  $$ = new RangeNode(ctx.line, true, $1, $2.first);
 } | or_expr range_interval or_expr {
-  $$ = nullptr;
+  $$ = new RangeNode(ctx.line, $1, $2.first, $3, $2.second);
 };
 
 range_interval: RANGE {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::INCLUSIVE, RangeInclusionType::EXCLUSIVE};
 } | RANGE_EXC {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::EXCLUSIVE, RangeInclusionType::EXCLUSIVE};
 } | RANGE_EXC_INC {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::EXCLUSIVE, RangeInclusionType::INCLUSIVE};
 } | RANGE_INC {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::INCLUSIVE, RangeInclusionType::INCLUSIVE};
 };
 
 or_expr: or_expr OR and_expr {

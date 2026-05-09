@@ -6,6 +6,11 @@ endproc;
 
 fn partition(array: int[]; min, max: int): int
 	var i: int = (min - 1);
+	for (j in min..max)
+		if array[j] <= array[max]
+		then swap(array, ++i, j);
+		endif;
+	endfor;
 	var pivot: int = i + 1;
 	swap(array, pivot, max);
 	return pivot;
