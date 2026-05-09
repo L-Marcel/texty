@@ -17,7 +17,7 @@ bool Type::operator<(const Type& a) const {
 };
 
 // String
-string Type::to_string() {
+string Type::to_string() const {
   if (kind == TypeKind::ARRAY) {
     return (inner_type ? inner_type->to_string() : "unknown") + "[]";
   } else if (kind == TypeKind::POINTER) {

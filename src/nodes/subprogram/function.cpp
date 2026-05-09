@@ -6,9 +6,7 @@
 string params_to_string(vector<Param> params) {
   string text = "";
   for (size_t i = 0; i < params.size(); i++) {
-    string id = params[i].first;
-    Type type = params[i].second;
-    text += id + ": " + type.to_string();
+    text += params[i].first + ": " + params[i].second.to_string();
     if (i != params.size() - 1) {
       text += ", ";
     };

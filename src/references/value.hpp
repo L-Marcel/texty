@@ -10,7 +10,7 @@ struct Type {
   bool operator==(const Type& a) const;
   bool operator!=(const Type& a) const;
   bool operator<(const Type& a) const;
-  string to_string();
+  string to_string() const;
 };
 
 struct Record;

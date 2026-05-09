@@ -4,7 +4,14 @@
 
 // Debug
 void SubprogramCallNode::compile_dot(ostream& os) const {
-  Compiler::add_dot_node(os, this, "CALL");
+  if (this->call_type == CallType::ACCESS) {
+    Compiler::add_dot_node(os, this, "CALL");
+    Compiler::add_dot_relation(os, this, this->access);
+  } else {
+    Compiler::add_dot_node(os, this,
+                           "CONVERT: " + this->target_type.to_string());
+  };
+
   for (size_t i = 0; i < this->params.size(); i++) {
     Compiler::add_dot_relation(os, this, this->params.at(i));
   };
