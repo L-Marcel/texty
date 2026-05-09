@@ -20,9 +20,9 @@ Type AssignNode::get_type() const {
   Type left = this->access->get_type();
   Type right = this->expression->get_type();
 
-  if (this->assign_type == SIMPLE && left == right) {
+  if (this->assign_type == AssignType::SIMPLE && left == right) {
     return this->access->get_type();
-  } else if (this->assign_type == OPERATION) {
+  } else if (this->assign_type == AssignType::OPERATION) {
     BinaryTypeCheckFunction result =
         BinaryOperations::get_type(this->operation, this->line);
     return result(left, right, this->line);
