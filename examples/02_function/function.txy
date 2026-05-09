@@ -1,0 +1,25 @@
+proc swap(array: int[]; a, b: int)
+	var temp: int = array[a];
+  array[a] = array[b];
+  array[b] = temp;
+endproc;
+
+fn partition(array: int[]; min, max: int): int
+	var i: int = (min - 1);
+	for (j in min..max)
+		if array[j] <= array[max]
+		then swap(array, ++i, j);
+		endif;
+	endfor;
+	var pivot: int = i + 1;
+	swap(array, pivot, max);
+	return pivot;
+endfn;
+
+proc quick_sort(array: int[]; min, max: int)
+	if min < max then 
+		var pivot: int = partition(array, min, max);
+		quick_sort(array, min, pivot - 1);
+		quick_sort(array, pivot + 1, max);
+	endif;
+endproc;

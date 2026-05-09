@@ -1,1 +1,9 @@
-enum class ReferenceType { VARIABLE, ENUM, STRUCT, TRAIT, FUNCTION, PROCEDURE };
+enum class ReferenceType {
+  EXPRESSION,
+  VARIABLE,
+  ENUM,
+  STRUCT,
+  TRAIT,
+  FUNCTION,
+  PROCEDURE
+};

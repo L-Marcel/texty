@@ -12,9 +12,11 @@ void IdNode::compile_code(ostream& os) const {
   // TODO
 };
 
-// Referência
-Reference* IdNode::get_reference() const {
-  return References::get_instance()->get_reference(this->name);
+// Tipagem
+Type IdNode::get_type() const {
+  return References::get_instance()
+      ->get_reference(this->line, this->name)
+      ->node_type;
 };
 
 // Construtores

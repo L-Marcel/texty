@@ -9,6 +9,7 @@ bool Type::operator==(const Type& a) const {
   }
   return false;
 };
+bool Type::operator!=(const Type& a) const { return !(*this == a); };
 bool Type::operator<(const Type& a) const {
   if (this->kind != a.kind) return this->kind < a.kind;
   if (this->inner_type && a.inner_type) return *inner_type < *a.inner_type;
@@ -16,7 +17,7 @@ bool Type::operator<(const Type& a) const {
 };
 
 // String
-string Type::to_string() {
+string Type::to_string() const {
   if (kind == TypeKind::ARRAY) {
     return (inner_type ? inner_type->to_string() : "unknown") + "[]";
   } else if (kind == TypeKind::POINTER) {

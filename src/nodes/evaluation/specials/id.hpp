@@ -7,5 +7,5 @@ struct IdNode : public ExpressionNode {
   IdNode(int line, string name);
   void compile_dot(ostream& os) const override;
   void compile_code(ostream& os) const override;
-  Reference* get_reference() const;
+  Type get_type() const override;
 };

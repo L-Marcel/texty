@@ -414,11 +414,13 @@ namespace yy {
       // access
       char dummy2[sizeof (AccessNode*)];
 
+      // assign
+      char dummy3[sizeof (AssignNode*)];
+
       // attr
-      char dummy3[sizeof (AttrNode*)];
+      char dummy4[sizeof (AttrNode*)];
 
       // expr
-      // range_expr
       // or_expr
       // and_expr
       // bit_or_expr
@@ -433,16 +435,24 @@ namespace yy {
       // exp_expr
       // postfix_expr
       // term
-      char dummy4[sizeof (ExpressionNode*)];
+      char dummy5[sizeof (ExpressionNode*)];
+
+      // for
+      char dummy6[sizeof (ForNode*)];
 
       // fn
-      char dummy5[sizeof (FunctionNode*)];
+      char dummy7[sizeof (FunctionNode*)];
+
+      // if_end
+      char dummy8[sizeof (IfEndNode*)];
+
+      // if
+      char dummy9[sizeof (IfNode*)];
 
       // root
       // program
       // program_slice
       // subprogram
-      // subprogram_call
       // enum
       // enum_values
       // struct
@@ -459,31 +469,34 @@ namespace yy {
       // impl_fn
       // impl_proc
       // stmt
-      // return
-      // assign
-      // if
-      // if_end
       // switch
       // cases
       // case_list
       // case
       // case_values
       // default_case
-      // for
       // while
       // repeat
-      // range_interval
       // array_allocation
       // array_allocation_values
       // struct_allocation
       // struct_allocation_values
-      char dummy6[sizeof (Node*)];
+      char dummy10[sizeof (Node*)];
 
       // proc
-      char dummy7[sizeof (ProcedureNode*)];
+      char dummy11[sizeof (ProcedureNode*)];
+
+      // range_expr
+      char dummy12[sizeof (RangeNode*)];
+
+      // return
+      char dummy13[sizeof (ReturnNode*)];
+
+      // subprogram_call
+      char dummy14[sizeof (SubprogramCallNode*)];
 
       // type
-      char dummy8[sizeof (Type*)];
+      char dummy15[sizeof (Type*)];
 
       // TYPE_BYTE
       // TYPE_INT
@@ -493,25 +506,28 @@ namespace yy {
       // TYPE_BOOL
       // TYPE_STRING
       // TYPE_CHAR
-      char dummy9[sizeof (TypeKind)];
+      char dummy16[sizeof (TypeKind)];
 
       // BOOL
-      char dummy10[sizeof (bool)];
+      char dummy17[sizeof (bool)];
 
       // CHAR
-      char dummy11[sizeof (char)];
+      char dummy18[sizeof (char)];
 
       // DOUBLE
-      char dummy12[sizeof (double)];
+      char dummy19[sizeof (double)];
 
       // FLOAT
-      char dummy13[sizeof (float)];
+      char dummy20[sizeof (float)];
 
       // INT
-      char dummy14[sizeof (int32_t)];
+      char dummy21[sizeof (int32_t)];
 
       // LONG
-      char dummy15[sizeof (int64_t)];
+      char dummy22[sizeof (int64_t)];
+
+      // range_interval
+      char dummy23[sizeof (pair<RangeInclusionType, RangeInclusionType>)];
 
       // ID
       // NAME
@@ -519,26 +535,26 @@ namespace yy {
       // STRING
       // id
       // name
-      char dummy16[sizeof (string)];
+      char dummy24[sizeof (string)];
 
       // BYTE
-      char dummy17[sizeof (uint8_t)];
+      char dummy25[sizeof (uint8_t)];
 
       // call_params_list
       // call_params
-      char dummy18[sizeof (vector<ExpressionNode*>)];
+      char dummy26[sizeof (vector<ExpressionNode*>)];
 
       // stmts
-      char dummy19[sizeof (vector<Node*>)];
+      char dummy27[sizeof (vector<Node*>)];
 
       // params_self_list
       // params_list
       // params
       // param
-      char dummy20[sizeof (vector<Param>)];
+      char dummy28[sizeof (vector<Param>)];
 
       // id_list
-      char dummy21[sizeof (vector<string>)];
+      char dummy29[sizeof (vector<string>)];
     };
 
     /// The size of the largest semantic type.
@@ -934,12 +950,15 @@ namespace yy {
         value.move< AccessNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_assign: // assign
+        value.move< AssignNode* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_attr: // attr
         value.move< AttrNode* > (std::move (that.value));
         break;
 
       case symbol_kind::S_expr: // expr
-      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -957,15 +976,26 @@ namespace yy {
         value.move< ExpressionNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_for: // for
+        value.move< ForNode* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_fn: // fn
         value.move< FunctionNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_if_end: // if_end
+        value.move< IfEndNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_if: // if
+        value.move< IfNode* > (std::move (that.value));
         break;
 
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -982,20 +1012,14 @@ namespace yy {
       case symbol_kind::S_impl_fn: // impl_fn
       case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_return: // return
-      case symbol_kind::S_assign: // assign
-      case symbol_kind::S_if: // if
-      case symbol_kind::S_if_end: // if_end
       case symbol_kind::S_switch: // switch
       case symbol_kind::S_cases: // cases
       case symbol_kind::S_case_list: // case_list
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_for: // for
       case symbol_kind::S_while: // while
       case symbol_kind::S_repeat: // repeat
-      case symbol_kind::S_range_interval: // range_interval
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -1005,6 +1029,18 @@ namespace yy {
 
       case symbol_kind::S_proc: // proc
         value.move< ProcedureNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_range_expr: // range_expr
+        value.move< RangeNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_return: // return
+        value.move< ReturnNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.move< SubprogramCallNode* > (std::move (that.value));
         break;
 
       case symbol_kind::S_type: // type
@@ -1044,6 +1080,10 @@ namespace yy {
 
       case symbol_kind::S_LONG: // LONG
         value.move< int64_t > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_range_interval: // range_interval
+        value.move< pair<RangeInclusionType, RangeInclusionType> > (std::move (that.value));
         break;
 
       case symbol_kind::S_ID: // ID
@@ -1125,6 +1165,18 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, AssignNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const AssignNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, AttrNode*&& v)
         : Base (t)
         , value (std::move (v))
@@ -1149,12 +1201,48 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, ForNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const ForNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, FunctionNode*&& v)
         : Base (t)
         , value (std::move (v))
       {}
 #else
       basic_symbol (typename Base::kind_type t, const FunctionNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, IfEndNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const IfEndNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, IfNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const IfNode*& v)
         : Base (t)
         , value (v)
       {}
@@ -1179,6 +1267,42 @@ namespace yy {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const ProcedureNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, RangeNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const RangeNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, ReturnNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const ReturnNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, SubprogramCallNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const SubprogramCallNode*& v)
         : Base (t)
         , value (v)
       {}
@@ -1275,6 +1399,18 @@ namespace yy {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const int64_t& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, pair<RangeInclusionType, RangeInclusionType>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const pair<RangeInclusionType, RangeInclusionType>& v)
         : Base (t)
         , value (v)
       {}
@@ -1384,12 +1520,15 @@ switch (yykind)
         value.template destroy< AccessNode* > ();
         break;
 
+      case symbol_kind::S_assign: // assign
+        value.template destroy< AssignNode* > ();
+        break;
+
       case symbol_kind::S_attr: // attr
         value.template destroy< AttrNode* > ();
         break;
 
       case symbol_kind::S_expr: // expr
-      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -1407,15 +1546,26 @@ switch (yykind)
         value.template destroy< ExpressionNode* > ();
         break;
 
+      case symbol_kind::S_for: // for
+        value.template destroy< ForNode* > ();
+        break;
+
       case symbol_kind::S_fn: // fn
         value.template destroy< FunctionNode* > ();
+        break;
+
+      case symbol_kind::S_if_end: // if_end
+        value.template destroy< IfEndNode* > ();
+        break;
+
+      case symbol_kind::S_if: // if
+        value.template destroy< IfNode* > ();
         break;
 
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -1432,20 +1582,14 @@ switch (yykind)
       case symbol_kind::S_impl_fn: // impl_fn
       case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_return: // return
-      case symbol_kind::S_assign: // assign
-      case symbol_kind::S_if: // if
-      case symbol_kind::S_if_end: // if_end
       case symbol_kind::S_switch: // switch
       case symbol_kind::S_cases: // cases
       case symbol_kind::S_case_list: // case_list
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_for: // for
       case symbol_kind::S_while: // while
       case symbol_kind::S_repeat: // repeat
-      case symbol_kind::S_range_interval: // range_interval
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -1455,6 +1599,18 @@ switch (yykind)
 
       case symbol_kind::S_proc: // proc
         value.template destroy< ProcedureNode* > ();
+        break;
+
+      case symbol_kind::S_range_expr: // range_expr
+        value.template destroy< RangeNode* > ();
+        break;
+
+      case symbol_kind::S_return: // return
+        value.template destroy< ReturnNode* > ();
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.template destroy< SubprogramCallNode* > ();
         break;
 
       case symbol_kind::S_type: // type
@@ -1494,6 +1650,10 @@ switch (yykind)
 
       case symbol_kind::S_LONG: // LONG
         value.template destroy< int64_t > ();
+        break;
+
+      case symbol_kind::S_range_interval: // range_interval
+        value.template destroy< pair<RangeInclusionType, RangeInclusionType> > ();
         break;
 
       case symbol_kind::S_ID: // ID
@@ -3752,7 +3912,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 2577,     ///< Last index in yytable_.
+      yylast_ = 2988,     ///< Last index in yytable_.
       yynnts_ = 72,  ///< Number of nonterminal symbols.
       yyfinal_ = 25 ///< Termination state number.
     };
@@ -3838,12 +3998,15 @@ switch (yykind)
         value.copy< AccessNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_assign: // assign
+        value.copy< AssignNode* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_attr: // attr
         value.copy< AttrNode* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_expr: // expr
-      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -3861,15 +4024,26 @@ switch (yykind)
         value.copy< ExpressionNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_for: // for
+        value.copy< ForNode* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_fn: // fn
         value.copy< FunctionNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_if_end: // if_end
+        value.copy< IfEndNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_if: // if
+        value.copy< IfNode* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -3886,20 +4060,14 @@ switch (yykind)
       case symbol_kind::S_impl_fn: // impl_fn
       case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_return: // return
-      case symbol_kind::S_assign: // assign
-      case symbol_kind::S_if: // if
-      case symbol_kind::S_if_end: // if_end
       case symbol_kind::S_switch: // switch
       case symbol_kind::S_cases: // cases
       case symbol_kind::S_case_list: // case_list
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_for: // for
       case symbol_kind::S_while: // while
       case symbol_kind::S_repeat: // repeat
-      case symbol_kind::S_range_interval: // range_interval
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -3909,6 +4077,18 @@ switch (yykind)
 
       case symbol_kind::S_proc: // proc
         value.copy< ProcedureNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_range_expr: // range_expr
+        value.copy< RangeNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_return: // return
+        value.copy< ReturnNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.copy< SubprogramCallNode* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_type: // type
@@ -3948,6 +4128,10 @@ switch (yykind)
 
       case symbol_kind::S_LONG: // LONG
         value.copy< int64_t > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_range_interval: // range_interval
+        value.copy< pair<RangeInclusionType, RangeInclusionType> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_ID: // ID
@@ -4022,12 +4206,15 @@ switch (yykind)
         value.move< AccessNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_assign: // assign
+        value.move< AssignNode* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_attr: // attr
         value.move< AttrNode* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_expr: // expr
-      case symbol_kind::S_range_expr: // range_expr
       case symbol_kind::S_or_expr: // or_expr
       case symbol_kind::S_and_expr: // and_expr
       case symbol_kind::S_bit_or_expr: // bit_or_expr
@@ -4045,15 +4232,26 @@ switch (yykind)
         value.move< ExpressionNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_for: // for
+        value.move< ForNode* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_fn: // fn
         value.move< FunctionNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_if_end: // if_end
+        value.move< IfEndNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_if: // if
+        value.move< IfNode* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_subprogram_call: // subprogram_call
       case symbol_kind::S_enum: // enum
       case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
@@ -4070,20 +4268,14 @@ switch (yykind)
       case symbol_kind::S_impl_fn: // impl_fn
       case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_return: // return
-      case symbol_kind::S_assign: // assign
-      case symbol_kind::S_if: // if
-      case symbol_kind::S_if_end: // if_end
       case symbol_kind::S_switch: // switch
       case symbol_kind::S_cases: // cases
       case symbol_kind::S_case_list: // case_list
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_for: // for
       case symbol_kind::S_while: // while
       case symbol_kind::S_repeat: // repeat
-      case symbol_kind::S_range_interval: // range_interval
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -4093,6 +4285,18 @@ switch (yykind)
 
       case symbol_kind::S_proc: // proc
         value.move< ProcedureNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_range_expr: // range_expr
+        value.move< RangeNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_return: // return
+        value.move< ReturnNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_subprogram_call: // subprogram_call
+        value.move< SubprogramCallNode* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_type: // type
@@ -4132,6 +4336,10 @@ switch (yykind)
 
       case symbol_kind::S_LONG: // LONG
         value.move< int64_t > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_range_interval: // range_interval
+        value.move< pair<RangeInclusionType, RangeInclusionType> > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_ID: // ID
@@ -4232,7 +4440,7 @@ switch (yykind)
 
 
 } // yy
-#line 4236 "grammar/build/syntax.tab.hh"
+#line 4444 "grammar/build/syntax.tab.hh"
 
 
 

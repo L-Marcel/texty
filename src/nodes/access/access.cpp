@@ -1,5 +1,8 @@
 #include "access.hpp"
 
+#include "../../references/references.hpp"
+#include "../subprogram/call.hpp"
+
 // Debug
 void AccessNode::compile_dot(ostream& os) const {
   switch (this->access_type) {
@@ -40,10 +43,34 @@ Type AccessNode::get_type() const {
   return Type(TypeKind::UNKNOWN);
 };
 
+// Referências
+// Referências
+Reference* AccessNode::get_reference(int line) const {
+  switch (this->access_type) {
+    case AccessType::DOT:
+      // TODO - Tem que ser uma referência que considere a base
+      return References::get_instance()->get_reference(line, this->name);
+    case AccessType::BRACKET:
+      // TODO - Tem que ser uma referência que considere a base
+      return References::get_instance()->get_reference(line, this->name);
+    case AccessType::CALL:
+      if (this->call->call_type == CallType::ACCESS) {
+        return this->call->access->get_reference(line);
+      } else {
+        throw error("tentativa de acesso a tipo primitivo", line);
+      };
+    case AccessType::STATIC:
+      // TODO - Tem que ser uma referência que considere a base
+      return References::get_instance()->get_reference(line, this->name);
+    default:
+      return this->base->get_reference(line);
+  };
+};
+
 // Construtores
 AccessNode::AccessNode(int line, AccessBaseNode* base)
     : ExpressionNode(line), access_type(AccessType::BASE), base(base) {};
-AccessNode::AccessNode(int line, Node* call)
+AccessNode::AccessNode(int line, SubprogramCallNode* call)
     : ExpressionNode(line), access_type(AccessType::CALL), call(call) {};
 AccessNode::AccessNode(int line, string name, AccessNode* previous,
                        AccessType access_type)

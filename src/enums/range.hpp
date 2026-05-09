@@ -1,0 +1,1 @@
+enum class RangeInclusionType { INCLUSIVE, EXCLUSIVE, UNBOUNDED };

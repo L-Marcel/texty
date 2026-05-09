@@ -1,0 +1,1 @@
+enum class AssignType { SIMPLE, OPERATION };

@@ -49,19 +49,26 @@
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
 %type <Node*> enum struct trait impl
-%type <Node*> subprogram_call
 %type <Node*> enum_values struct_attrs struct_attr
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> return assign if if_end switch cases case_list
-%type <Node*> case case_values default_case for while repeat array_allocation array_allocation_values
-%type <Node*> struct_allocation struct_allocation_values range_interval
+%type <Node*> switch cases case_list
+%type <Node*> case case_values default_case while repeat array_allocation array_allocation_values
+%type <Node*> struct_allocation struct_allocation_values 
 
 %type <string> id name
 %type <vector<Node*>> stmts
 %type <AccessBaseNode*> access_base
+%type <SubprogramCallNode*> subprogram_call
+%type <pair<RangeInclusionType, RangeInclusionType>> range_interval
+%type <RangeNode*> range_expr
 %type <AttrNode*> attr
+%type <AssignNode*> assign
+%type <ReturnNode*> return
 %type <AccessNode*> access
+%type <IfNode*> if
+%type <IfEndNode*> if_end
+%type <ForNode*> for
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
@@ -69,7 +76,7 @@
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
 %type <vector<ExpressionNode*>> call_params_list call_params
-%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr range_expr
+%type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
 %start root
@@ -161,7 +168,9 @@ id_list: id_list COMMA ID {
 };
 
 subprogram_call: access call_params_list {
-  $$ = nullptr;
+  $$ = new SubprogramCallNode(ctx.line, $1, $2);
+} | type call_params_list {
+  $$ = new SubprogramCallNode(ctx.line, *$1, $2);
 };
 
 call_params_list: LEFT_PAREN call_params RIGHT_PAREN {
@@ -341,7 +350,7 @@ stmt: BREAK {
 };
 
 return: RETURN expr {
-  $$ = nullptr;
+  $$ = new ReturnNode(ctx.line, $2);
 };
 
 attr: VAR ID COLON type ATTR expr {
@@ -375,47 +384,60 @@ type: TYPE_INT {
 };
 
 assign: access ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, $1, $3);
 } | access AND_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::AND, $1, $3);
 } | access OR_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::OR, $1, $3);
 } | access LAZY_AND_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::BITWISE_AND, $1, $3);
 } | access LAZY_OR_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::BITWISE_OR, $1, $3);
 } | access XOR_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::XOR, $1, $3);
 } | access CONCAT_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::CONCAT, $1, $3);
 } | access MOD_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::MOD, $1, $3);
 } | access PLUS_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::PLUS, $1, $3);
 } | access MINUS_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::MINUS, $1, $3);
 } | access MULT_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::MULT, $1, $3);
 } | access DIV_ATTR expr {
-  $$ = nullptr;
+  $$ = new AssignNode(ctx.line, BinaryOperation::DIV, $1, $3);
 };
 
 if: IF expr THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfNode(ctx.line, $2, $5);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 } | IF SOME ID IN access THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfNode(ctx.line, $5, $3, $8);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 };
 
 if_end: ELIF expr THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line, $2, $5);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 } | ELIF SOME ID IN access THEN stmts if_end {
-  $$ = nullptr;
-} | ELIF SOME IN access THEN stmts if_end {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line, $5, $3, $8);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 } | ELSE stmts END_IF {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line, new IfEndNode(ctx.line));
+  for (size_t i = 0; i < $2.size(); i++) {
+    $$->children.push_back($2[i]);
+  };
 } | END_IF {
-  $$ = nullptr;
+  $$ = new IfEndNode(ctx.line);
 };
 
 switch: SWITCH expr cases END_SWITCH {
@@ -455,13 +477,19 @@ default_case: DEFAULT COLON stmts {
 };
 
 for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 } | FOR LEFT_PAREN ID IN expr RIGHT_PAREN END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5);
 } | FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN stmts END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5, $7);
+  for (size_t i = 0; i < $9.size(); i++) {
+    $$->children.push_back($9[i]);
+  };
 } | FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN END_FOR {
-  $$ = nullptr;
+  $$ = new ForNode(ctx.line, $3, $5, $7);
 };
 
 while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE {
@@ -483,21 +511,21 @@ expr: or_expr {
 };
 
 range_expr: range_interval or_expr {
-  $$ = nullptr;
+  $$ = new RangeNode(ctx.line, false, $2, $1.second);
 } | or_expr range_interval {
-  $$ = nullptr;
+  $$ = new RangeNode(ctx.line, true, $1, $2.first);
 } | or_expr range_interval or_expr {
-  $$ = nullptr;
+  $$ = new RangeNode(ctx.line, $1, $2.first, $3, $2.second);
 };
 
 range_interval: RANGE {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::INCLUSIVE, RangeInclusionType::EXCLUSIVE};
 } | RANGE_EXC {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::EXCLUSIVE, RangeInclusionType::EXCLUSIVE};
 } | RANGE_EXC_INC {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::EXCLUSIVE, RangeInclusionType::INCLUSIVE};
 } | RANGE_INC {
-  $$ = nullptr;
+  $$ = {RangeInclusionType::INCLUSIVE, RangeInclusionType::INCLUSIVE};
 };
 
 or_expr: or_expr OR and_expr {

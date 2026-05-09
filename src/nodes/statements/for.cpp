@@ -1,0 +1,40 @@
+#include "for.hpp"
+
+// Debug
+void ForNode::compile_dot(ostream& os) const {
+  switch (this->type) {
+    case ForType::SINGLE_EXPRESSION:
+      Compiler::add_dot_node(os, this, "FOR: " + this->name);
+      Compiler::add_dot_relation(os, this, this->expression);
+      for (size_t i = 0; i < this->children.size(); i++) {
+        Compiler::add_dot_relation(os, this, this->children.at(i));
+      };
+      break;
+    case ForType::THREE_EXPRESSION:
+      Compiler::add_dot_node(os, this, "FOR");
+      Compiler::add_dot_relation(os, this, this->attr);
+      Compiler::add_dot_relation(os, this, this->condition);
+      Compiler::add_dot_relation(os, this, this->increment);
+      for (size_t i = 0; i < this->children.size(); i++) {
+        Compiler::add_dot_relation(os, this, this->children.at(i));
+      };
+      break;
+  }
+};
+
+// Código
+void ForNode::compile_code(ostream& os) const {
+  // TODO
+};
+
+// Tipagem
+Type ForNode::get_type() const { return Type(TypeKind::VOID); };
+
+// Construtores
+ForNode::ForNode(int line, string name, ExpressionNode* expression)
+    : Node(line, name),
+      type(ForType::SINGLE_EXPRESSION),
+      expression(expression) {};
+ForNode::ForNode(int line, AttrNode* attr, ExpressionNode* condition,
+                 ExpressionNode* increment)
+    : Node(line), attr(attr), condition(condition), increment(increment) {};
