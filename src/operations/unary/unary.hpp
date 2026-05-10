@@ -2,7 +2,7 @@
 #include "../../nodes/evaluation/unary.hpp"
 
 using UnaryTypeCheckFunction =
-    function<Type(const Type&, const Type&, int line)>;
+    function<Type(const Type&, int line)>;
 using UnaryOperationsTypeTable = map<UnaryOperation, UnaryTypeCheckFunction>;
 
 struct UnaryOperations {
