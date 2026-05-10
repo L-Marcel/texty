@@ -1,4 +1,5 @@
 #include "implementations/and.hpp"
+#include "implementations/equals.hpp"
 #include "implementations/exp.hpp"
 #include "implementations/mult.hpp"
 #include "implementations/or.hpp"
@@ -35,6 +36,8 @@ void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::AND, binary_and_get_type);
   BinaryOperations::add_type(BinaryOperation::OR, binary_or_get_type);
   BinaryOperations::add_type(BinaryOperation::EXP, binary_exp_get_type);
+  BinaryOperations::add_type(BinaryOperation::EQ, binary_eq_get_type);
+  BinaryOperations::add_type(BinaryOperation::NOT_EQ, binary_not_eq_get_type);
   BinaryOperations::add_type(BinaryOperation::GT, binary_gt_get_type);
   BinaryOperations::add_type(BinaryOperation::GT_EQ, binary_gt_eq_get_type);
   BinaryOperations::add_type(BinaryOperation::LT, binary_lt_get_type);
