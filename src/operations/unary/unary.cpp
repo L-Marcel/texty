@@ -29,4 +29,6 @@ void UnaryOperations::initialize() {
   UnaryOperations::add_type(UnaryOperation::NOT, unary_not_get_type);
   UnaryOperations::add_type(UnaryOperation::REV, unary_rev_get_type);
   UnaryOperations::add_type(UnaryOperation::REF, unary_ref_get_type);
+  UnaryOperations::add_type(UnaryOperation::INCREMENT, unary_increment_get_type);
+  UnaryOperations::add_type(UnaryOperation::DECREMENT, unary_decrement_get_type);
 };
