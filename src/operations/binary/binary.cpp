@@ -1,4 +1,5 @@
 #include "implementations/and.hpp"
+#include "implementations/bit_and.hpp"
 #include "implementations/equals.hpp"
 #include "implementations/exp.hpp"
 #include "implementations/mult.hpp"
@@ -46,6 +47,7 @@ void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::MULT, binary_mult_get_type);
   BinaryOperations::add_type(BinaryOperation::DIV, binary_div_get_type);
   BinaryOperations::add_type(BinaryOperation::MOD, binary_mod_get_type);
+  BinaryOperations::add_type(BinaryOperation::BITWISE_AND, binary_bit_and_get_type);
 
   // TODO: Restante das operações
 };
