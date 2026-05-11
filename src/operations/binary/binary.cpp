@@ -1,10 +1,11 @@
 #include "implementations/and.hpp"
 #include "implementations/bit_and.hpp"
+#include "implementations/bit_or.hpp"
+#include "implementations/bit_xor.hpp"
 #include "implementations/equals.hpp"
 #include "implementations/exp.hpp"
 #include "implementations/mult.hpp"
 #include "implementations/or.hpp"
-#include "implementations/bit_or.hpp"
 #include "implementations/rel.hpp"
 #include "implementations/sum.hpp"
 // Inicialização de variáveis
@@ -48,8 +49,11 @@ void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::MULT, binary_mult_get_type);
   BinaryOperations::add_type(BinaryOperation::DIV, binary_div_get_type);
   BinaryOperations::add_type(BinaryOperation::MOD, binary_mod_get_type);
-  BinaryOperations::add_type(BinaryOperation::BITWISE_OR, binary_bit_or_get_type);
-  BinaryOperations::add_type(BinaryOperation::BITWISE_AND, binary_bit_and_get_type);
+  BinaryOperations::add_type(BinaryOperation::BITWISE_OR,
+                             binary_bit_or_get_type);
+  BinaryOperations::add_type(BinaryOperation::BITWISE_AND,
+                             binary_bit_and_get_type);
+  BinaryOperations::add_type(BinaryOperation::XOR, binary_xor_get_type);
 
   // TODO: Restante das operações
 };
