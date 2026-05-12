@@ -7,4 +7,4 @@ string input_line() {
   string line;
   getline(cin, line);
   return line;
-}
+};

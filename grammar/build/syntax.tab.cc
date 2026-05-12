@@ -42,7 +42,7 @@
 
 
 // Unqualified %code blocks.
-#line 7 "grammar/syntax.y"
+#line 20 "grammar/syntax.y"
 
   yy::parser::symbol_type yylex(Context& ctx);
 
@@ -1384,7 +1384,7 @@ namespace yy {
           switch (yyn)
             {
   case 2: // root: program
-#line 85 "grammar/syntax.y"
+#line 98 "grammar/syntax.y"
               {
   ctx.root = yystack_[0].value.as < Node* > ();
 }
@@ -1392,7 +1392,7 @@ namespace yy {
     break;
 
   case 3: // program: program program_slice
-#line 89 "grammar/syntax.y"
+#line 102 "grammar/syntax.y"
                                {
   yylhs.value.as < Node* > () = yystack_[1].value.as < Node* > ();
   yystack_[1].value.as < Node* > ()->children.push_back(yystack_[0].value.as < Node* > ());
@@ -1401,7 +1401,7 @@ namespace yy {
     break;
 
   case 4: // program: program_slice
-#line 92 "grammar/syntax.y"
+#line 105 "grammar/syntax.y"
                   {
   yylhs.value.as < Node* > () = new Node(ctx.line, "PROGRAM");
   yylhs.value.as < Node* > ()->children.push_back(yystack_[0].value.as < Node* > ());
@@ -1410,7 +1410,7 @@ namespace yy {
     break;
 
   case 5: // program_slice: subprogram
-#line 97 "grammar/syntax.y"
+#line 110 "grammar/syntax.y"
                           {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -1418,7 +1418,7 @@ namespace yy {
     break;
 
   case 6: // program_slice: enum
-#line 99 "grammar/syntax.y"
+#line 112 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -1426,7 +1426,7 @@ namespace yy {
     break;
 
   case 7: // program_slice: struct
-#line 101 "grammar/syntax.y"
+#line 114 "grammar/syntax.y"
            {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -1434,7 +1434,7 @@ namespace yy {
     break;
 
   case 8: // program_slice: trait
-#line 103 "grammar/syntax.y"
+#line 116 "grammar/syntax.y"
           {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -1442,7 +1442,7 @@ namespace yy {
     break;
 
   case 9: // program_slice: impl
-#line 105 "grammar/syntax.y"
+#line 118 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -1450,7 +1450,7 @@ namespace yy {
     break;
 
   case 10: // subprogram: fn
-#line 109 "grammar/syntax.y"
+#line 122 "grammar/syntax.y"
                {
   yylhs.value.as < Node* > () = yystack_[0].value.as < FunctionNode* > ();
 }
@@ -1458,7 +1458,7 @@ namespace yy {
     break;
 
   case 11: // subprogram: proc
-#line 111 "grammar/syntax.y"
+#line 124 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = yystack_[0].value.as < ProcedureNode* > ();
 }
@@ -1466,7 +1466,7 @@ namespace yy {
     break;
 
   case 12: // fn: FUNCTION ID params_list COLON type stmts END_FUNCTION SEMICOLON
-#line 115 "grammar/syntax.y"
+#line 128 "grammar/syntax.y"
                                                                     {
   yylhs.value.as < FunctionNode* > () = new FunctionNode(ctx.line, yystack_[6].value.as < string > (), *yystack_[3].value.as < Type* > (), yystack_[5].value.as < vector<Param> > ());
   for (size_t i = 0; i < yystack_[2].value.as < vector<Node*> > ().size(); i++) {
@@ -1477,7 +1477,7 @@ namespace yy {
     break;
 
   case 13: // proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON
-#line 122 "grammar/syntax.y"
+#line 135 "grammar/syntax.y"
                                                              {
   yylhs.value.as < ProcedureNode* > () = new ProcedureNode(ctx.line, yystack_[4].value.as < string > (), yystack_[3].value.as < vector<Param> > ());
   for (size_t i = 0; i < yystack_[2].value.as < vector<Node*> > ().size(); i++) {
@@ -1488,7 +1488,7 @@ namespace yy {
     break;
 
   case 14: // proc: PROCEDURE ID params_list END_PROCEDURE SEMICOLON
-#line 127 "grammar/syntax.y"
+#line 140 "grammar/syntax.y"
                                                      {
   yylhs.value.as < ProcedureNode* > () = new ProcedureNode(ctx.line, yystack_[3].value.as < string > (), yystack_[2].value.as < vector<Param> > ());
 }
@@ -1496,7 +1496,7 @@ namespace yy {
     break;
 
   case 15: // params_self_list: LEFT_PAREN SELF SEMICOLON params RIGHT_PAREN
-#line 131 "grammar/syntax.y"
+#line 144 "grammar/syntax.y"
                                                                {
   yylhs.value.as < vector<Param> > () = yystack_[1].value.as < vector<Param> > ();
 }
@@ -1504,7 +1504,7 @@ namespace yy {
     break;
 
   case 16: // params_self_list: LEFT_PAREN SELF RIGHT_PAREN
-#line 133 "grammar/syntax.y"
+#line 146 "grammar/syntax.y"
                                 {
   yylhs.value.as < vector<Param> > () = vector<Param>();
 }
@@ -1512,7 +1512,7 @@ namespace yy {
     break;
 
   case 17: // params_list: LEFT_PAREN params RIGHT_PAREN
-#line 137 "grammar/syntax.y"
+#line 150 "grammar/syntax.y"
                                            {
   yylhs.value.as < vector<Param> > () = yystack_[1].value.as < vector<Param> > ();
 }
@@ -1520,7 +1520,7 @@ namespace yy {
     break;
 
   case 18: // params_list: LEFT_PAREN RIGHT_PAREN
-#line 139 "grammar/syntax.y"
+#line 152 "grammar/syntax.y"
                            {
   yylhs.value.as < vector<Param> > () = vector<Param>();
 }
@@ -1528,7 +1528,7 @@ namespace yy {
     break;
 
   case 19: // params: params SEMICOLON param
-#line 143 "grammar/syntax.y"
+#line 156 "grammar/syntax.y"
                                {
   yylhs.value.as < vector<Param> > () = yystack_[2].value.as < vector<Param> > ();
   for (size_t i = 0; i < yystack_[0].value.as < vector<Param> > ().size(); i++) {
@@ -1539,7 +1539,7 @@ namespace yy {
     break;
 
   case 20: // params: param
-#line 148 "grammar/syntax.y"
+#line 161 "grammar/syntax.y"
           {
   yylhs.value.as < vector<Param> > () = vector<Param>();
   for (size_t i = 0; i < yystack_[0].value.as < vector<Param> > ().size(); i++) {
@@ -1550,7 +1550,7 @@ namespace yy {
     break;
 
   case 21: // param: id_list COLON type
-#line 155 "grammar/syntax.y"
+#line 168 "grammar/syntax.y"
                           {
   yylhs.value.as < vector<Param> > () = vector<Param>();
   for (size_t i = 0; i < yystack_[2].value.as < vector<string> > ().size(); i++) {
@@ -1561,7 +1561,7 @@ namespace yy {
     break;
 
   case 22: // id_list: id_list COMMA ID
-#line 162 "grammar/syntax.y"
+#line 175 "grammar/syntax.y"
                           {
   yylhs.value.as < vector<string> > () = yystack_[2].value.as < vector<string> > ();
   yylhs.value.as < vector<string> > ().push_back(yystack_[0].value.as < string > ());
@@ -1570,7 +1570,7 @@ namespace yy {
     break;
 
   case 23: // id_list: ID
-#line 165 "grammar/syntax.y"
+#line 178 "grammar/syntax.y"
        {
   yylhs.value.as < vector<string> > () = vector<string>();
   yylhs.value.as < vector<string> > ().push_back(yystack_[0].value.as < string > ());
@@ -1579,7 +1579,7 @@ namespace yy {
     break;
 
   case 24: // subprogram_call: access call_params_list
-#line 170 "grammar/syntax.y"
+#line 183 "grammar/syntax.y"
                                          {
   yylhs.value.as < SubprogramCallNode* > () = new SubprogramCallNode(ctx.line, yystack_[1].value.as < AccessNode* > (), yystack_[0].value.as < vector<ExpressionNode*> > ());
 }
@@ -1587,7 +1587,7 @@ namespace yy {
     break;
 
   case 25: // subprogram_call: type call_params_list
-#line 172 "grammar/syntax.y"
+#line 185 "grammar/syntax.y"
                           {
   yylhs.value.as < SubprogramCallNode* > () = new SubprogramCallNode(ctx.line, *yystack_[1].value.as < Type* > (), yystack_[0].value.as < vector<ExpressionNode*> > ());
 }
@@ -1595,7 +1595,7 @@ namespace yy {
     break;
 
   case 26: // call_params_list: LEFT_PAREN call_params RIGHT_PAREN
-#line 176 "grammar/syntax.y"
+#line 189 "grammar/syntax.y"
                                                      {
   yylhs.value.as < vector<ExpressionNode*> > () = yystack_[1].value.as < vector<ExpressionNode*> > ();
 }
@@ -1603,7 +1603,7 @@ namespace yy {
     break;
 
   case 27: // call_params_list: LEFT_PAREN RIGHT_PAREN
-#line 178 "grammar/syntax.y"
+#line 191 "grammar/syntax.y"
                            {
   yylhs.value.as < vector<ExpressionNode*> > () = vector<ExpressionNode*>();
 }
@@ -1611,7 +1611,7 @@ namespace yy {
     break;
 
   case 28: // call_params: call_params COMMA expr
-#line 182 "grammar/syntax.y"
+#line 195 "grammar/syntax.y"
                                     {
   yylhs.value.as < vector<ExpressionNode*> > () = yystack_[2].value.as < vector<ExpressionNode*> > ();
   yylhs.value.as < vector<ExpressionNode*> > ().push_back(yystack_[0].value.as < ExpressionNode* > ());
@@ -1620,7 +1620,7 @@ namespace yy {
     break;
 
   case 29: // call_params: expr
-#line 185 "grammar/syntax.y"
+#line 198 "grammar/syntax.y"
          {
   yylhs.value.as < vector<ExpressionNode*> > () = vector<ExpressionNode*>();
   yylhs.value.as < vector<ExpressionNode*> > ().push_back(yystack_[0].value.as < ExpressionNode* > ());
@@ -1629,7 +1629,7 @@ namespace yy {
     break;
 
   case 30: // enum: ENUM name enum_values END_ENUM SEMICOLON
-#line 190 "grammar/syntax.y"
+#line 203 "grammar/syntax.y"
                                                {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1637,7 +1637,7 @@ namespace yy {
     break;
 
   case 31: // enum: ENUM name END_ENUM SEMICOLON
-#line 192 "grammar/syntax.y"
+#line 205 "grammar/syntax.y"
                                  {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1645,7 +1645,7 @@ namespace yy {
     break;
 
   case 32: // enum_values: enum_values COMMA CONST_NAME
-#line 196 "grammar/syntax.y"
+#line 209 "grammar/syntax.y"
                                           {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1653,7 +1653,7 @@ namespace yy {
     break;
 
   case 33: // enum_values: CONST_NAME
-#line 198 "grammar/syntax.y"
+#line 211 "grammar/syntax.y"
                {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1661,7 +1661,7 @@ namespace yy {
     break;
 
   case 34: // struct: STRUCT name struct_attrs END_STRUCT SEMICOLON
-#line 202 "grammar/syntax.y"
+#line 215 "grammar/syntax.y"
                                                       {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1669,7 +1669,7 @@ namespace yy {
     break;
 
   case 35: // struct: STRUCT name END_STRUCT SEMICOLON
-#line 204 "grammar/syntax.y"
+#line 217 "grammar/syntax.y"
                                      {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1677,7 +1677,7 @@ namespace yy {
     break;
 
   case 36: // struct_attrs: struct_attrs struct_attr SEMICOLON
-#line 208 "grammar/syntax.y"
+#line 221 "grammar/syntax.y"
                                                  {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1685,7 +1685,7 @@ namespace yy {
     break;
 
   case 37: // struct_attrs: struct_attr SEMICOLON
-#line 210 "grammar/syntax.y"
+#line 223 "grammar/syntax.y"
                           {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1693,7 +1693,7 @@ namespace yy {
     break;
 
   case 38: // struct_attr: id_list COLON type
-#line 214 "grammar/syntax.y"
+#line 227 "grammar/syntax.y"
                                 {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1701,7 +1701,7 @@ namespace yy {
     break;
 
   case 39: // trait: TRAIT name trait_subprograms END_TRAIT SEMICOLON
-#line 218 "grammar/syntax.y"
+#line 231 "grammar/syntax.y"
                                                         {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1709,7 +1709,7 @@ namespace yy {
     break;
 
   case 40: // trait: TRAIT name END_TRAIT SEMICOLON
-#line 220 "grammar/syntax.y"
+#line 233 "grammar/syntax.y"
                                    {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1717,7 +1717,7 @@ namespace yy {
     break;
 
   case 41: // trait_subprograms: trait_subprograms trait_subprogram
-#line 224 "grammar/syntax.y"
+#line 237 "grammar/syntax.y"
                                                       {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1725,7 +1725,7 @@ namespace yy {
     break;
 
   case 42: // trait_subprograms: trait_subprogram
-#line 226 "grammar/syntax.y"
+#line 239 "grammar/syntax.y"
                      {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1733,7 +1733,7 @@ namespace yy {
     break;
 
   case 43: // trait_subprogram: trait_fn
-#line 230 "grammar/syntax.y"
+#line 243 "grammar/syntax.y"
                            {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1741,7 +1741,7 @@ namespace yy {
     break;
 
   case 44: // trait_subprogram: trait_proc
-#line 232 "grammar/syntax.y"
+#line 245 "grammar/syntax.y"
                {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1749,7 +1749,7 @@ namespace yy {
     break;
 
   case 45: // trait_fn: FUNCTION ID params_self_list COLON type END_FUNCTION SEMICOLON
-#line 236 "grammar/syntax.y"
+#line 249 "grammar/syntax.y"
                                                                          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1757,7 +1757,7 @@ namespace yy {
     break;
 
   case 46: // trait_fn: FUNCTION ID params_list COLON type END_FUNCTION SEMICOLON
-#line 238 "grammar/syntax.y"
+#line 251 "grammar/syntax.y"
                                                               {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1765,7 +1765,7 @@ namespace yy {
     break;
 
   case 47: // trait_fn: fn
-#line 240 "grammar/syntax.y"
+#line 253 "grammar/syntax.y"
        {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1773,7 +1773,7 @@ namespace yy {
     break;
 
   case 48: // trait_proc: PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON
-#line 244 "grammar/syntax.y"
+#line 257 "grammar/syntax.y"
                                                                   {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1781,7 +1781,7 @@ namespace yy {
     break;
 
   case 49: // trait_proc: proc
-#line 246 "grammar/syntax.y"
+#line 259 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1789,7 +1789,7 @@ namespace yy {
     break;
 
   case 50: // impl: IMPL name impl_subprograms END_IMPL SEMICOLON
-#line 250 "grammar/syntax.y"
+#line 263 "grammar/syntax.y"
                                                     {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1797,7 +1797,7 @@ namespace yy {
     break;
 
   case 51: // impl: IMPL name END_IMPL SEMICOLON
-#line 252 "grammar/syntax.y"
+#line 265 "grammar/syntax.y"
                                  {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1805,7 +1805,7 @@ namespace yy {
     break;
 
   case 52: // impl: IMPL name impl_subprograms FOR name END_IMPL SEMICOLON
-#line 254 "grammar/syntax.y"
+#line 267 "grammar/syntax.y"
                                                            {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1813,7 +1813,7 @@ namespace yy {
     break;
 
   case 53: // impl: IMPL name FOR name END_IMPL SEMICOLON
-#line 256 "grammar/syntax.y"
+#line 269 "grammar/syntax.y"
                                           {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1821,7 +1821,7 @@ namespace yy {
     break;
 
   case 54: // impl_subprograms: impl_subprograms impl_subprogram
-#line 260 "grammar/syntax.y"
+#line 273 "grammar/syntax.y"
                                                    {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1829,7 +1829,7 @@ namespace yy {
     break;
 
   case 55: // impl_subprograms: impl_subprogram
-#line 262 "grammar/syntax.y"
+#line 275 "grammar/syntax.y"
                     {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1837,7 +1837,7 @@ namespace yy {
     break;
 
   case 56: // impl_subprogram: impl_fn
-#line 266 "grammar/syntax.y"
+#line 279 "grammar/syntax.y"
                          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1845,7 +1845,7 @@ namespace yy {
     break;
 
   case 57: // impl_subprogram: impl_proc
-#line 268 "grammar/syntax.y"
+#line 281 "grammar/syntax.y"
               {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1853,7 +1853,7 @@ namespace yy {
     break;
 
   case 58: // impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON
-#line 272 "grammar/syntax.y"
+#line 285 "grammar/syntax.y"
                                                                               {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1861,7 +1861,7 @@ namespace yy {
     break;
 
   case 59: // impl_fn: fn
-#line 274 "grammar/syntax.y"
+#line 287 "grammar/syntax.y"
        {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1869,7 +1869,7 @@ namespace yy {
     break;
 
   case 60: // impl_proc: PROCEDURE ID params_self_list stmts END_PROCEDURE SEMICOLON
-#line 278 "grammar/syntax.y"
+#line 291 "grammar/syntax.y"
                                                                        {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1877,7 +1877,7 @@ namespace yy {
     break;
 
   case 61: // impl_proc: PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON
-#line 280 "grammar/syntax.y"
+#line 293 "grammar/syntax.y"
                                                           {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1885,7 +1885,7 @@ namespace yy {
     break;
 
   case 62: // impl_proc: proc
-#line 282 "grammar/syntax.y"
+#line 295 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -1893,7 +1893,7 @@ namespace yy {
     break;
 
   case 63: // access: access DOT CONST_NAME
-#line 286 "grammar/syntax.y"
+#line 299 "grammar/syntax.y"
                               {
   yylhs.value.as < AccessNode* > () = new AccessNode(ctx.line, yystack_[0].value.as < string > (), yystack_[2].value.as < AccessNode* > (), AccessType::DOT);
 }
@@ -1901,7 +1901,7 @@ namespace yy {
     break;
 
   case 64: // access: access DOT ID
-#line 288 "grammar/syntax.y"
+#line 301 "grammar/syntax.y"
                   {
   yylhs.value.as < AccessNode* > () = new AccessNode(ctx.line, yystack_[0].value.as < string > (), yystack_[2].value.as < AccessNode* > (), AccessType::DOT);
 }
@@ -1909,7 +1909,7 @@ namespace yy {
     break;
 
   case 65: // access: access LEFT_BRACKET expr RIGHT_BRACKET
-#line 290 "grammar/syntax.y"
+#line 303 "grammar/syntax.y"
                                            {
   yylhs.value.as < AccessNode* > () = new AccessNode(ctx.line, yystack_[3].value.as < AccessNode* > (), yystack_[1].value.as < ExpressionNode* > ());
 }
@@ -1917,7 +1917,7 @@ namespace yy {
     break;
 
   case 66: // access: access DOUBLE_COLON ID
-#line 292 "grammar/syntax.y"
+#line 305 "grammar/syntax.y"
                            {
   yylhs.value.as < AccessNode* > () = new AccessNode(ctx.line, yystack_[0].value.as < string > (), yystack_[2].value.as < AccessNode* > (), AccessType::STATIC);
 }
@@ -1925,7 +1925,7 @@ namespace yy {
     break;
 
   case 67: // access: subprogram_call
-#line 294 "grammar/syntax.y"
+#line 307 "grammar/syntax.y"
                     {
   yylhs.value.as < AccessNode* > () = new AccessNode(ctx.line, yystack_[0].value.as < SubprogramCallNode* > ());
 }
@@ -1933,7 +1933,7 @@ namespace yy {
     break;
 
   case 68: // access: access_base
-#line 296 "grammar/syntax.y"
+#line 309 "grammar/syntax.y"
                 {
   yylhs.value.as < AccessNode* > () = new AccessNode(ctx.line, yystack_[0].value.as < AccessBaseNode* > ());
 }
@@ -1941,7 +1941,7 @@ namespace yy {
     break;
 
   case 69: // access_base: SELF
-#line 300 "grammar/syntax.y"
+#line 313 "grammar/syntax.y"
                   {
   yylhs.value.as < AccessBaseNode* > () = new AccessBaseNode(ctx.line);
 }
@@ -1949,7 +1949,7 @@ namespace yy {
     break;
 
   case 70: // access_base: id
-#line 302 "grammar/syntax.y"
+#line 315 "grammar/syntax.y"
        {
   yylhs.value.as < AccessBaseNode* > () = new AccessBaseNode(ctx.line, yystack_[0].value.as < string > ());
 }
@@ -1957,7 +1957,7 @@ namespace yy {
     break;
 
   case 71: // access_base: LEFT_PAREN expr RIGHT_PAREN
-#line 304 "grammar/syntax.y"
+#line 317 "grammar/syntax.y"
                                 {
   yylhs.value.as < AccessBaseNode* > () = new AccessBaseNode(ctx.line, yystack_[1].value.as < ExpressionNode* > ());
 }
@@ -1965,7 +1965,7 @@ namespace yy {
     break;
 
   case 72: // id: NAME
-#line 308 "grammar/syntax.y"
+#line 321 "grammar/syntax.y"
          {
   yylhs.value.as < string > () = yystack_[0].value.as < string > ();
 }
@@ -1973,7 +1973,7 @@ namespace yy {
     break;
 
   case 73: // id: ID
-#line 310 "grammar/syntax.y"
+#line 323 "grammar/syntax.y"
        {
   yylhs.value.as < string > () = yystack_[0].value.as < string > ();
 }
@@ -1981,7 +1981,7 @@ namespace yy {
     break;
 
   case 74: // name: NAME
-#line 314 "grammar/syntax.y"
+#line 327 "grammar/syntax.y"
            {
   yylhs.value.as < string > () = yystack_[0].value.as < string > ();
 }
@@ -1989,7 +1989,7 @@ namespace yy {
     break;
 
   case 75: // name: CONST_NAME
-#line 316 "grammar/syntax.y"
+#line 329 "grammar/syntax.y"
                {
   yylhs.value.as < string > () = yystack_[0].value.as < string > ();
 }
@@ -1997,7 +1997,7 @@ namespace yy {
     break;
 
   case 76: // stmts: stmts stmt SEMICOLON
-#line 320 "grammar/syntax.y"
+#line 333 "grammar/syntax.y"
                             {
   yylhs.value.as < vector<Node*> > () = yystack_[2].value.as < vector<Node*> > ();
   yylhs.value.as < vector<Node*> > ().push_back(yystack_[1].value.as < Node* > ());
@@ -2006,7 +2006,7 @@ namespace yy {
     break;
 
   case 77: // stmts: stmt SEMICOLON
-#line 323 "grammar/syntax.y"
+#line 336 "grammar/syntax.y"
                    {
   yylhs.value.as < vector<Node*> > () = vector<Node*>();
   yylhs.value.as < vector<Node*> > ().push_back(yystack_[1].value.as < Node* > ());
@@ -2015,7 +2015,7 @@ namespace yy {
     break;
 
   case 78: // stmt: BREAK
-#line 328 "grammar/syntax.y"
+#line 341 "grammar/syntax.y"
             {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2023,7 +2023,7 @@ namespace yy {
     break;
 
   case 79: // stmt: CONTINUE
-#line 330 "grammar/syntax.y"
+#line 343 "grammar/syntax.y"
              {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2031,7 +2031,7 @@ namespace yy {
     break;
 
   case 80: // stmt: attr
-#line 332 "grammar/syntax.y"
+#line 345 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = yystack_[0].value.as < AttrNode* > ();
 }
@@ -2039,7 +2039,7 @@ namespace yy {
     break;
 
   case 81: // stmt: assign
-#line 334 "grammar/syntax.y"
+#line 347 "grammar/syntax.y"
            {
   yylhs.value.as < Node* > () = yystack_[0].value.as < AssignNode* > ();
 }
@@ -2047,7 +2047,7 @@ namespace yy {
     break;
 
   case 82: // stmt: return
-#line 336 "grammar/syntax.y"
+#line 349 "grammar/syntax.y"
            {
   yylhs.value.as < Node* > () = yystack_[0].value.as < ReturnNode* > ();
 }
@@ -2055,7 +2055,7 @@ namespace yy {
     break;
 
   case 83: // stmt: if
-#line 338 "grammar/syntax.y"
+#line 351 "grammar/syntax.y"
        {
   yylhs.value.as < Node* > () = yystack_[0].value.as < IfNode* > ();
 }
@@ -2063,7 +2063,7 @@ namespace yy {
     break;
 
   case 84: // stmt: for
-#line 340 "grammar/syntax.y"
+#line 353 "grammar/syntax.y"
         {
   yylhs.value.as < Node* > () = yystack_[0].value.as < ForNode* > ();
 }
@@ -2071,7 +2071,7 @@ namespace yy {
     break;
 
   case 85: // stmt: while
-#line 342 "grammar/syntax.y"
+#line 355 "grammar/syntax.y"
           {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -2079,7 +2079,7 @@ namespace yy {
     break;
 
   case 86: // stmt: repeat
-#line 344 "grammar/syntax.y"
+#line 357 "grammar/syntax.y"
            {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -2087,7 +2087,7 @@ namespace yy {
     break;
 
   case 87: // stmt: switch
-#line 346 "grammar/syntax.y"
+#line 359 "grammar/syntax.y"
            {
   yylhs.value.as < Node* > () = yystack_[0].value.as < Node* > ();
 }
@@ -2095,7 +2095,7 @@ namespace yy {
     break;
 
   case 88: // stmt: expr
-#line 348 "grammar/syntax.y"
+#line 361 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2103,7 +2103,7 @@ namespace yy {
     break;
 
   case 89: // return: RETURN expr
-#line 352 "grammar/syntax.y"
+#line 365 "grammar/syntax.y"
                     {
   yylhs.value.as < ReturnNode* > () = new ReturnNode(ctx.line, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2111,7 +2111,7 @@ namespace yy {
     break;
 
   case 90: // attr: VAR ID COLON type ATTR expr
-#line 356 "grammar/syntax.y"
+#line 369 "grammar/syntax.y"
                                   {
   yylhs.value.as < AttrNode* > () = new AttrNode(ctx.line, yystack_[4].value.as < string > (), false, *yystack_[2].value.as < Type* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2119,7 +2119,7 @@ namespace yy {
     break;
 
   case 91: // attr: CONST ID COLON type ATTR expr
-#line 358 "grammar/syntax.y"
+#line 371 "grammar/syntax.y"
                                   {
   yylhs.value.as < AttrNode* > () = new AttrNode(ctx.line, yystack_[4].value.as < string > (), true, *yystack_[2].value.as < Type* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2127,7 +2127,7 @@ namespace yy {
     break;
 
   case 92: // type: TYPE_INT
-#line 362 "grammar/syntax.y"
+#line 375 "grammar/syntax.y"
                {
   yylhs.value.as < Type* > () = new Type(TypeKind::INT);
 }
@@ -2135,7 +2135,7 @@ namespace yy {
     break;
 
   case 93: // type: TYPE_FLOAT
-#line 364 "grammar/syntax.y"
+#line 377 "grammar/syntax.y"
                {
   yylhs.value.as < Type* > () = new Type(TypeKind::FLOAT);
 }
@@ -2143,7 +2143,7 @@ namespace yy {
     break;
 
   case 94: // type: TYPE_DOUBLE
-#line 366 "grammar/syntax.y"
+#line 379 "grammar/syntax.y"
                 {
   yylhs.value.as < Type* > () = new Type(TypeKind::DOUBLE);
 }
@@ -2151,7 +2151,7 @@ namespace yy {
     break;
 
   case 95: // type: TYPE_LONG
-#line 368 "grammar/syntax.y"
+#line 381 "grammar/syntax.y"
               {
   yylhs.value.as < Type* > () = new Type(TypeKind::LONG);
 }
@@ -2159,7 +2159,7 @@ namespace yy {
     break;
 
   case 96: // type: TYPE_BYTE
-#line 370 "grammar/syntax.y"
+#line 383 "grammar/syntax.y"
               {
   yylhs.value.as < Type* > () = new Type(TypeKind::BYTE);
 }
@@ -2167,7 +2167,7 @@ namespace yy {
     break;
 
   case 97: // type: TYPE_STRING
-#line 372 "grammar/syntax.y"
+#line 385 "grammar/syntax.y"
                 {
   yylhs.value.as < Type* > () = new Type(TypeKind::STRING);
 }
@@ -2175,7 +2175,7 @@ namespace yy {
     break;
 
   case 98: // type: TYPE_CHAR
-#line 374 "grammar/syntax.y"
+#line 387 "grammar/syntax.y"
               {
   yylhs.value.as < Type* > () = new Type(TypeKind::CHAR);
 }
@@ -2183,7 +2183,7 @@ namespace yy {
     break;
 
   case 99: // type: TYPE_BOOL
-#line 376 "grammar/syntax.y"
+#line 389 "grammar/syntax.y"
               {
   yylhs.value.as < Type* > () = new Type(TypeKind::BOOL);
 }
@@ -2191,7 +2191,7 @@ namespace yy {
     break;
 
   case 100: // type: type LEFT_BRACKET RIGHT_BRACKET
-#line 378 "grammar/syntax.y"
+#line 391 "grammar/syntax.y"
                                     {
   yylhs.value.as < Type* > () = new Type(TypeKind::ARRAY, yystack_[2].value.as < Type* > ());
 }
@@ -2199,7 +2199,7 @@ namespace yy {
     break;
 
   case 101: // type: TYPE_POINTER LT type GT
-#line 380 "grammar/syntax.y"
+#line 393 "grammar/syntax.y"
                             {
   yylhs.value.as < Type* > () = new Type(TypeKind::POINTER, yystack_[1].value.as < Type* > ());
 }
@@ -2207,7 +2207,7 @@ namespace yy {
     break;
 
   case 102: // type: TYPE_OPTION LT type GT
-#line 382 "grammar/syntax.y"
+#line 395 "grammar/syntax.y"
                            {
   yylhs.value.as < Type* > () = new Type(TypeKind::OPTION, yystack_[1].value.as < Type* > ());
 }
@@ -2215,7 +2215,7 @@ namespace yy {
     break;
 
   case 103: // assign: access ATTR expr
-#line 386 "grammar/syntax.y"
+#line 399 "grammar/syntax.y"
                          {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2223,7 +2223,7 @@ namespace yy {
     break;
 
   case 104: // assign: access AND_ATTR expr
-#line 388 "grammar/syntax.y"
+#line 401 "grammar/syntax.y"
                          {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::AND, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2231,7 +2231,7 @@ namespace yy {
     break;
 
   case 105: // assign: access OR_ATTR expr
-#line 390 "grammar/syntax.y"
+#line 403 "grammar/syntax.y"
                         {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::OR, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2239,7 +2239,7 @@ namespace yy {
     break;
 
   case 106: // assign: access LAZY_AND_ATTR expr
-#line 392 "grammar/syntax.y"
+#line 405 "grammar/syntax.y"
                               {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::BITWISE_AND, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2247,7 +2247,7 @@ namespace yy {
     break;
 
   case 107: // assign: access LAZY_OR_ATTR expr
-#line 394 "grammar/syntax.y"
+#line 407 "grammar/syntax.y"
                              {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::BITWISE_OR, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2255,7 +2255,7 @@ namespace yy {
     break;
 
   case 108: // assign: access XOR_ATTR expr
-#line 396 "grammar/syntax.y"
+#line 409 "grammar/syntax.y"
                          {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::XOR, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2263,7 +2263,7 @@ namespace yy {
     break;
 
   case 109: // assign: access CONCAT_ATTR expr
-#line 398 "grammar/syntax.y"
+#line 411 "grammar/syntax.y"
                             {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::CONCAT, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2271,7 +2271,7 @@ namespace yy {
     break;
 
   case 110: // assign: access MOD_ATTR expr
-#line 400 "grammar/syntax.y"
+#line 413 "grammar/syntax.y"
                          {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::MOD, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2279,7 +2279,7 @@ namespace yy {
     break;
 
   case 111: // assign: access PLUS_ATTR expr
-#line 402 "grammar/syntax.y"
+#line 415 "grammar/syntax.y"
                           {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::PLUS, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2287,7 +2287,7 @@ namespace yy {
     break;
 
   case 112: // assign: access MINUS_ATTR expr
-#line 404 "grammar/syntax.y"
+#line 417 "grammar/syntax.y"
                            {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::MINUS, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2295,7 +2295,7 @@ namespace yy {
     break;
 
   case 113: // assign: access MULT_ATTR expr
-#line 406 "grammar/syntax.y"
+#line 419 "grammar/syntax.y"
                           {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::MULT, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2303,7 +2303,7 @@ namespace yy {
     break;
 
   case 114: // assign: access DIV_ATTR expr
-#line 408 "grammar/syntax.y"
+#line 421 "grammar/syntax.y"
                          {
   yylhs.value.as < AssignNode* > () = new AssignNode(ctx.line, BinaryOperation::DIV, yystack_[2].value.as < AccessNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2311,7 +2311,7 @@ namespace yy {
     break;
 
   case 115: // if: IF expr THEN stmts if_end
-#line 412 "grammar/syntax.y"
+#line 425 "grammar/syntax.y"
                               {
   yylhs.value.as < IfNode* > () = new IfNode(ctx.line, yystack_[3].value.as < ExpressionNode* > (), yystack_[0].value.as < IfEndNode* > ());
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2322,7 +2322,7 @@ namespace yy {
     break;
 
   case 116: // if: IF SOME ID IN access THEN stmts if_end
-#line 417 "grammar/syntax.y"
+#line 430 "grammar/syntax.y"
                                            {
   yylhs.value.as < IfNode* > () = new IfNode(ctx.line, yystack_[3].value.as < AccessNode* > (), yystack_[5].value.as < string > (), yystack_[0].value.as < IfEndNode* > ());
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2333,7 +2333,7 @@ namespace yy {
     break;
 
   case 117: // if_end: ELIF expr THEN stmts if_end
-#line 424 "grammar/syntax.y"
+#line 437 "grammar/syntax.y"
                                     {
   yylhs.value.as < IfEndNode* > () = new IfEndNode(ctx.line, yystack_[3].value.as < ExpressionNode* > (), yystack_[0].value.as < IfEndNode* > ());
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2344,7 +2344,7 @@ namespace yy {
     break;
 
   case 118: // if_end: ELIF SOME ID IN access THEN stmts if_end
-#line 429 "grammar/syntax.y"
+#line 442 "grammar/syntax.y"
                                              {
   yylhs.value.as < IfEndNode* > () = new IfEndNode(ctx.line, yystack_[3].value.as < AccessNode* > (), yystack_[5].value.as < string > (), yystack_[0].value.as < IfEndNode* > ());
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2355,7 +2355,7 @@ namespace yy {
     break;
 
   case 119: // if_end: ELSE stmts END_IF
-#line 434 "grammar/syntax.y"
+#line 447 "grammar/syntax.y"
                       {
   yylhs.value.as < IfEndNode* > () = new IfEndNode(ctx.line, new IfEndNode(ctx.line));
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2366,7 +2366,7 @@ namespace yy {
     break;
 
   case 120: // if_end: END_IF
-#line 439 "grammar/syntax.y"
+#line 452 "grammar/syntax.y"
            {
   yylhs.value.as < IfEndNode* > () = new IfEndNode(ctx.line);
 }
@@ -2374,7 +2374,7 @@ namespace yy {
     break;
 
   case 121: // switch: SWITCH expr cases END_SWITCH
-#line 443 "grammar/syntax.y"
+#line 456 "grammar/syntax.y"
                                      {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2382,7 +2382,7 @@ namespace yy {
     break;
 
   case 122: // cases: case_list default_case
-#line 447 "grammar/syntax.y"
+#line 460 "grammar/syntax.y"
                               {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2390,7 +2390,7 @@ namespace yy {
     break;
 
   case 123: // cases: case_list
-#line 449 "grammar/syntax.y"
+#line 462 "grammar/syntax.y"
               {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2398,7 +2398,7 @@ namespace yy {
     break;
 
   case 124: // cases: default_case
-#line 451 "grammar/syntax.y"
+#line 464 "grammar/syntax.y"
                  {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2406,7 +2406,7 @@ namespace yy {
     break;
 
   case 125: // case_list: case_list case
-#line 455 "grammar/syntax.y"
+#line 468 "grammar/syntax.y"
                           {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2414,7 +2414,7 @@ namespace yy {
     break;
 
   case 126: // case_list: case
-#line 457 "grammar/syntax.y"
+#line 470 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2422,7 +2422,7 @@ namespace yy {
     break;
 
   case 127: // case: CASE case_values COLON stmts
-#line 461 "grammar/syntax.y"
+#line 474 "grammar/syntax.y"
                                    {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2430,7 +2430,7 @@ namespace yy {
     break;
 
   case 128: // case: CASE SOME ID COLON stmts
-#line 463 "grammar/syntax.y"
+#line 476 "grammar/syntax.y"
                              {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2438,7 +2438,7 @@ namespace yy {
     break;
 
   case 129: // case: CASE NONE COLON stmts
-#line 465 "grammar/syntax.y"
+#line 478 "grammar/syntax.y"
                           {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2446,7 +2446,7 @@ namespace yy {
     break;
 
   case 130: // case_values: case_values COMMA access
-#line 469 "grammar/syntax.y"
+#line 482 "grammar/syntax.y"
                                       {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2454,7 +2454,7 @@ namespace yy {
     break;
 
   case 131: // case_values: access
-#line 471 "grammar/syntax.y"
+#line 484 "grammar/syntax.y"
            {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2462,7 +2462,7 @@ namespace yy {
     break;
 
   case 132: // default_case: DEFAULT COLON stmts
-#line 475 "grammar/syntax.y"
+#line 488 "grammar/syntax.y"
                                   {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2470,7 +2470,7 @@ namespace yy {
     break;
 
   case 133: // for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR
-#line 479 "grammar/syntax.y"
+#line 492 "grammar/syntax.y"
                                                          {
   yylhs.value.as < ForNode* > () = new ForNode(ctx.line, yystack_[5].value.as < string > (), yystack_[3].value.as < ExpressionNode* > ());
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2481,7 +2481,7 @@ namespace yy {
     break;
 
   case 134: // for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN END_FOR
-#line 484 "grammar/syntax.y"
+#line 497 "grammar/syntax.y"
                                                   {
   yylhs.value.as < ForNode* > () = new ForNode(ctx.line, yystack_[4].value.as < string > (), yystack_[2].value.as < ExpressionNode* > ());
 }
@@ -2489,7 +2489,7 @@ namespace yy {
     break;
 
   case 135: // for: FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN stmts END_FOR
-#line 486 "grammar/syntax.y"
+#line 499 "grammar/syntax.y"
                                                                                 {
   yylhs.value.as < ForNode* > () = new ForNode(ctx.line, yystack_[7].value.as < AttrNode* > (), yystack_[5].value.as < ExpressionNode* > (), yystack_[3].value.as < ExpressionNode* > ());
   for (size_t i = 0; i < yystack_[1].value.as < vector<Node*> > ().size(); i++) {
@@ -2500,7 +2500,7 @@ namespace yy {
     break;
 
   case 136: // for: FOR LEFT_PAREN attr SEMICOLON expr SEMICOLON expr RIGHT_PAREN END_FOR
-#line 491 "grammar/syntax.y"
+#line 504 "grammar/syntax.y"
                                                                           {
   yylhs.value.as < ForNode* > () = new ForNode(ctx.line, yystack_[6].value.as < AttrNode* > (), yystack_[4].value.as < ExpressionNode* > (), yystack_[2].value.as < ExpressionNode* > ());
 }
@@ -2508,7 +2508,7 @@ namespace yy {
     break;
 
   case 137: // while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE
-#line 495 "grammar/syntax.y"
+#line 508 "grammar/syntax.y"
                                                          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2516,7 +2516,7 @@ namespace yy {
     break;
 
   case 138: // while: WHILE LEFT_PAREN expr RIGHT_PAREN END_WHILE
-#line 497 "grammar/syntax.y"
+#line 510 "grammar/syntax.y"
                                                 {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2524,7 +2524,7 @@ namespace yy {
     break;
 
   case 139: // repeat: REPEAT stmts UNTIL expr
-#line 501 "grammar/syntax.y"
+#line 514 "grammar/syntax.y"
                                 {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2532,7 +2532,7 @@ namespace yy {
     break;
 
   case 140: // repeat: REPEAT UNTIL expr
-#line 503 "grammar/syntax.y"
+#line 516 "grammar/syntax.y"
                       {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -2540,7 +2540,7 @@ namespace yy {
     break;
 
   case 141: // expr: or_expr
-#line 507 "grammar/syntax.y"
+#line 520 "grammar/syntax.y"
               {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2548,7 +2548,7 @@ namespace yy {
     break;
 
   case 142: // expr: range_expr
-#line 509 "grammar/syntax.y"
+#line 522 "grammar/syntax.y"
                {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < RangeNode* > ();
 }
@@ -2556,7 +2556,7 @@ namespace yy {
     break;
 
   case 143: // range_expr: range_interval or_expr
-#line 513 "grammar/syntax.y"
+#line 526 "grammar/syntax.y"
                                    {
   yylhs.value.as < RangeNode* > () = new RangeNode(ctx.line, false, yystack_[0].value.as < ExpressionNode* > (), yystack_[1].value.as < pair<RangeInclusionType, RangeInclusionType> > ().second);
 }
@@ -2564,7 +2564,7 @@ namespace yy {
     break;
 
   case 144: // range_expr: or_expr range_interval
-#line 515 "grammar/syntax.y"
+#line 528 "grammar/syntax.y"
                            {
   yylhs.value.as < RangeNode* > () = new RangeNode(ctx.line, true, yystack_[1].value.as < ExpressionNode* > (), yystack_[0].value.as < pair<RangeInclusionType, RangeInclusionType> > ().first);
 }
@@ -2572,7 +2572,7 @@ namespace yy {
     break;
 
   case 145: // range_expr: or_expr range_interval or_expr
-#line 517 "grammar/syntax.y"
+#line 530 "grammar/syntax.y"
                                    {
   yylhs.value.as < RangeNode* > () = new RangeNode(ctx.line, yystack_[2].value.as < ExpressionNode* > (), yystack_[1].value.as < pair<RangeInclusionType, RangeInclusionType> > ().first, yystack_[0].value.as < ExpressionNode* > (), yystack_[1].value.as < pair<RangeInclusionType, RangeInclusionType> > ().second);
 }
@@ -2580,7 +2580,7 @@ namespace yy {
     break;
 
   case 146: // range_interval: RANGE
-#line 521 "grammar/syntax.y"
+#line 534 "grammar/syntax.y"
                       {
   yylhs.value.as < pair<RangeInclusionType, RangeInclusionType> > () = {RangeInclusionType::INCLUSIVE, RangeInclusionType::EXCLUSIVE};
 }
@@ -2588,7 +2588,7 @@ namespace yy {
     break;
 
   case 147: // range_interval: RANGE_EXC
-#line 523 "grammar/syntax.y"
+#line 536 "grammar/syntax.y"
               {
   yylhs.value.as < pair<RangeInclusionType, RangeInclusionType> > () = {RangeInclusionType::EXCLUSIVE, RangeInclusionType::EXCLUSIVE};
 }
@@ -2596,7 +2596,7 @@ namespace yy {
     break;
 
   case 148: // range_interval: RANGE_EXC_INC
-#line 525 "grammar/syntax.y"
+#line 538 "grammar/syntax.y"
                   {
   yylhs.value.as < pair<RangeInclusionType, RangeInclusionType> > () = {RangeInclusionType::EXCLUSIVE, RangeInclusionType::INCLUSIVE};
 }
@@ -2604,7 +2604,7 @@ namespace yy {
     break;
 
   case 149: // range_interval: RANGE_INC
-#line 527 "grammar/syntax.y"
+#line 540 "grammar/syntax.y"
               {
   yylhs.value.as < pair<RangeInclusionType, RangeInclusionType> > () = {RangeInclusionType::INCLUSIVE, RangeInclusionType::INCLUSIVE};
 }
@@ -2612,7 +2612,7 @@ namespace yy {
     break;
 
   case 150: // or_expr: or_expr OR and_expr
-#line 531 "grammar/syntax.y"
+#line 544 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2620,7 +2620,7 @@ namespace yy {
     break;
 
   case 151: // or_expr: and_expr
-#line 533 "grammar/syntax.y"
+#line 546 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2628,7 +2628,7 @@ namespace yy {
     break;
 
   case 152: // and_expr: and_expr AND bit_or_expr
-#line 537 "grammar/syntax.y"
+#line 550 "grammar/syntax.y"
                                    {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2636,7 +2636,7 @@ namespace yy {
     break;
 
   case 153: // and_expr: bit_or_expr
-#line 539 "grammar/syntax.y"
+#line 552 "grammar/syntax.y"
                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2644,7 +2644,7 @@ namespace yy {
     break;
 
   case 154: // bit_or_expr: bit_or_expr BAR bit_xor_expr
-#line 543 "grammar/syntax.y"
+#line 556 "grammar/syntax.y"
                                           {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_OR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2652,7 +2652,7 @@ namespace yy {
     break;
 
   case 155: // bit_or_expr: bit_xor_expr
-#line 545 "grammar/syntax.y"
+#line 558 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2660,7 +2660,7 @@ namespace yy {
     break;
 
   case 156: // bit_xor_expr: bit_xor_expr XOR bit_and_expr
-#line 549 "grammar/syntax.y"
+#line 562 "grammar/syntax.y"
                                             {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::XOR, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2668,7 +2668,7 @@ namespace yy {
     break;
 
   case 157: // bit_xor_expr: bit_and_expr
-#line 551 "grammar/syntax.y"
+#line 564 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2676,7 +2676,7 @@ namespace yy {
     break;
 
   case 158: // bit_and_expr: bit_and_expr REF equals_expr
-#line 555 "grammar/syntax.y"
+#line 568 "grammar/syntax.y"
                                            {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::BITWISE_AND, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2684,7 +2684,7 @@ namespace yy {
     break;
 
   case 159: // bit_and_expr: equals_expr
-#line 557 "grammar/syntax.y"
+#line 570 "grammar/syntax.y"
                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2692,7 +2692,7 @@ namespace yy {
     break;
 
   case 160: // equals_expr: equals_expr EQ rel_expr
-#line 561 "grammar/syntax.y"
+#line 574 "grammar/syntax.y"
                                      {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2700,7 +2700,7 @@ namespace yy {
     break;
 
   case 161: // equals_expr: equals_expr NOT_EQ rel_expr
-#line 563 "grammar/syntax.y"
+#line 576 "grammar/syntax.y"
                                 {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::NOT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2708,7 +2708,7 @@ namespace yy {
     break;
 
   case 162: // equals_expr: rel_expr
-#line 565 "grammar/syntax.y"
+#line 578 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2716,7 +2716,7 @@ namespace yy {
     break;
 
   case 163: // rel_expr: rel_expr LT concat_expr
-#line 569 "grammar/syntax.y"
+#line 582 "grammar/syntax.y"
                                   {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2724,7 +2724,7 @@ namespace yy {
     break;
 
   case 164: // rel_expr: rel_expr GT concat_expr
-#line 571 "grammar/syntax.y"
+#line 584 "grammar/syntax.y"
                             {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2732,7 +2732,7 @@ namespace yy {
     break;
 
   case 165: // rel_expr: rel_expr LT_EQ concat_expr
-#line 573 "grammar/syntax.y"
+#line 586 "grammar/syntax.y"
                                {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::LT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2740,7 +2740,7 @@ namespace yy {
     break;
 
   case 166: // rel_expr: rel_expr GT_EQ concat_expr
-#line 575 "grammar/syntax.y"
+#line 588 "grammar/syntax.y"
                                {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::GT_EQ, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2748,7 +2748,7 @@ namespace yy {
     break;
 
   case 167: // rel_expr: rel_expr IN concat_expr
-#line 577 "grammar/syntax.y"
+#line 590 "grammar/syntax.y"
                             {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::IN, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2756,7 +2756,7 @@ namespace yy {
     break;
 
   case 168: // rel_expr: concat_expr
-#line 579 "grammar/syntax.y"
+#line 592 "grammar/syntax.y"
                 {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2764,7 +2764,7 @@ namespace yy {
     break;
 
   case 169: // concat_expr: concat_expr CONCAT sum_expr
-#line 583 "grammar/syntax.y"
+#line 596 "grammar/syntax.y"
                                          {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::CONCAT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2772,7 +2772,7 @@ namespace yy {
     break;
 
   case 170: // concat_expr: sum_expr
-#line 585 "grammar/syntax.y"
+#line 598 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2780,7 +2780,7 @@ namespace yy {
     break;
 
   case 171: // sum_expr: sum_expr PLUS mult_expr
-#line 589 "grammar/syntax.y"
+#line 602 "grammar/syntax.y"
                                   {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::PLUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2788,7 +2788,7 @@ namespace yy {
     break;
 
   case 172: // sum_expr: sum_expr MINUS mult_expr
-#line 591 "grammar/syntax.y"
+#line 604 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MINUS, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2796,7 +2796,7 @@ namespace yy {
     break;
 
   case 173: // sum_expr: mult_expr
-#line 593 "grammar/syntax.y"
+#line 606 "grammar/syntax.y"
               {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2804,7 +2804,7 @@ namespace yy {
     break;
 
   case 174: // mult_expr: mult_expr MULT unary_expr
-#line 597 "grammar/syntax.y"
+#line 610 "grammar/syntax.y"
                                      {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MULT, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2812,7 +2812,7 @@ namespace yy {
     break;
 
   case 175: // mult_expr: mult_expr DIV unary_expr
-#line 599 "grammar/syntax.y"
+#line 612 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::DIV, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2820,7 +2820,7 @@ namespace yy {
     break;
 
   case 176: // mult_expr: mult_expr MOD unary_expr
-#line 601 "grammar/syntax.y"
+#line 614 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::MOD, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2828,7 +2828,7 @@ namespace yy {
     break;
 
   case 177: // mult_expr: unary_expr
-#line 603 "grammar/syntax.y"
+#line 616 "grammar/syntax.y"
                {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2836,7 +2836,7 @@ namespace yy {
     break;
 
   case 178: // unary_expr: MINUS exp_expr
-#line 607 "grammar/syntax.y"
+#line 620 "grammar/syntax.y"
                            {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::MINUS, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2844,7 +2844,7 @@ namespace yy {
     break;
 
   case 179: // unary_expr: REV exp_expr
-#line 609 "grammar/syntax.y"
+#line 622 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REV, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2852,7 +2852,7 @@ namespace yy {
     break;
 
   case 180: // unary_expr: NOT exp_expr
-#line 611 "grammar/syntax.y"
+#line 624 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::NOT, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2860,7 +2860,7 @@ namespace yy {
     break;
 
   case 181: // unary_expr: REF exp_expr
-#line 613 "grammar/syntax.y"
+#line 626 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::REF, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2868,7 +2868,7 @@ namespace yy {
     break;
 
   case 182: // unary_expr: INCREMENT exp_expr
-#line 615 "grammar/syntax.y"
+#line 628 "grammar/syntax.y"
                        {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::INCREMENT, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2876,7 +2876,7 @@ namespace yy {
     break;
 
   case 183: // unary_expr: DECREMENT exp_expr
-#line 617 "grammar/syntax.y"
+#line 630 "grammar/syntax.y"
                        {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(UnaryOperation::DECREMENT, yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2884,7 +2884,7 @@ namespace yy {
     break;
 
   case 184: // unary_expr: MULT exp_expr
-#line 619 "grammar/syntax.y"
+#line 632 "grammar/syntax.y"
                   {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2892,7 +2892,7 @@ namespace yy {
     break;
 
   case 185: // unary_expr: exp_expr
-#line 621 "grammar/syntax.y"
+#line 634 "grammar/syntax.y"
              {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2900,7 +2900,7 @@ namespace yy {
     break;
 
   case 186: // exp_expr: postfix_expr EXP exp_expr
-#line 625 "grammar/syntax.y"
+#line 638 "grammar/syntax.y"
                                     {
   yylhs.value.as < ExpressionNode* > () = new BinaryOperationNode(BinaryOperation::EXP, yystack_[2].value.as < ExpressionNode* > (), yystack_[0].value.as < ExpressionNode* > ());
 }
@@ -2908,7 +2908,7 @@ namespace yy {
     break;
 
   case 187: // exp_expr: postfix_expr
-#line 627 "grammar/syntax.y"
+#line 640 "grammar/syntax.y"
                  {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2916,7 +2916,7 @@ namespace yy {
     break;
 
   case 188: // postfix_expr: term INCREMENT
-#line 631 "grammar/syntax.y"
+#line 644 "grammar/syntax.y"
                              {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(true, UnaryOperation::INCREMENT, yystack_[1].value.as < ExpressionNode* > ());
 }
@@ -2924,7 +2924,7 @@ namespace yy {
     break;
 
   case 189: // postfix_expr: term DECREMENT
-#line 633 "grammar/syntax.y"
+#line 646 "grammar/syntax.y"
                    {
   yylhs.value.as < ExpressionNode* > () = new UnaryOperationNode(true, UnaryOperation::DECREMENT, yystack_[1].value.as < ExpressionNode* > ());
 }
@@ -2932,7 +2932,7 @@ namespace yy {
     break;
 
   case 190: // postfix_expr: term
-#line 635 "grammar/syntax.y"
+#line 648 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < ExpressionNode* > ();
 }
@@ -2940,7 +2940,7 @@ namespace yy {
     break;
 
   case 191: // term: INT
-#line 639 "grammar/syntax.y"
+#line 652 "grammar/syntax.y"
           {
   yylhs.value.as < ExpressionNode* > () = new IntNode(ctx.line, yystack_[0].value.as < int32_t > ());
 }
@@ -2948,7 +2948,7 @@ namespace yy {
     break;
 
   case 192: // term: LONG
-#line 641 "grammar/syntax.y"
+#line 654 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new LongNode(ctx.line, yystack_[0].value.as < int64_t > ());
 }
@@ -2956,7 +2956,7 @@ namespace yy {
     break;
 
   case 193: // term: FLOAT
-#line 643 "grammar/syntax.y"
+#line 656 "grammar/syntax.y"
           {
   yylhs.value.as < ExpressionNode* > () = new FloatNode(ctx.line, yystack_[0].value.as < float > ());
 }
@@ -2964,7 +2964,7 @@ namespace yy {
     break;
 
   case 194: // term: DOUBLE
-#line 645 "grammar/syntax.y"
+#line 658 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = new DoubleNode(ctx.line, yystack_[0].value.as < double > ());
 }
@@ -2972,7 +2972,7 @@ namespace yy {
     break;
 
   case 195: // term: BYTE
-#line 647 "grammar/syntax.y"
+#line 660 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new ByteNode(ctx.line, yystack_[0].value.as < uint8_t > ());
 }
@@ -2980,7 +2980,7 @@ namespace yy {
     break;
 
   case 196: // term: BOOL
-#line 649 "grammar/syntax.y"
+#line 662 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new BoolNode(ctx.line, yystack_[0].value.as < bool > ());
 }
@@ -2988,7 +2988,7 @@ namespace yy {
     break;
 
   case 197: // term: STRING
-#line 651 "grammar/syntax.y"
+#line 664 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = new StringNode(ctx.line, yystack_[0].value.as < string > ());
 }
@@ -2996,7 +2996,7 @@ namespace yy {
     break;
 
   case 198: // term: CHAR
-#line 653 "grammar/syntax.y"
+#line 666 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new CharNode(ctx.line, yystack_[0].value.as < char > ());
 }
@@ -3004,7 +3004,7 @@ namespace yy {
     break;
 
   case 199: // term: NONE
-#line 655 "grammar/syntax.y"
+#line 668 "grammar/syntax.y"
          {
   yylhs.value.as < ExpressionNode* > () = new OptionNode(ctx.line, Option());
 }
@@ -3012,7 +3012,7 @@ namespace yy {
     break;
 
   case 200: // term: array_allocation
-#line 657 "grammar/syntax.y"
+#line 670 "grammar/syntax.y"
                      {
   yylhs.value.as < ExpressionNode* > () = nullptr;
 }
@@ -3020,7 +3020,7 @@ namespace yy {
     break;
 
   case 201: // term: struct_allocation
-#line 659 "grammar/syntax.y"
+#line 672 "grammar/syntax.y"
                       {
   yylhs.value.as < ExpressionNode* > () = nullptr;
 }
@@ -3028,7 +3028,7 @@ namespace yy {
     break;
 
   case 202: // term: access
-#line 661 "grammar/syntax.y"
+#line 674 "grammar/syntax.y"
            {
   yylhs.value.as < ExpressionNode* > () = yystack_[0].value.as < AccessNode* > ();
 }
@@ -3036,7 +3036,7 @@ namespace yy {
     break;
 
   case 203: // term: SOME LEFT_PAREN expr RIGHT_PAREN
-#line 663 "grammar/syntax.y"
+#line 676 "grammar/syntax.y"
                                      {
   yylhs.value.as < ExpressionNode* > () = new OptionNode(ctx.line, Option());
 }
@@ -3044,7 +3044,7 @@ namespace yy {
     break;
 
   case 204: // array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET
-#line 667 "grammar/syntax.y"
+#line 680 "grammar/syntax.y"
                                                            {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3052,7 +3052,7 @@ namespace yy {
     break;
 
   case 205: // array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET LEFT_BRACE array_allocation_values RIGHT_BRACE
-#line 669 "grammar/syntax.y"
+#line 682 "grammar/syntax.y"
                                                                                             {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3060,7 +3060,7 @@ namespace yy {
     break;
 
   case 206: // array_allocation_values: array_allocation_values COMMA expr
-#line 673 "grammar/syntax.y"
+#line 686 "grammar/syntax.y"
                                                             {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3068,7 +3068,7 @@ namespace yy {
     break;
 
   case 207: // array_allocation_values: expr
-#line 675 "grammar/syntax.y"
+#line 688 "grammar/syntax.y"
          {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3076,7 +3076,7 @@ namespace yy {
     break;
 
   case 208: // struct_allocation: NEW type LEFT_BRACE struct_allocation_values RIGHT_BRACE
-#line 679 "grammar/syntax.y"
+#line 692 "grammar/syntax.y"
                                                                             {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3084,7 +3084,7 @@ namespace yy {
     break;
 
   case 209: // struct_allocation: NEW type LEFT_BRACE RIGHT_BRACE
-#line 681 "grammar/syntax.y"
+#line 694 "grammar/syntax.y"
                                     {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3092,7 +3092,7 @@ namespace yy {
     break;
 
   case 210: // struct_allocation_values: struct_allocation_values COMMA ID COLON expr
-#line 685 "grammar/syntax.y"
+#line 698 "grammar/syntax.y"
                                                                        {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -3100,7 +3100,7 @@ namespace yy {
     break;
 
   case 211: // struct_allocation_values: ID COLON expr
-#line 687 "grammar/syntax.y"
+#line 700 "grammar/syntax.y"
                   {
   yylhs.value.as < Node* > () = nullptr;
 }
@@ -4216,28 +4216,28 @@ namespace yy {
   const short
   parser::yyrline_[] =
   {
-       0,    85,    85,    89,    92,    97,    99,   101,   103,   105,
-     109,   111,   115,   122,   127,   131,   133,   137,   139,   143,
-     148,   155,   162,   165,   170,   172,   176,   178,   182,   185,
-     190,   192,   196,   198,   202,   204,   208,   210,   214,   218,
-     220,   224,   226,   230,   232,   236,   238,   240,   244,   246,
-     250,   252,   254,   256,   260,   262,   266,   268,   272,   274,
-     278,   280,   282,   286,   288,   290,   292,   294,   296,   300,
-     302,   304,   308,   310,   314,   316,   320,   323,   328,   330,
-     332,   334,   336,   338,   340,   342,   344,   346,   348,   352,
-     356,   358,   362,   364,   366,   368,   370,   372,   374,   376,
-     378,   380,   382,   386,   388,   390,   392,   394,   396,   398,
-     400,   402,   404,   406,   408,   412,   417,   424,   429,   434,
-     439,   443,   447,   449,   451,   455,   457,   461,   463,   465,
-     469,   471,   475,   479,   484,   486,   491,   495,   497,   501,
-     503,   507,   509,   513,   515,   517,   521,   523,   525,   527,
-     531,   533,   537,   539,   543,   545,   549,   551,   555,   557,
-     561,   563,   565,   569,   571,   573,   575,   577,   579,   583,
-     585,   589,   591,   593,   597,   599,   601,   603,   607,   609,
-     611,   613,   615,   617,   619,   621,   625,   627,   631,   633,
-     635,   639,   641,   643,   645,   647,   649,   651,   653,   655,
-     657,   659,   661,   663,   667,   669,   673,   675,   679,   681,
-     685,   687
+       0,    98,    98,   102,   105,   110,   112,   114,   116,   118,
+     122,   124,   128,   135,   140,   144,   146,   150,   152,   156,
+     161,   168,   175,   178,   183,   185,   189,   191,   195,   198,
+     203,   205,   209,   211,   215,   217,   221,   223,   227,   231,
+     233,   237,   239,   243,   245,   249,   251,   253,   257,   259,
+     263,   265,   267,   269,   273,   275,   279,   281,   285,   287,
+     291,   293,   295,   299,   301,   303,   305,   307,   309,   313,
+     315,   317,   321,   323,   327,   329,   333,   336,   341,   343,
+     345,   347,   349,   351,   353,   355,   357,   359,   361,   365,
+     369,   371,   375,   377,   379,   381,   383,   385,   387,   389,
+     391,   393,   395,   399,   401,   403,   405,   407,   409,   411,
+     413,   415,   417,   419,   421,   425,   430,   437,   442,   447,
+     452,   456,   460,   462,   464,   468,   470,   474,   476,   478,
+     482,   484,   488,   492,   497,   499,   504,   508,   510,   514,
+     516,   520,   522,   526,   528,   530,   534,   536,   538,   540,
+     544,   546,   550,   552,   556,   558,   562,   564,   568,   570,
+     574,   576,   578,   582,   584,   586,   588,   590,   592,   596,
+     598,   602,   604,   606,   610,   612,   614,   616,   620,   622,
+     624,   626,   628,   630,   632,   634,   638,   640,   644,   646,
+     648,   652,   654,   656,   658,   660,   662,   664,   666,   668,
+     670,   672,   674,   676,   680,   682,   686,   688,   692,   694,
+     698,   700
   };
 
   void
@@ -4271,4 +4271,4 @@ namespace yy {
 } // yy
 #line 4273 "grammar/build/syntax.tab.cc"
 
-#line 690 "grammar/syntax.y"
+#line 703 "grammar/syntax.y"

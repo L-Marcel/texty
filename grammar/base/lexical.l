@@ -1,7 +1,8 @@
 %{
+  #include <stdio.h>
+  #include <string.h>
+  #include <stdlib.h>
 %}
-
-%option noyywrap nounput noinput batch
 
 %%
 \n+                                            {}
@@ -50,15 +51,15 @@
 "+"                                            { printf("PLUS\n"); }
 "*"                                            { printf("MULT\n"); }
 "/"                                            { printf("DIV\n"); }
-\"([^"\\]|\\.)*\"                              { printf("STRING\n"); }
-'([^"\\]|\\.)'                                 { printf("CHAR\n"); }
-[0-9]+[lL]                                     { printf("LONG\n"); }
-[0-9]+[bB]                                     { printf("BYTE\n"); }
-[0-9]+(\.[0-9]+)?[fF]                          { printf("FLOAT\n"); }
-[0-9]+(\.[0-9]+)?[dD]                          { printf("DOUBLE\n"); }
-[0-9]+                                         { printf("INT\n"); }
-"true"                                         { printf("BOOL\n"); }
-"false"                                        { printf("BOOL\n"); }
+\"([^\"\\]|\\.)*\"                             { yytext[yyleng-1] = '\0'; printf("STRING(%s)\n", yytext + 1); }
+'([^\"\\]|\\.)'                                { printf("CHAR(%c)\n", yytext[1]); }
+[0-9]+[lL]                                     { printf("LONG(%lld)\n", atoll(yytext)); }
+[0-9]+[bB]                                     { printf("BYTE(%d)\n", atoi(yytext)); }
+[0-9]+(\.[0-9]+)?[fF]                          { printf("FLOAT(%f)\n", atof(yytext)); }
+[0-9]+(\.[0-9]+)?[dD]                          { printf("DOUBLE(%f)\n", atof(yytext)); }
+[0-9]+                                         { printf("INT(%d)\n", atoi(yytext)); }
+"true"                                         { printf("BOOL(true)\n"); }
+"false"                                        { printf("BOOL(false)\n"); }
 "new"                                          { printf("NEW\n"); }
 "var"                                          { printf("VAR\n"); }
 "const"                                        { printf("CONST\n"); }
@@ -111,9 +112,9 @@
 "trait"                                        { printf("TRAIT\n"); }
 "endtrait"                                     { printf("END_TRAIT\n"); }
 "return"                                       { printf("RETURN\n"); }
-[A-Z][_A-Z0-9]*                                { printf("CONST_NAME\n"); } 
-[A-Z][a-zA-Z0-9]*                              { printf("NAME\n"); }
-[_a-z][_a-zA-Z0-9]*                            { printf("ID\n"); }
+[A-Z][_A-Z0-9]*                                { printf("CONST_NAME(%s)\n", yytext); } 
+[A-Z][a-zA-Z0-9]*                              { printf("NAME(%s)\n", yytext); }
+[_a-z][_a-zA-Z0-9]*                            { printf("ID(%s)\n", yytext); }
 .                                              { printf("ERRO\n"); }
 %%
 

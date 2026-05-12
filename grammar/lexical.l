@@ -121,6 +121,10 @@
 .                                              { invalid_token(yytext, ctx); return yy::parser::make_YYerror(); }
 %%
 
+#ifndef yywrap
+  int yywrap () { return 1; }
+#endif
+
 void invalid_token(std::string token, Context& ctx) {
   ctx.has_lexical_error = true;
   fprintf(stderr, "[ ERRO ] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);

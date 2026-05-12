@@ -48,8 +48,21 @@
 #line 3 "grammar/syntax.y"
 
   #include "../src/main.hpp"
+  #ifdef _WIN32
+    #undef CONST
+    #undef IN
+    #undef VOID
+    #undef CHAR
+    #undef INT
+    #undef LONG
+    #undef FLOAT
+    #undef DOUBLE
+    #undef BYTE
+    #undef BOOL
+    #undef ERROR
+  #endif
 
-#line 53 "grammar/build/syntax.tab.hh"
+#line 66 "grammar/build/syntax.tab.hh"
 
 # include <cassert>
 # include <cstdlib> // std::abort
@@ -189,7 +202,7 @@
 #endif
 
 namespace yy {
-#line 193 "grammar/build/syntax.tab.hh"
+#line 206 "grammar/build/syntax.tab.hh"
 
 
 
@@ -4440,7 +4453,7 @@ switch (yykind)
 
 
 } // yy
-#line 4444 "grammar/build/syntax.tab.hh"
+#line 4457 "grammar/build/syntax.tab.hh"
 
 
 
