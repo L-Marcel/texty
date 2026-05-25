@@ -16,6 +16,7 @@
 #include "enums/access.hpp"
 #include "enums/assign.hpp"
 #include "enums/call.hpp"
+#include "enums/cases.hpp"
 #include "enums/for.hpp"
 #include "enums/if.hpp"
 #include "enums/operations.hpp"

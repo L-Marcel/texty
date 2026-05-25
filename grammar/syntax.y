@@ -67,11 +67,8 @@
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
 %type <Node*> struct_allocation struct_allocation_values 
 
-%type <Node*> switch cases case_list
-%type <Node*> case case_values default_case 
-
 %type <string> id name
-%type <vector<Node*>> stmts
+%type <vector<Node*>> stmts 
 %type <AccessBaseNode*> access_base
 %type <SubprogramCallNode*> subprogram_call
 %type <pair<RangeInclusionType, RangeInclusionType>> range_interval
@@ -84,6 +81,10 @@
 %type <IfEndNode*> if_end
 %type <ForNode*> for
 %type <WhileNode*> while repeat
+%type <SwitchNode*> switch 
+%type <CaseNode*> case default_case
+%type <vector<ExpressionNode*>> case_values
+%type <vector<CaseNode*>> cases case_list
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
@@ -457,39 +458,45 @@ if_end: ELIF expr THEN stmts if_end {
 };
 
 switch: SWITCH expr cases END_SWITCH {
-  $$ = nullptr;
+  $$ = new SwitchNode(ctx.line, $2, $3);
 };
 
 cases: case_list default_case {
-  $$ = nullptr;
-} | case_list {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | default_case {
-  $$ = nullptr;
+  $$ = vector<CaseNode*>();
+  $$.push_back($1);
 };
 
 case_list: case_list case {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | case {
-  $$ = nullptr;
+  $$ = vector<CaseNode*>();
+  $$.push_back($1);
 };
 
 case: CASE case_values COLON stmts {
-  $$ = nullptr;
-} | CASE SOME ID COLON stmts {
-  $$ = nullptr;
-} | CASE NONE COLON stmts {
-  $$ = nullptr;
+  $$ = new CaseNode(ctx.line, $2);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 };
 
-case_values: case_values COMMA access {
-  $$ = nullptr;
-} | access {
-  $$ = nullptr;
+case_values: case_values COMMA term {
+  $$ = $1;
+  $$.push_back($3);
+} | term {
+  $$ = vector<ExpressionNode*>();
+  $$.push_back($1);
 };
 
 default_case: DEFAULT COLON stmts {
-  $$ = nullptr;
+  $$ = new CaseNode(ctx.line);
+  for (size_t i = 0; i < $3.size(); i++) {
+    $$->children.push_back($3[i]);
+  };
 };
 
 for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
