@@ -1,0 +1,1 @@
+enum class WhileType { WHILE, REPEAT };

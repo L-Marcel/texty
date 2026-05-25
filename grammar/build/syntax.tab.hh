@@ -488,8 +488,6 @@ namespace yy {
       // case
       // case_values
       // default_case
-      // while
-      // repeat
       // array_allocation
       // array_allocation_values
       // struct_allocation
@@ -521,26 +519,30 @@ namespace yy {
       // TYPE_CHAR
       char dummy16[sizeof (TypeKind)];
 
+      // while
+      // repeat
+      char dummy17[sizeof (WhileNode*)];
+
       // BOOL
-      char dummy17[sizeof (bool)];
+      char dummy18[sizeof (bool)];
 
       // CHAR
-      char dummy18[sizeof (char)];
+      char dummy19[sizeof (char)];
 
       // DOUBLE
-      char dummy19[sizeof (double)];
+      char dummy20[sizeof (double)];
 
       // FLOAT
-      char dummy20[sizeof (float)];
+      char dummy21[sizeof (float)];
 
       // INT
-      char dummy21[sizeof (int32_t)];
+      char dummy22[sizeof (int32_t)];
 
       // LONG
-      char dummy22[sizeof (int64_t)];
+      char dummy23[sizeof (int64_t)];
 
       // range_interval
-      char dummy23[sizeof (pair<RangeInclusionType, RangeInclusionType>)];
+      char dummy24[sizeof (pair<RangeInclusionType, RangeInclusionType>)];
 
       // ID
       // NAME
@@ -548,26 +550,26 @@ namespace yy {
       // STRING
       // id
       // name
-      char dummy24[sizeof (string)];
+      char dummy25[sizeof (string)];
 
       // BYTE
-      char dummy25[sizeof (uint8_t)];
+      char dummy26[sizeof (uint8_t)];
 
       // call_params_list
       // call_params
-      char dummy26[sizeof (vector<ExpressionNode*>)];
+      char dummy27[sizeof (vector<ExpressionNode*>)];
 
       // stmts
-      char dummy27[sizeof (vector<Node*>)];
+      char dummy28[sizeof (vector<Node*>)];
 
       // params_self_list
       // params_list
       // params
       // param
-      char dummy28[sizeof (vector<Param>)];
+      char dummy29[sizeof (vector<Param>)];
 
       // id_list
-      char dummy29[sizeof (vector<string>)];
+      char dummy30[sizeof (vector<string>)];
     };
 
     /// The size of the largest semantic type.
@@ -1031,8 +1033,6 @@ namespace yy {
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_while: // while
-      case symbol_kind::S_repeat: // repeat
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -1069,6 +1069,11 @@ namespace yy {
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
         value.move< TypeKind > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+        value.move< WhileNode* > (std::move (that.value));
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -1346,6 +1351,18 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, WhileNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const WhileNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, bool&& v)
         : Base (t)
         , value (std::move (v))
@@ -1601,8 +1618,6 @@ switch (yykind)
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_while: // while
-      case symbol_kind::S_repeat: // repeat
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -1639,6 +1654,11 @@ switch (yykind)
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
         value.template destroy< TypeKind > ();
+        break;
+
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+        value.template destroy< WhileNode* > ();
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -4079,8 +4099,6 @@ switch (yykind)
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_while: // while
-      case symbol_kind::S_repeat: // repeat
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -4117,6 +4135,11 @@ switch (yykind)
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
         value.copy< TypeKind > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+        value.copy< WhileNode* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -4287,8 +4310,6 @@ switch (yykind)
       case symbol_kind::S_case: // case
       case symbol_kind::S_case_values: // case_values
       case symbol_kind::S_default_case: // default_case
-      case symbol_kind::S_while: // while
-      case symbol_kind::S_repeat: // repeat
       case symbol_kind::S_array_allocation: // array_allocation
       case symbol_kind::S_array_allocation_values: // array_allocation_values
       case symbol_kind::S_struct_allocation: // struct_allocation
@@ -4325,6 +4346,11 @@ switch (yykind)
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
         value.move< TypeKind > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_while: // while
+      case symbol_kind::S_repeat: // repeat
+        value.move< WhileNode* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_BOOL: // BOOL
@@ -4453,7 +4479,7 @@ switch (yykind)
 
 
 } // yy
-#line 4457 "grammar/build/syntax.tab.hh"
+#line 4483 "grammar/build/syntax.tab.hh"
 
 
 

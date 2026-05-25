@@ -66,7 +66,7 @@
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
 %type <Node*> switch cases case_list
-%type <Node*> case case_values default_case while repeat array_allocation array_allocation_values
+%type <Node*> case case_values default_case array_allocation array_allocation_values
 %type <Node*> struct_allocation struct_allocation_values 
 
 %type <string> id name
@@ -82,6 +82,7 @@
 %type <IfNode*> if
 %type <IfEndNode*> if_end
 %type <ForNode*> for
+%type <WhileNode*> while repeat
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
@@ -506,15 +507,21 @@ for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
 };
 
 while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $3, WhileType::WHILE);
+  for (size_t i = 0; i < $5.size(); i++) {
+    $$->children.push_back($5[i]);
+  };
 } | WHILE LEFT_PAREN expr RIGHT_PAREN END_WHILE {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $3, WhileType::WHILE);
 };
 
 repeat: REPEAT stmts UNTIL expr {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $4, WhileType::REPEAT);
+  for (size_t i = 0; i < $2.size(); i++) {
+    $$->children.push_back($2[i]);
+  };
 } | REPEAT UNTIL expr {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $3, WhileType::REPEAT);
 };
 
 expr: or_expr {
