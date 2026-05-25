@@ -65,9 +65,10 @@
 %type <Node*> enum_values struct_attrs struct_attr
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> switch cases case_list
-%type <Node*> case case_values default_case array_allocation array_allocation_values
 %type <Node*> struct_allocation struct_allocation_values 
+
+%type <Node*> switch cases case_list
+%type <Node*> case case_values default_case 
 
 %type <string> id name
 %type <vector<Node*>> stmts
@@ -89,7 +90,8 @@
 %type <vector<string>> id_list
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
-%type <vector<ExpressionNode*>> call_params_list call_params
+%type <ArrayAllocationNode*> array_allocation
+%type <vector<ExpressionNode*>> call_params_list call_params array_allocation_values
 %type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
@@ -675,7 +677,7 @@ term: INT {
 } | NONE {
   $$ = new OptionNode(ctx.line, Option());
 } | array_allocation {
-  $$ = nullptr;
+  $$ = $1;
 } | struct_allocation {
   $$ = nullptr;
 } | access {
@@ -685,15 +687,20 @@ term: INT {
 };
 
 array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET {
-  $$ = nullptr;
+  $$ = new ArrayAllocationNode(ctx.line, *$2, $4);
 } | NEW type LEFT_BRACKET expr RIGHT_BRACKET LEFT_BRACE array_allocation_values RIGHT_BRACE {
-  $$ = nullptr;
+  $$ = new ArrayAllocationNode(ctx.line, *$2, $4);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 };
 
 array_allocation_values: array_allocation_values COMMA expr {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($3);
 } | expr {
-  $$ = nullptr;
+  $$ = vector<ExpressionNode*>();
+  $$.push_back($1);
 };
 
 struct_allocation: NEW type LEFT_BRACE struct_allocation_values RIGHT_BRACE {
