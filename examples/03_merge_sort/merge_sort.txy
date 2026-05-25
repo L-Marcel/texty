@@ -1,9 +1,11 @@
+# Swap the position of two elements in the array 
 proc swap(array: int[]; a, b: int)
 	var temp: int = array[a];
   array[a] = array[b];
   array[b] = temp;
 endproc;
 
+# Take the pivot
 fn partition(array: int[]; min, max: int): int
 	var i: int = (min - 1);
 	for (j in min..max)
@@ -16,6 +18,7 @@ fn partition(array: int[]; min, max: int): int
 	return pivot;
 endfn;
 
+# Perform quick sorting
 proc quick_sort(array: int[]; min, max: int)
 	if min < max then 
 		var pivot: int = partition(array, min, max);
@@ -24,12 +27,12 @@ proc quick_sort(array: int[]; min, max: int)
 	endif;
 endproc;
 
-
 fn main(): int
 	print("Digite o tamanho do array: ");
 	var size: int = int(input_line());
 	println("");
 
+	# Build the array
 	var array: int[] = new int[size];
 	for (i in 0..size)
 		print(format(
