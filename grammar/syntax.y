@@ -61,16 +61,13 @@
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
-%type <Node*> enum struct trait impl
-%type <Node*> enum_values struct_attrs struct_attr
+%type <Node*> trait impl
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> switch cases case_list
-%type <Node*> case case_values default_case while repeat array_allocation array_allocation_values
-%type <Node*> struct_allocation struct_allocation_values 
+%type <Node*> struct_allocation struct_allocation_values
 
 %type <string> id name
-%type <vector<Node*>> stmts
+%type <vector<Node*>> stmts 
 %type <AccessBaseNode*> access_base
 %type <SubprogramCallNode*> subprogram_call
 %type <pair<RangeInclusionType, RangeInclusionType>> range_interval
@@ -82,13 +79,22 @@
 %type <IfNode*> if
 %type <IfEndNode*> if_end
 %type <ForNode*> for
+%type <WhileNode*> while repeat
+%type <SwitchNode*> switch 
+%type <CaseNode*> case default_case
+%type <vector<ExpressionNode*>> case_values
+%type <vector<CaseNode*>> cases case_list
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
-%type <vector<Param>> params_self_list params_list params param
-%type <vector<string>> id_list
+%type <vector<pair<string, Type>>> params_self_list params_list params 
+%type <vector<pair<string, Type>>> param struct_attrs struct_attr
+%type <vector<string>> id_list enum_values
+%type <EnumNode*> enum
+%type <StructNode*> struct
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
-%type <vector<ExpressionNode*>> call_params_list call_params
+%type <ArrayAllocationNode*> array_allocation
+%type <vector<ExpressionNode*>> call_params_list call_params array_allocation_values
 %type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
@@ -144,13 +150,13 @@ proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON {
 params_self_list: LEFT_PAREN SELF SEMICOLON params RIGHT_PAREN {
   $$ = $4;
 } | LEFT_PAREN SELF RIGHT_PAREN {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
 };
 
 params_list: LEFT_PAREN params RIGHT_PAREN {
   $$ = $2;
 } | LEFT_PAREN RIGHT_PAREN {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
 };
 
 params: params SEMICOLON param {
@@ -159,14 +165,14 @@ params: params SEMICOLON param {
     $$.push_back($3[i]);
   };
 } | param {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
   for (size_t i = 0; i < $1.size(); i++) {
     $$.push_back($1[i]);
   };
 };
 
 param: id_list COLON type {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
   for (size_t i = 0; i < $1.size(); i++) {
     $$.push_back({$1[i], *$3});
   };
@@ -201,31 +207,39 @@ call_params: call_params COMMA expr {
 };
 
 enum: ENUM name enum_values END_ENUM SEMICOLON {
-  $$ = nullptr;
+  $$ = new EnumNode(ctx.line, $2, $3);
 } | ENUM name END_ENUM SEMICOLON {
-  $$ = nullptr;
+  $$ = new EnumNode(ctx.line, $2, vector<string>());
 };
 
 enum_values: enum_values COMMA CONST_NAME {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($3);
 } | CONST_NAME {
-  $$ = nullptr;
+  $$ = vector<string>();
+  $$.push_back($1);
 };
 
 struct: STRUCT name struct_attrs END_STRUCT SEMICOLON {
-  $$ = nullptr;
+  $$ = new StructNode(ctx.line, $2, $3);
 } | STRUCT name END_STRUCT SEMICOLON {
-  $$ = nullptr;
+  $$ = new StructNode(ctx.line, $2, vector<pair<string, Type>>());
 };
 
 struct_attrs: struct_attrs struct_attr SEMICOLON {
-  $$ = nullptr;
+  $$ = $1;
+  for (size_t i = 0; i < $2.size(); i++) {
+    $$.push_back($2[i]);
+  };
 } | struct_attr SEMICOLON {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 struct_attr: id_list COLON type {
-  $$ = nullptr;
+  $$ = vector<pair<string, Type>>();
+  for (size_t i = 0; i < $1.size(); i++) {
+    $$.push_back({$1[i], *$3});
+  };
 };
 
 trait: TRAIT name trait_subprograms END_TRAIT SEMICOLON {
@@ -454,39 +468,45 @@ if_end: ELIF expr THEN stmts if_end {
 };
 
 switch: SWITCH expr cases END_SWITCH {
-  $$ = nullptr;
+  $$ = new SwitchNode(ctx.line, $2, $3);
 };
 
 cases: case_list default_case {
-  $$ = nullptr;
-} | case_list {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | default_case {
-  $$ = nullptr;
+  $$ = vector<CaseNode*>();
+  $$.push_back($1);
 };
 
 case_list: case_list case {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | case {
-  $$ = nullptr;
+  $$ = vector<CaseNode*>();
+  $$.push_back($1);
 };
 
 case: CASE case_values COLON stmts {
-  $$ = nullptr;
-} | CASE SOME ID COLON stmts {
-  $$ = nullptr;
-} | CASE NONE COLON stmts {
-  $$ = nullptr;
+  $$ = new CaseNode(ctx.line, $2);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 };
 
-case_values: case_values COMMA access {
-  $$ = nullptr;
-} | access {
-  $$ = nullptr;
+case_values: case_values COMMA term {
+  $$ = $1;
+  $$.push_back($3);
+} | term {
+  $$ = vector<ExpressionNode*>();
+  $$.push_back($1);
 };
 
 default_case: DEFAULT COLON stmts {
-  $$ = nullptr;
+  $$ = new CaseNode(ctx.line);
+  for (size_t i = 0; i < $3.size(); i++) {
+    $$->children.push_back($3[i]);
+  };
 };
 
 for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
@@ -506,15 +526,21 @@ for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {
 };
 
 while: WHILE LEFT_PAREN expr RIGHT_PAREN stmts END_WHILE {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $3, WhileType::WHILE);
+  for (size_t i = 0; i < $5.size(); i++) {
+    $$->children.push_back($5[i]);
+  };
 } | WHILE LEFT_PAREN expr RIGHT_PAREN END_WHILE {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $3, WhileType::WHILE);
 };
 
 repeat: REPEAT stmts UNTIL expr {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $4, WhileType::REPEAT);
+  for (size_t i = 0; i < $2.size(); i++) {
+    $$->children.push_back($2[i]);
+  };
 } | REPEAT UNTIL expr {
-  $$ = nullptr;
+  $$ = new WhileNode(ctx.line, $3, WhileType::REPEAT);
 };
 
 expr: or_expr {
@@ -668,7 +694,7 @@ term: INT {
 } | NONE {
   $$ = new OptionNode(ctx.line, Option());
 } | array_allocation {
-  $$ = nullptr;
+  $$ = $1;
 } | struct_allocation {
   $$ = nullptr;
 } | access {
@@ -678,15 +704,20 @@ term: INT {
 };
 
 array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET {
-  $$ = nullptr;
+  $$ = new ArrayAllocationNode(ctx.line, *$2, $4);
 } | NEW type LEFT_BRACKET expr RIGHT_BRACKET LEFT_BRACE array_allocation_values RIGHT_BRACE {
-  $$ = nullptr;
+  $$ = new ArrayAllocationNode(ctx.line, *$2, $4);
+  for (size_t i = 0; i < $7.size(); i++) {
+    $$->children.push_back($7[i]);
+  };
 };
 
 array_allocation_values: array_allocation_values COMMA expr {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($3);
 } | expr {
-  $$ = nullptr;
+  $$ = vector<ExpressionNode*>();
+  $$.push_back($1);
 };
 
 struct_allocation: NEW type LEFT_BRACE struct_allocation_values RIGHT_BRACE {

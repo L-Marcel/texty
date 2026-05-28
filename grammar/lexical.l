@@ -10,6 +10,7 @@
 %%
 \n+                                            { ctx.line += yyleng; }
 [ \t\r]+                                       {}
+"#"[^\n]*                                      {}
 "int"                                          { return yy::parser::make_TYPE_INT(TypeKind::INT); }
 "float"                                        { return yy::parser::make_TYPE_FLOAT(TypeKind::FLOAT); }
 "double"                                       { return yy::parser::make_TYPE_DOUBLE(TypeKind::DOUBLE); }

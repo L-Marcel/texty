@@ -1,0 +1,30 @@
+digraph AST {
+  node [shape=box, fontname="Courier"];
+  "0x555586a6f860" [label="PROGRAM"];
+  "0x555586a6f860" -> "0x555586a6f7f0";
+  "0x555586a6f7f0" [label="STRUCT: User"];
+  "0x555586a6f7f0_id: long" [label="id: long"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_id: long";
+  "0x555586a6f7f0_age: int" [label="age: int"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_age: int";
+  "0x555586a6f7f0_name: string" [label="name: string"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_name: string";
+  "0x555586a6f7f0_password: string" [label="password: string"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_password: string";
+  "0x555586a6f7f0_bio: string" [label="bio: string"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_bio: string";
+  "0x555586a6f7f0_admin: bool" [label="admin: bool"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_admin: bool";
+  "0x555586a6f7f0_height: float" [label="height: float"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_height: float";
+  "0x555586a6f7f0_weight: float" [label="weight: float"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_weight: float";
+  "0x555586a6f7f0_balance: double" [label="balance: double"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_balance: double";
+  "0x555586a6f7f0_gender: char" [label="gender: char"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_gender: char";
+  "0x555586a6f7f0_version: int" [label="version: int"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_version: int";
+  "0x555586a6f7f0_permission: byte" [label="permission: byte"];
+  "0x555586a6f7f0" -> "0x555586a6f7f0_permission: byte";
+}

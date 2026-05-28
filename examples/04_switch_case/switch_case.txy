@@ -1,0 +1,7 @@
+fn test(): int
+  var i: int = 0;
+  switch i
+    case 0: println("Zero!");
+    default: println("Diferente de zero!");
+  endswitch;
+endfn;

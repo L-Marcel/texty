@@ -1,0 +1,1 @@
+enum class CaseType { CASE, DEFAULT };

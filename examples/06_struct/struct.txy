@@ -1,0 +1,11 @@
+struct User
+  id: long;
+  age: int;
+  name, password, bio: string;
+  admin: bool;
+  height, weight: float;
+  balance: double;
+  gender: char;
+  version: int;
+  permission: byte;
+endstruct;

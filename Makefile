@@ -45,14 +45,14 @@ examples: all
 	@for file in $(EXAMPLES); do \
 		echo "[ COMPILE ] $$file"; \
 		./$(TARGET) --file "$$file" || exit 1; \
-		dot -Tpng "$${file%.txy}.dot" -o "$${file%.txy}.png" || exit 1; \
+		dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg" || exit 1; \
 	done
 
 examples-pendrive: all
 	@for file in $(EXAMPLES); do \
 		echo "[ COMPILE ] $$file"; \
 		/lib64/ld-linux-x86-64.so.2 ./$(TARGET) --file "$$file" || exit 1; \
-		dot -Tpng "$${file%.txy}.dot" -o "$${file%.txy}.png" || exit 1; \
+		dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg" || exit 1; \
 	done
 
 clean:

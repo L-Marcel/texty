@@ -7,6 +7,7 @@
 %%
 \n+                                            {}
 [ \t\r]+                                       {}
+"#"[^\n]*                                      {}
 "int"                                          { printf("TYPE_INT\n"); }
 "float"                                        { printf("TYPE_FLOAT\n"); }
 "double"                                       { printf("TYPE_DOUBLE\n"); }
