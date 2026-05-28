@@ -1,0 +1,12 @@
+digraph AST {
+  node [shape=box, fontname="Courier"];
+  "0x5555684966c0" [label="PROGRAM"];
+  "0x5555684966c0" -> "0x5555684967f0";
+  "0x5555684967f0" [label="ENUM: State"];
+  "0x5555684967f0_OPEN" [label="OPEN"];
+  "0x5555684967f0" -> "0x5555684967f0_OPEN";
+  "0x5555684967f0_HALF_OPEN" [label="HALF_OPEN"];
+  "0x5555684967f0" -> "0x5555684967f0_HALF_OPEN";
+  "0x5555684967f0_CLOSED" [label="CLOSED"];
+  "0x5555684967f0" -> "0x5555684967f0_CLOSED";
+}

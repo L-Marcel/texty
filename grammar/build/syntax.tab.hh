@@ -474,7 +474,6 @@ namespace yy {
       // program_slice
       // subprogram
       // enum
-      // enum_values
       // struct
       // struct_attrs
       // struct_attr
@@ -577,6 +576,7 @@ namespace yy {
       char dummy33[sizeof (vector<Param>)];
 
       // id_list
+      // enum_values
       char dummy34[sizeof (vector<string>)];
     };
 
@@ -1029,7 +1029,6 @@ namespace yy {
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
       case symbol_kind::S_enum: // enum
-      case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
       case symbol_kind::S_struct_attrs: // struct_attrs
       case symbol_kind::S_struct_attr: // struct_attr
@@ -1154,6 +1153,7 @@ namespace yy {
         break;
 
       case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_enum_values: // enum_values
         value.move< vector<string> > (std::move (that.value));
         break;
 
@@ -1674,7 +1674,6 @@ switch (yykind)
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
       case symbol_kind::S_enum: // enum
-      case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
       case symbol_kind::S_struct_attrs: // struct_attrs
       case symbol_kind::S_struct_attr: // struct_attr
@@ -1799,6 +1798,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_enum_values: // enum_values
         value.template destroy< vector<string> > ();
         break;
 
@@ -4167,7 +4167,6 @@ switch (yykind)
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
       case symbol_kind::S_enum: // enum
-      case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
       case symbol_kind::S_struct_attrs: // struct_attrs
       case symbol_kind::S_struct_attr: // struct_attr
@@ -4292,6 +4291,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_enum_values: // enum_values
         value.copy< vector<string> > (YY_MOVE (that.value));
         break;
 
@@ -4390,7 +4390,6 @@ switch (yykind)
       case symbol_kind::S_program_slice: // program_slice
       case symbol_kind::S_subprogram: // subprogram
       case symbol_kind::S_enum: // enum
-      case symbol_kind::S_enum_values: // enum_values
       case symbol_kind::S_struct: // struct
       case symbol_kind::S_struct_attrs: // struct_attrs
       case symbol_kind::S_struct_attr: // struct_attr
@@ -4515,6 +4514,7 @@ switch (yykind)
         break;
 
       case symbol_kind::S_id_list: // id_list
+      case symbol_kind::S_enum_values: // enum_values
         value.move< vector<string> > (YY_MOVE (s.value));
         break;
 

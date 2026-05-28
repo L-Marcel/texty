@@ -11,6 +11,12 @@ string get_filename_without_mime(string filename) {
 void Compiler::add_dot_node(ostream& os, const Node* node, string label) {
   os << "  \"" << node << "\" [label=\"" << label << "\"];" << std::endl;
 };
+void Compiler::add_dot_node_item(ostream& os, const Node* node, string item) {
+  os << "  \"" << node << "_" << item << "\" [label=\"" << item << "\"];"
+     << std::endl;
+  os << "  \"" << node << "\" -> \"" << node << "_" << item << "\";"
+     << std::endl;
+};
 void Compiler::add_dot_relation(ostream& os, const Node* from, const Node* to) {
   os << "  \"" << from << "\" -> \"" << to << "\";" << std::endl;
   to->compile_dot(os);

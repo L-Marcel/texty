@@ -62,7 +62,7 @@
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
 %type <Node*> enum struct trait impl
-%type <Node*> enum_values struct_attrs struct_attr
+%type <Node*> struct_attrs struct_attr
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
 %type <Node*> struct_allocation struct_allocation_values 
@@ -88,7 +88,7 @@
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
 %type <vector<Param>> params_self_list params_list params param
-%type <vector<string>> id_list
+%type <vector<string>> id_list enum_values
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
 %type <ArrayAllocationNode*> array_allocation
@@ -205,15 +205,17 @@ call_params: call_params COMMA expr {
 };
 
 enum: ENUM name enum_values END_ENUM SEMICOLON {
-  $$ = nullptr;
+  $$ = new EnumNode(ctx.line, $2, $3);
 } | ENUM name END_ENUM SEMICOLON {
-  $$ = nullptr;
+  $$ = new EnumNode(ctx.line, $2, vector<string>());
 };
 
 enum_values: enum_values COMMA CONST_NAME {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($3);
 } | CONST_NAME {
-  $$ = nullptr;
+  $$ = vector<string>();
+  $$.push_back($1);
 };
 
 struct: STRUCT name struct_attrs END_STRUCT SEMICOLON {
