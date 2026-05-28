@@ -4,9 +4,11 @@
 struct Type {
   TypeKind kind;
   Type* inner_type;
+  string name;
 
   Type(TypeKind kind);
   Type(TypeKind kind, Type* inner);
+  Type(TypeKind kind, string name);
   bool operator==(const Type& a) const;
   bool operator!=(const Type& a) const;
   bool operator<(const Type& a) const;

@@ -509,6 +509,7 @@ namespace yy {
       // switch
       char dummy19[sizeof (SwitchNode*)];
 
+      // basic_type
       // type
       char dummy20[sizeof (Type*)];
 
@@ -901,40 +902,41 @@ namespace yy {
         S_stmt = 145,                            // stmt
         S_return = 146,                          // return
         S_attr = 147,                            // attr
-        S_type = 148,                            // type
-        S_assign = 149,                          // assign
-        S_if = 150,                              // if
-        S_if_end = 151,                          // if_end
-        S_switch = 152,                          // switch
-        S_cases = 153,                           // cases
-        S_case_list = 154,                       // case_list
-        S_case = 155,                            // case
-        S_case_values = 156,                     // case_values
-        S_default_case = 157,                    // default_case
-        S_for = 158,                             // for
-        S_while = 159,                           // while
-        S_repeat = 160,                          // repeat
-        S_expr = 161,                            // expr
-        S_range_expr = 162,                      // range_expr
-        S_range_interval = 163,                  // range_interval
-        S_or_expr = 164,                         // or_expr
-        S_and_expr = 165,                        // and_expr
-        S_bit_or_expr = 166,                     // bit_or_expr
-        S_bit_xor_expr = 167,                    // bit_xor_expr
-        S_bit_and_expr = 168,                    // bit_and_expr
-        S_equals_expr = 169,                     // equals_expr
-        S_rel_expr = 170,                        // rel_expr
-        S_concat_expr = 171,                     // concat_expr
-        S_sum_expr = 172,                        // sum_expr
-        S_mult_expr = 173,                       // mult_expr
-        S_unary_expr = 174,                      // unary_expr
-        S_exp_expr = 175,                        // exp_expr
-        S_postfix_expr = 176,                    // postfix_expr
-        S_term = 177,                            // term
-        S_array_allocation = 178,                // array_allocation
-        S_array_allocation_values = 179,         // array_allocation_values
-        S_struct_allocation = 180,               // struct_allocation
-        S_struct_allocation_values = 181         // struct_allocation_values
+        S_basic_type = 148,                      // basic_type
+        S_type = 149,                            // type
+        S_assign = 150,                          // assign
+        S_if = 151,                              // if
+        S_if_end = 152,                          // if_end
+        S_switch = 153,                          // switch
+        S_cases = 154,                           // cases
+        S_case_list = 155,                       // case_list
+        S_case = 156,                            // case
+        S_case_values = 157,                     // case_values
+        S_default_case = 158,                    // default_case
+        S_for = 159,                             // for
+        S_while = 160,                           // while
+        S_repeat = 161,                          // repeat
+        S_expr = 162,                            // expr
+        S_range_expr = 163,                      // range_expr
+        S_range_interval = 164,                  // range_interval
+        S_or_expr = 165,                         // or_expr
+        S_and_expr = 166,                        // and_expr
+        S_bit_or_expr = 167,                     // bit_or_expr
+        S_bit_xor_expr = 168,                    // bit_xor_expr
+        S_bit_and_expr = 169,                    // bit_and_expr
+        S_equals_expr = 170,                     // equals_expr
+        S_rel_expr = 171,                        // rel_expr
+        S_concat_expr = 172,                     // concat_expr
+        S_sum_expr = 173,                        // sum_expr
+        S_mult_expr = 174,                       // mult_expr
+        S_unary_expr = 175,                      // unary_expr
+        S_exp_expr = 176,                        // exp_expr
+        S_postfix_expr = 177,                    // postfix_expr
+        S_term = 178,                            // term
+        S_array_allocation = 179,                // array_allocation
+        S_array_allocation_values = 180,         // array_allocation_values
+        S_struct_allocation = 181,               // struct_allocation
+        S_struct_allocation_values = 182         // struct_allocation_values
       };
     };
 
@@ -1076,6 +1078,7 @@ namespace yy {
         value.move< SwitchNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_basic_type: // basic_type
       case symbol_kind::S_type: // type
         value.move< Type* > (std::move (that.value));
         break;
@@ -1751,6 +1754,7 @@ switch (yykind)
         value.template destroy< SwitchNode* > ();
         break;
 
+      case symbol_kind::S_basic_type: // basic_type
       case symbol_kind::S_type: // type
         value.template destroy< Type* > ();
         break;
@@ -4065,8 +4069,8 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 2959,     ///< Last index in yytable_.
-      yynnts_ = 72,  ///< Number of nonterminal symbols.
+      yylast_ = 2953,     ///< Last index in yytable_.
+      yynnts_ = 73,  ///< Number of nonterminal symbols.
       yyfinal_ = 25 ///< Termination state number.
     };
 
@@ -4250,6 +4254,7 @@ switch (yykind)
         value.copy< SwitchNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_basic_type: // basic_type
       case symbol_kind::S_type: // type
         value.copy< Type* > (YY_MOVE (that.value));
         break;
@@ -4479,6 +4484,7 @@ switch (yykind)
         value.move< SwitchNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_basic_type: // basic_type
       case symbol_kind::S_type: // type
         value.move< Type* > (YY_MOVE (s.value));
         break;
@@ -4635,7 +4641,7 @@ switch (yykind)
 
 
 } // yy
-#line 4639 "grammar/build/syntax.tab.hh"
+#line 4645 "grammar/build/syntax.tab.hh"
 
 
 

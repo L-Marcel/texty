@@ -85,7 +85,7 @@
 %type <vector<ExpressionNode*>> case_values
 %type <vector<CaseNode*>> cases case_list
 %type <Node*> root program program_slice stmt subprogram
-%type <Type*> type
+%type <Type*> type basic_type
 %type <vector<pair<string, Type>>> params_self_list params_list params 
 %type <vector<pair<string, Type>>> param struct_attrs struct_attr
 %type <vector<string>> id_list enum_values
@@ -188,7 +188,7 @@ id_list: id_list COMMA ID {
 
 subprogram_call: access call_params_list {
   $$ = new SubprogramCallNode(ctx.line, $1, $2);
-} | type call_params_list {
+} | basic_type call_params_list {
   $$ = new SubprogramCallNode(ctx.line, *$1, $2);
 };
 
@@ -386,7 +386,7 @@ attr: VAR ID COLON type ATTR expr {
   $$ = new AttrNode(ctx.line, $2, true, *$4, $6);
 };
 
-type: TYPE_INT {
+basic_type: TYPE_INT {
   $$ = new Type(TypeKind::INT);
 } | TYPE_FLOAT {
   $$ = new Type(TypeKind::FLOAT);
@@ -402,12 +402,18 @@ type: TYPE_INT {
   $$ = new Type(TypeKind::CHAR);
 } | TYPE_BOOL {
   $$ = new Type(TypeKind::BOOL);
+};
+
+type: basic_type {
+  $$ = $1;
 } | type LEFT_BRACKET RIGHT_BRACKET {
   $$ = new Type(TypeKind::ARRAY, $1);
 } | TYPE_POINTER LT type GT {
   $$ = new Type(TypeKind::POINTER, $3);
 } | TYPE_OPTION LT type GT {
   $$ = new Type(TypeKind::OPTION, $3);
+} | name {
+  $$ = new Type(TypeKind::NAMED, $1);
 };
 
 assign: access ATTR expr {
