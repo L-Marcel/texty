@@ -3,7 +3,7 @@
 #include "../../references/references.hpp"
 
 // Params
-string params_to_string(vector<Param> params) {
+string params_to_string(vector<pair<string, Type>> params) {
   string text = "";
   for (size_t i = 0; i < params.size(); i++) {
     text += params[i].first + ": " + params[i].second.to_string();

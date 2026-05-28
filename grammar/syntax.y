@@ -61,11 +61,10 @@
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
-%type <Node*> enum struct trait impl
-%type <Node*> struct_attrs struct_attr
+%type <Node*> trait impl
 %type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
 %type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> struct_allocation struct_allocation_values 
+%type <Node*> struct_allocation struct_allocation_values
 
 %type <string> id name
 %type <vector<Node*>> stmts 
@@ -87,8 +86,11 @@
 %type <vector<CaseNode*>> cases case_list
 %type <Node*> root program program_slice stmt subprogram
 %type <Type*> type
-%type <vector<Param>> params_self_list params_list params param
+%type <vector<pair<string, Type>>> params_self_list params_list params 
+%type <vector<pair<string, Type>>> param struct_attrs struct_attr
 %type <vector<string>> id_list enum_values
+%type <EnumNode*> enum
+%type <StructNode*> struct
 %type <FunctionNode*> fn
 %type <ProcedureNode*> proc
 %type <ArrayAllocationNode*> array_allocation
@@ -148,13 +150,13 @@ proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON {
 params_self_list: LEFT_PAREN SELF SEMICOLON params RIGHT_PAREN {
   $$ = $4;
 } | LEFT_PAREN SELF RIGHT_PAREN {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
 };
 
 params_list: LEFT_PAREN params RIGHT_PAREN {
   $$ = $2;
 } | LEFT_PAREN RIGHT_PAREN {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
 };
 
 params: params SEMICOLON param {
@@ -163,14 +165,14 @@ params: params SEMICOLON param {
     $$.push_back($3[i]);
   };
 } | param {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
   for (size_t i = 0; i < $1.size(); i++) {
     $$.push_back($1[i]);
   };
 };
 
 param: id_list COLON type {
-  $$ = vector<Param>();
+  $$ = vector<pair<string, Type>>();
   for (size_t i = 0; i < $1.size(); i++) {
     $$.push_back({$1[i], *$3});
   };
@@ -219,19 +221,25 @@ enum_values: enum_values COMMA CONST_NAME {
 };
 
 struct: STRUCT name struct_attrs END_STRUCT SEMICOLON {
-  $$ = nullptr;
+  $$ = new StructNode(ctx.line, $2, $3);
 } | STRUCT name END_STRUCT SEMICOLON {
-  $$ = nullptr;
+  $$ = new StructNode(ctx.line, $2, vector<pair<string, Type>>());
 };
 
 struct_attrs: struct_attrs struct_attr SEMICOLON {
-  $$ = nullptr;
+  $$ = $1;
+  for (size_t i = 0; i < $2.size(); i++) {
+    $$.push_back($2[i]);
+  };
 } | struct_attr SEMICOLON {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 struct_attr: id_list COLON type {
-  $$ = nullptr;
+  $$ = vector<pair<string, Type>>();
+  for (size_t i = 0; i < $1.size(); i++) {
+    $$.push_back({$1[i], *$3});
+  };
 };
 
 trait: TRAIT name trait_subprograms END_TRAIT SEMICOLON {

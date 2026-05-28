@@ -1,5 +1,6 @@
 #pragma once
 #include "../statements/switch.hpp"
+#include "../subprogram/call.hpp"
 
 struct EnumNode : public Node {
   vector<string> values;

@@ -4,6 +4,6 @@
 #include "nodes/evaluation/literals/char.hpp"
 #include "nodes/evaluation/specials/array_allocation.hpp"
 #include "nodes/statements/switch.hpp"
-#include "nodes/structures/enum.hpp"
+#include "nodes/structures/struct.hpp"
 #include "nodes/subprogram/call.hpp"
 #include "references/references.hpp"

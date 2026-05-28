@@ -1,5 +1,5 @@
 enum State
-OPEN,
-HALF_OPEN,
-CLOSED
+  OPEN,
+  HALF_OPEN,
+  CLOSED
 endenum;
