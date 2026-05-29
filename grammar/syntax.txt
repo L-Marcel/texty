@@ -13,7 +13,7 @@
 <param> -> <id_list> COLON <type>
 <id_list> -> <id_list> COMMA ID | ID
 
-<subprogram_call> -> <access> <call_params_list>
+<subprogram_call> -> <access> <call_params_list> | <basic_type> <call_params_list>
 <call_params_list> -> LEFT_PAREN <call_params> RIGHT_PAREN | LEFT_PAREN RIGHT_PAREN
 <call_params> -> <call_params> COMMA <expr> | <expr>
 
@@ -85,17 +85,19 @@
 <return> -> RETURN <expr>
 <attr> -> VAR ID COLON <type> ATTR <expr>
         | CONST ID COLON <type> ATTR <expr>
-<type> -> TYPE_INT
-        | TYPE_FLOAT
-        | TYPE_DOUBLE
-        | TYPE_LONG
-        | TYPE_BYTE
-        | TYPE_STRING
-        | TYPE_CHAR
-        | TYPE_BOOL 
-        | <type> LEFT_BRACKET RIGHT_BRACKET 
+<basic_type> -> TYPE_INT 
+              | TYPE_FLOAT 
+              | TYPE_DOUBLE 
+              | TYPE_LONG
+              | TYPE_BYTE 
+              | TYPE_STRING 
+              | TYPE_CHAR 
+              | TYPE_BOOL
+<type> -> <basic_type>
+        | <type> LEFT_BRACKET RIGHT_BRACKET
         | TYPE_POINTER LT <type> GT
         | TYPE_OPTION LT <type> GT
+        | <name> 
 <assign> -> <access> ATTR <expr>
           | <access> AND_ATTR <expr>
           | <access> OR_ATTR <expr>
@@ -114,20 +116,18 @@
       | IF SOME ID IN <access> THEN <stmts> <if_end>
 <if_end> -> ELIF <expr> THEN <stmts> <if_end>
           | ELIF SOME ID IN <access> THEN <stmts> <if_end>
-          | ELIF NONE IN <access> THEN <stmts> <if_end>
           | ELSE <stmts> END_IF  
           | END_IF
 <switch> -> SWITCH <expr> <cases> END_SWITCH
 <cases> -> <case_list> <default_case>
-         | <case_list>
          | <default_case>
 <case_list> -> <case_list> <case>
              | <case>
 <case> -> CASE <case_values> COLON <stmts>
         | CASE SOME ID COLON <stmts>
         | CASE NONE COLON <stmts>
-<case_values> -> <case_values> COMMA <access>
-               | <access>
+<case_values> -> <case_values> COMMA <term>
+               | <term>
 <default_case> -> DEFAULT COLON <stmts>
 
 <!-- Estruturas de repetição -->
