@@ -16,6 +16,13 @@ struct User
   address: Address;
 endstruct;
 
+trait Test
+  fn a(): int;
+  fn b(self): int;
+  proc c();
+  proc d(self);
+endtrait;
+
 fn main(): int
 	var user: User = new User {
     id: 0,

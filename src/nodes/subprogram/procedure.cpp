@@ -34,4 +34,7 @@ Type ProcedureNode::get_type() const { return Type(TypeKind::VOID); };
 // Construtores
 ProcedureNode::ProcedureNode(int line, string name,
                              vector<pair<string, Type>> params)
-    : Node(line, name), params(params) {};
+    : SubprogramNode(line, name, params) {};
+ProcedureNode::ProcedureNode(int line, string name,
+                             vector<pair<string, Type>> params, bool self)
+    : SubprogramNode(line, name, params, self) {};

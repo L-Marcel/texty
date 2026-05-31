@@ -1,0 +1,67 @@
+struct Address
+  street, city, country: string;
+endstruct;
+
+struct User
+  id: long;
+  age: int;
+  name, password, bio: string;
+  admin: bool;
+  height, weight: float;
+  balance: double;
+  gender: char;
+  version: int;
+  permission: byte;
+  supervisor: option<User>;
+  address: Address;
+endstruct;
+
+trait Test
+  fn a(): int;
+  fn b(self): int;
+  proc c();
+  proc d(self);
+endtrait;
+
+impl Test
+endimpl;
+
+impl Test 
+  fn a(): int
+    return 0;
+  endfn;
+  fn b(self): int
+    return self.a();
+  endfn;
+  proc c() endproc;
+  proc d(self)
+    print("{%int}", self.b());
+  endproc;
+endimpl;
+
+impl Test for User
+  fn a(): int
+    return 0;
+  endfn;
+  fn b(self): int
+    return self.age;
+  endfn;
+  proc c() endproc;
+  proc d(self)
+    print("{%int}", self.age);
+  endproc;
+endimpl;
+
+impl Test for User
+endimpl;
+
+fn main(): int
+	var user: User = new User {
+    id: 0,
+    age: 20,
+    gender: 'm'
+  };
+  continue; # apenas teste sintático
+  break; # outro teste sintático
+	return 0;
+endfn;

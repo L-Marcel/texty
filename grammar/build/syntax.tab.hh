@@ -464,6 +464,8 @@ namespace yy {
       char dummy9[sizeof (ForNode*)];
 
       // fn
+      // trait_fn
+      // impl_fn
       char dummy10[sizeof (FunctionNode*)];
 
       // if_end
@@ -472,46 +474,49 @@ namespace yy {
       // if
       char dummy12[sizeof (IfNode*)];
 
+      // impl
+      char dummy13[sizeof (ImplNode*)];
+
       // root
       // program
       // program_slice
-      // subprogram
-      // trait
-      // trait_subprograms
-      // trait_subprogram
-      // trait_fn
-      // trait_proc
-      // impl
-      // impl_subprograms
-      // impl_subprogram
-      // impl_fn
-      // impl_proc
       // stmt
-      // struct_allocation
-      // struct_allocation_values
-      char dummy13[sizeof (Node*)];
+      char dummy14[sizeof (Node*)];
 
       // proc
-      char dummy14[sizeof (ProcedureNode*)];
+      // trait_proc
+      // impl_proc
+      char dummy15[sizeof (ProcedureNode*)];
 
       // range_expr
-      char dummy15[sizeof (RangeNode*)];
+      char dummy16[sizeof (RangeNode*)];
 
       // return
-      char dummy16[sizeof (ReturnNode*)];
+      char dummy17[sizeof (ReturnNode*)];
+
+      // struct_allocation
+      char dummy18[sizeof (StructAllocationNode*)];
 
       // struct
-      char dummy17[sizeof (StructNode*)];
+      char dummy19[sizeof (StructNode*)];
 
       // subprogram_call
-      char dummy18[sizeof (SubprogramCallNode*)];
+      char dummy20[sizeof (SubprogramCallNode*)];
+
+      // subprogram
+      // trait_subprogram
+      // impl_subprogram
+      char dummy21[sizeof (SubprogramNode*)];
 
       // switch
-      char dummy19[sizeof (SwitchNode*)];
+      char dummy22[sizeof (SwitchNode*)];
+
+      // trait
+      char dummy23[sizeof (TraitNode*)];
 
       // basic_type
       // type
-      char dummy20[sizeof (Type*)];
+      char dummy24[sizeof (Type*)];
 
       // TYPE_BYTE
       // TYPE_INT
@@ -521,32 +526,34 @@ namespace yy {
       // TYPE_BOOL
       // TYPE_STRING
       // TYPE_CHAR
-      char dummy21[sizeof (TypeKind)];
+      // TYPE_POINTER
+      // TYPE_OPTION
+      char dummy25[sizeof (TypeKind)];
 
       // while
       // repeat
-      char dummy22[sizeof (WhileNode*)];
+      char dummy26[sizeof (WhileNode*)];
 
       // BOOL
-      char dummy23[sizeof (bool)];
+      char dummy27[sizeof (bool)];
 
       // CHAR
-      char dummy24[sizeof (char)];
+      char dummy28[sizeof (char)];
 
       // DOUBLE
-      char dummy25[sizeof (double)];
+      char dummy29[sizeof (double)];
 
       // FLOAT
-      char dummy26[sizeof (float)];
+      char dummy30[sizeof (float)];
 
       // INT
-      char dummy27[sizeof (int32_t)];
+      char dummy31[sizeof (int32_t)];
 
       // LONG
-      char dummy28[sizeof (int64_t)];
+      char dummy32[sizeof (int64_t)];
 
       // range_interval
-      char dummy29[sizeof (pair<RangeInclusionType, RangeInclusionType>)];
+      char dummy33[sizeof (pair<RangeInclusionType, RangeInclusionType>)];
 
       // ID
       // NAME
@@ -554,23 +561,30 @@ namespace yy {
       // STRING
       // id
       // name
-      char dummy30[sizeof (string)];
+      char dummy34[sizeof (string)];
 
       // BYTE
-      char dummy31[sizeof (uint8_t)];
+      char dummy35[sizeof (uint8_t)];
 
       // cases
       // case_list
-      char dummy32[sizeof (vector<CaseNode*>)];
+      char dummy36[sizeof (vector<CaseNode*>)];
 
       // call_params_list
       // call_params
       // case_values
       // array_allocation_values
-      char dummy33[sizeof (vector<ExpressionNode*>)];
+      char dummy37[sizeof (vector<ExpressionNode*>)];
 
       // stmts
-      char dummy34[sizeof (vector<Node*>)];
+      char dummy38[sizeof (vector<Node*>)];
+
+      // trait_subprograms
+      // impl_subprograms
+      char dummy39[sizeof (vector<SubprogramNode*>)];
+
+      // struct_allocation_values
+      char dummy40[sizeof (vector<pair<string, ExpressionNode*>>)];
 
       // params_self_list
       // params_list
@@ -578,11 +592,11 @@ namespace yy {
       // param
       // struct_attrs
       // struct_attr
-      char dummy35[sizeof (vector<pair<string, Type>>)];
+      char dummy41[sizeof (vector<pair<string, Type>>)];
 
       // id_list
       // enum_values
-      char dummy36[sizeof (vector<string>)];
+      char dummy42[sizeof (vector<string>)];
     };
 
     /// The size of the largest semantic type.
@@ -1023,6 +1037,8 @@ namespace yy {
         break;
 
       case symbol_kind::S_fn: // fn
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_impl_fn: // impl_fn
         value.move< FunctionNode* > (std::move (that.value));
         break;
 
@@ -1034,27 +1050,20 @@ namespace yy {
         value.move< IfNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_impl: // impl
+        value.move< ImplNode* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
-      case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_trait: // trait
-      case symbol_kind::S_trait_subprograms: // trait_subprograms
-      case symbol_kind::S_trait_subprogram: // trait_subprogram
-      case symbol_kind::S_trait_fn: // trait_fn
-      case symbol_kind::S_trait_proc: // trait_proc
-      case symbol_kind::S_impl: // impl
-      case symbol_kind::S_impl_subprograms: // impl_subprograms
-      case symbol_kind::S_impl_subprogram: // impl_subprogram
-      case symbol_kind::S_impl_fn: // impl_fn
-      case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_struct_allocation: // struct_allocation
-      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
         value.move< Node* > (std::move (that.value));
         break;
 
       case symbol_kind::S_proc: // proc
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl_proc: // impl_proc
         value.move< ProcedureNode* > (std::move (that.value));
         break;
 
@@ -1066,6 +1075,10 @@ namespace yy {
         value.move< ReturnNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_struct_allocation: // struct_allocation
+        value.move< StructAllocationNode* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_struct: // struct
         value.move< StructNode* > (std::move (that.value));
         break;
@@ -1074,8 +1087,18 @@ namespace yy {
         value.move< SubprogramCallNode* > (std::move (that.value));
         break;
 
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+        value.move< SubprogramNode* > (std::move (that.value));
+        break;
+
       case symbol_kind::S_switch: // switch
         value.move< SwitchNode* > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_trait: // trait
+        value.move< TraitNode* > (std::move (that.value));
         break;
 
       case symbol_kind::S_basic_type: // basic_type
@@ -1091,6 +1114,8 @@ namespace yy {
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
+      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
+      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
         value.move< TypeKind > (std::move (that.value));
         break;
 
@@ -1154,6 +1179,15 @@ namespace yy {
 
       case symbol_kind::S_stmts: // stmts
         value.move< vector<Node*> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+        value.move< vector<SubprogramNode*> > (std::move (that.value));
+        break;
+
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.move< vector<pair<string, ExpressionNode*>> > (std::move (that.value));
         break;
 
       case symbol_kind::S_params_self_list: // params_self_list
@@ -1336,6 +1370,18 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, ImplNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const ImplNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, Node*&& v)
         : Base (t)
         , value (std::move (v))
@@ -1384,6 +1430,18 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, StructAllocationNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const StructAllocationNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, StructNode*&& v)
         : Base (t)
         , value (std::move (v))
@@ -1408,12 +1466,36 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, SubprogramNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const SubprogramNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, SwitchNode*&& v)
         : Base (t)
         , value (std::move (v))
       {}
 #else
       basic_symbol (typename Base::kind_type t, const SwitchNode*& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, TraitNode*&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const TraitNode*& v)
         : Base (t)
         , value (v)
       {}
@@ -1600,6 +1682,30 @@ namespace yy {
 #endif
 
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, vector<SubprogramNode*>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const vector<SubprogramNode*>& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, vector<pair<string, ExpressionNode*>>&& v)
+        : Base (t)
+        , value (std::move (v))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const vector<pair<string, ExpressionNode*>>& v)
+        : Base (t)
+        , value (v)
+      {}
+#endif
+
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, vector<pair<string, Type>>&& v)
         : Base (t)
         , value (std::move (v))
@@ -1699,6 +1805,8 @@ switch (yykind)
         break;
 
       case symbol_kind::S_fn: // fn
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_impl_fn: // impl_fn
         value.template destroy< FunctionNode* > ();
         break;
 
@@ -1710,27 +1818,20 @@ switch (yykind)
         value.template destroy< IfNode* > ();
         break;
 
+      case symbol_kind::S_impl: // impl
+        value.template destroy< ImplNode* > ();
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
-      case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_trait: // trait
-      case symbol_kind::S_trait_subprograms: // trait_subprograms
-      case symbol_kind::S_trait_subprogram: // trait_subprogram
-      case symbol_kind::S_trait_fn: // trait_fn
-      case symbol_kind::S_trait_proc: // trait_proc
-      case symbol_kind::S_impl: // impl
-      case symbol_kind::S_impl_subprograms: // impl_subprograms
-      case symbol_kind::S_impl_subprogram: // impl_subprogram
-      case symbol_kind::S_impl_fn: // impl_fn
-      case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_struct_allocation: // struct_allocation
-      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
         value.template destroy< Node* > ();
         break;
 
       case symbol_kind::S_proc: // proc
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl_proc: // impl_proc
         value.template destroy< ProcedureNode* > ();
         break;
 
@@ -1742,6 +1843,10 @@ switch (yykind)
         value.template destroy< ReturnNode* > ();
         break;
 
+      case symbol_kind::S_struct_allocation: // struct_allocation
+        value.template destroy< StructAllocationNode* > ();
+        break;
+
       case symbol_kind::S_struct: // struct
         value.template destroy< StructNode* > ();
         break;
@@ -1750,8 +1855,18 @@ switch (yykind)
         value.template destroy< SubprogramCallNode* > ();
         break;
 
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+        value.template destroy< SubprogramNode* > ();
+        break;
+
       case symbol_kind::S_switch: // switch
         value.template destroy< SwitchNode* > ();
+        break;
+
+      case symbol_kind::S_trait: // trait
+        value.template destroy< TraitNode* > ();
         break;
 
       case symbol_kind::S_basic_type: // basic_type
@@ -1767,6 +1882,8 @@ switch (yykind)
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
+      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
+      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
         value.template destroy< TypeKind > ();
         break;
 
@@ -1830,6 +1947,15 @@ switch (yykind)
 
       case symbol_kind::S_stmts: // stmts
         value.template destroy< vector<Node*> > ();
+        break;
+
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+        value.template destroy< vector<SubprogramNode*> > ();
+        break;
+
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.template destroy< vector<pair<string, ExpressionNode*>> > ();
         break;
 
       case symbol_kind::S_params_self_list: // params_self_list
@@ -1942,7 +2068,7 @@ switch (yykind)
 #if !defined _MSC_VER || defined __clang__
         YY_ASSERT (tok == token::YYEOF
                    || (token::YYerror <= tok && tok <= token::YYUNDEF)
-                   || (token::TYPE_POINTER <= tok && tok <= token::RETURN));
+                   || (token::DECREMENT <= tok && tok <= token::RETURN));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -1954,7 +2080,7 @@ switch (yykind)
 #endif
       {
 #if !defined _MSC_VER || defined __clang__
-        YY_ASSERT ((token::TYPE_BYTE <= tok && tok <= token::TYPE_CHAR));
+        YY_ASSERT ((token::TYPE_BYTE <= tok && tok <= token::TYPE_OPTION));
 #endif
       }
 #if 201103L <= YY_CPLUSPLUS
@@ -2433,31 +2559,31 @@ switch (yykind)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_POINTER ()
+      make_TYPE_POINTER (TypeKind v)
       {
-        return symbol_type (token::TYPE_POINTER);
+        return symbol_type (token::TYPE_POINTER, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_POINTER ()
+      make_TYPE_POINTER (const TypeKind& v)
       {
-        return symbol_type (token::TYPE_POINTER);
+        return symbol_type (token::TYPE_POINTER, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TYPE_OPTION ()
+      make_TYPE_OPTION (TypeKind v)
       {
-        return symbol_type (token::TYPE_OPTION);
+        return symbol_type (token::TYPE_OPTION, std::move (v));
       }
 #else
       static
       symbol_type
-      make_TYPE_OPTION ()
+      make_TYPE_OPTION (const TypeKind& v)
       {
-        return symbol_type (token::TYPE_OPTION);
+        return symbol_type (token::TYPE_OPTION, v);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -4069,7 +4195,7 @@ switch (yykind)
     /// Constants.
     enum
     {
-      yylast_ = 2953,     ///< Last index in yytable_.
+      yylast_ = 2840,     ///< Last index in yytable_.
       yynnts_ = 73,  ///< Number of nonterminal symbols.
       yyfinal_ = 25 ///< Termination state number.
     };
@@ -4199,6 +4325,8 @@ switch (yykind)
         break;
 
       case symbol_kind::S_fn: // fn
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_impl_fn: // impl_fn
         value.copy< FunctionNode* > (YY_MOVE (that.value));
         break;
 
@@ -4210,27 +4338,20 @@ switch (yykind)
         value.copy< IfNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_impl: // impl
+        value.copy< ImplNode* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
-      case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_trait: // trait
-      case symbol_kind::S_trait_subprograms: // trait_subprograms
-      case symbol_kind::S_trait_subprogram: // trait_subprogram
-      case symbol_kind::S_trait_fn: // trait_fn
-      case symbol_kind::S_trait_proc: // trait_proc
-      case symbol_kind::S_impl: // impl
-      case symbol_kind::S_impl_subprograms: // impl_subprograms
-      case symbol_kind::S_impl_subprogram: // impl_subprogram
-      case symbol_kind::S_impl_fn: // impl_fn
-      case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_struct_allocation: // struct_allocation
-      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
         value.copy< Node* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_proc: // proc
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl_proc: // impl_proc
         value.copy< ProcedureNode* > (YY_MOVE (that.value));
         break;
 
@@ -4242,6 +4363,10 @@ switch (yykind)
         value.copy< ReturnNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_struct_allocation: // struct_allocation
+        value.copy< StructAllocationNode* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_struct: // struct
         value.copy< StructNode* > (YY_MOVE (that.value));
         break;
@@ -4250,8 +4375,18 @@ switch (yykind)
         value.copy< SubprogramCallNode* > (YY_MOVE (that.value));
         break;
 
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+        value.copy< SubprogramNode* > (YY_MOVE (that.value));
+        break;
+
       case symbol_kind::S_switch: // switch
         value.copy< SwitchNode* > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_trait: // trait
+        value.copy< TraitNode* > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_basic_type: // basic_type
@@ -4267,6 +4402,8 @@ switch (yykind)
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
+      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
+      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
         value.copy< TypeKind > (YY_MOVE (that.value));
         break;
 
@@ -4330,6 +4467,15 @@ switch (yykind)
 
       case symbol_kind::S_stmts: // stmts
         value.copy< vector<Node*> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+        value.copy< vector<SubprogramNode*> > (YY_MOVE (that.value));
+        break;
+
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.copy< vector<pair<string, ExpressionNode*>> > (YY_MOVE (that.value));
         break;
 
       case symbol_kind::S_params_self_list: // params_self_list
@@ -4429,6 +4575,8 @@ switch (yykind)
         break;
 
       case symbol_kind::S_fn: // fn
+      case symbol_kind::S_trait_fn: // trait_fn
+      case symbol_kind::S_impl_fn: // impl_fn
         value.move< FunctionNode* > (YY_MOVE (s.value));
         break;
 
@@ -4440,27 +4588,20 @@ switch (yykind)
         value.move< IfNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_impl: // impl
+        value.move< ImplNode* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_root: // root
       case symbol_kind::S_program: // program
       case symbol_kind::S_program_slice: // program_slice
-      case symbol_kind::S_subprogram: // subprogram
-      case symbol_kind::S_trait: // trait
-      case symbol_kind::S_trait_subprograms: // trait_subprograms
-      case symbol_kind::S_trait_subprogram: // trait_subprogram
-      case symbol_kind::S_trait_fn: // trait_fn
-      case symbol_kind::S_trait_proc: // trait_proc
-      case symbol_kind::S_impl: // impl
-      case symbol_kind::S_impl_subprograms: // impl_subprograms
-      case symbol_kind::S_impl_subprogram: // impl_subprogram
-      case symbol_kind::S_impl_fn: // impl_fn
-      case symbol_kind::S_impl_proc: // impl_proc
       case symbol_kind::S_stmt: // stmt
-      case symbol_kind::S_struct_allocation: // struct_allocation
-      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
         value.move< Node* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_proc: // proc
+      case symbol_kind::S_trait_proc: // trait_proc
+      case symbol_kind::S_impl_proc: // impl_proc
         value.move< ProcedureNode* > (YY_MOVE (s.value));
         break;
 
@@ -4472,6 +4613,10 @@ switch (yykind)
         value.move< ReturnNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_struct_allocation: // struct_allocation
+        value.move< StructAllocationNode* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_struct: // struct
         value.move< StructNode* > (YY_MOVE (s.value));
         break;
@@ -4480,8 +4625,18 @@ switch (yykind)
         value.move< SubprogramCallNode* > (YY_MOVE (s.value));
         break;
 
+      case symbol_kind::S_subprogram: // subprogram
+      case symbol_kind::S_trait_subprogram: // trait_subprogram
+      case symbol_kind::S_impl_subprogram: // impl_subprogram
+        value.move< SubprogramNode* > (YY_MOVE (s.value));
+        break;
+
       case symbol_kind::S_switch: // switch
         value.move< SwitchNode* > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_trait: // trait
+        value.move< TraitNode* > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_basic_type: // basic_type
@@ -4497,6 +4652,8 @@ switch (yykind)
       case symbol_kind::S_TYPE_BOOL: // TYPE_BOOL
       case symbol_kind::S_TYPE_STRING: // TYPE_STRING
       case symbol_kind::S_TYPE_CHAR: // TYPE_CHAR
+      case symbol_kind::S_TYPE_POINTER: // TYPE_POINTER
+      case symbol_kind::S_TYPE_OPTION: // TYPE_OPTION
         value.move< TypeKind > (YY_MOVE (s.value));
         break;
 
@@ -4560,6 +4717,15 @@ switch (yykind)
 
       case symbol_kind::S_stmts: // stmts
         value.move< vector<Node*> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_trait_subprograms: // trait_subprograms
+      case symbol_kind::S_impl_subprograms: // impl_subprograms
+        value.move< vector<SubprogramNode*> > (YY_MOVE (s.value));
+        break;
+
+      case symbol_kind::S_struct_allocation_values: // struct_allocation_values
+        value.move< vector<pair<string, ExpressionNode*>> > (YY_MOVE (s.value));
         break;
 
       case symbol_kind::S_params_self_list: // params_self_list
@@ -4641,7 +4807,7 @@ switch (yykind)
 
 
 } // yy
-#line 4645 "grammar/build/syntax.tab.hh"
+#line 4811 "grammar/build/syntax.tab.hh"
 
 
 

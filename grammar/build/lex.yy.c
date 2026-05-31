@@ -950,12 +950,12 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 22 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_POINTER(); }
+{ return yy::parser::make_TYPE_POINTER(TypeKind::POINTER); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 23 "grammar/lexical.l"
-{ return yy::parser::make_TYPE_OPTION(); }
+{ return yy::parser::make_TYPE_OPTION(TypeKind::OPTION); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP

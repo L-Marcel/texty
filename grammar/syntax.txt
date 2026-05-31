@@ -36,16 +36,15 @@
 <trait_subprograms> -> <trait_subprograms> <trait_subprogram>
                      | <trait_subprogram>
 <trait_subprogram> -> <trait_fn> | <trait_proc>
-<trait_fn> -> FUNCTION ID <params_self_list> COLON <type> END_FUNCTION SEMICOLON
-            | FUNCTION ID <params_list> COLON <type> END_FUNCTION SEMICOLON
-            | <fn>
-<trait_proc> -> PROCEDURE ID <params_self_list> END_PROCEDURE SEMICOLON
-              | <proc>
+<trait_fn> -> FUNCTION ID <params_self_list> COLON <type> SEMICOLON
+            | FUNCTION ID <params_list> COLON <type> SEMICOLON
+<trait_proc> -> PROCEDURE ID <params_self_list> SEMICOLON
+              | PROCEDURE ID <params_list> SEMICOLON
 
 <!-- Implementações -->
 <impl> -> IMPL <name> <impl_subprograms> END_IMPL SEMICOLON
         | IMPL <name> END_IMPL SEMICOLON
-        | IMPL <name> <impl_subprograms> FOR <name> END_IMPL SEMICOLON
+        | IMPL <name> FOR <name> <impl_subprograms> END_IMPL SEMICOLON
         | IMPL <name> FOR <name> END_IMPL SEMICOLON
 <impl_subprograms> -> <impl_subprograms> <impl_subprogram>
                      | <impl_subprogram>
@@ -212,7 +211,7 @@
                     | NEW <type> LEFT_BRACKET <expr> RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
 <array_allocation_values> -> <array_allocation_values> COMMA <expr> 
                            | <expr>
-<struct_allocation> -> NEW <type> LEFT_BRACE <struct_allocation_values> RIGHT_BRACE
-                     | NEW <type> LEFT_BRACE RIGHT_BRACE 
+<struct_allocation> -> NEW <name> LEFT_BRACE <struct_allocation_values> RIGHT_BRACE
+                     | NEW <name> LEFT_BRACE RIGHT_BRACE 
 <struct_allocation_values> -> <struct_allocation_values> COMMA ID COLON <expr> 
                             | ID COLON <expr>
