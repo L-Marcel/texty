@@ -36,7 +36,9 @@ $(BISON_CC) $(BISON_HH): $(GRAMMAR_DIR)/syntax.y
 
 $(FLEX_C): $(GRAMMAR_DIR)/lexical.l $(BISON_HH)
 	@mkdir -p $(GRAMMAR_BUILD_DIR)
-	flex -o $(FLEX_C) $(GRAMMAR_DIR)/lexical.l
+	flex --header-file=$(GRAMMAR_BUILD_DIR)/lex.yy.h -o $(FLEX_C) $(GRAMMAR_DIR)/lexical.l
+
+$(OBJS): $(BISON_CC) $(FLEX_C)
 
 check: 
 	bison -Wcounterexamples grammar/syntax.y
