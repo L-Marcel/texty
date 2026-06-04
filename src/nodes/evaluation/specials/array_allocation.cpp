@@ -4,7 +4,9 @@
 void ArrayAllocationNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(
       os, this,
-      string(magic_enum::enum_name(this->get_type().inner_type->kind)) + "[]");
+      "new " +
+          string(magic_enum::enum_name(this->get_type().inner_type->kind)) +
+          "[]");
   Compiler::add_dot_relation(os, this, this->size_expression);
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children.at(i));

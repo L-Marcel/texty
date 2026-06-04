@@ -1,7 +1,7 @@
 #pragma once
 #include "../access/access.hpp"
 #include "../evaluation/expression.hpp"
-#include "procedure.hpp"
+#include "impl.hpp"
 
 struct SubprogramCallNode : public Node {
   CallType call_type;

@@ -1,3 +1,7 @@
+struct Address
+  street, city, country: string;
+endstruct;
+
 struct User
   id: long;
   age: int;
@@ -8,4 +12,15 @@ struct User
   gender: char;
   version: int;
   permission: byte;
+  supervisor: option<User>;
+  address: Address;
 endstruct;
+
+fn main(): int
+	var user: User = new User {
+    id: 0,
+    age: 20,
+    gender: 'm'
+  };
+	return 0;
+endfn;

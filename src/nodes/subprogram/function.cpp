@@ -2,19 +2,6 @@
 
 #include "../../references/references.hpp"
 
-// Params
-string params_to_string(vector<pair<string, Type>> params) {
-  string text = "";
-  for (size_t i = 0; i < params.size(); i++) {
-    text += params[i].first + ": " + params[i].second.to_string();
-    if (i != params.size() - 1) {
-      text += ", ";
-    };
-  };
-
-  return text;
-};
-
 // Debug
 void FunctionNode::compile_dot(ostream& os) const {
   string params = params_to_string(this->params);
@@ -24,7 +11,7 @@ void FunctionNode::compile_dot(ostream& os) const {
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children.at(i));
   };
-}
+};
 
 // Código
 void FunctionNode::compile_code(ostream& os) const {
@@ -40,7 +27,7 @@ void FunctionNode::compile_code(ostream& os) const {
     this->children.at(i)->compile_code(os);
   };
   References::get_instance()->pop_scope();
-}
+};
 
 // Tipagem
 Type FunctionNode::get_type() const { return this->type; };
@@ -48,4 +35,7 @@ Type FunctionNode::get_type() const { return this->type; };
 // Construtores
 FunctionNode::FunctionNode(int line, string name, Type type,
                            vector<pair<string, Type>> params)
-    : Node(line, name), type(type), params(params) {};
+    : SubprogramNode(line, name, params), type(type) {};
+FunctionNode::FunctionNode(int line, string name, Type type,
+                           vector<pair<string, Type>> params, bool self)
+    : SubprogramNode(line, name, params, self), type(type) {};

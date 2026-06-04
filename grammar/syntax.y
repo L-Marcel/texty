@@ -46,8 +46,8 @@
 %token <TypeKind>    TYPE_BOOL
 %token <TypeKind>    TYPE_STRING
 %token <TypeKind>    TYPE_CHAR
-%token TYPE_POINTER
-%token TYPE_OPTION
+%token <TypeKind>    TYPE_POINTER
+%token <TypeKind>    TYPE_OPTION
 
 %token DECREMENT INCREMENT EXP EQ AND_ATTR OR_ATTR CONCAT
 %token LAZY_AND_ATTR LAZY_OR_ATTR MOD_ATTR XOR_ATTR PLUS_ATTR
@@ -61,11 +61,10 @@
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
 %token IMPL END_IMPL TRAIT END_TRAIT RETURN
 
-%type <Node*> trait impl
-%type <Node*> trait_subprograms trait_subprogram trait_fn trait_proc
-%type <Node*> impl_subprograms impl_subprogram impl_fn impl_proc
-%type <Node*> struct_allocation struct_allocation_values
-
+%type <TraitNode*> trait
+%type <ImplNode*> impl
+%type <SubprogramNode*> trait_subprogram impl_subprogram
+%type <vector<SubprogramNode*>> trait_subprograms impl_subprograms
 %type <string> id name
 %type <vector<Node*>> stmts 
 %type <AccessBaseNode*> access_base
@@ -84,17 +83,20 @@
 %type <CaseNode*> case default_case
 %type <vector<ExpressionNode*>> case_values
 %type <vector<CaseNode*>> cases case_list
-%type <Node*> root program program_slice stmt subprogram
-%type <Type*> type
+%type <Node*> root program program_slice stmt
+%type <SubprogramNode*> subprogram
+%type <Type*> type basic_type
 %type <vector<pair<string, Type>>> params_self_list params_list params 
 %type <vector<pair<string, Type>>> param struct_attrs struct_attr
 %type <vector<string>> id_list enum_values
 %type <EnumNode*> enum
 %type <StructNode*> struct
-%type <FunctionNode*> fn
-%type <ProcedureNode*> proc
+%type <FunctionNode*> fn trait_fn impl_fn
+%type <ProcedureNode*> proc trait_proc impl_proc
 %type <ArrayAllocationNode*> array_allocation
 %type <vector<ExpressionNode*>> call_params_list call_params array_allocation_values
+%type <StructAllocationNode*> struct_allocation
+%type <vector<pair<string, ExpressionNode*>>> struct_allocation_values
 %type <ExpressionNode*> expr or_expr and_expr bit_or_expr bit_xor_expr
 %type <ExpressionNode*> bit_and_expr equals_expr rel_expr concat_expr sum_expr 
 %type <ExpressionNode*> mult_expr unary_expr exp_expr postfix_expr term
@@ -188,7 +190,7 @@ id_list: id_list COMMA ID {
 
 subprogram_call: access call_params_list {
   $$ = new SubprogramCallNode(ctx.line, $1, $2);
-} | type call_params_list {
+} | basic_type call_params_list {
   $$ = new SubprogramCallNode(ctx.line, *$1, $2);
 };
 
@@ -243,71 +245,79 @@ struct_attr: id_list COLON type {
 };
 
 trait: TRAIT name trait_subprograms END_TRAIT SEMICOLON {
-  $$ = nullptr;
+  $$ = new TraitNode(ctx.line, $2, $3);
 } | TRAIT name END_TRAIT SEMICOLON {
-  $$ = nullptr;
+  $$ = new TraitNode(ctx.line, $2, vector<SubprogramNode*>());
 };
 
 trait_subprograms: trait_subprograms trait_subprogram {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | trait_subprogram {
-  $$ = nullptr;
+  $$ = vector<SubprogramNode*>();
+  $$.push_back($1);
 };
 
 trait_subprogram: trait_fn {
-  $$ = nullptr;
+  $$ = $1;
 } | trait_proc {
-  $$ = nullptr;
+  $$ = $1;
 };
 
-trait_fn: FUNCTION ID params_self_list COLON type END_FUNCTION SEMICOLON {
-  $$ = nullptr;
-} | FUNCTION ID params_list COLON type END_FUNCTION SEMICOLON {
-  $$ = nullptr;
-} | fn {
-  $$ = nullptr;
+trait_fn: FUNCTION ID params_self_list COLON type SEMICOLON {
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true);
+} | FUNCTION ID params_list COLON type SEMICOLON {
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3);
 };
 
-trait_proc: PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON {
-  $$ = nullptr;
-} | proc {
-  $$ = nullptr;
+trait_proc: PROCEDURE ID params_self_list SEMICOLON {
+  $$ = new ProcedureNode(ctx.line, $2, $3, true);
+} | PROCEDURE ID params_list SEMICOLON {
+  $$ = new ProcedureNode(ctx.line, $2, $3);
 };
 
 impl: IMPL name impl_subprograms END_IMPL SEMICOLON {
-  $$ = nullptr;
+  $$ = new ImplNode(ctx.line, $2, $3);
 } | IMPL name END_IMPL SEMICOLON {
-  $$ = nullptr;
-} | IMPL name impl_subprograms FOR name END_IMPL SEMICOLON {
-  $$ = nullptr;
+  $$ = new ImplNode(ctx.line, $2, vector<SubprogramNode*>());
+} | IMPL name FOR name impl_subprograms END_IMPL SEMICOLON {
+  $$ = new ImplNode(ctx.line, $2, $4, $5);
 } | IMPL name FOR name END_IMPL SEMICOLON {
-  $$ = nullptr;
+  $$ = new ImplNode(ctx.line, $2, $4, vector<SubprogramNode*>());
 };
 
 impl_subprograms: impl_subprograms impl_subprogram {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back($2);
 } | impl_subprogram {
-  $$ = nullptr;
+  $$ = vector<SubprogramNode*>();
+  $$.push_back($1);
 };
 
 impl_subprogram: impl_fn {
-  $$ = nullptr;
+  $$ = $1;
 } | impl_proc {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON {
-  $$ = nullptr;
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true);
+  for (size_t i = 0; i < $6.size(); i++) {
+    $$->children.push_back($6[i]);
+  };
 } | fn {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 impl_proc: PROCEDURE ID params_self_list stmts END_PROCEDURE SEMICOLON {
-  $$ = nullptr;
+  $$ = new ProcedureNode(ctx.line, $2, $3, true);
+  for (size_t i = 0; i < $4.size(); i++) {
+    $$->children.push_back($4[i]);
+  };
 } | PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON {
-  $$ = nullptr;
+  $$ = new ProcedureNode(ctx.line, $2, $3, true);
 } | proc {
-  $$ = nullptr;
+  $$ = $1;
 };
 
 access: access DOT CONST_NAME {
@@ -353,9 +363,9 @@ stmts: stmts stmt SEMICOLON {
 };
 
 stmt: BREAK {
-  $$ = nullptr;
+  $$ = new BreakNode(ctx.line);
 } | CONTINUE {
-  $$ = nullptr;
+  $$ = new ContinueNode(ctx.line);
 } | attr {
   $$ = $1;
 } | assign {
@@ -386,7 +396,7 @@ attr: VAR ID COLON type ATTR expr {
   $$ = new AttrNode(ctx.line, $2, true, *$4, $6);
 };
 
-type: TYPE_INT {
+basic_type: TYPE_INT {
   $$ = new Type(TypeKind::INT);
 } | TYPE_FLOAT {
   $$ = new Type(TypeKind::FLOAT);
@@ -402,12 +412,18 @@ type: TYPE_INT {
   $$ = new Type(TypeKind::CHAR);
 } | TYPE_BOOL {
   $$ = new Type(TypeKind::BOOL);
+};
+
+type: basic_type {
+  $$ = $1;
 } | type LEFT_BRACKET RIGHT_BRACKET {
   $$ = new Type(TypeKind::ARRAY, $1);
 } | TYPE_POINTER LT type GT {
   $$ = new Type(TypeKind::POINTER, $3);
 } | TYPE_OPTION LT type GT {
   $$ = new Type(TypeKind::OPTION, $3);
+} | name {
+  $$ = new Type(TypeKind::NAMED, $1);
 };
 
 assign: access ATTR expr {
@@ -696,7 +712,7 @@ term: INT {
 } | array_allocation {
   $$ = $1;
 } | struct_allocation {
-  $$ = nullptr;
+  $$ = $1;
 } | access {
   $$ = $1;
 } | SOME LEFT_PAREN expr RIGHT_PAREN {
@@ -720,15 +736,17 @@ array_allocation_values: array_allocation_values COMMA expr {
   $$.push_back($1);
 };
 
-struct_allocation: NEW type LEFT_BRACE struct_allocation_values RIGHT_BRACE {
-  $$ = nullptr;
-} | NEW type LEFT_BRACE RIGHT_BRACE {
-  $$ = nullptr;
+struct_allocation: NEW name LEFT_BRACE struct_allocation_values RIGHT_BRACE {
+ $$ = new StructAllocationNode(ctx.line, $2, $4);
+} | NEW name LEFT_BRACE RIGHT_BRACE {
+  $$ = new StructAllocationNode(ctx.line, $2, vector<pair<string, ExpressionNode*>>());
 };
 
 struct_allocation_values: struct_allocation_values COMMA ID COLON expr {
-  $$ = nullptr;
+  $$ = $1;
+  $$.push_back({ $3, $5});
 } | ID COLON expr {
-  $$ = nullptr;
+  $$ = vector<pair<string, ExpressionNode*>>();
+  $$.push_back({ $1, $3});
 };
 %%

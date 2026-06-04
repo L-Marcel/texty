@@ -17,6 +17,11 @@ void Compiler::add_dot_node_item(ostream& os, const Node* node, string item) {
   os << "  \"" << node << "\" -> \"" << node << "_" << item << "\";"
      << std::endl;
 };
+void Compiler::add_dot_node_item_relation(ostream& os, const Node* node,
+                                          string item, const Node* to) {
+  os << "  \"" << node << "_" << item << "\" -> \"" << to << "\";" << std::endl;
+  to->compile_dot(os);
+};
 void Compiler::add_dot_relation(ostream& os, const Node* from, const Node* to) {
   os << "  \"" << from << "\" -> \"" << to << "\";" << std::endl;
   to->compile_dot(os);

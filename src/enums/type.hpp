@@ -12,5 +12,6 @@ enum class TypeKind {
   POINTER,
   OPTION,
   RANGE,
-  ARRAY
+  ARRAY,
+  NAMED
 };
