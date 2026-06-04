@@ -123,8 +123,6 @@
 <case_list> -> <case_list> <case>
              | <case>
 <case> -> CASE <case_values> COLON <stmts>
-        | CASE SOME ID COLON <stmts>
-        | CASE NONE COLON <stmts>
 <case_values> -> <case_values> COMMA <term>
                | <term>
 <default_case> -> DEFAULT COLON <stmts>
