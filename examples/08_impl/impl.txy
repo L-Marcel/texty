@@ -1,3 +1,9 @@
+enum State
+  OPEN,
+  HALF_OPEN,
+  CLOSED
+endenum;
+
 struct Address
   street, city, country: string;
 endstruct;
