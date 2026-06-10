@@ -13,6 +13,7 @@ SRCS = $(shell find src -name "*.cpp")
 EXAMPLES = $(shell find examples -name "*.txy")
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o) $(BISON_CC:.cc=.o) $(FLEX_C:.c=.o))
 
+build: all
 all: $(TARGET)
 
 $(TARGET): $(BISON_CC) $(FLEX_C) $(OBJS)
@@ -43,19 +44,21 @@ $(OBJS): $(BISON_CC) $(FLEX_C)
 check: 
 	bison -Wcounterexamples grammar/syntax.y
 
-examples: all
-	@for file in $(EXAMPLES); do \
+examples: build
+	@failed=0; \
+	for file in $(EXAMPLES); do \
 		echo "[ COMPILE ] $$file"; \
-		./$(TARGET) --file "$$file" || exit 1; \
-		dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg" || exit 1; \
-	done
+		(./$(TARGET) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
+	done; \
+	if [ $$failed -ne 0 ]; then exit 1; fi
 
-examples-pendrive: all
-	@for file in $(EXAMPLES); do \
+examples-pendrive: build
+	@failed=0; \
+	for file in $(EXAMPLES); do \
 		echo "[ COMPILE ] $$file"; \
-		/lib64/ld-linux-x86-64.so.2 ./$(TARGET) --file "$$file" || exit 1; \
-		dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg" || exit 1; \
-	done
+		(/lib64/ld-linux-x86-64.so.2 ./$(TARGET) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
+	done; \
+	if [ $$failed -ne 0 ]; then exit 1; fi
 
 clean:
-	rm -rf $(OBJ_DIR) $(GEN_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR) $(GRAMMAR_BUILD_DIR) $(TARGET)

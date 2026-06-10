@@ -1,4 +1,7 @@
 /syntax.tab.cc
-
+/build
+/grammar/build
+/examples
+!/examples/**/*.txy
 # Arquivos compilados do Windows
 *.exe

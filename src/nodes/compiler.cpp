@@ -48,5 +48,31 @@ void Compiler::create_dot(Context& ctx, string filename) {
 
 // Código
 void Compiler::create_code(Context& ctx, string filename) {
+  string base_filename = get_filename_without_mime(filename);
+  string cpp_filename = base_filename + ".cpp";
+  ofstream file = ofstream();
+  std::cout << "[ DEBUG ] Montando arquivo de intermediário" << std::endl;
+  if (file.is_open()) {
+    if (ctx.root != nullptr) {
+      ctx.root->compile_code(file);
+    }
 
+    file.close();
+    std::cout << "[ DEBUG ] Arquivo de intermediário montado" << std::endl;
+    std::cout << "[ DEBUG ] Compilando binário final" << std::endl;
+
+    string command =
+        "g++ -O2 -std=c++17" + cpp_filename + " -o " + base_filename;
+
+    int result = std::system(command.c_str());
+
+    if (result == 0) {
+      std::cout << "[ INFO ] Binário final compilado com sucesso" << std::endl;
+    } else {
+      std::cerr << "[ ERRO ] Falha ao compilar binário final" << std::endl;
+    }
+  } else {
+    std::cerr << "[ ERRO ] Não foi possível montar o arquivo intermediário"
+              << std::endl;
+  }
 };
