@@ -17,3 +17,4 @@ struct SubprogramNode : public Node {
 };
 
 string params_to_string(vector<pair<string, Type>> params, bool production);
+string params_ids_to_string(vector<pair<string, Type>> params, bool production);

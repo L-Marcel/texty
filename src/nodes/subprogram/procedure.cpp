@@ -29,12 +29,31 @@ void ProcedureNode::compile_code(ostream& os) const {
   };
   if (this->implemented) {
     os << std::endl;
+
     string params = params_to_string(this->params, true);
-    os << "void " << this->name << "(" << params << ") {" << std::endl;
-    for (size_t i = 0; i < this->children.size(); i++) {
-      this->children[i]->compile_code(os);
+    if (this->name == "txy_main") {
+      os << "int " << this->name << "(" << params << ") {" << std::endl;
+      for (size_t i = 0; i < this->children.size(); i++) {
+        os << "\t";
+        this->children[i]->compile_code(os);
+      };
+      os << "\treturn 0;" << std::endl;
+    } else {
+      os << "void " << this->name << "(" << params << ") {" << std::endl;
+      for (size_t i = 0; i < this->children.size(); i++) {
+        os << "\t";
+        this->children[i]->compile_code(os);
+      };
     };
+
     os << "};" << std::endl;
+
+    if (this->name == "txy_main") {
+      os << "int main(" << params << ") {" << std::endl;
+      string params = params_ids_to_string(this->params, true);
+      os << "\treturn txy_main(" << params << ");" << std::endl;
+      os << "};" << std::endl;
+    };
   };
   References::get_instance()->pop_scope();
 }

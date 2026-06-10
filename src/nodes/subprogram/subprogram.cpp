@@ -25,6 +25,20 @@ string params_to_string(vector<pair<string, Type>> params, bool production) {
   return text;
 };
 
+string params_ids_to_string(vector<pair<string, Type>> params,
+                            bool production) {
+  string text = "";
+
+  for (size_t i = 0; i < params.size(); i++) {
+    text += params[i].first;
+    if (i != params.size() - 1) {
+      text += ", ";
+    };
+  };
+
+  return text;
+};
+
 // Debug
 void SubprogramNode::compile_dot(ostream& os) const {
   string params = params_to_string(this->params, false);

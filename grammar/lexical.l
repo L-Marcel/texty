@@ -116,9 +116,9 @@
 "trait"                                        { return yy::parser::make_TRAIT(); }
 "endtrait"                                     { return yy::parser::make_END_TRAIT(); }
 "return"                                       { return yy::parser::make_RETURN(); }
-[A-Z][_A-Z0-9]*                                { return yy::parser::make_CONST_NAME(string(yytext)); } 
-[A-Z][a-zA-Z0-9]*                              { return yy::parser::make_NAME(string(yytext)); }
-[_a-z][_a-zA-Z0-9]*                            { return yy::parser::make_ID(string(yytext)); }
+[A-Z][_A-Z0-9]*                                { return yy::parser::make_CONST_NAME("txy_" + string(yytext)); } 
+[A-Z][a-zA-Z0-9]*                              { return yy::parser::make_NAME("txy_" + string(yytext)); }
+[_a-z][_a-zA-Z0-9]*                            { return yy::parser::make_ID("txy_" + string(yytext)); }
 .                                              { invalid_token(yytext, ctx); return yy::parser::make_YYerror(); }
 %%
 
