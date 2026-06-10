@@ -28,7 +28,7 @@ void Compiler::add_dot_relation(ostream& os, const Node* from, const Node* to) {
 };
 void Compiler::create_dot(Context& ctx, string filename) {
   ofstream file = ofstream(get_filename_without_mime(filename) + ".dot");
-  std::cout << "[ DEBUG ] Montando arquivo de visualização" << std::endl;
+  std::cout << DEBUG_LABEL << "Montando arquivo de visualização" << std::endl;
   if (file.is_open()) {
     file << "digraph AST {" << std::endl;
     file << "  node [shape=box, fontname=\"Courier\"];" << std::endl;
@@ -39,9 +39,10 @@ void Compiler::create_dot(Context& ctx, string filename) {
 
     file << "}" << std::endl;
     file.close();
-    std::cout << "[ DEBUG ] Arquivo de visualização montado" << std::endl;
+    std::cout << DEBUG_LABEL << "Arquivo de visualização montado" << std::endl;
   } else {
-    std::cerr << "[ ERRO ] Não foi possível montar o arquivo de visualização"
+    std::cerr << ERROR_LABEL
+              << "Não foi possível montar o arquivo de visualização"
               << std::endl;
   }
 };
@@ -50,29 +51,31 @@ void Compiler::create_dot(Context& ctx, string filename) {
 void Compiler::create_code(Context& ctx, string filename) {
   string base_filename = get_filename_without_mime(filename);
   string cpp_filename = base_filename + ".cpp";
-  ofstream file = ofstream();
-  std::cout << "[ DEBUG ] Montando arquivo de intermediário" << std::endl;
+  ofstream file = ofstream(cpp_filename);
+  std::cout << DEBUG_LABEL << "Montando arquivo de intermediário" << std::endl;
   if (file.is_open()) {
     if (ctx.root != nullptr) {
       ctx.root->compile_code(file);
     }
 
     file.close();
-    std::cout << "[ DEBUG ] Arquivo de intermediário montado" << std::endl;
-    std::cout << "[ DEBUG ] Compilando binário final" << std::endl;
+    std::cout << DEBUG_LABEL << "Arquivo de intermediário montado" << std::endl;
+    std::cout << DEBUG_LABEL << "Compilando binário final" << std::endl;
 
     string command =
-        "g++ -O2 -std=c++17" + cpp_filename + " -o " + base_filename;
+        "g++ -O2 -std=c++17 " + cpp_filename + " -o " + base_filename;
 
     int result = std::system(command.c_str());
 
     if (result == 0) {
-      std::cout << "[ INFO ] Binário final compilado com sucesso" << std::endl;
+      std::cout << SUCCESS_LABEL << "Binário final compilado com sucesso"
+                << std::endl;
     } else {
-      std::cerr << "[ ERRO ] Falha ao compilar binário final" << std::endl;
+      std::cerr << ERROR_LABEL << "Falha ao compilar binário final"
+                << std::endl;
     }
   } else {
-    std::cerr << "[ ERRO ] Não foi possível montar o arquivo intermediário"
-              << std::endl;
+    std::cerr << ERROR_LABEL
+              << "Não foi possível montar o arquivo intermediário" << std::endl;
   }
 };

@@ -13,6 +13,7 @@ struct Type {
   bool operator!=(const Type& a) const;
   bool operator<(const Type& a) const;
   string to_string() const;
+  string to_production() const;
 };
 
 struct Record;

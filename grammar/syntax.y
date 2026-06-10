@@ -83,7 +83,8 @@
 %type <CaseNode*> case default_case
 %type <vector<ExpressionNode*>> case_values
 %type <vector<CaseNode*>> cases case_list
-%type <Node*> root program program_slice stmt
+%type <ProgramNode*> root program
+%type <Node*> program_slice stmt
 %type <SubprogramNode*> subprogram
 %type <Type*> type basic_type
 %type <vector<pair<string, Type>>> params_self_list params_list params 
@@ -111,7 +112,7 @@ program: program program_slice {
   $$ = $1;
   $1->children.push_back($2);
 } | program_slice {
-  $$ = new Node(ctx.line, "PROGRAM");
+  $$ = new ProgramNode(ctx.line);
   $$->children.push_back($1);
 };
 
@@ -134,19 +135,19 @@ subprogram: fn {
 };
 
 fn: FUNCTION ID params_list COLON type stmts END_FUNCTION SEMICOLON {
-  $$ = new FunctionNode(ctx.line, $2, *$5, $3);
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, false, true);
   for (size_t i = 0; i < $6.size(); i++) {
     $$->children.push_back($6[i]);
   };
 };
 
 proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON {
-  $$ = new ProcedureNode(ctx.line, $2, $3);
+  $$ = new ProcedureNode(ctx.line, $2, $3, false, true);
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
 } | PROCEDURE ID params_list END_PROCEDURE SEMICOLON {
-  $$ = new ProcedureNode(ctx.line, $2, $3);
+  $$ = new ProcedureNode(ctx.line, $2, $3, false, true);
 };
 
 params_self_list: LEFT_PAREN SELF SEMICOLON params RIGHT_PAREN {
@@ -265,15 +266,15 @@ trait_subprogram: trait_fn {
 };
 
 trait_fn: FUNCTION ID params_self_list COLON type SEMICOLON {
-  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true);
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true, false);
 } | FUNCTION ID params_list COLON type SEMICOLON {
-  $$ = new FunctionNode(ctx.line, $2, *$5, $3);
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, false, false);
 };
 
 trait_proc: PROCEDURE ID params_self_list SEMICOLON {
-  $$ = new ProcedureNode(ctx.line, $2, $3, true);
+  $$ = new ProcedureNode(ctx.line, $2, $3, true, false);
 } | PROCEDURE ID params_list SEMICOLON {
-  $$ = new ProcedureNode(ctx.line, $2, $3);
+  $$ = new ProcedureNode(ctx.line, $2, $3, false, false);
 };
 
 impl: IMPL name impl_subprograms END_IMPL SEMICOLON {
@@ -301,7 +302,7 @@ impl_subprogram: impl_fn {
 };
 
 impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON {
-  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true);
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true, true);
   for (size_t i = 0; i < $6.size(); i++) {
     $$->children.push_back($6[i]);
   };
@@ -310,12 +311,12 @@ impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON {
 };
 
 impl_proc: PROCEDURE ID params_self_list stmts END_PROCEDURE SEMICOLON {
-  $$ = new ProcedureNode(ctx.line, $2, $3, true);
+  $$ = new ProcedureNode(ctx.line, $2, $3, true, true);
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
 } | PROCEDURE ID params_self_list END_PROCEDURE SEMICOLON {
-  $$ = new ProcedureNode(ctx.line, $2, $3, true);
+  $$ = new ProcedureNode(ctx.line, $2, $3, true, true);
 } | proc {
   $$ = $1;
 };

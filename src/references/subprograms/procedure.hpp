@@ -3,5 +3,7 @@
 
 struct ProcedureReference : public Reference {
   vector<Type> params;
-  ProcedureReference(vector<Type> params);
+  bool self;
+  bool implemented;
+  ProcedureReference(vector<Type> params, bool self, bool implemented);
 };

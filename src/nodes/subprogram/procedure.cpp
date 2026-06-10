@@ -4,12 +4,12 @@
 
 // Debug
 void ProcedureNode::compile_dot(ostream& os) const {
-  string params = params_to_string(this->params);
+  string params = params_to_string(this->params, false);
   Compiler::add_dot_node(os, this,
                          "PROCEDURE: " + this->name + "(" + params + ")");
 
   for (size_t i = 0; i < this->children.size(); i++) {
-    Compiler::add_dot_relation(os, this, this->children.at(i));
+    Compiler::add_dot_relation(os, this, this->children[i]);
   };
 }
 
@@ -20,10 +20,21 @@ void ProcedureNode::compile_code(ostream& os) const {
     types.push_back(this->params[i].second);
   };
 
-  References::get_instance()->add_procedure_reference(this->name, types);
+  References::get_instance()->add_procedure_reference(
+      this->name, types, this->self, this->implemented);
   References::get_instance()->push_scope();
-  for (size_t i = 0; i < this->children.size(); i++) {
-    this->children.at(i)->compile_code(os);
+  for (size_t i = 0; i < this->params.size(); i++) {
+    References::get_instance()->add_variable_reference(
+        this->params[i].first, this->params[i].second, false);
+  };
+  if (this->implemented) {
+    os << std::endl;
+    string params = params_to_string(this->params, true);
+    os << "void " << this->name << "(" << params << ") {" << std::endl;
+    for (size_t i = 0; i < this->children.size(); i++) {
+      this->children[i]->compile_code(os);
+    };
+    os << "};" << std::endl;
   };
   References::get_instance()->pop_scope();
 }
@@ -33,8 +44,6 @@ Type ProcedureNode::get_type() const { return Type(TypeKind::VOID); };
 
 // Construtores
 ProcedureNode::ProcedureNode(int line, string name,
-                             vector<pair<string, Type>> params)
-    : SubprogramNode(line, name, params) {};
-ProcedureNode::ProcedureNode(int line, string name,
-                             vector<pair<string, Type>> params, bool self)
-    : SubprogramNode(line, name, params, self) {};
+                             vector<pair<string, Type>> params, bool self,
+                             bool implemented)
+    : SubprogramNode(line, name, params, self, implemented) {};

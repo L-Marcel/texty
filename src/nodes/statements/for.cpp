@@ -7,7 +7,7 @@ void ForNode::compile_dot(ostream& os) const {
       Compiler::add_dot_node(os, this, "FOR: " + this->name);
       Compiler::add_dot_relation(os, this, this->expression);
       for (size_t i = 0; i < this->children.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->children.at(i));
+        Compiler::add_dot_relation(os, this, this->children[i]);
       };
       break;
     case ForType::THREE_EXPRESSION:
@@ -16,7 +16,7 @@ void ForNode::compile_dot(ostream& os) const {
       Compiler::add_dot_relation(os, this, this->condition);
       Compiler::add_dot_relation(os, this, this->increment);
       for (size_t i = 0; i < this->children.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->children.at(i));
+        Compiler::add_dot_relation(os, this, this->children[i]);
       };
       break;
   }

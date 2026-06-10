@@ -28,7 +28,6 @@
 #include "lib/CLI11.hpp"
 #include "lib/magic_enum.hpp"
 
-// Correção para Windows: evita colisão com macros do sistema
 #ifdef _WIN32
 #undef CONST
 #undef IN
@@ -42,5 +41,20 @@
 #undef BOOL
 #undef ERROR
 #endif
+
+#define ANSI_RESET "\033[0m"
+#define ANSI_BOLD "\033[1m"
+#define ANSI_RED "\033[31m"
+#define ANSI_GREEN "\033[32m"
+#define ANSI_YELLOW "\033[33m"
+#define ANSI_BLUE "\033[34m"
+#define ANSI_MAGENTA "\033[35m"
+#define ANSI_CYAN "\033[36m"
+
+#define FATAL_LABEL string("[\033[31m FATAL \033[0m] ")
+#define ERROR_LABEL string("[\033[35m ERRO \033[0m] ")
+#define DEBUG_LABEL string("[\033[36m DEBUG \033[0m] ")
+#define INFO_LABEL string("[\033[34m INFO \033[0m] ")
+#define SUCCESS_LABEL string("[\033[32m SUCESSO \033[0m] ")
 
 using namespace std;

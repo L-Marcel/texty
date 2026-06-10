@@ -13,14 +13,13 @@ void SubprogramCallNode::compile_dot(ostream& os) const {
   };
 
   for (size_t i = 0; i < this->params.size(); i++) {
-    Compiler::add_dot_relation(os, this, this->params.at(i));
+    Compiler::add_dot_relation(os, this, this->params[i]);
   };
 }
 
 // Código
 void SubprogramCallNode::compile_code(ostream& os) const {
   // TODO
-  this->get_type();
 }
 
 // Tipagem

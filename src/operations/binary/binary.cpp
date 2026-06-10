@@ -21,7 +21,7 @@ BinaryTypeCheckFunction BinaryOperations::get_type(const BinaryOperation key,
       BinaryOperations::initialized = true;
     };
 
-    return BinaryOperations::table.at(key);
+    return BinaryOperations::table[key];
   } catch (const out_of_range& _) {
     throw error("operação não definida", line);
   }

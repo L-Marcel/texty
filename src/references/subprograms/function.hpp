@@ -3,5 +3,8 @@
 
 struct FunctionReference : public Reference {
   vector<Type> params;
-  FunctionReference(Type node_type, vector<Type> params);
+  bool self;
+  bool implemented;
+  FunctionReference(Type node_type, vector<Type> params, bool self,
+                    bool implemented);
 };

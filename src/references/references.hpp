@@ -13,8 +13,10 @@ struct References {
 
   Reference* get_reference(int line, string name);
   void add_variable_reference(string name, Type type, bool is_const);
-  void add_procedure_reference(string name, vector<Type> params);
-  void add_function_reference(string name, Type type, vector<Type> params);
+  void add_procedure_reference(string name, vector<Type> params, bool self,
+                               bool implemented);
+  void add_function_reference(string name, Type type, vector<Type> params,
+                              bool self, bool implemented);
 
   static References* _instance;
   static References* get_instance();

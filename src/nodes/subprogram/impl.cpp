@@ -8,7 +8,7 @@ void ImplNode::compile_dot(ostream& os) const {
     Compiler::add_dot_node(os, this,
                            "IMPL: (" + this->name + ", " + this->target + ")");
   for (size_t i = 0; i < this->subprograms.size(); i++) {
-    Compiler::add_dot_relation(os, this, this->subprograms.at(i));
+    Compiler::add_dot_relation(os, this, this->subprograms[i]);
   };
 };
 

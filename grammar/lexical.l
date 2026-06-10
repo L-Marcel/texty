@@ -128,5 +128,5 @@
 
 void invalid_token(std::string token, Context& ctx) {
   ctx.has_lexical_error = true;
-  fprintf(stderr, "[ ERRO ] Erro léxico: caractere inválido '%s' na linha %d\n", token.c_str(), ctx.line);
+  fprintf(stderr, "%sErro léxico: caractere inválido '%s' na linha %d\n", ERROR_LABEL.c_str(), token.c_str(), ctx.line);
 }

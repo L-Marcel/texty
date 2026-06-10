@@ -7,7 +7,7 @@ void IfNode::compile_dot(ostream& os) const {
       Compiler::add_dot_node(os, this, "IF");
       Compiler::add_dot_relation(os, this, this->expression);
       for (size_t i = 0; i < this->children.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->children.at(i));
+        Compiler::add_dot_relation(os, this, this->children[i]);
       };
       Compiler::add_dot_relation(os, this, this->next);
       break;
@@ -15,7 +15,7 @@ void IfNode::compile_dot(ostream& os) const {
       Compiler::add_dot_node(os, this, "IF: " + this->access_id);
       Compiler::add_dot_relation(os, this, this->access);
       for (size_t i = 0; i < this->children.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->children.at(i));
+        Compiler::add_dot_relation(os, this, this->children[i]);
       };
       Compiler::add_dot_relation(os, this, this->next);
       break;

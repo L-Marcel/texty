@@ -9,7 +9,7 @@ void ArrayAllocationNode::compile_dot(ostream& os) const {
           "[]");
   Compiler::add_dot_relation(os, this, this->size_expression);
   for (size_t i = 0; i < this->children.size(); i++) {
-    Compiler::add_dot_relation(os, this, this->children.at(i));
+    Compiler::add_dot_relation(os, this, this->children[i]);
   };
 }
 

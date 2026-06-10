@@ -6,16 +6,16 @@ void CaseNode::compile_dot(ostream& os) const {
     case CaseType::CASE:
       Compiler::add_dot_node(os, this, "CASE");
       for (size_t i = 0; i < this->expressions.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->expressions.at(i));
+        Compiler::add_dot_relation(os, this, this->expressions[i]);
       };
       for (size_t i = 0; i < this->children.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->children.at(i));
+        Compiler::add_dot_relation(os, this, this->children[i]);
       };
       break;
     case CaseType::DEFAULT:
       Compiler::add_dot_node(os, this, "DEFAULT");
       for (size_t i = 0; i < this->children.size(); i++) {
-        Compiler::add_dot_relation(os, this, this->children.at(i));
+        Compiler::add_dot_relation(os, this, this->children[i]);
       };
       break;
   }

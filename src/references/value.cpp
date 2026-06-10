@@ -39,6 +39,61 @@ string Type::to_string() const {
   return name;
 };
 
+string Type::to_production() const {
+  if (this->kind == TypeKind::NAMED)
+    return this->name;
+  else if (this->kind == TypeKind::ARRAY) {
+    return "std::vector<" +
+           (this->inner_type ? this->inner_type->to_production() : "unknown") +
+           ">";
+  } else if (this->kind == TypeKind::POINTER) {
+    return (this->inner_type ? this->inner_type->to_production() : "unknown") +
+           "*";
+  } else if (this->kind == TypeKind::OPTION) {
+    // TODO
+    return "option<" +
+           (this->inner_type ? this->inner_type->to_production() : "unknown") +
+           ">";
+  };
+
+  string name = "unknown";
+
+  // TODO - RANGE
+
+  switch (this->kind) {
+    case TypeKind::CHAR:
+      name = "char";
+      break;
+    case TypeKind::STRING:
+      name = "std::string";
+      break;
+    case TypeKind::BOOL:
+      name = "bool";
+      break;
+    case TypeKind::FLOAT:
+      name = "float";
+      break;
+    case TypeKind::DOUBLE:
+      name = "double";
+      break;
+    case TypeKind::LONG:
+      name = "std::int64_t";
+      break;
+    case TypeKind::INT:
+      name = "std::int32_t";
+      break;
+    case TypeKind::BYTE:
+      name = "std::uint8_t";
+      break;
+    case TypeKind::VOID:
+      break;
+    default:
+      break;
+  }
+
+  return name;
+};
+
 // Construtores
 Type::Type(TypeKind kind) : kind(kind), inner_type(nullptr) {};
 Type::Type(TypeKind kind, Type* inner) : kind(kind), inner_type(inner) {};

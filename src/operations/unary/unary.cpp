@@ -13,7 +13,7 @@ UnaryTypeCheckFunction UnaryOperations::get_type(const UnaryOperation key,
       UnaryOperations::initialized = true;
     };
 
-    return UnaryOperations::table.at(key);
+    return UnaryOperations::table[key];
   } catch (const out_of_range& _) {
     throw error("operação não definida", line);
   }
@@ -29,6 +29,8 @@ void UnaryOperations::initialize() {
   UnaryOperations::add_type(UnaryOperation::NOT, unary_not_get_type);
   UnaryOperations::add_type(UnaryOperation::REV, unary_rev_get_type);
   UnaryOperations::add_type(UnaryOperation::REF, unary_ref_get_type);
-  UnaryOperations::add_type(UnaryOperation::INCREMENT, unary_increment_get_type);
-  UnaryOperations::add_type(UnaryOperation::DECREMENT, unary_decrement_get_type);
+  UnaryOperations::add_type(UnaryOperation::INCREMENT,
+                            unary_increment_get_type);
+  UnaryOperations::add_type(UnaryOperation::DECREMENT,
+                            unary_decrement_get_type);
 };

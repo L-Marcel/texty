@@ -1,5 +1,5 @@
 #pragma once
-#include "node.hpp"
+#include "program.hpp"
 
 struct Context {
   int line = 1;

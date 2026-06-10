@@ -6,6 +6,7 @@ References* References::_instance = nullptr;
 References* References::get_instance() {
   if (References::_instance == nullptr) {
     References::_instance = new References();
+    References::_instance->push_scope();
   }
 
   return References::_instance;
@@ -15,19 +16,23 @@ References* References::get_instance() {
 void References::push_scope() { this->scopes.push_back(Scope()); };
 void References::pop_scope() { this->scopes.pop_back(); };
 Scope References::get_scope() const {
-  return this->scopes.at(this->scopes.size() - 1);
+  return this->scopes[this->scopes.size() - 1];
 };
 
 // Referências
 void References::add_variable_reference(string name, Type type, bool is_const) {
   this->get_scope().insert({name, new VariableReference(type, is_const)});
 };
-void References::add_procedure_reference(string name, vector<Type> params) {
-  this->get_scope().insert({name, new ProcedureReference(params)});
+void References::add_procedure_reference(string name, vector<Type> params,
+                                         bool self, bool implemented) {
+  this->get_scope().insert(
+      {name, new ProcedureReference(params, self, implemented)});
 };
 void References::add_function_reference(string name, Type type,
-                                        vector<Type> params) {
-  this->get_scope().insert({name, new FunctionReference(type, params)});
+                                        vector<Type> params, bool self,
+                                        bool implemented) {
+  this->get_scope().insert(
+      {name, new FunctionReference(type, params, self, implemented)});
 };
 
 Reference* References::get_reference(int line, string name) {
