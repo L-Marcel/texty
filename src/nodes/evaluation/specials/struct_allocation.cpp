@@ -2,7 +2,7 @@
 
 // Debug
 void StructAllocationNode::compile_dot(ostream& os) const {
-  Compiler::add_dot_node(os, this, "new " + this->name);
+  Compiler::add_dot_node(os, this, "new " + this->name.substr(4));
   for (size_t i = 0; i < this->attributes.size(); i++) {
     pair<string, ExpressionNode*> attribute = this->attributes[i];
     Compiler::add_dot_node_item(os, this, attribute.first);

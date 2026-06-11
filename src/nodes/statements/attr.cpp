@@ -1,14 +1,20 @@
 #include "attr.hpp"
 
+#include "../../references/references.hpp"
+
 // Debug
 void AttrNode::compile_dot(ostream& os) const {
-  Compiler::add_dot_node(os, this, "ATTR: " + this->name);
+  Compiler::add_dot_node(os, this, "ATTR: " + this->name.substr(4));
   Compiler::add_dot_relation(os, this, this->expression);
 };
 
 // Código
 void AttrNode::compile_code(ostream& os) const {
-  // TODO
+  os << this->type.to_production() << " " << this->name << " = ";
+  this->expression->compile_code(os);
+  os << ";";
+  References::get_instance()->add_variable_reference(this->name, this->type,
+                                                     false);
 };
 
 // Tipagem

@@ -3,10 +3,10 @@
 // Debug
 void ImplNode::compile_dot(ostream& os) const {
   if (this->target == "")
-    Compiler::add_dot_node(os, this, "IMPL: " + this->name);
+    Compiler::add_dot_node(os, this, "IMPL: " + this->name.substr(4));
   else
     Compiler::add_dot_node(os, this,
-                           "IMPL: (" + this->name + ", " + this->target + ")");
+                           "IMPL: (" + this->name.substr(4) + ", " + this->target.substr(4) + ")");
   for (size_t i = 0; i < this->subprograms.size(); i++) {
     Compiler::add_dot_relation(os, this, this->subprograms[i]);
   };

@@ -2,7 +2,7 @@
 
 // Debug
 void StructNode::compile_dot(ostream& os) const {
-  Compiler::add_dot_node(os, this, "STRUCT: " + this->name);
+  Compiler::add_dot_node(os, this, "STRUCT: " + this->name.substr(4));
   for (size_t i = 0; i < this->attributes.size(); i++) {
     pair<string, Type> attribute = this->attributes[i];
     string label = attribute.first + ": " + attribute.second.to_string();

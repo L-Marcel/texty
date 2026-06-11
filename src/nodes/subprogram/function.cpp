@@ -6,7 +6,7 @@
 void FunctionNode::compile_dot(ostream& os) const {
   string params = params_to_string(this->params, false);
   Compiler::add_dot_node(os, this,
-                         "FUNCTION: " + this->name + "(" + params + ")");
+                         "FUNCTION: " + this->name.substr(4) + "(" + params + ")");
 
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children[i]);
@@ -36,6 +36,7 @@ void FunctionNode::compile_code(ostream& os) const {
     for (size_t i = 0; i < this->children.size(); i++) {
       os << "\t";
       this->children[i]->compile_code(os);
+      os << "\n";
     };
     os << "};" << std::endl;
 

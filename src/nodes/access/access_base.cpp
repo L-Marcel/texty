@@ -6,7 +6,7 @@
 void AccessBaseNode::compile_dot(ostream& os) const {
   switch (this->access_type) {
     case AccessBaseType::ID:
-      Compiler::add_dot_node(os, this, "ID: " + this->name);
+      Compiler::add_dot_node(os, this, "ID: " + this->name.substr(4));
       break;
     case AccessBaseType::SELF:
       Compiler::add_dot_node(os, this, "SELF");
@@ -22,7 +22,17 @@ void AccessBaseNode::compile_dot(ostream& os) const {
 
 // Código
 void AccessBaseNode::compile_code(ostream& os) const {
-  // TODO
+    switch (this->access_type) {
+    case AccessBaseType::ID:
+      os << this->name;
+      break;
+    case AccessBaseType::SELF:
+      os << "this";
+      break;
+    default:
+      this->expression->compile_code(os);
+      break;
+  };
 };
 
 // Tipagem
@@ -41,7 +51,7 @@ Reference* AccessBaseNode::get_reference(int line) const {
     default:
       return new Reference(this->expression->get_type(),
                            ReferenceType::EXPRESSION);
-  }
+  };
 };
 
 // Construtores

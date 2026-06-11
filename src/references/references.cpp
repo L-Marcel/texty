@@ -57,6 +57,6 @@ Reference* References::get_reference(int line, string name) {
   }
 
   throw error(
-      "tentativa inválida de acesso a variável ou subprograma não declarado",
+      "tentativa inválida de acesso a variável ou subprograma '" + name.substr(4) + "' não declarado",
       line);
 };
