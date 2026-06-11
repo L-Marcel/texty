@@ -36,7 +36,7 @@ void ProcedureNode::compile_code(ostream& os) const {
       for (size_t i = 0; i < this->children.size(); i++) {
         os << "\t";
         this->children[i]->compile_code(os);
-        os << "\n";
+        os << std::endl;
       };
       os << "\treturn 0;" << std::endl;
     } else {
@@ -44,14 +44,14 @@ void ProcedureNode::compile_code(ostream& os) const {
       for (size_t i = 0; i < this->children.size(); i++) {
         os << "\t";
         this->children[i]->compile_code(os);
-        os << "\n";
+        os << std::endl;
       };
     };
 
     os << "};" << std::endl;
 
     if (this->name == "txy_main") {
-      os << "\nint main(" << params << ") {" << std::endl;
+      os << std::endl << "int main(" << params << ") {" << std::endl;
       string params = params_ids_to_string(this->params, true);
       os << "\treturn txy_main(" << params << ");" << std::endl;
       os << "};" << std::endl;

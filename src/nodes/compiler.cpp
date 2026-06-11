@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 
+#include "../embedded_standard.hpp"
+
 // Filename
 string get_filename_without_mime(string filename) {
   int index = filename.rfind('.');
@@ -54,6 +56,13 @@ void Compiler::create_code(Context& ctx, string filename) {
   ofstream file = ofstream(cpp_filename);
   std::cout << DEBUG_LABEL << "Montando arquivo de intermediário" << std::endl;
   if (file.is_open()) {
+    file << "// ================== STANDARD ================== //" << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << std::endl << TEXTY_STANDARD_LIBRARY << std::endl << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << "// ================== PROGRAM =================== //" << std::endl
+         << std::endl;
+
     if (ctx.root != nullptr) {
       ctx.root->compile_code(file);
     }
