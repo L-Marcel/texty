@@ -13,6 +13,20 @@
 #include <variant>
 #include <vector>
 
+#ifdef _WIN32
+  #include <windows.h>
+  #undef CONST
+  #undef IN
+  #undef VOID
+  #undef CHAR
+  #undef INT
+  #undef LONG
+  #undef FLOAT
+  #undef DOUBLE
+  #undef BYTE
+  #undef BOOL
+  #undef ERROR
+#endif
 #include "enums/access.hpp"
 #include "enums/assign.hpp"
 #include "enums/call.hpp"
@@ -27,20 +41,6 @@
 #include "errors.hpp"
 #include "lib/CLI11.hpp"
 #include "lib/magic_enum.hpp"
-
-#ifdef _WIN32
-#undef CONST
-#undef IN
-#undef VOID
-#undef CHAR
-#undef INT
-#undef LONG
-#undef FLOAT
-#undef DOUBLE
-#undef BYTE
-#undef BOOL
-#undef ERROR
-#endif
 
 #define ANSI_RESET "\033[0m"
 #define ANSI_BOLD "\033[1m"

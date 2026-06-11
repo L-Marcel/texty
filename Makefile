@@ -9,48 +9,86 @@ BISON_CC = $(GRAMMAR_BUILD_DIR)/syntax.tab.cc
 BISON_HH = $(GRAMMAR_BUILD_DIR)/syntax.tab.hh
 FLEX_C = $(GRAMMAR_BUILD_DIR)/lex.yy.c
 
-SRCS = $(shell find src -name "*.cpp")
-EXAMPLES = $(shell find examples -name "*.txy")
+# Cross-platform config
+ifeq ($(OS),Windows_NT)
+	BISON = win_bison
+	FLEX = win_flex
+	TARGET_EXT = .exe
+	MD = if not exist $(subst /,\,$1) mkdir $(subst /,\,$1)
+	RD = if exist $(subst /,\,$1) rmdir /s /q $(subst /,\,$1)
+	RM_FILE = if exist $(subst /,\,$1) del /q $(subst /,\,$1)
+else
+	BISON = bison
+	FLEX = flex
+	TARGET_EXT =
+	MD = mkdir -p $1
+	RD = rm -rf $1
+	RM_FILE = rm -f $1
+endif
+
+# Recursive wildcard (cross-platform alternative to find)
+rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+
+SRCS = $(call rwildcard,src/,*.cpp)
+EXAMPLES = $(call rwildcard,examples/,*.txy)
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o) $(BISON_CC:.cc=.o) $(FLEX_C:.c=.o))
 
 build: all
-all: $(TARGET)
+all: $(TARGET)$(TARGET_EXT)
 
-$(TARGET): $(BISON_CC) $(FLEX_C) $(OBJS)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
+$(TARGET)$(TARGET_EXT): $(BISON_CC) $(FLEX_C) $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)$(TARGET_EXT)
 
 $(BUILD_DIR)/%.o: %.cpp
-	@mkdir -p $(dir $@)
+	@$(call MD,$(dir $@))
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/%.o: %.cc
-	@mkdir -p $(dir $@)
+	@$(call MD,$(dir $@))
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/%.o: %.c
-	@mkdir -p $(dir $@)
+	@$(call MD,$(dir $@))
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BISON_CC) $(BISON_HH): $(GRAMMAR_DIR)/syntax.y
-	@mkdir -p $(GRAMMAR_BUILD_DIR)
-	bison -d $(GRAMMAR_DIR)/syntax.y -o $(BISON_CC)
+	@$(call MD,$(GRAMMAR_BUILD_DIR))
+	$(BISON) -d $(GRAMMAR_DIR)/syntax.y -o $(BISON_CC)
 
 $(FLEX_C): $(GRAMMAR_DIR)/lexical.l $(BISON_HH)
-	@mkdir -p $(GRAMMAR_BUILD_DIR)
-	flex --header-file=$(GRAMMAR_BUILD_DIR)/lex.yy.h -o $(FLEX_C) $(GRAMMAR_DIR)/lexical.l
+	@$(call MD,$(GRAMMAR_BUILD_DIR))
+	$(FLEX) --header-file=$(GRAMMAR_BUILD_DIR)/lex.yy.h -o $(FLEX_C) $(GRAMMAR_DIR)/lexical.l
 
 $(OBJS): $(BISON_CC) $(FLEX_C)
 
 check: 
-	bison -Wcounterexamples grammar/syntax.y
+	$(BISON) -Wcounterexamples grammar/syntax.y
 
 examples: build
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	$$failed=0; \
+	foreach ($$file in '$(EXAMPLES)'.Split(' ')) { \
+		if ($$file -eq '') { continue; } \
+		Write-Host '[ COMPILE ]' $$file; \
+		& .\$(TARGET)$(TARGET_EXT) --file $$file; \
+		if ($$LASTEXITCODE -eq 0) { \
+			$$dot = $$file -replace '\.txy$$', '.dot'; \
+			$$svg = $$file -replace '\.txy$$', '.svg'; \
+			dot -Tsvg $$dot -o $$svg; \
+		} else { \
+			$$failed=1; \
+		} \
+	}; \
+	if ($$failed -ne 0) { exit 1; }"
+else
 	@failed=0; \
 	for file in $(EXAMPLES); do \
 		echo "[ COMPILE ] $$file"; \
-		(./$(TARGET) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
+		(./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
 	done; \
 	if [ $$failed -ne 0 ]; then exit 1; fi
+endif
 
 examples-pendrive: build
 	@failed=0; \
@@ -61,4 +99,6 @@ examples-pendrive: build
 	if [ $$failed -ne 0 ]; then exit 1; fi
 
 clean:
-	rm -rf $(BUILD_DIR) $(GRAMMAR_BUILD_DIR) $(TARGET)
+	@$(call RD,$(BUILD_DIR))
+	@$(call RD,$(GRAMMAR_BUILD_DIR))
+	@$(call RM_FILE,$(TARGET)$(TARGET_EXT))
