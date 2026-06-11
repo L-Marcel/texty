@@ -4,3 +4,6 @@ proc swap(array: int[]; a, b: int)
   array[a] = array[b];
   array[b] = temp;
 endproc;
+
+proc main()
+endproc;

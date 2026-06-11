@@ -7,10 +7,11 @@ typedef unordered_map<string, Reference*> Scope;
 struct References {
   vector<Scope> scopes;
 
-  Scope get_scope() const;
+  Scope& get_scope();
   void push_scope();
   void pop_scope();
 
+  bool has_reference(string name, ReferenceType reference_type);
   Reference* get_reference(int line, string name);
   void add_variable_reference(string name, Type type, bool is_const);
   void add_procedure_reference(string name, vector<Type> params, bool self,

@@ -14,5 +14,3 @@ struct Node {
   Node(int line);
   Node(int line, string name);
 };
-
-// TODO: Adicionar nó executável

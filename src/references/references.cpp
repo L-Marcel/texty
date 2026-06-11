@@ -6,7 +6,6 @@ References* References::_instance = nullptr;
 References* References::get_instance() {
   if (References::_instance == nullptr) {
     References::_instance = new References();
-    References::_instance->push_scope();
   }
 
   return References::_instance;
@@ -15,9 +14,7 @@ References* References::get_instance() {
 // Escopo
 void References::push_scope() { this->scopes.push_back(Scope()); };
 void References::pop_scope() { this->scopes.pop_back(); };
-Scope References::get_scope() const {
-  return this->scopes[this->scopes.size() - 1];
-};
+Scope& References::get_scope() { return this->scopes.back(); };
 
 // Referências
 void References::add_variable_reference(string name, Type type, bool is_const) {
@@ -35,14 +32,31 @@ void References::add_function_reference(string name, Type type,
       {name, new FunctionReference(type, params, self, implemented)});
 };
 
-Reference* References::get_reference(int line, string name) {
-  for (size_t i = this->scopes.size() - 1; i >= 0; i--) {
-    Scope& scope = this->scopes[i];
-    Scope::iterator iterator = scope.find(name);
-    if (iterator != scope.end()) {
-      return iterator->second;
+bool References::has_reference(string name, ReferenceType reference_type) {
+  for (reverse_iterator iterator = this->scopes.rbegin();
+       iterator != this->scopes.rend(); ++iterator) {
+    Scope& scope = *iterator;
+    Scope::iterator scope_iterator = scope.find(name);
+    if (scope_iterator != scope.end() &&
+        scope_iterator->second->reference_type == reference_type) {
+      return true;
     }
   }
 
-  throw error("tentativa inválida de acesso", line);
+  return false;
+};
+
+Reference* References::get_reference(int line, string name) {
+  for (reverse_iterator iterator = this->scopes.rbegin();
+       iterator != this->scopes.rend(); ++iterator) {
+    Scope& scope = *iterator;
+    Scope::iterator scope_iterator = scope.find(name);
+    if (scope_iterator != scope.end()) {
+      return scope_iterator->second;
+    }
+  }
+
+  throw error(
+      "tentativa inválida de acesso a variável ou subprograma não declarado",
+      line);
 };

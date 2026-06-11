@@ -43,7 +43,7 @@ string Type::to_production() const {
   if (this->kind == TypeKind::NAMED)
     return this->name;
   else if (this->kind == TypeKind::ARRAY) {
-    return "std::vector<" +
+    return "::std::vector<" +
            (this->inner_type ? this->inner_type->to_production() : "unknown") +
            ">";
   } else if (this->kind == TypeKind::POINTER) {

@@ -26,3 +26,6 @@ proc quick_sort(array: int[]; min, max: int)
 		quick_sort(array, pivot + 1, max);
 	endif;
 endproc;
+
+proc main()
+endproc;
