@@ -61,21 +61,29 @@ void AccessNode::compile_code(ostream& os) const {
 
 // Tipagem
 Type AccessNode::get_type() const {
-  Reference* reference = References::get_instance()->get_reference(line, this->name);
   switch (this->access_type) {
     case AccessType::DOT:
       // TODO - Tem que considerar o caminho
-      return reference->node_type;
-    case AccessType::BRACKET:
-      return this->previous->get_type();
+      return References::get_instance()
+          ->get_reference(line, this->name)
+          ->node_type;
+    case AccessType::BRACKET: {
+      Type type = this->previous->get_type();
+      if (type.kind != TypeKind::ARRAY)
+        throw new error("acesso com colchetes é reservado para arrays",
+                        this->line);
+      return *type.inner_type;
+    }
     case AccessType::CALL:
       return this->call->get_type();
     case AccessType::STATIC:
       // TODO - Tem que considerar o caminho
-      return reference->node_type;
+      return References::get_instance()
+          ->get_reference(line, this->name)
+          ->node_type;
     default:
       // TODO - Tem que considerar o caminho
-      return reference->node_type;
+      return this->base->get_type();
   };
 };
 

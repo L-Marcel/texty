@@ -22,7 +22,7 @@ void AccessBaseNode::compile_dot(ostream& os) const {
 
 // Código
 void AccessBaseNode::compile_code(ostream& os) const {
-    switch (this->access_type) {
+  switch (this->access_type) {
     case AccessBaseType::ID:
       os << this->name;
       break;

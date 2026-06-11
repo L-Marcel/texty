@@ -30,7 +30,9 @@ Type AssignNode::get_type() const {
         BinaryOperations::get_type(this->operation, this->line);
     return result(left, right, this->line);
   } else {
-    throw error("operação não definida para os respectivos tipos (" + left.to_string() + ", " + right.to_string() + ")", line);
+    throw error("operação não definida para os respectivos tipos (" +
+                    left.to_string() + ", " + right.to_string() + ")",
+                this->line);
   };
 };
 

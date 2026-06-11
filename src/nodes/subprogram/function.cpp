@@ -5,8 +5,8 @@
 // Debug
 void FunctionNode::compile_dot(ostream& os) const {
   string params = params_to_string(this->params, false);
-  Compiler::add_dot_node(os, this,
-                         "FUNCTION: " + this->name.substr(4) + "(" + params + ")");
+  Compiler::add_dot_node(
+      os, this, "FUNCTION: " + this->name.substr(4) + "(" + params + ")");
 
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children[i]);
@@ -41,7 +41,7 @@ void FunctionNode::compile_code(ostream& os) const {
     os << "};" << std::endl;
 
     if (this->name == "txy_main") {
-      os << "int main(" << params << ") {" << std::endl;
+      os << "\nint main(" << params << ") {" << std::endl;
       string params = params_ids_to_string(this->params, true);
       os << "\treturn txy_main(" << params << ");" << std::endl;
       os << "};" << std::endl;

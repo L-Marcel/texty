@@ -19,8 +19,7 @@ void ProgramNode::compile_dot(ostream& os) const {
 // Código
 void ProgramNode::compile_code(ostream& os) const {
   References::get_instance()->push_scope();
-  os << "#include <vector>" << std::endl;
-  os << "#include <cstdint>" << std::endl;
+  os << "#include <texty.hpp>" << std::endl;
   for (size_t i = 0; i < this->children.size(); i++) {
     this->children[i]->compile_code(os);
   };
