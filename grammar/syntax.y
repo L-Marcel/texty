@@ -2,19 +2,6 @@
 
 %code requires {
   #include "../src/main.hpp"
-  #ifdef _WIN32
-    #undef CONST
-    #undef IN
-    #undef VOID
-    #undef CHAR
-    #undef INT
-    #undef LONG
-    #undef FLOAT
-    #undef DOUBLE
-    #undef BYTE
-    #undef BOOL
-    #undef ERROR
-  #endif
 }
 
 %code {

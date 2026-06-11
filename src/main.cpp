@@ -5,7 +5,6 @@
 #include "syntax.tab.hh"
 
 #ifdef _WIN32
-#include <windows.h>
 void setup_terminal_colors() {
   HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
   if (hOut == INVALID_HANDLE_VALUE) return;
