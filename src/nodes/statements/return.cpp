@@ -8,7 +8,9 @@ void ReturnNode::compile_dot(ostream& os) const {
 
 // Código
 void ReturnNode::compile_code(ostream& os) const {
-  // TODO
+  os << "return ";
+  this->expression->compile_code(os);
+  os << ";" << std::endl;
 };
 
 // Tipagem

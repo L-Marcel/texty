@@ -9,7 +9,7 @@ void IntNode::compile_dot(ostream& os) const {
 
 // Código
 void IntNode::compile_code(ostream& os) const {
-  // TODO
+  os << this->value;
 };
 
 // Tipagem

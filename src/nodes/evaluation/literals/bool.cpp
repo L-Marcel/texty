@@ -9,7 +9,7 @@ void BoolNode::compile_dot(ostream& os) const {
 
 // Código
 void BoolNode::compile_code(ostream& os) const {
-  // TODO
+  os << (this->value ? "true" : "false");
 };
 
 // Tipagem
