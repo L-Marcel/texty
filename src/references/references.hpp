@@ -18,10 +18,9 @@ struct References {
                                bool implemented);
   void add_function_reference(string name, Type type, vector<Type> params,
                               bool self, bool implemented);
+  void initialize();
 
   static References* _instance;
   static References* get_instance();
   References();
 };
-
-// TODO: Registrar métodos e procedures nativos

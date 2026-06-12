@@ -1,5 +1,6 @@
 #pragma once
 #include "../compiler.hpp"
+#include "../evaluation/expression.hpp"
 
 struct SubprogramNode : public Node {
   vector<pair<string, Type>> params;
@@ -18,3 +19,6 @@ struct SubprogramNode : public Node {
 
 string params_to_string(vector<pair<string, Type>> params, bool production);
 string params_ids_to_string(vector<pair<string, Type>> params, bool production);
+string types_to_string(vector<Type> types, bool production);
+string expressions_types_to_string(vector<ExpressionNode*> expressions,
+                                   bool production);

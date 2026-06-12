@@ -660,7 +660,7 @@ unary_expr: MINUS exp_expr {
 } | DECREMENT exp_expr {
   $$ = new UnaryOperationNode(UnaryOperation::DECREMENT, $2);
 } | MULT exp_expr {
-  $$ = $2;
+  $$ = new UnaryOperationNode(UnaryOperation::DEREF, $2);
 } | exp_expr {
   $$ = $1;
 };
@@ -696,7 +696,7 @@ term: INT {
 } | CHAR {
   $$ = new CharNode(ctx.line, $1);
 } | NONE {
-  $$ = new OptionNode(ctx.line, Option());
+  $$ = new OptionNode(ctx.line);
 } | array_allocation {
   $$ = $1;
 } | struct_allocation {
@@ -704,7 +704,7 @@ term: INT {
 } | access {
   $$ = $1;
 } | SOME LEFT_PAREN expr RIGHT_PAREN {
-  $$ = new OptionNode(ctx.line, Option());
+  $$ = new OptionNode(ctx.line, $3);
 };
 
 array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET {
@@ -713,6 +713,13 @@ array_allocation: NEW type LEFT_BRACKET expr RIGHT_BRACKET {
   $$ = new ArrayAllocationNode(ctx.line, *$2, $4);
   for (size_t i = 0; i < $7.size(); i++) {
     $$->children.push_back($7[i]);
+  };
+} | NEW type LEFT_BRACKET RIGHT_BRACKET {
+  $$ = new ArrayAllocationNode(ctx.line, *$2);
+} | NEW type LEFT_BRACKET RIGHT_BRACKET LEFT_BRACE array_allocation_values RIGHT_BRACE {
+  $$ = new ArrayAllocationNode(ctx.line, *$2);
+  for (size_t i = 0; i < $6.size(); i++) {
+    $$->children.push_back($6[i]);
   };
 };
 

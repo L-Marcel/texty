@@ -1,0 +1,1 @@
+enum class ArrayAllocationSizeType { INITIAL_DEFINED, UNDEFINED };

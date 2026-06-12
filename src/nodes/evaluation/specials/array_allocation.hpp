@@ -2,9 +2,11 @@
 #include "range.hpp"
 
 struct ArrayAllocationNode : public ExpressionNode {
+  ArrayAllocationSizeType size_type;
   Type inner_type;
   ExpressionNode* size_expression;
 
+  ArrayAllocationNode(int line, Type inner_type);
   ArrayAllocationNode(int line, Type inner_type,
                       ExpressionNode* size_expression);
 

@@ -50,7 +50,6 @@ string Type::to_production() const {
     return (this->inner_type ? this->inner_type->to_production() : "unknown") +
            "*";
   } else if (this->kind == TypeKind::OPTION) {
-    // TODO - OPTION
     return "::txy::option<" +
            (this->inner_type ? this->inner_type->to_production() : "unknown") +
            ">";

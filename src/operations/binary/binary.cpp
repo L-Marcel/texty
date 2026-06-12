@@ -8,6 +8,7 @@
 #include "implementations/or.hpp"
 #include "implementations/rel.hpp"
 #include "implementations/sum.hpp"
+
 // Inicialização de variáveis
 bool BinaryOperations::initialized = false;
 BinaryOperationsTypeTable BinaryOperations::table = {};
@@ -23,7 +24,7 @@ BinaryTypeCheckFunction BinaryOperations::get_type(const BinaryOperation key,
 
     return BinaryOperations::table[key];
   } catch (const out_of_range& _) {
-    throw error("operação não definida", line);
+    throw error("tipos suportados da operação não definidos", line);
   }
 };
 void BinaryOperations::add_type(BinaryOperation key,

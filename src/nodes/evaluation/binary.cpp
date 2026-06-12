@@ -8,12 +8,12 @@ void BinaryOperationNode::compile_dot(ostream& os) const {
                          string(magic_enum::enum_name(this->operation)));
   if (this->left) Compiler::add_dot_relation(os, this, this->left);
   if (this->right) Compiler::add_dot_relation(os, this, this->right);
-}
+};
 
 // Código
 void BinaryOperationNode::compile_code(ostream& os) const {
   // TODO
-}
+};
 
 // Tipagem
 Type BinaryOperationNode::get_type() const {

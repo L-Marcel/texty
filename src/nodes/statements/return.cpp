@@ -10,7 +10,6 @@ void ReturnNode::compile_dot(ostream& os) const {
 void ReturnNode::compile_code(ostream& os) const {
   os << "return ";
   this->expression->compile_code(os);
-  os << ";" << std::endl;
 };
 
 // Tipagem

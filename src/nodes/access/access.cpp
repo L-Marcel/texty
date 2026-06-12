@@ -59,6 +59,22 @@ void AccessNode::compile_code(ostream& os) const {
   this->get_type();
 };
 
+// String
+string AccessNode::to_string() const {
+  switch (this->access_type) {
+    case AccessType::DOT:
+      return this->previous->to_string() + "." + this->name.substr(4);
+    case AccessType::BRACKET:
+      return this->previous->to_string() + "[...]";
+    case AccessType::CALL:
+      return this->call->access->to_string() + "(...)";
+    case AccessType::STATIC:
+      return this->previous->to_string() + "::" + this->name.substr(4);
+    default:
+      return this->base->to_string();
+  };
+};
+
 // Tipagem
 Type AccessNode::get_type() const {
   switch (this->access_type) {

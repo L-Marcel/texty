@@ -9,7 +9,7 @@ void FloatNode::compile_dot(ostream& os) const {
 
 // Código
 void FloatNode::compile_code(ostream& os) const {
-  // TODO
+  os << showpoint << this->value << "f";
 };
 
 // Tipagem

@@ -35,6 +35,18 @@ void AccessBaseNode::compile_code(ostream& os) const {
   };
 };
 
+// String
+string AccessBaseNode::to_string() const {
+  switch (this->access_type) {
+    case AccessBaseType::ID:
+      return this->name.substr(4);
+    case AccessBaseType::SELF:
+      return "self";
+    default:
+      return "(<expression>)";
+  };
+};
+
 // Tipagem
 Type AccessBaseNode::get_type() const {
   Reference* reference = this->get_reference(this->line);

@@ -1,11 +1,12 @@
 #include "bit_and.hpp"
 
 Type binary_bit_and_get_type(const Type& left, const Type& right, int line) {
-  if ((left == Type(TypeKind::BYTE) || left == Type(TypeKind::INT) || left == Type(TypeKind::LONG)) &&
-      (right == Type(TypeKind::BYTE) || right == Type(TypeKind::INT) || right == Type(TypeKind::LONG)) &&
+  if (check_if_is_pointwise(left) && check_if_is_pointwise(right) &&
       left == right) {
     return left;
   } else {
-    throw error("operação bitwise '&' não definida para os respectivos tipos", line);
-  }
-}
+    throw error("operação binária '&' não definida para os tipos (" +
+                    left.to_string() + "," + right.to_string() + ")",
+                line);
+  };
+};

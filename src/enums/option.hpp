@@ -1,0 +1,1 @@
+enum class OptionNodeType { DEFINED, UNDEFINED };

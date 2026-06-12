@@ -12,7 +12,6 @@ void AttrNode::compile_dot(ostream& os) const {
 void AttrNode::compile_code(ostream& os) const {
   os << this->type.to_production() << " " << this->name << " = ";
   this->expression->compile_code(os);
-  os << ";";
   References::get_instance()->add_variable_reference(this->name, this->type,
                                                      false);
 };

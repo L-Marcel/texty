@@ -14,26 +14,28 @@
 #include <vector>
 
 #ifdef _WIN32
-  #include <windows.h>
-  #undef CONST
-  #undef IN
-  #undef VOID
-  #undef CHAR
-  #undef INT
-  #undef LONG
-  #undef FLOAT
-  #undef DOUBLE
-  #undef BYTE
-  #undef BOOL
-  #undef ERROR
+#include <windows.h>
+#undef CONST
+#undef IN
+#undef VOID
+#undef CHAR
+#undef INT
+#undef LONG
+#undef FLOAT
+#undef DOUBLE
+#undef BYTE
+#undef BOOL
+#undef ERROR
 #endif
 #include "enums/access.hpp"
+#include "enums/array.hpp"
 #include "enums/assign.hpp"
 #include "enums/call.hpp"
 #include "enums/cases.hpp"
 #include "enums/for.hpp"
 #include "enums/if.hpp"
 #include "enums/operations.hpp"
+#include "enums/option.hpp"
 #include "enums/range.hpp"
 #include "enums/references.hpp"
 #include "enums/type.hpp"

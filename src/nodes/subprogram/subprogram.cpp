@@ -35,9 +35,54 @@ string params_ids_to_string(vector<pair<string, Type>> params,
     } else {
       text += params[i].first.substr(4);
     };
-    
+
     if (i != params.size() - 1) {
       text += ", ";
+    };
+  };
+
+  return text;
+};
+
+string types_to_string(vector<Type> types, bool production) {
+  string text = "";
+
+  if (production) {
+    for (size_t i = 0; i < types.size(); i++) {
+      text += types[i].to_production();
+      if (i != types.size() - 1) {
+        text += ", ";
+      };
+    };
+  } else {
+    for (size_t i = 0; i < types.size(); i++) {
+      text += types[i].to_string();
+      if (i != types.size() - 1) {
+        text += ", ";
+      };
+    };
+  };
+
+  return text;
+};
+
+string expressions_types_to_string(vector<ExpressionNode*> expressions,
+                                   bool production) {
+  string text = "";
+
+  if (production) {
+    for (size_t i = 0; i < expressions.size(); i++) {
+      text += expressions[i]->get_type().to_production();
+      if (i != expressions.size() - 1) {
+        text += ", ";
+      };
+    };
+  } else {
+    for (size_t i = 0; i < expressions.size(); i++) {
+      text += expressions[i]->get_type().to_string();
+      if (i != expressions.size() - 1) {
+        text += ", ";
+      };
     };
   };
 
@@ -47,8 +92,8 @@ string params_ids_to_string(vector<pair<string, Type>> params,
 // Debug
 void SubprogramNode::compile_dot(ostream& os) const {
   string params = params_to_string(this->params, false);
-  Compiler::add_dot_node(os, this,
-                         "SUBPROGRAM: " + this->name.substr(4) + "(" + params + ")");
+  Compiler::add_dot_node(
+      os, this, "SUBPROGRAM: " + this->name.substr(4) + "(" + params + ")");
 
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children[i]);
