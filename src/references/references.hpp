@@ -24,5 +24,3 @@ struct References {
   static References* get_instance();
   References();
 };
-
-// TODO: Registrar métodos e procedures nativos
