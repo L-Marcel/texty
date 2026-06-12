@@ -9,12 +9,12 @@ void RangeNode::compile_dot(ostream& os) const {
   if (this->right_inclusion != RangeInclusionType::UNBOUNDED) {
     Compiler::add_dot_relation(os, this, this->right);
   };
-}
+};
 
 // Código
 void RangeNode::compile_code(ostream& os) const {
   // TODO
-}
+};
 
 // Tipagem
 Type RangeNode::get_type() const {
