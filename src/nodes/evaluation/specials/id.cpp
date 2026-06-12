@@ -8,9 +8,7 @@ void IdNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void IdNode::compile_code(ostream& os) const {
-  // TODO
-};
+void IdNode::compile_code(ostream& os) const { os << this->name; };
 
 // Tipagem
 Type IdNode::get_type() const {

@@ -6,9 +6,7 @@ void ContinueNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void ContinueNode::compile_code(ostream& os) const {
-  // TODO
-};
+void ContinueNode::compile_code(ostream& os) const { os << "continue"; };
 
 // Tipagem
 Type ContinueNode::get_type() const { return Type(TypeKind::VOID); };

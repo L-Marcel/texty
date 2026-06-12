@@ -6,9 +6,7 @@ void BreakNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void BreakNode::compile_code(ostream& os) const {
-  // TODO
-};
+void BreakNode::compile_code(ostream& os) const { os << "break"; };
 
 // Tipagem
 Type BreakNode::get_type() const { return Type(TypeKind::VOID); };

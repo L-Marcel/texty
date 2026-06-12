@@ -71,4 +71,5 @@ void References::initialize() {
                                true);
   this->add_function_reference("txy_join", Type(TypeKind::STRING), {}, false,
                                true);
+  // TODO: Registrar métodos e procedures nativos
 };
