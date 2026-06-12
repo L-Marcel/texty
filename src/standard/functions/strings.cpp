@@ -1,5 +1,21 @@
 #include "../core.hpp"
 
+void txy_print(const ::std::string in) { ::std::cout << in; };
+void txy_println(const ::std::string in) { ::std::cout << in << ::std::endl; };
+
+template <typename... Args>
+::std::string txy_format(const ::std::string& in, const Args&... args) {
+  // TODO
+  return "TODO do format!";
+};
+
+template <typename... Args>
+::std::string txy_join(const ::std::string& delimiter, const ::std::string& in,
+                       const Args&... args) {
+  // TODO
+  return "TODO do join!";
+};
+
 bool txy_is_empty(const ::std::string in) { return in.empty(); };
 
 bool txy_is_blank(const ::std::string in) {

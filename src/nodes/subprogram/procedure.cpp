@@ -36,7 +36,7 @@ void ProcedureNode::compile_code(ostream& os) const {
       for (size_t i = 0; i < this->children.size(); i++) {
         os << "\t";
         this->children[i]->compile_code(os);
-        os << std::endl;
+        os << ";" << std::endl;
       };
       os << "\treturn 0;" << std::endl;
     } else {
@@ -44,7 +44,7 @@ void ProcedureNode::compile_code(ostream& os) const {
       for (size_t i = 0; i < this->children.size(); i++) {
         os << "\t";
         this->children[i]->compile_code(os);
-        os << std::endl;
+        os << ";" << std::endl;
       };
     };
 

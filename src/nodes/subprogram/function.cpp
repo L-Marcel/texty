@@ -36,7 +36,7 @@ void FunctionNode::compile_code(ostream& os) const {
     for (size_t i = 0; i < this->children.size(); i++) {
       os << "\t";
       this->children[i]->compile_code(os);
-      os << "\n";
+      os << ";" << std::endl;
     };
     os << "};" << std::endl;
 

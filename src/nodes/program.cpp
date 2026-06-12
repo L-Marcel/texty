@@ -9,7 +9,7 @@ void ProgramNode::compile_dot(ostream& os) const {
     Compiler::add_dot_node(
         os, this, string(magic_enum::enum_name(this->get_type().kind)));
   else
-    Compiler::add_dot_node(os, this, this->name.substr(4));
+    Compiler::add_dot_node(os, this, this->name);
 
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children[i]);
@@ -19,6 +19,7 @@ void ProgramNode::compile_dot(ostream& os) const {
 // Código
 void ProgramNode::compile_code(ostream& os) const {
   References::get_instance()->push_scope();
+  References::get_instance()->initialize();
 
   for (size_t i = 0; i < this->children.size(); i++) {
     this->children[i]->compile_code(os);

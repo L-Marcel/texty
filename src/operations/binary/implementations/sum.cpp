@@ -5,7 +5,9 @@ Type binary_plus_get_type(const Type& left, const Type& right, int line) {
       left == right) {
     return left;
   } else {
-    throw error("operação não definida para os respectivos tipos", line);
+    throw error("operação binária '+' não definida para os tipos (" +
+                    left.to_string() + "," + right.to_string() + ")",
+                line);
   }
 };
 
@@ -14,6 +16,8 @@ Type binary_minus_get_type(const Type& left, const Type& right, int line) {
       left == right) {
     return left;
   } else {
-    throw error("operação não definida para os respectivos tipos", line);
+    throw error("operação binária '-' não definida para os tipos (" +
+                    left.to_string() + "," + right.to_string() + ")",
+                line);
   }
 };

@@ -14,7 +14,6 @@ void AssignNode::compile_code(ostream& os) const {
   this->access->compile_code(os);
   os << " = ";
   this->expression->compile_code(os);
-  os << ";";
   this->get_type();
 };
 
@@ -30,7 +29,7 @@ Type AssignNode::get_type() const {
         BinaryOperations::get_type(this->operation, this->line);
     return result(left, right, this->line);
   } else {
-    throw error("operação não definida para os respectivos tipos (" +
+    throw error("operação de atribuição '=' não definida para os tipos (" +
                     left.to_string() + ", " + right.to_string() + ")",
                 this->line);
   };

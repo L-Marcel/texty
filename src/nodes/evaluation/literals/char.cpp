@@ -9,7 +9,7 @@ void CharNode::compile_dot(ostream& os) const {
 
 // Código
 void CharNode::compile_code(ostream& os) const {
-
+  os << "'" << this->value << "'";
 };
 
 // Tipagem

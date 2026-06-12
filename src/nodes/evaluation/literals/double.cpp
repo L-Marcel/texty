@@ -8,9 +8,7 @@ void DoubleNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void DoubleNode::compile_code(ostream& os) const {
-  // TODO
-};
+void DoubleNode::compile_code(ostream& os) const { os << this->value; };
 
 // Tipagem
 Type DoubleNode::get_type() const { return Type(TypeKind::DOUBLE); };

@@ -57,6 +57,18 @@ Reference* References::get_reference(int line, string name) {
   }
 
   throw error("tentativa inválida de acesso a variável ou subprograma \'" +
-                  name + "\' não declarado",
+                  name.substr(4) + "\' não declarado",
               line);
+};
+
+// Inicialização
+void References::initialize() {
+  this->add_procedure_reference("txy_print", {Type(TypeKind::STRING)}, false,
+                                true);
+  this->add_procedure_reference("txy_println", {Type(TypeKind::STRING)}, false,
+                                true);
+  this->add_function_reference("txy_format", Type(TypeKind::STRING), {}, false,
+                               true);
+  this->add_function_reference("txy_join", Type(TypeKind::STRING), {}, false,
+                               true);
 };

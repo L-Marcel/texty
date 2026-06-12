@@ -23,4 +23,4 @@ enum class BinaryOperation {
   EXP
 };
 
-enum class UnaryOperation { MINUS, REV, NOT, REF, INCREMENT, DECREMENT };
+enum class UnaryOperation { MINUS, REV, NOT, REF, DEREF, INCREMENT, DECREMENT };

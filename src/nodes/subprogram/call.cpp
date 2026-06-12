@@ -1,5 +1,6 @@
 #include "call.hpp"
 
+#include "../../helpers/function.hpp"
 #include "../../references/references.hpp"
 
 // Debug
@@ -15,29 +16,90 @@ void SubprogramCallNode::compile_dot(ostream& os) const {
   for (size_t i = 0; i < this->params.size(); i++) {
     Compiler::add_dot_relation(os, this, this->params[i]);
   };
-}
+};
 
 // Código
 void SubprogramCallNode::compile_code(ostream& os) const {
-  // TODO
-}
+  this->access->compile_code(os);
+  os << "(";
+  for (size_t i = 0; i < this->params.size(); i++) {
+    this->params[i]->compile_code(os);
+    if (i != this->params.size() - 1) {
+      os << ", ";
+    };
+  };
+  os << ")";
+};
 
 // Tipagem
 Type SubprogramCallNode::get_type() const {
   if (this->call_type == CallType::ACCESS) {
     Reference* reference = this->access->get_reference(this->line);
-
+    string reference_name = this->access->to_string();
     vector<Type> types;
     if (reference->reference_type == ReferenceType::FUNCTION) {
       FunctionReference* function_reference = (FunctionReference*)reference;
 
-      if (function_reference->params.size() != this->params.size()) {
-        throw error("número de parâmetros incorreto", this->line);
+      string reference_types =
+          types_to_string(function_reference->params, false);
+      string params_types = expressions_types_to_string(this->params, false);
+
+      bool is_varchar_function = check_if_is_varchar_function(reference_name);
+      if (is_varchar_function)
+        reference_types = get_varchar_function_types_as_string(reference_name);
+
+      vector<Type> required_varchar_types =
+          get_required_varchar_function_types(reference_name);
+      Type others_varchar_types =
+          get_others_varchar_function_types(reference_name);
+
+      if (function_reference->params.size() != this->params.size() &&
+          !is_varchar_function) {
+        throw error("número de parâmetros incorreto na chamada, a função \'" +
+                        reference_name + "\' espera receber (" +
+                        reference_types + ") mas recebeu (" + params_types +
+                        ")",
+                    this->line);
+      } else if (is_varchar_function &&
+                 this->params.size() < required_varchar_types.size()) {
+        throw error("número de parâmetros incorreto na chamada, a função \'" +
+                        reference_name + "\' espera receber (" +
+                        reference_types + ") mas recebeu (" + params_types +
+                        ")",
+                    this->line);
       };
 
-      for (size_t i = 0; i < function_reference->params.size(); i++) {
-        if (this->params[i]->get_type() != function_reference->params[i]) {
-          throw error("tipo incorreto nos parâmetros da chamada", this->line);
+      if (!is_varchar_function) {
+        for (size_t i = 0; i < function_reference->params.size(); i++) {
+          if (this->params[i]->get_type() != function_reference->params[i]) {
+            throw error(
+                "tipo incorreto nos parâmetros da chamada, a função \'" +
+                    reference_name + "\' espera receber (" + reference_types +
+                    ") mas recebeu (" + params_types + ")",
+                this->line);
+          };
+        };
+      } else {
+        for (size_t i = 0; i < required_varchar_types.size(); i++) {
+          if (this->params[i]->get_type() != required_varchar_types[i]) {
+            throw error(
+                "tipo incorreto nos parâmetros da chamada, a função \'" +
+                    reference_name + "\' espera receber (" + reference_types +
+                    ") mas recebeu (" + params_types + ")",
+                this->line);
+          };
+        };
+
+        for (size_t i = required_varchar_types.size(); i < this->params.size();
+             i++) {
+          if (this->params[i]->get_type() != others_varchar_types &&
+              others_varchar_types != Type(TypeKind::UNKNOWN)) {
+            throw error(
+                "tipo incorreto nos parâmetros da chamada, a função \'" +
+                    reference_name + "\' espera receber (" + reference_types +
+                    ") mas recebeu (" + params_types + ") ",
+                this->line);
+          };
         };
       };
 
@@ -45,19 +107,33 @@ Type SubprogramCallNode::get_type() const {
     } else if (reference->reference_type == ReferenceType::PROCEDURE) {
       ProcedureReference* procedure_reference = (ProcedureReference*)reference;
 
+      string reference_types =
+          types_to_string(procedure_reference->params, false);
+      string params_types = expressions_types_to_string(this->params, false);
+
       if (procedure_reference->params.size() != this->params.size()) {
-        throw error("número de parâmetros incorreto", this->line);
+        throw error(
+            "número de parâmetros incorreto na chamada, o procedimento \'" +
+                reference_name + "\' espera receber (" + reference_types +
+                ") mas recebeu (" + params_types + ")",
+            this->line);
       };
 
       for (size_t i = 0; i < procedure_reference->params.size(); i++) {
         if (this->params[i]->get_type() != procedure_reference->params[i]) {
-          throw error("tipo incorreto nos parâmetros da chamada", this->line);
+          throw error(
+              "tipo incorreto nos parâmetros da chamada, o procedimento \'" +
+                  reference_name + "\' espera receber (" + reference_types +
+                  ") mas recebeu (" + params_types + ")",
+              this->line);
         };
       };
 
       return Type(TypeKind::VOID);
     } else {
-      throw error("identificador não pertence a um subprograma", this->line);
+      throw error("identificador \'" + reference_name +
+                      "\' não pertence a um subprograma",
+                  this->line);
     };
   } else {
     // TODO

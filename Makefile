@@ -75,7 +75,7 @@ $(BUILD_DIR)/src/nodes/compiler.o: src/nodes/compiler.cpp $(EMBEDDED_STD)
 check: 
 	$(BISON) -Wcounterexamples grammar/syntax.y
 
-examples: build
+examples: build $(EXAMPLES)
 ifeq ($(OS),Windows_NT)
 	@powershell -ExecutionPolicy Bypass -Command "\
 	$$failed=0; \
@@ -101,7 +101,7 @@ else
 	if [ $$failed -ne 0 ]; then exit 1; fi
 endif
 
-examples-pendrive: build
+examples-pendrive: build $(EXAMPLES)
 	@failed=0; \
 	for file in $(EXAMPLES); do \
 		echo "[ COMPILE ] $$file"; \

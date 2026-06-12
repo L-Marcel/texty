@@ -11,26 +11,54 @@ const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
 #include <cstdint>
 #include <iostream>
 #include <memory>
+#include <optional>
+#include <stdexcept>
 #include <string>
+#include <variant>
 #include <vector>
 namespace txy {
 template <typename T>
 struct array {
   ::std::shared_ptr<::std::vector<T>> ptr;
-  array(int size) : ptr(::std::make_shared<::std::vector<T>>(size)) {}
-  T& operator[](int index) { return (*ptr)[index]; }
+  array() : ptr(::std::make_shared<::std::vector<T>>()) {};
+  array(::std::int32_t size)
+      : ptr(::std::make_shared<::std::vector<T>>(
+            static_cast<::std::size_t>(size))) {};
+  array(::std::initializer_list<T> init)
+      : ptr(::std::make_shared<::std::vector<T>>(init)) {};
+  array(::std::int32_t size, ::std::initializer_list<T> init)
+      : ptr(::std::make_shared<::std::vector<T>>(init)) {
+    ptr->resize(static_cast<::std::size_t>(size));
+  };
+  T& operator[](::std::int32_t index) {
+    return (*ptr)[static_cast<::std::size_t>(index)];
+  };
+};
+template <typename T>
+struct option {
+  ::std::optional<T> inner;
+  option() : inner(::std::nullopt) {}
+  option(T value) : inner(::std::move(value)) {};
+  bool is_some() const { return this->inner.has_value(); };
+  bool is_none() const { return !this->inner.has_value(); };
+  T unwrap() const {
+    if (!this->inner.has_value()) {
+      throw ::std::runtime_error("tentativa de acessar valor none");
+    }
+    return this->inner.value();
+  };
 };
 };  // namespace txy
-int input_key_pressed() {
+::std::int32_t input_key_pressed() {
 #ifdef _WIN32
-  return _getch();
+  return static_cast<::std::int32_t>(_getch());
 #else
   struct termios oldterminal, newterminal;
   tcgetattr(STDIN_FILENO, &oldterminal);
   newterminal = oldterminal;
   newterminal.c_lflag &= ~(ICANON | ECHO);
   tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
-  int caractere = getchar();
+  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
   tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
   return caractere;
 #endif
@@ -39,6 +67,17 @@ int input_key_pressed() {
   ::std::string line;
   ::std::getline(::std::cin, line);
   return line;
+};
+void txy_print(const ::std::string in) { ::std::cout << in; };
+void txy_println(const ::std::string in) { ::std::cout << in << ::std::endl; };
+template <typename... Args>
+::std::string txy_format(const ::std::string& in, const Args&... args) {
+  return "TODO do format!";
+};
+template <typename... Args>
+::std::string txy_join(const ::std::string& delimiter, const ::std::string& in,
+                       const Args&... args) {
+  return "TODO do join!";
 };
 bool txy_is_empty(const ::std::string in) { return in.empty(); };
 bool txy_is_blank(const ::std::string in) {

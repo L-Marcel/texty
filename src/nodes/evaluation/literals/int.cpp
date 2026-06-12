@@ -9,7 +9,7 @@ void IntNode::compile_dot(ostream& os) const {
 
 // Código
 void IntNode::compile_code(ostream& os) const {
-  os << this->value;
+  os << "static_cast<::std::int32_t>(" << this->value << ")";
 };
 
 // Tipagem
