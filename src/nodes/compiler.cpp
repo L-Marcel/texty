@@ -71,8 +71,14 @@ void Compiler::create_code(Context& ctx, string filename) {
     std::cout << DEBUG_LABEL << "Arquivo de intermediário montado" << std::endl;
     std::cout << DEBUG_LABEL << "Compilando binário final" << std::endl;
 
+#ifdef _WIN32
+    string output_filename = base_filename + ".exe";
+#else
+    string output_filename = base_filename;
+#endif
+
     string command =
-        "g++ -O2 -std=c++17 " + cpp_filename + " -o " + base_filename;
+        "g++ -O2 -std=c++17 " + cpp_filename + " -o " + output_filename;
 
     int result = std::system(command.c_str());
 
