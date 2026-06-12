@@ -4,7 +4,7 @@
 
 // Debug
 void IdNode::compile_dot(ostream& os) const {
-  Compiler::add_dot_node(os, this, this->name);
+  Compiler::add_dot_node(os, this, this->name.substr(4));
 };
 
 // Código

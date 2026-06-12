@@ -8,8 +8,9 @@ GRAMMAR_BUILD_DIR = $(GRAMMAR_DIR)/build
 BISON_CC = $(GRAMMAR_BUILD_DIR)/syntax.tab.cc
 BISON_HH = $(GRAMMAR_BUILD_DIR)/syntax.tab.hh
 FLEX_C = $(GRAMMAR_BUILD_DIR)/lex.yy.c
+EMBEDDED_STD = src/embedded_standard.hpp
+PACKER_SRC = src/packer.cpp
 
-# Cross-platform config
 ifeq ($(OS),Windows_NT)
 	BISON = win_bison
 	FLEX = win_flex
@@ -26,18 +27,26 @@ else
 	RM_FILE = rm -f $1
 endif
 
-# Recursive wildcard (cross-platform alternative to find)
+PACKER_BIN = packer$(TARGET_EXT)
+
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
-SRCS = $(call rwildcard,src/,*.cpp)
+SRCS_ALL = $(call rwildcard,src/,*.cpp)
+SRCS = $(filter-out $(PACKER_SRC), $(SRCS_ALL))
 EXAMPLES = $(call rwildcard,examples/,*.txy)
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o) $(BISON_CC:.cc=.o) $(FLEX_C:.c=.o))
 
 build: all
 all: $(TARGET)$(TARGET_EXT)
 
-$(TARGET)$(TARGET_EXT): $(BISON_CC) $(FLEX_C) $(OBJS)
+$(TARGET)$(TARGET_EXT): $(EMBEDDED_STD) $(BISON_CC) $(FLEX_C) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)$(TARGET_EXT)
+
+$(EMBEDDED_STD): $(PACKER_SRC) $(call rwildcard,src/standard/,*.*)
+	@echo "[ PACK ] Compilando empacotador..."
+	$(CXX) -std=c++17 $(PACKER_SRC) -o $(PACKER_BIN)
+	@echo "[ PACK ] Gerando biblioteca padrao embutida..."
+	./$(PACKER_BIN)
 
 $(BUILD_DIR)/%.o: %.cpp
 	@$(call MD,$(dir $@))
@@ -60,6 +69,8 @@ $(FLEX_C): $(GRAMMAR_DIR)/lexical.l $(BISON_HH)
 	$(FLEX) --header-file=$(GRAMMAR_BUILD_DIR)/lex.yy.h -o $(FLEX_C) $(GRAMMAR_DIR)/lexical.l
 
 $(OBJS): $(BISON_CC) $(FLEX_C)
+
+$(BUILD_DIR)/src/nodes/compiler.o: src/nodes/compiler.cpp $(EMBEDDED_STD)
 
 check: 
 	$(BISON) -Wcounterexamples grammar/syntax.y
@@ -102,3 +113,5 @@ clean:
 	@$(call RD,$(BUILD_DIR))
 	@$(call RD,$(GRAMMAR_BUILD_DIR))
 	@$(call RM_FILE,$(TARGET)$(TARGET_EXT))
+	@$(call RM_FILE,$(PACKER_BIN))
+	@$(call RM_FILE,$(EMBEDDED_STD))

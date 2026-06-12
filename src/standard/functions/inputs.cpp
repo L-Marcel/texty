@@ -1,17 +1,8 @@
+#include "../core.hpp"
+
+::std::int32_t input_key_pressed() {
 #ifdef _WIN32
-#include <conio.h>
-#else
-#include <termios.h>
-#include <unistd.h>
-#endif
-
-#include <iostream>
-
-using namespace std;
-
-int input_key_pressed() {
-#ifdef _WIN32
-  return _getch();
+  return static_cast<::std::int32_t>(_getch());
 #else
   struct termios oldterminal, newterminal;
 
@@ -21,10 +12,16 @@ int input_key_pressed() {
 
   tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
 
-  int caractere = getchar();
+  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
 
   tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
 
   return caractere;
 #endif
-}
+};
+
+::std::string input_line() {
+  ::std::string line;
+  ::std::getline(::std::cin, line);
+  return line;
+};

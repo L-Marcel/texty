@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 
+#include "../embedded_standard.hpp"
+
 // Filename
 string get_filename_without_mime(string filename) {
   int index = filename.rfind('.');
@@ -54,6 +56,13 @@ void Compiler::create_code(Context& ctx, string filename) {
   ofstream file = ofstream(cpp_filename);
   std::cout << DEBUG_LABEL << "Montando arquivo de intermediário" << std::endl;
   if (file.is_open()) {
+    file << "// ================== STANDARD ================== //" << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << std::endl << TEXTY_STANDARD_LIBRARY << std::endl << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << "// ================== PROGRAM =================== //" << std::endl
+         << std::endl;
+
     if (ctx.root != nullptr) {
       ctx.root->compile_code(file);
     }
@@ -62,8 +71,14 @@ void Compiler::create_code(Context& ctx, string filename) {
     std::cout << DEBUG_LABEL << "Arquivo de intermediário montado" << std::endl;
     std::cout << DEBUG_LABEL << "Compilando binário final" << std::endl;
 
+#ifdef _WIN32
+    string output_filename = base_filename + ".exe";
+#else
+    string output_filename = base_filename;
+#endif
+
     string command =
-        "g++ -O2 -std=c++17 " + cpp_filename + " -o " + base_filename;
+        "g++ -O2 -std=c++17 " + cpp_filename + " -o " + output_filename;
 
     int result = std::system(command.c_str());
 

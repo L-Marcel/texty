@@ -7,7 +7,7 @@
 void AccessNode::compile_dot(ostream& os) const {
   switch (this->access_type) {
     case AccessType::DOT:
-      Compiler::add_dot_node(os, this, "DOT: " + this->name);
+      Compiler::add_dot_node(os, this, "DOT: " + this->name.substr(4));
       Compiler::add_dot_relation(os, this, this->previous);
       break;
     case AccessType::BRACKET:
@@ -20,7 +20,7 @@ void AccessNode::compile_dot(ostream& os) const {
       Compiler::add_dot_relation(os, this, this->call);
       break;
     case AccessType::STATIC:
-      Compiler::add_dot_node(os, this, "STATIC: " + this->name);
+      Compiler::add_dot_node(os, this, "STATIC: " + this->name.substr(4));
       Compiler::add_dot_relation(os, this, this->previous);
       break;
     case AccessType::BASE:
@@ -34,16 +34,59 @@ void AccessNode::compile_dot(ostream& os) const {
 
 // Código
 void AccessNode::compile_code(ostream& os) const {
-  // TODO
+  switch (this->access_type) {
+    case AccessType::DOT:
+      this->previous->compile_code(os);
+      os << "." << this->name;
+      break;
+    case AccessType::BRACKET:
+      this->previous->compile_code(os);
+      os << "[";
+      this->expression->compile_code(os);
+      os << "]";
+      break;
+    case AccessType::CALL:
+      this->call->compile_code(os);
+      break;
+    case AccessType::STATIC:
+      this->previous->compile_code(os);
+      os << "::" << this->name;
+      break;
+    default:
+      this->base->compile_code(os);
+      break;
+  };
+  this->get_type();
 };
 
 // Tipagem
 Type AccessNode::get_type() const {
-  // TODO
-  return Type(TypeKind::UNKNOWN);
+  switch (this->access_type) {
+    case AccessType::DOT:
+      // TODO - Tem que considerar o caminho
+      return References::get_instance()
+          ->get_reference(line, this->name)
+          ->node_type;
+    case AccessType::BRACKET: {
+      Type type = this->previous->get_type();
+      if (type.kind != TypeKind::ARRAY)
+        throw new error("acesso com colchetes é reservado para arrays",
+                        this->line);
+      return *type.inner_type;
+    }
+    case AccessType::CALL:
+      return this->call->get_type();
+    case AccessType::STATIC:
+      // TODO - Tem que considerar o caminho
+      return References::get_instance()
+          ->get_reference(line, this->name)
+          ->node_type;
+    default:
+      // TODO - Tem que considerar o caminho
+      return this->base->get_type();
+  };
 };
 
-// Referências
 // Referências
 Reference* AccessNode::get_reference(int line) const {
   switch (this->access_type) {
@@ -51,8 +94,7 @@ Reference* AccessNode::get_reference(int line) const {
       // TODO - Tem que ser uma referência que considere a base
       return References::get_instance()->get_reference(line, this->name);
     case AccessType::BRACKET:
-      // TODO - Tem que ser uma referência que considere a base
-      return References::get_instance()->get_reference(line, this->name);
+      return this->previous->get_reference(line);
     case AccessType::CALL:
       if (this->call->call_type == CallType::ACCESS) {
         return this->call->access->get_reference(line);

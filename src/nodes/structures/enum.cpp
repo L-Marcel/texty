@@ -2,9 +2,9 @@
 
 // Debug
 void EnumNode::compile_dot(ostream& os) const {
-  Compiler::add_dot_node(os, this, "ENUM: " + this->name);
+  Compiler::add_dot_node(os, this, "ENUM: " + this->name.substr(4));
   for (size_t i = 0; i < this->values.size(); i++) {
-    Compiler::add_dot_node_item(os, this, this->values[i]);
+    Compiler::add_dot_node_item(os, this, this->values[i].substr(4));
   };
 };
 

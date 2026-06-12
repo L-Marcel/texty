@@ -15,7 +15,7 @@ string params_to_string(vector<pair<string, Type>> params, bool production) {
     };
   } else {
     for (size_t i = 0; i < params.size(); i++) {
-      text += params[i].first + ": " + params[i].second.to_string();
+      text += params[i].first.substr(4) + ": " + params[i].second.to_string();
       if (i != params.size() - 1) {
         text += ", ";
       };
@@ -30,7 +30,12 @@ string params_ids_to_string(vector<pair<string, Type>> params,
   string text = "";
 
   for (size_t i = 0; i < params.size(); i++) {
-    text += params[i].first;
+    if (production) {
+      text += params[i].first;
+    } else {
+      text += params[i].first.substr(4);
+    };
+    
     if (i != params.size() - 1) {
       text += ", ";
     };
@@ -43,7 +48,7 @@ string params_ids_to_string(vector<pair<string, Type>> params,
 void SubprogramNode::compile_dot(ostream& os) const {
   string params = params_to_string(this->params, false);
   Compiler::add_dot_node(os, this,
-                         "SUBPROGRAM: " + this->name + "(" + params + ")");
+                         "SUBPROGRAM: " + this->name.substr(4) + "(" + params + ")");
 
   for (size_t i = 0; i < this->children.size(); i++) {
     Compiler::add_dot_relation(os, this, this->children[i]);

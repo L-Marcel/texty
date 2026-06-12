@@ -43,15 +43,15 @@ string Type::to_production() const {
   if (this->kind == TypeKind::NAMED)
     return this->name;
   else if (this->kind == TypeKind::ARRAY) {
-    return "::std::vector<" +
+    return "::txy::array<" +
            (this->inner_type ? this->inner_type->to_production() : "unknown") +
            ">";
   } else if (this->kind == TypeKind::POINTER) {
     return (this->inner_type ? this->inner_type->to_production() : "unknown") +
            "*";
   } else if (this->kind == TypeKind::OPTION) {
-    // TODO
-    return "option<" +
+    // TODO - OPTION
+    return "::txy::option<" +
            (this->inner_type ? this->inner_type->to_production() : "unknown") +
            ">";
   };
@@ -65,7 +65,7 @@ string Type::to_production() const {
       name = "char";
       break;
     case TypeKind::STRING:
-      name = "std::string";
+      name = "::std::string";
       break;
     case TypeKind::BOOL:
       name = "bool";
@@ -77,13 +77,13 @@ string Type::to_production() const {
       name = "double";
       break;
     case TypeKind::LONG:
-      name = "std::int64_t";
+      name = "::std::int64_t";
       break;
     case TypeKind::INT:
-      name = "std::int32_t";
+      name = "::std::int32_t";
       break;
     case TypeKind::BYTE:
-      name = "std::uint8_t";
+      name = "::std::uint8_t";
       break;
     case TypeKind::VOID:
       break;

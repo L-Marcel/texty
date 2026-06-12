@@ -4,7 +4,7 @@
 void ForNode::compile_dot(ostream& os) const {
   switch (this->type) {
     case ForType::SINGLE_EXPRESSION:
-      Compiler::add_dot_node(os, this, "FOR: " + this->name);
+      Compiler::add_dot_node(os, this, "FOR: " + this->name.substr(4));
       Compiler::add_dot_relation(os, this, this->expression);
       for (size_t i = 0; i < this->children.size(); i++) {
         Compiler::add_dot_relation(os, this, this->children[i]);
