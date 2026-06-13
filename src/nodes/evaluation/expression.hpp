@@ -3,6 +3,7 @@
 
 struct ExpressionNode : public Node {
   virtual ~ExpressionNode() = default;
+  virtual void set_expected_type(Type type);
 
  protected:
   ExpressionNode(int line);
