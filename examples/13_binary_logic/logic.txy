@@ -1,0 +1,9 @@
+proc main()
+  var base: int = 2 ** 8;
+  var bits: int = 5 & 3;
+  var xor: int = 5 ^ 3;
+  
+  if base == 256 && bits == 1 then
+    println("Operadores estendidos funcionando");
+  endif;
+endproc;
