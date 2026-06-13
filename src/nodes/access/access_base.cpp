@@ -30,7 +30,9 @@ void AccessBaseNode::compile_code(ostream& os) const {
       os << "this";
       break;
     default:
+      os << "(";
       this->expression->compile_code(os);
+      os << ")";
       break;
   };
 };

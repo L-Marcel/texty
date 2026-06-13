@@ -10,6 +10,14 @@ void AttrNode::compile_dot(ostream& os) const {
 
 // Código
 void AttrNode::compile_code(ostream& os) const {
+  Type expression_type = this->expression->get_type();
+  if (this->type.kind == TypeKind::OPTION &&
+      expression_type.kind == TypeKind::OPTION &&
+      expression_type.inner_type->kind == TypeKind::UNKNOWN) {
+    this->expression->set_expected_type(this->type);
+    expression_type = this->expression->get_type();
+  };
+
   os << this->type.to_production() << " " << this->name << " = ";
   this->expression->compile_code(os);
   References::get_instance()->add_variable_reference(this->name, this->type,

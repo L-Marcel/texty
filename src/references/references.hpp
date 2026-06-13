@@ -10,6 +10,8 @@ struct References {
   Scope& get_scope();
   void push_scope();
   void pop_scope();
+  size_t get_scope_level();
+  string get_scope_ident();
 
   bool has_reference(string name, ReferenceType reference_type);
   Reference* get_reference(int line, string name);

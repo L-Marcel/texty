@@ -1,5 +1,7 @@
 #include "references.hpp"
 
+#include "../helpers/string.hpp"
+
 // Singleton
 References::References() {};
 References* References::_instance = nullptr;
@@ -15,6 +17,14 @@ References* References::get_instance() {
 void References::push_scope() { this->scopes.push_back(Scope()); };
 void References::pop_scope() { this->scopes.pop_back(); };
 Scope& References::get_scope() { return this->scopes.back(); };
+size_t References::get_scope_level() { return this->scopes.size(); };
+string References::get_scope_ident() {
+  size_t level = this->get_scope_level();
+  if (level <= 1)
+    return "";
+  else
+    return repeat("\t", level - 1);
+};
 
 // Referências
 void References::add_variable_reference(string name, Type type, bool is_const) {
