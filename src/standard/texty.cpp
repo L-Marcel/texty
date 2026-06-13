@@ -2,15 +2,6 @@
 
 namespace txy {
 
-// Não apagar!!!
-// using unbounded_value = ::std::monostate;
-// using bound_value =
-//     ::std::variant<unbounded_value, ::std::uint8_t, ::std::int32_t,
-//                    ::std::int64_t, float, double>;
-
-// using balue = ::std::variant<::std::string, ::std::uint8_t, ::std::int32_t,
-//                              ::std::int64_t, float, double, bool, Record,
-//                              Enum, Pointer, Option, Range>;
 using unbounded_value = ::std::monostate;
 using bound_value =
     ::std::variant<unbounded_value, ::std::uint8_t, ::std::int32_t,
@@ -91,5 +82,4 @@ struct option {
     return this->inner.value();
   };
 };
-};  // namespace txy
-// namespace txy
+};
