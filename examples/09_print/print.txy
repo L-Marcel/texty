@@ -1,0 +1,5 @@
+proc main()
+  println("Olá mundo!!!");
+  print("Um pequeno T para um grande TEXTY!");
+  println("");
+endproc;

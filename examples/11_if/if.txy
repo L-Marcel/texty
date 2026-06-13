@@ -1,0 +1,40 @@
+proc main()
+  var optional: option<string> = some("valor");
+
+  if true then
+    println("if");
+  endif;
+
+  if some value in optional then
+    println(value);
+  endif;
+
+  # TODO
+  #if none in optional then
+  #  println(value);
+  #endif;
+
+  if false then
+    println("if");
+  elif true then
+    println("elif");
+  endif;
+
+  optional = none;
+  
+  if some value in optional then
+    println("if");
+  elif true then
+    println("elif");
+  endif;
+
+  if false then
+    println("if");
+  elif some value in optional then
+    println("elif");
+  elif false then
+    println("elif");
+  else
+    println("else");
+  endif;
+endproc;
