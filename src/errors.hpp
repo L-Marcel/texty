@@ -2,9 +2,7 @@
 #include <stdexcept>
 #include <string>
 
-using namespace std;
-
-struct error : public runtime_error {
-  error(const string& message, int line);
-  error(const string& message);
+struct error : public std::runtime_error {
+  error(const std::string& message, int line);
+  error(const std::string& message);
 };

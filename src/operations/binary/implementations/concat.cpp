@@ -3,7 +3,7 @@
 Type binary_array_concat_get_type(const Type& left, const Type& right,
                                   int line) {
   if (check_if_is_array(left) && check_if_is_array(right) &&
-      left.inner_type == right.inner_type) {
+      *left.inner_type == *right.inner_type) {
     return left;
   } else {
     throw error("operação binária '<<' não definida para os tipos (" +

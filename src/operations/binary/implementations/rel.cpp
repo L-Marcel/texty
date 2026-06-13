@@ -46,7 +46,7 @@ Type binary_lt_eq_get_type(const Type& left, const Type& right, int line) {
 
 Type binary_in_get_type(const Type& left, const Type& right, int line) {
   Type array_type = Type(TypeKind::ARRAY);
-  if (right == array_type && left == *right.inner_type) {
+  if (right.kind == TypeKind::ARRAY && left == *right.inner_type) {
     return TypeKind::BOOL;
   } else {
     throw error("operação binária 'in' não definida para os tipos (" +
