@@ -20,24 +20,31 @@ void FunctionNode::compile_code(ostream& os) const {
     types.push_back(this->params[i].second);
   };
 
-  References::get_instance()->add_function_reference(
-      this->name, this->type, types, this->self, this->implemented);
-  References::get_instance()->push_scope();
-  for (size_t i = 0; i < this->params.size(); i++) {
-    References::get_instance()->add_variable_reference(
-        this->params[i].first, this->params[i].second, false);
-  };
+  References* references = References::get_instance();
+  references->add_function_reference(this->name, this->type, types, this->self,
+                                     this->implemented);
+
   if (this->implemented) {
     os << std::endl;
 
     string params = params_to_string(this->params, true);
     os << this->type.to_production() << " " << this->name << "(" << params
        << ") {" << std::endl;
+
+    references->push_scope();
+    for (size_t i = 0; i < this->params.size(); i++) {
+      references->add_variable_reference(this->params[i].first,
+                                         this->params[i].second, false);
+    };
+
+    string ident = references->get_scope_ident();
     for (size_t i = 0; i < this->children.size(); i++) {
-      os << "\t";
+      os << ident;
       this->children[i]->compile_code(os);
       os << ";" << std::endl;
     };
+
+    references->pop_scope();
     os << "};" << std::endl;
 
     if (this->name == "txy_main") {
@@ -47,7 +54,6 @@ void FunctionNode::compile_code(ostream& os) const {
       os << "};" << std::endl;
     };
   };
-  References::get_instance()->pop_scope();
 };
 
 // Tipagem

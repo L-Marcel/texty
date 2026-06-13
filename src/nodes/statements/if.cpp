@@ -1,5 +1,7 @@
 #include "if.hpp"
 
+#include "../../references/references.hpp"
+
 // Debug
 void IfNode::compile_dot(ostream& os) const {
   switch (this->type) {
@@ -19,12 +21,36 @@ void IfNode::compile_dot(ostream& os) const {
       };
       Compiler::add_dot_relation(os, this, this->next);
       break;
-  }
+  };
 };
 
 // Código
 void IfNode::compile_code(ostream& os) const {
-  // TODO
+  References* references = References::get_instance();
+
+  switch (this->type) {
+    case IfType::EXPRESSION: {
+      os << "if (";
+      this->expression->compile_code(os);
+      os << ") {" << std::endl;
+      references->push_scope();
+
+      string ident = references->get_scope_ident();
+      for (size_t i = 0; i < this->children.size(); i++) {
+        os << ident;
+        this->children[i]->compile_code(os);
+        os << ";" << std::endl;
+      };
+
+      references->pop_scope();
+      ident = references->get_scope_ident();
+      os << ident << "}";
+      break;
+    }
+    default:
+      // TODO
+      break;
+  };
 };
 
 // Tipagem
