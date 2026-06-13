@@ -1,5 +1,11 @@
 #include "range.hpp"
 
+#include "../../../helpers/numeric.hpp"
+
+static bool range_inclusion_to_bool(RangeInclusionType inclusion) {
+  return inclusion == RangeInclusionType::INCLUSIVE;
+}
+
 // Debug
 void RangeNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this, "RANGE");
@@ -13,16 +19,66 @@ void RangeNode::compile_dot(ostream& os) const {
 
 // Código
 void RangeNode::compile_code(ostream& os) const {
-  // TODO
+  Type type = this->get_type();
+
+  os << "::txy::range<" << type.inner_type->to_production() << ">(";
+  if (this->left_inclusion == RangeInclusionType::UNBOUNDED) {
+    os << "::txy::unbounded_value{}";
+  } else {
+    this->left->compile_code(os);
+  };
+
+  os << ", ";
+
+  if (this->right_inclusion == RangeInclusionType::UNBOUNDED) {
+    os << "::txy::unbounded_value{}";
+  } else {
+    this->right->compile_code(os);
+  };
+
+  os << ", " << (range_inclusion_to_bool(this->left_inclusion) ? "true"
+                                                               : "false")
+     << ", " << (range_inclusion_to_bool(this->right_inclusion) ? "true"
+                                                                : "false")
+     << ")";
 };
 
 // Tipagem
 Type RangeNode::get_type() const {
-  if (this->left_inclusion != RangeInclusionType::UNBOUNDED) {
-    return Type(TypeKind::RANGE, new Type(this->left->get_type()));
-  } else {
-    return Type(TypeKind::RANGE, new Type(this->right->get_type()));
+  if (this->left_inclusion != RangeInclusionType::UNBOUNDED &&
+      this->right_inclusion != RangeInclusionType::UNBOUNDED) {
+    Type left_type = this->left->get_type();
+    Type right_type = this->right->get_type();
+
+    if (!check_if_is_numeric(left_type) || left_type != right_type) {
+      throw error("limites de range precisam ser numeros do mesmo tipo (" +
+                      left_type.to_string() + ", " + right_type.to_string() +
+                      ")",
+                  this->line);
+    };
+
+    return Type(TypeKind::RANGE, new Type(left_type));
   };
+
+  if (this->left_inclusion != RangeInclusionType::UNBOUNDED) {
+    Type left_type = this->left->get_type();
+    if (!check_if_is_numeric(left_type)) {
+      throw error("limite de range precisa ser numero (" +
+                      left_type.to_string() + ")",
+                  this->line);
+    };
+
+    return Type(TypeKind::RANGE, new Type(left_type));
+  };
+
+  Type right_type = this->right->get_type();
+  if (!check_if_is_numeric(right_type)) {
+    throw error("limite de range precisa ser numero (" +
+                    right_type.to_string() + ")",
+                this->line);
+  };
+
+  return Type(TypeKind::RANGE, new Type(right_type));
 };
 
 // Construtores

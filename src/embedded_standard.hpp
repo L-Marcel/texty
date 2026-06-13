@@ -14,27 +14,9 @@ const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <variant>
 #include <vector>
-::std::int32_t input_key_pressed() {
-#ifdef _WIN32
-  return static_cast<::std::int32_t>(_getch());
-#else
-  struct termios oldterminal, newterminal;
-  tcgetattr(STDIN_FILENO, &oldterminal);
-  newterminal = oldterminal;
-  newterminal.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
-  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
-  return caractere;
-#endif
-};
-::std::string input_line() {
-  ::std::string line;
-  ::std::getline(::std::cin, line);
-  return line;
-};
 void txy_print(const ::std::string in) { ::std::cout << in; };
 void txy_println(const ::std::string in) { ::std::cout << in << ::std::endl; };
 template <typename... Args>
@@ -73,7 +55,65 @@ void txy_trim(::std::string& in) {
   if (last == ::std::string::npos) last = in.size();
   in = in.substr(first, last + 1);
 };
+::std::int32_t input_key_pressed() {
+#ifdef _WIN32
+  return static_cast<::std::int32_t>(_getch());
+#else
+  struct termios oldterminal, newterminal;
+  tcgetattr(STDIN_FILENO, &oldterminal);
+  newterminal = oldterminal;
+  newterminal.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
+  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
+  return caractere;
+#endif
+};
+::std::string input_line() {
+  ::std::string line;
+  ::std::getline(::std::cin, line);
+  return line;
+};
 namespace txy {
+using unbounded_value = ::std::monostate;
+using bound_value =
+    ::std::variant<unbounded_value, ::std::uint8_t, ::std::int32_t,
+                   ::std::int64_t, float, double>;
+template <typename T>
+struct range {
+  static_assert(::std::is_same_v<T, ::std::uint8_t> ||
+                    ::std::is_same_v<T, ::std::int32_t> ||
+                    ::std::is_same_v<T, ::std::int64_t> ||
+                    ::std::is_same_v<T, float> || ::std::is_same_v<T, double>,
+                "range precisa ter limites numericos");
+  bound_value left;
+  bound_value right;
+  bool left_inclusive;
+  bool right_inclusive;
+  range(T left, T right, bool left_inclusive, bool right_inclusive)
+      : left(left),
+        right(right),
+        left_inclusive(left_inclusive),
+        right_inclusive(right_inclusive) {};
+  range(unbounded_value left, T right, bool left_inclusive,
+        bool right_inclusive)
+      : left(left),
+        right(right),
+        left_inclusive(left_inclusive),
+        right_inclusive(right_inclusive) {};
+  range(T left, unbounded_value right, bool left_inclusive,
+        bool right_inclusive)
+      : left(left),
+        right(right),
+        left_inclusive(left_inclusive),
+        right_inclusive(right_inclusive) {};
+  range(unbounded_value left, unbounded_value right, bool left_inclusive,
+        bool right_inclusive)
+      : left(left),
+        right(right),
+        left_inclusive(left_inclusive),
+        right_inclusive(right_inclusive) {};
+};
 template <typename T>
 struct array {
   ::std::shared_ptr<::std::vector<T>> ptr;
@@ -105,5 +145,5 @@ struct option {
     return this->inner.value();
   };
 };
-};  // namespace txy
+};
 )__texty_std__";
