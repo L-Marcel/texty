@@ -112,9 +112,9 @@
   
 <!-- Estruturas condicionais -->
 <if> -> IF <expr> THEN <stmts> <if_end>
-      | IF SOME ID IN <access> THEN <stmts> <if_end>
+      | IF SOME ID IN <expr> THEN <stmts> <if_end>
 <if_end> -> ELIF <expr> THEN <stmts> <if_end>
-          | ELIF SOME ID IN <access> THEN <stmts> <if_end>
+          | ELIF SOME ID IN <expr> THEN <stmts> <if_end>
           | ELSE <stmts> END_IF  
           | END_IF
 <switch> -> SWITCH <expr> <cases> END_SWITCH

@@ -1,0 +1,22 @@
+proc main()
+  # TODO - Dando segmentation fault
+  if "ab" in "abc" then
+    println("ab in abc");
+  endif;
+
+  if "ab" in "ac" then
+    println("ab in ac");
+  endif;
+
+  if "ab" in "ac" then
+    println("ab in ac");
+  elif "a" in "ac" then
+    println("a in ac");
+  endif;
+
+  if "ab" in "ac" then
+    println("ab in ac");
+  elif "b" in "ac" then
+    println("b in ac");
+  endif;
+endproc;

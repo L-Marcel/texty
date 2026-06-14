@@ -1,6 +1,7 @@
 #include "binary.hpp"
 
 #include "../../operations/binary/binary.hpp"
+#include "specials/option.hpp"
 
 // Debug
 void BinaryOperationNode::compile_dot(ostream& os) const {
@@ -106,14 +107,41 @@ void BinaryOperationNode::compile_code(ostream& os) const {
       os << " << ";
       this->right->compile_code(os);
       break;
-    case BinaryOperation::IN:
-      this->right->compile_code(os);
-      os << ".contains(";
-      this->left->compile_code(os);
-      os << ")";
+    case BinaryOperation::IN: {
+      Type type = this->right->get_type();
+      if (type.kind == TypeKind::ARRAY || type.kind == TypeKind::RANGE) {
+        this->right->compile_code(os);
+        os << ".contains(";
+        this->left->compile_code(os);
+        os << ")";
+      } else if (type.kind == TypeKind::OPTION) {
+        OptionNode* right_option = dynamic_cast<OptionNode*>(this->right);
+        OptionNode* left_option = dynamic_cast<OptionNode*>(this->left);
+
+        if (right_option != nullptr && left_option != nullptr &&
+            right_option->type == OptionNodeType::UNDEFINED &&
+            left_option->type == OptionNodeType::UNDEFINED) {
+          os << "true";
+        } else {
+          this->left->set_expected_type(this->right->get_type());
+          this->left->compile_code(os);
+          os << ".is_some() == ";
+          this->right->compile_code(os);
+          os << ".is_some()";
+        };
+      } else if (type.kind == TypeKind::STRING) {
+        this->right->compile_code(os);
+        os << ".find(";
+        this->left->compile_code(os);
+        os << ") != ::std::string::npos";
+      };
       break;
+    }
     default:
-      throw error("operação binária (" + string(magic_enum::enum_name(this->operation)) + ") não suportada na compilação", this->line);
+      throw error("operação binária \'" +
+                      string(magic_enum::enum_name(this->operation)) +
+                      "\' não implementada",
+                  this->line);
   }
   os << ")";
 };

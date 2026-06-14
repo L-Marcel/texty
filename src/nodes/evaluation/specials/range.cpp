@@ -2,9 +2,9 @@
 
 #include "../../../helpers/numeric.hpp"
 
-static bool range_inclusion_to_bool(RangeInclusionType inclusion) {
+bool range_inclusion_to_bool(RangeInclusionType inclusion) {
   return inclusion == RangeInclusionType::INCLUSIVE;
-}
+};
 
 // Debug
 void RangeNode::compile_dot(ostream& os) const {
@@ -36,10 +36,10 @@ void RangeNode::compile_code(ostream& os) const {
     this->right->compile_code(os);
   };
 
-  os << ", " << (range_inclusion_to_bool(this->left_inclusion) ? "true"
-                                                               : "false")
-     << ", " << (range_inclusion_to_bool(this->right_inclusion) ? "true"
-                                                                : "false")
+  os << ", "
+     << (range_inclusion_to_bool(this->left_inclusion) ? "true" : "false")
+     << ", "
+     << (range_inclusion_to_bool(this->right_inclusion) ? "true" : "false")
      << ")";
 };
 
@@ -51,7 +51,7 @@ Type RangeNode::get_type() const {
     Type right_type = this->right->get_type();
 
     if (!check_if_is_numeric(left_type) || left_type != right_type) {
-      throw error("limites de range precisam ser numeros do mesmo tipo (" +
+      throw error("subfaixas não suportam limites do tipo (" +
                       left_type.to_string() + ", " + right_type.to_string() +
                       ")",
                   this->line);
@@ -63,7 +63,7 @@ Type RangeNode::get_type() const {
   if (this->left_inclusion != RangeInclusionType::UNBOUNDED) {
     Type left_type = this->left->get_type();
     if (!check_if_is_numeric(left_type)) {
-      throw error("limite de range precisa ser numero (" +
+      throw error("subfaixas não suportam limites do tipo (" +
                       left_type.to_string() + ")",
                   this->line);
     };
@@ -73,7 +73,7 @@ Type RangeNode::get_type() const {
 
   Type right_type = this->right->get_type();
   if (!check_if_is_numeric(right_type)) {
-    throw error("limite de range precisa ser numero (" +
+    throw error("subfaixas não suportam limites do tipo (" +
                     right_type.to_string() + ")",
                 this->line);
   };

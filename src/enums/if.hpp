@@ -1,2 +1,2 @@
-enum class IfType { ACCESS, EXPRESSION };
-enum class IfEndType { ACCESS, EXPRESSION, ELSE, END };
+enum class IfType { UNWRAP, EXPRESSION };
+enum class IfEndType { UNWRAP, EXPRESSION, ELSE, END };

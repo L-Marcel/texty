@@ -1,4 +1,5 @@
 #include <cmath>
+
 #include "core.hpp"
 
 namespace txy {
@@ -44,6 +45,23 @@ struct range {
         right(right),
         left_inclusive(left_inclusive),
         right_inclusive(right_inclusive) {};
+
+  bool contains(const bound_value& value) const {
+    if (!::std::holds_alternative<T>(value)) return false;
+    T v = ::std::get<T>(value);
+
+    if (::std::holds_alternative<T>(this->left)) {
+      T l = ::std::get<T>(this->left);
+      if (this->left_inclusive ? (v < l) : (v <= l)) return false;
+    };
+
+    if (::std::holds_alternative<T>(this->right)) {
+      T r = ::std::get<T>(this->right);
+      if (this->right_inclusive ? (v > r) : (v >= r)) return false;
+    };
+
+    return true;
+  };
 };
 
 template <typename T>
@@ -66,7 +84,8 @@ struct array {
   };
 
   bool contains(const T& value) const {
-    return ::std::find(ptr->begin(), ptr->end(), value) != ptr->end();
+    return ::std::find(this->ptr->begin(), this->ptr->end(), value) !=
+           this->ptr->end();
   };
 
   array<T> operator<<(const array<T>& other) const {
@@ -95,4 +114,4 @@ struct option {
     return this->inner.value();
   };
 };
-};
+};  // namespace txy

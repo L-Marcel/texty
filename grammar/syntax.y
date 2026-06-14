@@ -445,7 +445,7 @@ if: IF expr THEN stmts if_end {
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
-} | IF SOME ID IN access THEN stmts if_end {
+} | IF SOME ID IN expr THEN stmts if_end {
   $$ = new IfNode(ctx.line, $5, $3, $8);
   for (size_t i = 0; i < $7.size(); i++) {
     $$->children.push_back($7[i]);
@@ -457,7 +457,7 @@ if_end: ELIF expr THEN stmts if_end {
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
-} | ELIF SOME ID IN access THEN stmts if_end {
+} | ELIF SOME ID IN expr THEN stmts if_end {
   $$ = new IfEndNode(ctx.line, $5, $3, $8);
   for (size_t i = 0; i < $7.size(); i++) {
     $$->children.push_back($7[i]);

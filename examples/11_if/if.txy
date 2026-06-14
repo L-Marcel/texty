@@ -9,10 +9,9 @@ proc main()
     println(value);
   endif;
 
-  # TODO
-  #if none in optional then
-  #  println(value);
-  #endif;
+  if none in optional then
+    println(value);
+  endif;
 
   if false then
     println("if");

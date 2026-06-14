@@ -3,13 +3,13 @@
 
 struct IfEndNode : public Node {
   IfEndType type;
-  AccessNode* access;
-  string access_id;
+  string variable_id;
   ExpressionNode* expression;
   IfEndNode* next;
 
   IfEndNode(int line, ExpressionNode* expression, IfEndNode* next);
-  IfEndNode(int line, AccessNode* access, string access_id, IfEndNode* next);
+  IfEndNode(int line, ExpressionNode* expression, string variable_id,
+            IfEndNode* next);
   IfEndNode(int line, IfEndNode* next);
   IfEndNode(int line);
 

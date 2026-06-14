@@ -13,7 +13,6 @@ enum class BinaryOperation {
   LT_EQ,
   GT_EQ,
   IN,
-  INCREMENT,
   CONCAT,
   PLUS,
   MINUS,

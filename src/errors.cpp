@@ -4,8 +4,8 @@
 #include "syntax.tab.hh"
 
 error::error(const std::string& message, int line)
-    : std::runtime_error(ERROR_LABEL + "Erro semântico: " + message + " na linha " +
-                    std::to_string(line)) {};
+    : std::runtime_error(ERROR_LABEL + "Erro semântico: " + message +
+                         " na linha " + std::to_string(line)) {};
 
 error::error(const std::string& message)
     : std::runtime_error(ERROR_LABEL + "Erro semântico: " + message) {};

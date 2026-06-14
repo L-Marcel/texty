@@ -16,3 +16,5 @@ struct RangeNode : public ExpressionNode {
   void compile_code(ostream& os) const override;
   Type get_type() const override;
 };
+
+bool range_inclusion_to_bool(RangeInclusionType inclusion);

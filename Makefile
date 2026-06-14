@@ -36,6 +36,8 @@ SRCS = $(filter-out $(PACKER_SRC), $(SRCS_ALL))
 EXAMPLES = $(call rwildcard,examples/,*.txy)
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o) $(BISON_CC:.cc=.o) $(FLEX_C:.c=.o))
 
+.PHONY: build all check clean examples examples-pendrive
+
 build: all
 all: $(TARGET)$(TARGET_EXT)
 

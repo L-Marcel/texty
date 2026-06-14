@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../helpers/numeric.hpp"
+#include "../../../helpers/relational.hpp"
 #include "../binary.hpp"
 
 Type binary_gt_get_type(const Type& left, const Type& right, int line);

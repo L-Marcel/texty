@@ -2,25 +2,6 @@
 
 #include "../../operations/unary/unary.hpp"
 
-static string unary_operation_to_production(UnaryOperation operation) {
-  switch (operation) {
-    case UnaryOperation::MINUS:
-      return "-";
-    case UnaryOperation::REV:
-      return "~";
-    case UnaryOperation::NOT:
-      return "!";
-    case UnaryOperation::REF:
-      return "&";
-    case UnaryOperation::DEREF:
-      return "*";
-    case UnaryOperation::INCREMENT:
-      return "++";
-    case UnaryOperation::DECREMENT:
-      return "--";
-  };
-};
-
 // Debug
 void UnaryOperationNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
@@ -32,16 +13,47 @@ void UnaryOperationNode::compile_dot(ostream& os) const {
 void UnaryOperationNode::compile_code(ostream& os) const {
   this->get_type();
 
-  string operation = unary_operation_to_production(this->operation);
   if (this->postfix) {
     os << "(";
     this->node->compile_code(os);
-    os << operation << ")";
   } else {
-    os << "(" << operation;
-    this->node->compile_code(os);
-    os << ")";
+    os << "(";
   };
+
+  switch (operation) {
+    case UnaryOperation::MINUS:
+      os << "-";
+      break;
+    case UnaryOperation::REV:
+      os << "~";
+      break;
+    case UnaryOperation::NOT:
+      os << "!";
+      break;
+    case UnaryOperation::REF:
+      os << "&";
+      break;
+    case UnaryOperation::DEREF:
+      os << "*";
+      break;
+    case UnaryOperation::INCREMENT:
+      os << "++";
+      break;
+    case UnaryOperation::DECREMENT:
+      os << "--";
+      break;
+    default:
+      throw error("operação unária \'" +
+                      string(magic_enum::enum_name(this->operation)) +
+                      "\' não implementada",
+                  this->line);
+  };
+
+  if (!this->postfix) {
+    this->node->compile_code(os);
+  };
+
+  os << ")";
 };
 
 // Tipagem
