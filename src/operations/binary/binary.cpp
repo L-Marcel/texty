@@ -8,6 +8,7 @@
 #include "implementations/or.hpp"
 #include "implementations/rel.hpp"
 #include "implementations/sum.hpp"
+#include "implementations/concat.hpp"
 
 // Inicialização de variáveis
 bool BinaryOperations::initialized = false;
@@ -55,6 +56,8 @@ void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::BITWISE_AND,
                              binary_bit_and_get_type);
   BinaryOperations::add_type(BinaryOperation::XOR, binary_xor_get_type);
+  BinaryOperations::add_type(BinaryOperation::CONCAT,
+                             binary_array_concat_get_type);
 
   // TODO: Restante das operações
 };

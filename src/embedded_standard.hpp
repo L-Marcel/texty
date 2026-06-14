@@ -17,6 +17,25 @@ const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
 #include <type_traits>
 #include <variant>
 #include <vector>
+::std::int32_t input_key_pressed() {
+#ifdef _WIN32
+  return static_cast<::std::int32_t>(_getch());
+#else
+  struct termios oldterminal, newterminal;
+  tcgetattr(STDIN_FILENO, &oldterminal);
+  newterminal = oldterminal;
+  newterminal.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
+  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
+  return caractere;
+#endif
+};
+::std::string input_line() {
+  ::std::string line;
+  ::std::getline(::std::cin, line);
+  return line;
+};
 void txy_print(const ::std::string in) { ::std::cout << in; };
 void txy_println(const ::std::string in) { ::std::cout << in << ::std::endl; };
 template <typename... Args>
@@ -114,6 +133,8 @@ struct range {
         left_inclusive(left_inclusive),
         right_inclusive(right_inclusive) {};
 };
+#include <cmath>
+namespace txy {
 template <typename T>
 struct array {
   ::std::shared_ptr<::std::vector<T>> ptr;
@@ -129,6 +150,16 @@ struct array {
   };
   T& operator[](::std::int32_t index) {
     return (*ptr)[static_cast<::std::size_t>(index)];
+  };
+  bool contains(const T& value) const {
+    return ::std::find(ptr->begin(), ptr->end(), value) != ptr->end();
+  };
+  array<T> operator<<(const array<T>& other) const {
+    array<T> result;
+    result.ptr->reserve(this->ptr->size() + other.ptr->size());
+    result.ptr->insert(result.ptr->end(), this->ptr->begin(), this->ptr->end());
+    result.ptr->insert(result.ptr->end(), other.ptr->begin(), other.ptr->end());
+    return result;
   };
 };
 template <typename T>
@@ -146,4 +177,5 @@ struct option {
   };
 };
 };
+};  // namespace txy
 )__texty_std__";

@@ -1,3 +1,4 @@
+#include <cmath>
 #include "core.hpp"
 
 namespace txy {
@@ -62,6 +63,18 @@ struct array {
 
   T& operator[](::std::int32_t index) {
     return (*ptr)[static_cast<::std::size_t>(index)];
+  };
+
+  bool contains(const T& value) const {
+    return ::std::find(ptr->begin(), ptr->end(), value) != ptr->end();
+  };
+
+  array<T> operator<<(const array<T>& other) const {
+    array<T> result;
+    result.ptr->reserve(this->ptr->size() + other.ptr->size());
+    result.ptr->insert(result.ptr->end(), this->ptr->begin(), this->ptr->end());
+    result.ptr->insert(result.ptr->end(), other.ptr->begin(), other.ptr->end());
+    return result;
   };
 };
 
