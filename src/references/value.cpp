@@ -25,6 +25,10 @@ string Type::to_string() const {
   else if (this->kind == TypeKind::ARRAY) {
     return (this->inner_type ? this->inner_type->to_string() : "unknown") +
            "[]";
+  } else if (this->kind == TypeKind::RANGE) {
+    return "range<" +
+           (this->inner_type ? this->inner_type->to_string() : "unknown") +
+           ">";
   } else if (this->kind == TypeKind::POINTER) {
     return "pointer<" +
            (this->inner_type ? this->inner_type->to_string() : "unknown") + ">";
@@ -46,6 +50,10 @@ string Type::to_production() const {
     return "::txy::array<" +
            (this->inner_type ? this->inner_type->to_production() : "unknown") +
            ">";
+  } else if (this->kind == TypeKind::RANGE) {
+    return "::txy::range<" +
+           (this->inner_type ? this->inner_type->to_production() : "unknown") +
+           ">";
   } else if (this->kind == TypeKind::POINTER) {
     return (this->inner_type ? this->inner_type->to_production() : "unknown") +
            "*";
@@ -56,8 +64,6 @@ string Type::to_production() const {
   };
 
   string name = "unknown";
-
-  // TODO - RANGE
 
   switch (this->kind) {
     case TypeKind::CHAR:

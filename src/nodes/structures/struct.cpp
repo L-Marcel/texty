@@ -12,7 +12,13 @@ void StructNode::compile_dot(ostream& os) const {
 
 // Código
 void StructNode::compile_code(ostream& os) const {
-  // TODO
+  os << std::endl << "struct " << this->name << " {" << std::endl;
+  for (size_t i = 0; i < this->attributes.size(); i++) {
+    pair<string, Type> attribute = this->attributes[i];
+    os << "\t" << attribute.second.to_production() << " " << attribute.first
+       << ";" << std::endl;
+  };
+  os << "};" << std::endl;
 };
 
 // Tipagem

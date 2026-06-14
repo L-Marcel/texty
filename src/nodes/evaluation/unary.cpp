@@ -2,6 +2,25 @@
 
 #include "../../operations/unary/unary.hpp"
 
+static string unary_operation_to_production(UnaryOperation operation) {
+  switch (operation) {
+    case UnaryOperation::MINUS:
+      return "-";
+    case UnaryOperation::REV:
+      return "~";
+    case UnaryOperation::NOT:
+      return "!";
+    case UnaryOperation::REF:
+      return "&";
+    case UnaryOperation::DEREF:
+      return "*";
+    case UnaryOperation::INCREMENT:
+      return "++";
+    case UnaryOperation::DECREMENT:
+      return "--";
+  };
+};
+
 // Debug
 void UnaryOperationNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
@@ -11,7 +30,18 @@ void UnaryOperationNode::compile_dot(ostream& os) const {
 
 // Código
 void UnaryOperationNode::compile_code(ostream& os) const {
-  // TODO
+  this->get_type();
+
+  string operation = unary_operation_to_production(this->operation);
+  if (this->postfix) {
+    os << "(";
+    this->node->compile_code(os);
+    os << operation << ")";
+  } else {
+    os << "(" << operation;
+    this->node->compile_code(os);
+    os << ")";
+  };
 };
 
 // Tipagem
