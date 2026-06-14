@@ -12,6 +12,7 @@ void StructNode::compile_dot(ostream& os) const {
 
 // Código
 void StructNode::compile_code(ostream& os) const {
+  // TODO - Valor padrão
   os << std::endl << "struct " << this->name << " {" << std::endl;
   for (size_t i = 0; i < this->attributes.size(); i++) {
     pair<string, Type> attribute = this->attributes[i];
