@@ -28,8 +28,10 @@ proc quick_sort(array: int[]; min, max: int)
 endproc;
 
 fn main(): int
+	# TODO - Está dando segmentation fault
 	print("Digite o tamanho do array: ");
-	var size: int = int(input_line());
+	var size: int = 0;
+	#var size: int = int(input_line());
 	println("");
 
 	# Build the array
@@ -39,7 +41,7 @@ fn main(): int
 			"Digite o valor do %int° elemento: ",
 			i + 1
 		));
-		array[i] = int(input_line());
+		#array[i] = int(input_line());
 		println("");
 	endfor;
 

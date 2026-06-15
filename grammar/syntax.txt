@@ -4,6 +4,7 @@
 <subprogram> -> <fn> | <proc>
 
 <fn> -> FUNCTION ID <params_list> COLON <type> <stmts> END_FUNCTION SEMICOLON
+      | FUNCTION ID <params_list> COLON <type> END_FUNCTION SEMICOLON
 <proc> -> PROCEDURE ID <params_list> <stmts> END_PROCEDURE SEMICOLON
         | PROCEDURE ID <params_list> END_PROCEDURE SEMICOLON
 
@@ -50,6 +51,7 @@
                      | <impl_subprogram>
 <impl_subprogram> -> <impl_fn> | <impl_proc>
 <impl_fn> -> FUNCTION ID <params_self_list> COLON <type> <stmts> END_FUNCTION SEMICOLON
+           | FUNCTION ID <params_self_list> COLON <type> END_FUNCTION SEMICOLON
            | <fn>
 <impl_proc> -> PROCEDURE ID <params_self_list> <stmts> END_PROCEDURE SEMICOLON
              | PROCEDURE ID <params_self_list> END_PROCEDURE SEMICOLON
@@ -113,9 +115,14 @@
 <!-- Estruturas condicionais -->
 <if> -> IF <expr> THEN <stmts> <if_end>
       | IF SOME ID IN <expr> THEN <stmts> <if_end>
+      | IF <expr> THEN <if_end>
+      | IF SOME ID IN <expr> THEN <if_end>
 <if_end> -> ELIF <expr> THEN <stmts> <if_end>
           | ELIF SOME ID IN <expr> THEN <stmts> <if_end>
           | ELSE <stmts> END_IF  
+          | ELIF <expr> THEN <if_end>
+          | ELIF SOME ID IN <expr> THEN <if_end>
+          | ELSE END_IF
           | END_IF
 <switch> -> SWITCH <expr> <cases> END_SWITCH
 <cases> -> <case_list> <default_case>
@@ -123,9 +130,11 @@
 <case_list> -> <case_list> <case>
              | <case>
 <case> -> CASE <case_values> COLON <stmts>
+        | CASE <case_values> COLON
 <case_values> -> <case_values> COMMA <term>
                | <term>
 <default_case> -> DEFAULT COLON <stmts>
+                | DEFAULT COLON
 
 <!-- Estruturas de repetição -->
 <for> -> FOR LEFT_PAREN ID IN <expr> RIGHT_PAREN <stmts> END_FOR

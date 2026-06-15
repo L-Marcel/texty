@@ -10,7 +10,7 @@ proc main()
   endif;
 
   if none in optional then
-    println(value);
+    println("none");
   endif;
 
   if false then

@@ -17,7 +17,7 @@ void StructNode::compile_code(ostream& os) const {
   for (size_t i = 0; i < this->attributes.size(); i++) {
     pair<string, Type> attribute = this->attributes[i];
     os << "\t" << attribute.second.to_production() << " " << attribute.first
-       << ";" << std::endl;
+       << " {};" << std::endl;
   };
   os << "};" << std::endl;
 };

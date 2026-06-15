@@ -22,6 +22,11 @@ struct range {
   bool left_inclusive;
   bool right_inclusive;
 
+  range()
+      : left(T{}),
+        right(::std::monostate{}),
+        left_inclusive(true),
+        right_inclusive(false) {};
   range(T left, T right, bool left_inclusive, bool right_inclusive)
       : left(left),
         right(right),
@@ -69,17 +74,22 @@ struct array {
   ::std::shared_ptr<::std::vector<T>> ptr;
 
   array() : ptr(::std::make_shared<::std::vector<T>>()) {};
-  array(::std::int32_t size)
-      : ptr(::std::make_shared<::std::vector<T>>(
-            static_cast<::std::size_t>(size))) {};
   array(::std::initializer_list<T> init)
       : ptr(::std::make_shared<::std::vector<T>>(init)) {};
-  array(::std::int32_t size, ::std::initializer_list<T> init)
+
+  template <typename I, typename = ::std::enable_if_t<::std::is_integral_v<I>>>
+  array(I size)
+      : ptr(::std::make_shared<::std::vector<T>>(
+            static_cast<::std::size_t>(size))) {};
+
+  template <typename I, typename = ::std::enable_if_t<::std::is_integral_v<I>>>
+  array(I size, ::std::initializer_list<T> init)
       : ptr(::std::make_shared<::std::vector<T>>(init)) {
     ptr->resize(static_cast<::std::size_t>(size));
   };
 
-  T& operator[](::std::int32_t index) {
+  template <typename I, typename = ::std::enable_if_t<::std::is_integral_v<I>>>
+  T& operator[](I index) {
     return (*ptr)[static_cast<::std::size_t>(index)];
   };
 
@@ -99,19 +109,29 @@ struct array {
 
 template <typename T>
 struct option {
-  ::std::optional<T> inner;
+  ::std::unique_ptr<T> inner;
 
-  option() : inner(::std::nullopt) {}
-  option(T value) : inner(::std::move(value)) {};
+  option() : inner(nullptr) {}
+  option(T value) : inner(::std::make_unique<T>(::std::move(value))) {};
 
-  bool is_some() const { return this->inner.has_value(); };
-  bool is_none() const { return !this->inner.has_value(); };
+  option(const option& other)
+      : inner(other.inner ? ::std::make_unique<T>(*other.inner) : nullptr) {};
+
+  option& operator=(const option& other) {
+    if (this != &other) {
+      inner = other.inner ? ::std::make_unique<T>(*other.inner) : nullptr;
+    }
+    return *this;
+  };
+
+  bool is_some() const { return inner != nullptr; };
+  bool is_none() const { return inner == nullptr; };
 
   T unwrap() const {
-    if (!this->inner.has_value()) {
+    if (!inner) {
       throw ::std::runtime_error("tentativa de acessar valor none");
-    }
-    return this->inner.value();
+    };
+    return *inner;
   };
 };
 };  // namespace txy

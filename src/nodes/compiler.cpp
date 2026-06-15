@@ -54,7 +54,7 @@ void Compiler::create_code(Context& ctx, string filename) {
   string base_filename = get_filename_without_mime(filename);
   string cpp_filename = base_filename + ".cpp";
   ofstream file = ofstream(cpp_filename);
-  std::cout << DEBUG_LABEL << "Montando arquivo de intermediário" << std::endl;
+  std::cout << DEBUG_LABEL << "Montando arquivo intermediário" << std::endl;
   if (file.is_open()) {
     file << "// ================== STANDARD ================== //" << std::endl;
     file << "// ---------------------------------------------- //" << std::endl;
