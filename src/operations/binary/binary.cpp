@@ -2,6 +2,7 @@
 #include "implementations/bit_and.hpp"
 #include "implementations/bit_or.hpp"
 #include "implementations/bit_xor.hpp"
+#include "implementations/concat.hpp"
 #include "implementations/equals.hpp"
 #include "implementations/exp.hpp"
 #include "implementations/mult.hpp"
@@ -36,7 +37,6 @@ void BinaryOperations::add_type(BinaryOperation key,
 void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::PLUS, binary_plus_get_type);
   BinaryOperations::add_type(BinaryOperation::MINUS, binary_minus_get_type);
-
   BinaryOperations::add_type(BinaryOperation::AND, binary_and_get_type);
   BinaryOperations::add_type(BinaryOperation::OR, binary_or_get_type);
   BinaryOperations::add_type(BinaryOperation::EXP, binary_exp_get_type);
@@ -55,6 +55,6 @@ void BinaryOperations::initialize() {
   BinaryOperations::add_type(BinaryOperation::BITWISE_AND,
                              binary_bit_and_get_type);
   BinaryOperations::add_type(BinaryOperation::XOR, binary_xor_get_type);
-
-  // TODO: Restante das operações
+  BinaryOperations::add_type(BinaryOperation::CONCAT,
+                             binary_array_concat_get_type);
 };

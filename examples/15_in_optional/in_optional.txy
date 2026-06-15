@@ -1,0 +1,19 @@
+proc main()
+  var optional: option<string> = some("valor");
+
+  if some value in optional then
+    println(value);
+  endif;
+
+  if none in optional then
+    println("none");
+  endif;
+ 
+  if some _ in some("valor") then
+    println("some");
+  endif;
+
+  if none in none then
+    println("none");
+  endif;
+endproc;

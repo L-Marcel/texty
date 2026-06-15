@@ -1,0 +1,17 @@
+proc main()
+  var array: int[] = new int[]{0, 2, 3};
+  println(format(
+    "%long %int %float %double %byte %string %bool %int[] %char %option",
+    0L,
+    1,
+    2.0f,
+    3.0d,
+    4B,
+    "Olá mundo!!!",
+    true,
+    'a',
+    #*array,
+    #0..1,
+    some(array)
+  ));
+endproc;

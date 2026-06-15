@@ -11,16 +11,26 @@ void AssignNode::compile_dot(ostream& os) const {
 
 // Código
 void AssignNode::compile_code(ostream& os) const {
-  this->access->compile_code(os);
-  os << " = ";
-  this->expression->compile_code(os);
-  this->get_type();
+  if (this->assign_type == AssignType::SIMPLE) {
+    this->get_type();
+    this->access->compile_code(os);
+    os << " = ";
+    this->expression->compile_code(os);
+  } else {
+    // TODO
+  };
 };
 
 // Tipagem
 Type AssignNode::get_type() const {
   Type left = this->access->get_type();
   Type right = this->expression->get_type();
+
+  if (left.kind == TypeKind::OPTION && right.kind == TypeKind::OPTION &&
+      right.inner_type->kind == TypeKind::UNKNOWN) {
+    this->expression->set_expected_type(left);
+    right = this->expression->get_type();
+  };
 
   if (this->assign_type == AssignType::SIMPLE && left == right) {
     return this->access->get_type();

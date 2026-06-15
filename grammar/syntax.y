@@ -46,7 +46,7 @@
 %token ELIF ELSE FOR WHILE END_WHILE REPEAT UNTIL END_FOR BREAK CONTINUE 
 %token SWITCH CASE DEFAULT END_SWITCH IN SOME NONE FUNCTION END_FUNCTION
 %token PROCEDURE END_PROCEDURE ENUM END_ENUM STRUCT END_STRUCT SELF
-%token IMPL END_IMPL TRAIT END_TRAIT RETURN
+%token IMPL END_IMPL TRAIT END_TRAIT RETURN END_CASE END_DEFAULT
 
 %type <TraitNode*> trait
 %type <ImplNode*> impl
@@ -126,6 +126,8 @@ fn: FUNCTION ID params_list COLON type stmts END_FUNCTION SEMICOLON {
   for (size_t i = 0; i < $6.size(); i++) {
     $$->children.push_back($6[i]);
   };
+} | FUNCTION ID params_list COLON type END_FUNCTION SEMICOLON {
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, false, true);
 };
 
 proc: PROCEDURE ID params_list stmts END_PROCEDURE SEMICOLON {
@@ -293,6 +295,8 @@ impl_fn: FUNCTION ID params_self_list COLON type stmts END_FUNCTION SEMICOLON {
   for (size_t i = 0; i < $6.size(); i++) {
     $$->children.push_back($6[i]);
   };
+} | FUNCTION ID params_self_list COLON type END_FUNCTION SEMICOLON {
+  $$ = new FunctionNode(ctx.line, $2, *$5, $3, true, true);
 } | fn {
   $$ = $1;
 };
@@ -445,11 +449,15 @@ if: IF expr THEN stmts if_end {
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
-} | IF SOME ID IN access THEN stmts if_end {
+} | IF SOME ID IN expr THEN stmts if_end {
   $$ = new IfNode(ctx.line, $5, $3, $8);
   for (size_t i = 0; i < $7.size(); i++) {
     $$->children.push_back($7[i]);
   };
+} | IF expr THEN if_end {
+  $$ = new IfNode(ctx.line, $2, $4);
+} | IF SOME ID IN expr THEN if_end {
+  $$ = new IfNode(ctx.line, $5, $3, $7);
 };
 
 if_end: ELIF expr THEN stmts if_end {
@@ -457,7 +465,7 @@ if_end: ELIF expr THEN stmts if_end {
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
-} | ELIF SOME ID IN access THEN stmts if_end {
+} | ELIF SOME ID IN expr THEN stmts if_end {
   $$ = new IfEndNode(ctx.line, $5, $3, $8);
   for (size_t i = 0; i < $7.size(); i++) {
     $$->children.push_back($7[i]);
@@ -467,6 +475,12 @@ if_end: ELIF expr THEN stmts if_end {
   for (size_t i = 0; i < $2.size(); i++) {
     $$->children.push_back($2[i]);
   };
+} | ELIF expr THEN if_end {
+  $$ = new IfEndNode(ctx.line, $2, $4);
+} | ELIF SOME ID IN expr THEN if_end {
+  $$ = new IfEndNode(ctx.line, $5, $3, $7);
+} | ELSE END_IF {
+  $$ = new IfEndNode(ctx.line, new IfEndNode(ctx.line));
 } | END_IF {
   $$ = new IfEndNode(ctx.line);
 };
@@ -496,6 +510,8 @@ case: CASE case_values COLON stmts {
   for (size_t i = 0; i < $4.size(); i++) {
     $$->children.push_back($4[i]);
   };
+} | CASE case_values COLON {
+  $$ = new CaseNode(ctx.line, $2);
 };
 
 case_values: case_values COMMA term {
@@ -511,6 +527,8 @@ default_case: DEFAULT COLON stmts {
   for (size_t i = 0; i < $3.size(); i++) {
     $$->children.push_back($3[i]);
   };
+} | DEFAULT COLON {
+  $$ = new CaseNode(ctx.line);
 };
 
 for: FOR LEFT_PAREN ID IN expr RIGHT_PAREN stmts END_FOR {

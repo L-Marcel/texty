@@ -6,7 +6,11 @@ void BreakNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void BreakNode::compile_code(ostream& os) const { os << "break"; };
+void BreakNode::compile_code(ostream& os) const {
+  // TODO - Break só pode dentro de loop
+  // (não tente)
+  os << "break";
+};
 
 // Tipagem
 Type BreakNode::get_type() const { return Type(TypeKind::VOID); };

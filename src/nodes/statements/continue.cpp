@@ -6,7 +6,11 @@ void ContinueNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void ContinueNode::compile_code(ostream& os) const { os << "continue"; };
+void ContinueNode::compile_code(ostream& os) const {
+  // TODO - Break só pode dentro de loop, mesma coisa do break
+  // (não tente)
+  os << "continue";
+};
 
 // Tipagem
 Type ContinueNode::get_type() const { return Type(TypeKind::VOID); };

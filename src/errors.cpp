@@ -4,11 +4,11 @@
 #include "syntax.tab.hh"
 
 error::error(const std::string& message, int line)
-    : runtime_error(ERROR_LABEL + "Erro semântico: " + message + " na linha " +
-                    to_string(line)) {};
+    : std::runtime_error(ERROR_LABEL + "Erro semântico: " + message +
+                         " na linha " + std::to_string(line)) {};
 
 error::error(const std::string& message)
-    : runtime_error(ERROR_LABEL + "Erro semântico: " + message) {};
+    : std::runtime_error(ERROR_LABEL + "Erro semântico: " + message) {};
 
 void yy::parser::error(const std::string& msg) {};
 void yy::parser::report_syntax_error(const yy::parser::context& yyctx) const {

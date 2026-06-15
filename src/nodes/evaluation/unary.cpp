@@ -11,7 +11,49 @@ void UnaryOperationNode::compile_dot(ostream& os) const {
 
 // Código
 void UnaryOperationNode::compile_code(ostream& os) const {
-  // TODO
+  this->get_type();
+
+  if (this->postfix) {
+    os << "(";
+    this->node->compile_code(os);
+  } else {
+    os << "(";
+  };
+
+  switch (operation) {
+    case UnaryOperation::MINUS:
+      os << "-";
+      break;
+    case UnaryOperation::REV:
+      os << "~";
+      break;
+    case UnaryOperation::NOT:
+      os << "!";
+      break;
+    case UnaryOperation::REF:
+      os << "&";
+      break;
+    case UnaryOperation::DEREF:
+      os << "*";
+      break;
+    case UnaryOperation::INCREMENT:
+      os << "++";
+      break;
+    case UnaryOperation::DECREMENT:
+      os << "--";
+      break;
+    default:
+      throw error("operação unária \'" +
+                      string(magic_enum::enum_name(this->operation)) +
+                      "\' não implementada",
+                  this->line);
+  };
+
+  if (!this->postfix) {
+    this->node->compile_code(os);
+  };
+
+  os << ")";
 };
 
 // Tipagem

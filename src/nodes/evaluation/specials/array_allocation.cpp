@@ -21,7 +21,9 @@ void ArrayAllocationNode::compile_dot(ostream& os) const {
 
 // Código
 void ArrayAllocationNode::compile_code(ostream& os) const {
-  os << "::txy::array(";
+  os << "::txy::array<";
+  os << this->inner_type.to_production();
+  os << ">(";
   if (this->children.empty() &&
       this->size_type == ArrayAllocationSizeType::UNDEFINED) {
     os << ")";

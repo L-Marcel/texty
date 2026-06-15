@@ -1,0 +1,17 @@
+proc main()
+  var soma: int = 10 + 5;
+  var subtracao: int = 10 - 5;
+  var multiplicacao: int = 10 * 5;
+  var divisao: int = 10 / 5;
+  var modulo: int = 10 % 3;
+
+  var b_or: int = 5 | 3;
+  
+  if soma > 10 || subtracao < 10 then
+    if multiplicacao >= 50 && divisao <= 2 then
+      if modulo != 0 then
+        println("Matematica e Relacionais OK");
+      endif;
+    endif;
+  endif;
+endproc;
