@@ -43,6 +43,11 @@ Type ReturnNode::get_type() const {
   };
 };
 
+// Cobertura do retorno
+ReturnCoverage ReturnNode::get_return_coverage() const {
+  return ReturnCoverage::GUARANTEED;
+};
+
 // Construtores
 ReturnNode::ReturnNode(int line)
     : Node(line),

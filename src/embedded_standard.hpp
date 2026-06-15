@@ -1,7 +1,6 @@
 #pragma once
 
 const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
-#include <cmath>
 #ifdef _WIN32
 #include <conio.h>
 #else
@@ -18,6 +17,64 @@ const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
 #include <type_traits>
 #include <variant>
 #include <vector>
+::std::int32_t input_key_pressed() {
+#ifdef _WIN32
+  return static_cast<::std::int32_t>(_getch());
+#else
+  struct termios oldterminal, newterminal;
+  tcgetattr(STDIN_FILENO, &oldterminal);
+  newterminal = oldterminal;
+  newterminal.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
+  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
+  return caractere;
+#endif
+};
+::std::string input_line() {
+  ::std::string line;
+  ::std::getline(::std::cin, line);
+  return line;
+};
+void txy_print(const ::std::string in) { ::std::cout << in; };
+void txy_println(const ::std::string in) { ::std::cout << in << ::std::endl; };
+template <typename... Args>
+::std::string txy_format(const ::std::string& in, const Args&... args) {
+  return "TODO do format!";
+};
+template <typename... Args>
+::std::string txy_join(const ::std::string& delimiter, const ::std::string& in,
+                       const Args&... args) {
+  return "TODO do join!";
+};
+bool txy_is_empty(const ::std::string in) { return in.empty(); };
+bool txy_is_blank(const ::std::string in) {
+  return in.find_first_not_of(" \t\n\v\f\r") == ::std::string::npos;
+};
+void txy_uppercase(::std::string& in) {
+  transform(in.begin(), in.end(), in.begin(), ::toupper);
+};
+void txy_lowercase(::std::string& in) {
+  transform(in.begin(), in.end(), in.begin(), ::tolower);
+};
+void txy_trim_end(::std::string& in) {
+  ::std::string::size_type pos = in.find_last_not_of(" \t\n\v\f\r");
+  if (pos == ::std::string::npos) pos = in.size();
+  in = in.substr(0, pos + 1);
+};
+void txy_trim_start(::std::string& in) {
+  ::std::string::size_type pos = in.find_first_not_of(" \t\n\v\f\r");
+  if (pos == ::std::string::npos) pos = 0;
+  in = in.substr(pos);
+};
+void txy_trim(::std::string& in) {
+  ::std::string::size_type first = in.find_first_not_of(" \t\n\v\f\r");
+  ::std::string::size_type last = in.find_last_not_of(" \t\n\v\f\r");
+  if (first == ::std::string::npos) first = 0;
+  if (last == ::std::string::npos) last = in.size();
+  in = in.substr(first, last + 1);
+};
+#include <cmath>
 namespace txy {
 using unbounded_value = ::std::monostate;
 using bound_value =
@@ -130,61 +187,4 @@ struct option {
   };
 };
 };  // namespace txy
-::std::int32_t input_key_pressed() {
-#ifdef _WIN32
-  return static_cast<::std::int32_t>(_getch());
-#else
-  struct termios oldterminal, newterminal;
-  tcgetattr(STDIN_FILENO, &oldterminal);
-  newterminal = oldterminal;
-  newterminal.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &newterminal);
-  ::std::int32_t caractere = static_cast<::std::int32_t>(getchar());
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldterminal);
-  return caractere;
-#endif
-};
-::std::string input_line() {
-  ::std::string line;
-  ::std::getline(::std::cin, line);
-  return line;
-};
-void txy_print(const ::std::string in) { ::std::cout << in; };
-void txy_println(const ::std::string in) { ::std::cout << in << ::std::endl; };
-template <typename... Args>
-::std::string txy_format(const ::std::string& in, const Args&... args) {
-  return "TODO do format!";
-};
-template <typename... Args>
-::std::string txy_join(const ::std::string& delimiter, const ::std::string& in,
-                       const Args&... args) {
-  return "TODO do join!";
-};
-bool txy_is_empty(const ::std::string in) { return in.empty(); };
-bool txy_is_blank(const ::std::string in) {
-  return in.find_first_not_of(" \t\n\v\f\r") == ::std::string::npos;
-};
-void txy_uppercase(::std::string& in) {
-  transform(in.begin(), in.end(), in.begin(), ::toupper);
-};
-void txy_lowercase(::std::string& in) {
-  transform(in.begin(), in.end(), in.begin(), ::tolower);
-};
-void txy_trim_end(::std::string& in) {
-  ::std::string::size_type pos = in.find_last_not_of(" \t\n\v\f\r");
-  if (pos == ::std::string::npos) pos = in.size();
-  in = in.substr(0, pos + 1);
-};
-void txy_trim_start(::std::string& in) {
-  ::std::string::size_type pos = in.find_first_not_of(" \t\n\v\f\r");
-  if (pos == ::std::string::npos) pos = 0;
-  in = in.substr(pos);
-};
-void txy_trim(::std::string& in) {
-  ::std::string::size_type first = in.find_first_not_of(" \t\n\v\f\r");
-  ::std::string::size_type last = in.find_last_not_of(" \t\n\v\f\r");
-  if (first == ::std::string::npos) first = 0;
-  if (last == ::std::string::npos) last = in.size();
-  in = in.substr(first, last + 1);
-};
 )__texty_std__";

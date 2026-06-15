@@ -31,6 +31,12 @@ void FunctionNode::compile_code(ostream& os) const {
   if (this->implemented) {
     os << std::endl;
 
+    ReturnCoverage coverage = this->get_return_coverage();
+    if(coverage == ReturnCoverage::PARTIAL)
+      throw error("função sem retorno garantido");
+    else if(coverage == ReturnCoverage::NONE)
+      throw error("função sem retorno");
+    
     string params = params_to_string(this->params, true);
     os << this->type.to_production() << " " << this->name << "(" << params
        << ") {" << std::endl;

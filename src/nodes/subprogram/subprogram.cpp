@@ -112,6 +112,35 @@ Type SubprogramNode::get_type() const {
   return Type(TypeKind::UNKNOWN);
 };
 
+
+// Cobertura do retorno
+ReturnCoverage SubprogramNode::get_return_coverage() const {
+  if (!this->implemented) {
+    return ReturnCoverage::NONE;
+  };
+
+  ReturnCoverage final_coverage = ReturnCoverage::NONE;
+
+  for (size_t i = 0; i < this->children.size(); i++) {
+    ReturnCoverage child_coverage = this->children[i]->get_return_coverage();
+
+    if (child_coverage == ReturnCoverage::GUARANTEED) {
+      final_coverage = ReturnCoverage::GUARANTEED;
+      
+      if (i + 1 < this->children.size()) {
+        throw error("código inalcançável detectado após instrução de retorno", 
+                    this->children[i + 1]->line);
+      };
+
+      break;
+    } else if (child_coverage == ReturnCoverage::PARTIAL) {
+      final_coverage = ReturnCoverage::PARTIAL;
+    };
+  };
+
+  return final_coverage;
+};
+
 // Construtores
 SubprogramNode::SubprogramNode(int line, string name,
                                vector<pair<string, Type>> params, bool self,

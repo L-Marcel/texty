@@ -127,19 +127,67 @@ void IfEndNode::compile_code(ostream& os) const {
 // Tipagem
 Type IfEndNode::get_type() const { return Type(TypeKind::VOID); };
 
+// Cobertura dos retornos
+ReturnCoverage IfEndNode::get_return_coverage() const {
+  if (this->type == IfEndType::END) {
+    return ReturnCoverage::NONE;
+  };
+
+  ReturnCoverage block_coverage = ReturnCoverage::NONE;
+
+  for (size_t i = 0; i < this->children.size(); i++) {
+    ReturnCoverage coverage = this->children[i]->get_return_coverage();
+    if (coverage == ReturnCoverage::GUARANTEED) {
+      block_coverage = ReturnCoverage::GUARANTEED;
+      
+      if (i + 1 < this->children.size()) {
+        throw error("código inalcançável detectado após instrução de retorno", 
+                    this->children[i + 1]->line);
+      };
+
+      break;
+    } else if (coverage == ReturnCoverage::PARTIAL) {
+      block_coverage = ReturnCoverage::PARTIAL;
+    }
+  };
+
+  if (this->type == IfEndType::ELSE) {
+    return block_coverage; 
+  };
+
+  ReturnCoverage next_coverage = this->next ? this->next->get_return_coverage() : ReturnCoverage::NONE;
+
+  if (block_coverage == ReturnCoverage::GUARANTEED && next_coverage == ReturnCoverage::GUARANTEED) {
+    return ReturnCoverage::GUARANTEED;
+  } else if (block_coverage != ReturnCoverage::NONE || next_coverage != ReturnCoverage::NONE) {
+    return ReturnCoverage::PARTIAL;
+  };
+
+  return ReturnCoverage::NONE;
+};
+
 // Construtores
 IfEndNode::IfEndNode(int line, ExpressionNode* expression, IfEndNode* next)
     : Node(line),
       type(IfEndType::EXPRESSION),
+      variable_id(""),
       expression(expression),
       next(next) {};
 IfEndNode::IfEndNode(int line, ExpressionNode* expression, string variable_id,
                      IfEndNode* next)
     : Node(line),
       type(IfEndType::UNWRAP),
-      expression(expression),
       variable_id(variable_id),
+      expression(expression),
       next(next) {};
 IfEndNode::IfEndNode(int line, IfEndNode* next)
-    : Node(line), type(IfEndType::ELSE), next(next) {};
-IfEndNode::IfEndNode(int line) : Node(line), type(IfEndType::END) {};
+    : Node(line), 
+      type(IfEndType::ELSE), 
+      variable_id(""), 
+      expression(nullptr),
+      next(next) {};
+IfEndNode::IfEndNode(int line) : Node(line), 
+      type(IfEndType::END),       
+      variable_id(""), 
+      expression(nullptr),
+      next(nullptr) {};

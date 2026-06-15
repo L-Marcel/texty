@@ -99,6 +99,37 @@ void IfNode::compile_code(ostream& os) const {
 // Tipagem
 Type IfNode::get_type() const { return Type(TypeKind::VOID); };
 
+// Cobertura dos retornos
+ReturnCoverage IfNode::get_return_coverage() const {
+  ReturnCoverage block_coverage = ReturnCoverage::NONE;
+
+  for (size_t i = 0; i < this->children.size(); i++) {
+    ReturnCoverage coverage = this->children[i]->get_return_coverage();
+    if (coverage == ReturnCoverage::GUARANTEED) {
+      block_coverage = ReturnCoverage::GUARANTEED;
+
+      if (i + 1 < this->children.size()) {
+        throw error("código inalcançável detectado após instrução de retorno", 
+                    this->children[i + 1]->line);
+      };
+
+      break;
+    } else if (coverage == ReturnCoverage::PARTIAL) {
+      block_coverage = ReturnCoverage::PARTIAL;
+    };
+  };
+
+  ReturnCoverage next_coverage = this->next ? this->next->get_return_coverage() : ReturnCoverage::NONE;
+
+  if (block_coverage == ReturnCoverage::GUARANTEED && next_coverage == ReturnCoverage::GUARANTEED) {
+    return ReturnCoverage::GUARANTEED;
+  } else if (block_coverage != ReturnCoverage::NONE || next_coverage != ReturnCoverage::NONE) {
+    return ReturnCoverage::PARTIAL;
+  };
+
+  return ReturnCoverage::NONE;
+};
+
 // Construtores
 IfNode::IfNode(int line, ExpressionNode* expression, IfEndNode* next)
     : Node(line),

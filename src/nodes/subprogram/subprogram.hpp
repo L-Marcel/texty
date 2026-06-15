@@ -13,6 +13,7 @@ struct SubprogramNode : public Node {
   virtual void compile_dot(ostream& os) const;
   virtual void compile_code(ostream& os) const;
   virtual Type get_type() const;
+  ReturnCoverage get_return_coverage() const override;
 
   virtual ~SubprogramNode() = default;
 };

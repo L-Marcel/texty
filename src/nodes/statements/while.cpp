@@ -28,6 +28,34 @@ void WhileNode::compile_code(ostream& os) const {
 // Tipagem
 Type WhileNode::get_type() const { return Type(TypeKind::VOID); };
 
+// Cobertura dos retornos
+ReturnCoverage WhileNode::get_return_coverage() const {
+  ReturnCoverage block_coverage = ReturnCoverage::NONE;
+
+  for (size_t i = 0; i < this->children.size(); i++) {
+    ReturnCoverage coverage = this->children[i]->get_return_coverage();
+    
+    if (coverage == ReturnCoverage::GUARANTEED) {
+      if (this->type == WhileType::REPEAT) {
+        block_coverage = ReturnCoverage::GUARANTEED;
+      } else {
+        block_coverage = ReturnCoverage::PARTIAL; 
+      };
+      
+      if (i + 1 < this->children.size()) {
+        throw error("código inalcançável detectado após instrução de retorno", 
+                    this->children[i + 1]->line);
+      };
+      
+      break;
+    } else if (coverage == ReturnCoverage::PARTIAL) {
+      block_coverage = ReturnCoverage::PARTIAL;
+    };
+  };
+
+  return block_coverage;
+};
+
 // Construtores
 WhileNode::WhileNode(int line, ExpressionNode* condition, WhileType type)
     : Node(line), type(type), condition(condition) {};

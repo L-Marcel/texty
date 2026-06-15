@@ -27,6 +27,8 @@ void ProcedureNode::compile_code(ostream& os) const {
   if (this->implemented) {
     os << std::endl;
 
+    this->get_return_coverage();
+
     string params = params_to_string(this->params, true);
     if (this->name == "txy_main") {
       os << "int " << this->name << "(" << params << ") {" << std::endl;

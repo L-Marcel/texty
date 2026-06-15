@@ -30,6 +30,30 @@ void ForNode::compile_code(ostream& os) const {
 // Tipagem
 Type ForNode::get_type() const { return Type(TypeKind::VOID); };
 
+// Cobertura dos retornos
+ReturnCoverage ForNode::get_return_coverage() const {
+  ReturnCoverage block_coverage = ReturnCoverage::NONE;
+
+  for (size_t i = 0; i < this->children.size(); i++) {
+    ReturnCoverage coverage = this->children[i]->get_return_coverage();
+    
+    if (coverage == ReturnCoverage::GUARANTEED) {
+      block_coverage = ReturnCoverage::PARTIAL; 
+      
+      if (i + 1 < this->children.size()) {
+        throw error("código inalcançável detectado após instrução de retorno", 
+                    this->children[i + 1]->line);
+      };
+      
+      break;
+    } else if (coverage == ReturnCoverage::PARTIAL) {
+      block_coverage = ReturnCoverage::PARTIAL;
+    };
+  };
+
+  return block_coverage;
+};
+
 // Construtores
 ForNode::ForNode(int line, string name, ExpressionNode* expression)
     : Node(line, name),
