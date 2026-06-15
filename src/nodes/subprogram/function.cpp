@@ -20,6 +20,10 @@ void FunctionNode::compile_code(ostream& os) const {
     types.push_back(this->params[i].second);
   };
 
+  // TODO - Verificar os returns: tem que ter um
+  // para cada bifurcação (checar os ifs recursivamente, não é uma recursão
+  // trivial, serio, não tente fazer).
+
   References* references = References::get_instance();
   references->add_function_reference(this->name, this->type, types, this->self,
                                      this->implemented);
