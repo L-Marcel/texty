@@ -84,6 +84,7 @@
         | <switch>
         | <expr>
 <return> -> RETURN <expr>
+          | RETURN
 <attr> -> VAR ID COLON <type> ATTR <expr>
         | CONST ID COLON <type> ATTR <expr>
 <basic_type> -> TYPE_INT 

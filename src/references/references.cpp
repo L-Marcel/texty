@@ -3,12 +3,12 @@
 #include "../helpers/string.hpp"
 
 // Singleton
-References::References() {};
+References::References() : subprogam_return_type(Type(TypeKind::UNKNOWN)) {};
 References* References::_instance = nullptr;
 References* References::get_instance() {
   if (References::_instance == nullptr) {
     References::_instance = new References();
-  }
+  };
 
   return References::_instance;
 };
@@ -25,6 +25,23 @@ string References::get_scope_ident() {
   else
     return repeat("\t", level - 1);
 };
+
+// Tipo de retorno
+Type References::get_suprogram_return_type() {
+  return this->subprogam_return_type;
+};
+void References::set_subprogram_return_type(Type type) {
+  this->subprogam_return_type = Type(type);
+};
+void References::clear_subprogram_return_type() {
+  this->subprogam_return_type = Type(TypeKind::UNKNOWN);
+};
+
+// Caso main seja um procedimento
+void References::set_main_is_procedure(bool main_is_procedure) {
+  this->main_is_procedure = main_is_procedure;
+};
+bool References::get_main_is_procedure() { return this->main_is_procedure; };
 
 // Referências
 void References::add_variable_reference(string name, Type type, bool is_const) {

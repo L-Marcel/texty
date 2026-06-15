@@ -380,6 +380,8 @@ stmt: BREAK {
 
 return: RETURN expr {
   $$ = new ReturnNode(ctx.line, $2);
+} | RETURN {
+  $$ = new ReturnNode(ctx.line);
 };
 
 attr: VAR ID COLON type ATTR expr {

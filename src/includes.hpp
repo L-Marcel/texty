@@ -38,6 +38,7 @@
 #include "enums/option.hpp"
 #include "enums/range.hpp"
 #include "enums/references.hpp"
+#include "enums/return.hpp"
 #include "enums/type.hpp"
 #include "enums/while.hpp"
 #include "errors.hpp"

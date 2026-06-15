@@ -32,6 +32,8 @@ void ProcedureNode::compile_code(ostream& os) const {
       os << "int " << this->name << "(" << params << ") {" << std::endl;
 
       references->push_scope();
+      references->set_subprogram_return_type(this->get_type());
+      references->set_main_is_procedure(true);
       for (size_t i = 0; i < this->params.size(); i++) {
         references->add_variable_reference(this->params[i].first,
                                            this->params[i].second, false);
@@ -48,6 +50,7 @@ void ProcedureNode::compile_code(ostream& os) const {
       os << "void " << this->name << "(" << params << ") {" << std::endl;
 
       references->push_scope();
+      references->set_subprogram_return_type(this->get_type());
       for (size_t i = 0; i < this->params.size(); i++) {
         references->add_variable_reference(this->params[i].first,
                                            this->params[i].second, false);
@@ -62,6 +65,8 @@ void ProcedureNode::compile_code(ostream& os) const {
     };
 
     references->pop_scope();
+    references->clear_subprogram_return_type();
+    references->set_main_is_procedure(false);
     os << "};" << std::endl;
 
     if (this->name == "txy_main") {

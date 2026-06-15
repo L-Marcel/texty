@@ -1,0 +1,1 @@
+enum class ReturnNodeType { EXPRESSION, EMPTY };
