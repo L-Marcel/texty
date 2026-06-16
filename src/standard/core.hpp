@@ -6,6 +6,7 @@
 #include <unistd.h>
 #endif
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <memory>

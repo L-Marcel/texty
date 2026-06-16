@@ -1,5 +1,3 @@
-#include <cmath>
-
 #include "core.hpp"
 
 namespace txy {
