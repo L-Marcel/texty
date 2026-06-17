@@ -10,8 +10,6 @@ const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include <string.h>
 int32_t input_key_pressed() {
 #ifdef _WIN32
   return (int32_t)_getch();
@@ -45,6 +43,80 @@ loop_start:
 loop_end:
   buffer[length] = '\0';
   return buffer;
+};
+int32_t txy_pow_int(int32_t base, int32_t exp) {
+  int32_t result = 1;
+  int32_t current_exp = exp;
+loop_start:
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
+loop_end:
+  return result;
+};
+int64_t txy_pow_long(int64_t base, int64_t exp) {
+  int64_t result = 1;
+  int64_t current_exp = exp;
+loop_start:
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
+loop_end:
+  return result;
+};
+double txy_exp_double(double x) {
+  double sum = 1.0;
+  double term = 1.0;
+  int32_t i = 1;
+loop_start:
+  if (i > 30) goto loop_end;
+  term = term * x / i;
+  sum = sum + term;
+  i = i + 1;
+  goto loop_start;
+loop_end:
+  return sum;
+};
+double txy_ln_double(double x) {
+  if (x <= 0.0) return 0.0;
+  double y = (x - 1.0) / (x + 1.0);
+  double y_squared = y * y;
+  double sum = 0.0;
+  double term = y;
+  int32_t n = 0;
+loop_start:
+  if (n > 30) goto loop_end;
+  sum = sum + term / (2 * n + 1);
+  term = term * y_squared;
+  n = n + 1;
+  goto loop_start;
+loop_end:
+  return 2.0 * sum;
+};
+double txy_pow_double(double base, double exp) {
+  if (base == 0.0) return 0.0;
+  if (exp == 0.0) return 1.0;
+  if (exp == (int64_t)exp) {
+    double result = 1.0;
+    int64_t current_exp = (int64_t)exp;
+    if (current_exp < 0) {
+      base = 1.0 / base;
+      current_exp = -current_exp;
+    }
+loop_start:
+    if (current_exp <= 0) goto loop_end;
+    result = result * base;
+    current_exp = current_exp - 1;
+    goto loop_start;
+loop_end:
+    return result;
+  }
+  return txy_exp_double(exp * txy_ln_double(base));
+};
+float txy_pow_float(float base, float exp) {
+  return (float)txy_pow_double((double)base, (double)exp);
 };
 void txy_print(const char* input) { printf("%s", input); };
 void txy_println(const char* input) { printf("%s\n", input); };
@@ -149,6 +221,27 @@ loop_end:
 void txy_trim(char* input) {
   txy_trim_start(input);
   txy_trim_end(input);
+};
+int txy_string_contains(const char* text, const char* substr) {
+  size_t i = 0;
+  size_t j = 0;
+  if (substr[0] == '\0') goto found;
+outer_loop:
+  if (text[i] == '\0') goto not_found;
+  j = 0;
+inner_loop:
+  if (substr[j] == '\0') goto found;
+  if (text[i + j] == '\0') goto not_found;
+  if (text[i + j] != substr[j]) goto next_i;
+  j = j + 1;
+  goto inner_loop;
+next_i:
+  i = i + 1;
+  goto outer_loop;
+found:
+  return 1;
+not_found:
+  return 0;
 };
 char* txy_float_decimals(float value, int64_t left, int64_t right) {
   int total_width;

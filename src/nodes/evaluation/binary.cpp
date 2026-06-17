@@ -40,13 +40,15 @@ void BinaryOperationNode::compile_code(ostream& os) const {
       os << " % ";
       this->right->compile_code(os);
       break;
-    case BinaryOperation::EXP:
-      os << "pow(";
+    case BinaryOperation::EXP: {
+      Type type = this->left->get_type();
+      os << "txy_pow_" << type.get_name() << "(";
       this->left->compile_code(os);
       os << ", ";
       this->right->compile_code(os);
       os << ")";
       break;
+    }
     case BinaryOperation::AND:
       this->left->compile_code(os);
       os << " && ";
@@ -142,11 +144,11 @@ void BinaryOperationNode::compile_code(ostream& os) const {
           os << "))";
         };
       } else if (type.kind == TypeKind::STRING) {
-        os << "strstr(";
+        os << "txy_string_contains(";
         this->right->compile_code(os);
         os << ", ";
         this->left->compile_code(os);
-        os << ") != NULL";
+        os << ")";
       };
       break;
     }
