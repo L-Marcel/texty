@@ -9,7 +9,7 @@ void LongNode::compile_dot(ostream& os) const {
 
 // Código
 void LongNode::compile_code(ostream& os) const {
-  os << "static_cast<::std::int64_t>(" << this->value << "LL)";
+  os << "((int64_t)" << this->value << "LL)";
 };
 
 // Tipagem

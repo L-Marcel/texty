@@ -9,7 +9,7 @@ void StringNode::compile_dot(ostream& os) const {
 
 // Código
 void StringNode::compile_code(ostream& os) const {
-  os << "::std::string(\"" << this->value << "\")";
+  os << "(char*)(\"" << this->value << "\")";
 };
 
 // Tipagem

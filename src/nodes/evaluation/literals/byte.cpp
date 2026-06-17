@@ -9,7 +9,7 @@ void ByteNode::compile_dot(ostream& os) const {
 
 // Código
 void ByteNode::compile_code(ostream& os) const {
-  os << "static_cast<::std::uint8_t>(" << static_cast<unsigned int>(this->value)
+  os << "((uint8_t)" << static_cast<unsigned int>(this->value)
      << "U)";
 };
 
