@@ -1,6 +1,8 @@
 #pragma once
 #include "context.hpp"
 
+extern stringstream generated_code;
+
 struct Compiler {
   static void add_dot_node(ostream& os, const Node* node, string label);
   static void add_dot_node_item(ostream& os, const Node* node, string item);

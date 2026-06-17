@@ -20,6 +20,74 @@ void SubprogramCallNode::compile_dot(ostream& os) const {
 
 // Código
 void SubprogramCallNode::compile_code(ostream& os) const {
+  if (this->access->access_type == AccessType::BASE) {
+    AccessBaseNode* base = this->access->base;
+    if (base->access_type == AccessBaseType::ID && base->name == "txy_format") {
+      string signature = "";
+      for (size_t i = 1; i < this->params.size(); i++) {
+        signature += this->params[i]->get_type().get_name();
+        if (i != this->params.size() - 1) signature += "_";
+      };
+
+      string name = "__txy_fmt_" + signature;
+      static set<string> generated_formats;
+      if (generated_formats.find(signature) == generated_formats.end()) {
+        generated_formats.insert(signature);
+
+        generated_code << "char* " << name << "(const char* pattern";
+        for (size_t i = 1; i < this->params.size(); i++) {
+          generated_code << ", " << this->params[i]->get_type().to_production()
+                         << " arg" << i;
+        };
+        generated_code << ") {" << std::endl;
+
+        size_t count = this->params.size() - 1;
+        generated_code << "  array_string array = array_string_create(" << count
+                       << ", \"\");" << std::endl;
+
+        for (size_t i = 1; i < this->params.size(); i++) {
+          string to_string_function =
+              this->params[i]->get_type().get_name() + "_to_string";
+          generated_code << "  array.pointer[" << (i - 1)
+                         << "] = " << to_string_function << "(arg" << i
+                         << ");\n";
+        };
+
+        generated_code << "  return txy_format(pattern, array);\n";
+        generated_code << "}\n\n";
+      };
+
+      os << name << "(";
+      for (size_t i = 0; i < this->params.size(); i++) {
+        this->params[i]->compile_code(os);
+        if (i != this->params.size() - 1) os << ", ";
+      }
+      os << ")";
+
+      return;
+    } else if (base->access_type == AccessBaseType::ID &&
+               base->name == "txy_join" && this->params.size() > 1) {
+      os << "txy_join(";
+      this->params[0]->compile_code(os);
+      os << ", array_string_from_values(";
+      os << "(char*[]){";
+
+      for (size_t i = 1; i < this->params.size(); i++) {
+        this->params[i]->compile_code(os);
+        if (i != this->params.size() - 1) {
+          os << ", ";
+        };
+      };
+
+      os << "}, ";
+      os << (this->params.size() - 1) << ", ";
+      os << (this->params.size() - 1) << ", ";
+      os << "\"\"";
+      os << "))";
+      return;
+    };
+  };
+
   this->access->compile_code(os);
   os << "(";
   for (size_t i = 0; i < this->params.size(); i++) {

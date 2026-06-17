@@ -27,8 +27,7 @@ string Type::to_string() const {
            "[]";
   } else if (this->kind == TypeKind::RANGE) {
     return "range<" +
-           (this->inner_type ? this->inner_type->to_string() : "unknown") +
-           ">";
+           (this->inner_type ? this->inner_type->to_string() : "unknown") + ">";
   } else if (this->kind == TypeKind::POINTER) {
     return "pointer<" +
            (this->inner_type ? this->inner_type->to_string() : "unknown") + ">";
@@ -95,6 +94,29 @@ string Type::to_production() const {
     default:
       break;
   }
+
+  return name;
+};
+
+string Type::get_name() const {
+  if (this->kind == TypeKind::NAMED)
+    return this->name;
+  else if (this->kind == TypeKind::ARRAY) {
+    return "array_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
+  } else if (this->kind == TypeKind::RANGE) {
+    return "range_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
+  } else if (this->kind == TypeKind::POINTER) {
+    return "pointer_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
+  } else if (this->kind == TypeKind::OPTION) {
+    return "option_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
+  };
+
+  string name = string(magic_enum::enum_name(this->kind));
+  transform(name.begin(), name.end(), name.begin(), ::tolower);
 
   return name;
 };

@@ -51,8 +51,7 @@ void process_file(const fs::path& filepath) {
 
 int main() {
   for (const auto& entry : fs::recursive_directory_iterator("src/standard")) {
-    if (entry.path().extension() == ".hpp" ||
-        entry.path().extension() == ".cpp") {
+    if (entry.path().extension() == ".h" || entry.path().extension() == ".c") {
       process_file(entry.path());
     };
   };

@@ -2,6 +2,8 @@
 
 #include "../embedded_standard.hpp"
 
+stringstream generated_code;
+
 // Filename
 string get_filename_without_mime(string filename) {
   int index = filename.rfind('.');
@@ -52,20 +54,30 @@ void Compiler::create_dot(Context& ctx, string filename) {
 // Código
 void Compiler::create_code(Context& ctx, string filename) {
   string base_filename = get_filename_without_mime(filename);
-  string cpp_filename = base_filename + ".cpp";
+  string cpp_filename = base_filename + ".c";
   ofstream file = ofstream(cpp_filename);
   std::cout << DEBUG_LABEL << "Montando arquivo intermediário" << std::endl;
+
   if (file.is_open()) {
+    generated_code.str("");
+    generated_code.clear();
+
+    stringstream program;
+    if (ctx.root != nullptr) {
+      ctx.root->compile_code(program);
+    };
+
     file << "// ================== STANDARD ================== //" << std::endl;
     file << "// ---------------------------------------------- //" << std::endl;
     file << std::endl << TEXTY_STANDARD_LIBRARY << std::endl << std::endl;
     file << "// ---------------------------------------------- //" << std::endl;
-    file << "// ================== PROGRAM =================== //" << std::endl
-         << std::endl;
-
-    if (ctx.root != nullptr) {
-      ctx.root->compile_code(file);
-    }
+    file << "// ================== GENERATED ================= //" << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << std::endl << generated_code.str() << std::endl << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << "// ================== PROGRAM =================== //" << std::endl;
+    file << "// ---------------------------------------------- //" << std::endl;
+    file << std::endl << program.str() << std::endl << std::endl;
 
     file.close();
     std::cout << DEBUG_LABEL << "Arquivo de intermediário montado" << std::endl;
