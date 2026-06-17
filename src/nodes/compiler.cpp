@@ -3,6 +3,49 @@
 #include "../embedded_standard.hpp"
 
 stringstream generated_code;
+set<string> Compiler::defined_arrays = {"string", "char", "bool",  "byte",
+                                        "int",    "long", "float", "double"};
+set<string> Compiler::defined_options = {"string", "char", "bool",  "byte",
+                                         "int",    "long", "float", "double"};
+
+// Registro de tipos
+void Compiler::register_array(Type inner_type) {
+  string name = inner_type.get_name();
+  if (defined_arrays.find(name) == defined_arrays.end()) {
+    defined_arrays.insert(name);
+
+    if (inner_type.kind == TypeKind::ARRAY) {
+      register_array(*inner_type.inner_type);
+    } else if (inner_type.kind == TypeKind::OPTION) {
+      register_option(*inner_type.inner_type);
+    };
+
+    generated_code << "DEFINE_ARRAY(";
+    generated_code << inner_type.to_production();
+    generated_code << ", " << name << ", EQUALS, ";
+    generated_code << name << "_to_string";
+    generated_code << ")" << std::endl;
+  };
+};
+
+void Compiler::register_option(Type inner_type) {
+  string name = inner_type.get_name();
+  if (defined_options.find(name) == defined_options.end()) {
+    defined_options.insert(name);
+
+    if (inner_type.kind == TypeKind::ARRAY) {
+      register_array(*inner_type.inner_type);
+    } else if (inner_type.kind == TypeKind::OPTION) {
+      register_option(*inner_type.inner_type);
+    };
+
+    generated_code << "DEFINE_OPTION(";
+    generated_code << inner_type.to_production();
+    generated_code << ", " << name << ", ";
+    generated_code << name << "_to_string";
+    generated_code << ")" << std::endl;
+  };
+};
 
 // Filename
 string get_filename_without_mime(string filename) {
@@ -61,6 +104,10 @@ void Compiler::create_code(Context& ctx, string filename) {
   if (file.is_open()) {
     generated_code.str("");
     generated_code.clear();
+    Compiler::defined_arrays = {"string", "char", "bool",  "byte",
+                                "int",    "long", "float", "double"};
+    Compiler::defined_options = {"string", "char", "bool",  "byte",
+                                 "int",    "long", "float", "double"};
 
     stringstream program;
     if (ctx.root != nullptr) {

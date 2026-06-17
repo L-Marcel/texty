@@ -12,6 +12,7 @@ void OptionNode::compile_code(ostream& os) const {
     throw error("tipo desconhecido para option", this->line);
   };
 
+  type.get_name();
   string name = "option_" + type.inner_type->get_name();
 
   if (this->type == OptionNodeType::DEFINED) {

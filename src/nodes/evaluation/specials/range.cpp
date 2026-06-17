@@ -20,6 +20,8 @@ void RangeNode::compile_dot(ostream& os) const {
 // Código
 void RangeNode::compile_code(ostream& os) const {
   Type type = this->get_type();
+  type.get_name();
+
   string range_name = "range_" + type.inner_type->get_name();
   string type_production = type.inner_type->to_production();
 

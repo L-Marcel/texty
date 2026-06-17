@@ -21,6 +21,9 @@ void ArrayAllocationNode::compile_dot(ostream& os) const {
 
 // Código
 void ArrayAllocationNode::compile_code(ostream& os) const {
+  Type type = this->get_type();
+  type.get_name();
+
   string name = "array_" + this->inner_type.get_name();
   string type_production = this->inner_type.to_production();
 

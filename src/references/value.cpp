@@ -1,4 +1,5 @@
 #include "value.hpp"
+#include "../nodes/compiler.hpp"
 
 // Operadores
 bool Type::operator==(const Type& a) const {
@@ -46,6 +47,7 @@ string Type::to_production() const {
   if (this->kind == TypeKind::NAMED)
     return this->name;
   else if (this->kind == TypeKind::ARRAY) {
+    if (this->inner_type) Compiler::register_array(*this->inner_type);
     return "array_" +
            (this->inner_type ? this->inner_type->get_name() : "unknown");
   } else if (this->kind == TypeKind::RANGE) {
@@ -55,6 +57,7 @@ string Type::to_production() const {
     return (this->inner_type ? this->inner_type->to_production() : "unknown") +
            "*";
   } else if (this->kind == TypeKind::OPTION) {
+    if (this->inner_type) Compiler::register_option(*this->inner_type);
     return "option_" +
            (this->inner_type ? this->inner_type->get_name() : "unknown");
   };
@@ -100,6 +103,7 @@ string Type::get_name() const {
   if (this->kind == TypeKind::NAMED)
     return this->name;
   else if (this->kind == TypeKind::ARRAY) {
+    if (this->inner_type) Compiler::register_array(*this->inner_type);
     return "array_" +
            (this->inner_type ? this->inner_type->get_name() : "unknown");
   } else if (this->kind == TypeKind::RANGE) {
@@ -109,6 +113,7 @@ string Type::get_name() const {
     return "pointer_" +
            (this->inner_type ? this->inner_type->get_name() : "unknown");
   } else if (this->kind == TypeKind::OPTION) {
+    if (this->inner_type) Compiler::register_option(*this->inner_type);
     return "option_" +
            (this->inner_type ? this->inner_type->get_name() : "unknown");
   };
