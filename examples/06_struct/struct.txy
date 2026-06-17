@@ -6,6 +6,8 @@ struct Room
   owner: User;
 endstruct;
 
+# TODO - Erro semantico nos casos que não permite
+
 struct User
   id: long;
   age: int;
