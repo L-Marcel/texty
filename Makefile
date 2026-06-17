@@ -34,9 +34,15 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 SRCS_ALL = $(call rwildcard,src/,*.cpp)
 SRCS = $(filter-out $(PACKER_SRC), $(SRCS_ALL))
 EXAMPLES = $(call rwildcard,examples/,*.txy)
+
+ifeq ($(firstword $(MAKECMDGOALS)),$(filter $(firstword $(MAKECMDGOALS)),example run-example))
+  EXAMPLE_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(EXAMPLE_ARGS):;@:)
+endif
+
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o) $(BISON_CC:.cc=.o) $(FLEX_C:.c=.o))
 
-.PHONY: build all check clean examples examples-pendrive
+.PHONY: build all check clean examples example run-example examples-pendrive
 
 build: all
 all: $(TARGET)$(TARGET_EXT)
@@ -110,6 +116,52 @@ examples-pendrive: build $(EXAMPLES)
 		(/lib64/ld-linux-x86-64.so.2 ./$(TARGET) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
 	done; \
 	if [ $$failed -ne 0 ]; then exit 1; fi
+
+example: build
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$file = Get-ChildItem -Path examples -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match '$(EXAMPLE_ARGS)' } | Select-Object -First 1; \
+	if (!\$$file) { Write-Host '[ ERRO ] Código fonte não encontrado'; exit 1; } \
+	Write-Host '[ COMPILE ]' \$$file.FullName; \
+	& .\$(TARGET)$(TARGET_EXT) --file \$$file.FullName; \
+	if (\$$LASTEXITCODE -eq 0) { \
+		\$$dot = \$$file.FullName -replace '\.txy$$$$', '.dot'; \
+		\$$svg = \$$file.FullName -replace '\.txy$$$$', '.svg'; \
+		dot -Tsvg \$$dot -o \$$svg; \
+	}"
+else
+	@file=$$(find examples -type f -name "*.txy" | grep "$(EXAMPLE_ARGS)" | head -n 1); \
+	if [ -z "$$file" ]; then \
+		echo "[ ERRO ] Código fonte nao encontrado"; exit 1; \
+	fi; \
+	echo "[ COMPILE ] $$file"; \
+	./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg"
+endif
+
+run-example: example
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$file = Get-ChildItem -Path examples -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match '$(EXAMPLE_ARGS)' } | Select-Object -First 1; \
+	\$$c_file = \$$file.FullName -replace '\.txy$$$$', '.c'; \
+	\$$bin_file = \$$file.FullName -replace '\.txy$$$$', '.exe'; \
+	if (Test-Path \$$c_file) { \
+		Write-Host '[ RUN ] Compilando $$c_file e executando...'; \
+		gcc \$$c_file -o \$$bin_file; \
+		if (\$$LASTEXITCODE -eq 0) { & \$$bin_file } \
+	} else { \
+		Write-Host '[ ERRO ] Binário não encontrado'; \
+	}"
+else
+	@file=$$(find examples -type f -name "*.txy" | grep "$(EXAMPLE_ARGS)" | head -n 1); \
+	c_file="$${file%.txy}.c"; \
+	bin_file="$${file%.txy}.out"; \
+	if [ -f "$$c_file" ]; then \
+		echo "[ RUN ] Compilando $$c_file e executando..."; \
+		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
+	else \
+		echo "[ ERRO ] Binário não encontrado"; \
+	fi
+endif
 
 clean:
 	@$(call RD,$(BUILD_DIR))
