@@ -133,17 +133,17 @@ char* txy_join(const char* delimiter, array_string args);
     return result;                                                           \
   };                                                                         \
                                                                              \
-  char* array_##NAME##_to_string(const array_##NAME* array) {                \
+  char* array_##NAME##_to_string(array_##NAME array) {                       \
     size_t i = 0;                                                            \
     const char* delimiter = ", ";                                            \
     char* inner_content;                                                     \
     int final_length;                                                        \
     char* result;                                                            \
-    array_string elements = array_string_create(array->capacity, (char*)""); \
+    array_string elements = array_string_create(array.capacity, (char*)"");  \
                                                                              \
   convert_loop:                                                              \
-    if (i == array->capacity) goto join_elements;                            \
-    elements.pointer[i] = TO_STRING(array->pointer[i]);                      \
+    if (i == array.capacity) goto join_elements;                             \
+    elements.pointer[i] = TO_STRING(array.pointer[i]);                       \
     i = i + 1;                                                               \
     goto convert_loop;                                                       \
                                                                              \
@@ -223,12 +223,12 @@ char* txy_join(const char* delimiter, array_string args);
     return;                                                        \
   };                                                               \
                                                                    \
-  char* option_##NAME##_to_string(const option_##NAME* option) {   \
+  char* option_##NAME##_to_string(option_##NAME option) {          \
     char* result;                                                  \
     char* string;                                                  \
     int length;                                                    \
                                                                    \
-    if (option->is_some) goto format_some;                         \
+    if (option.is_some) goto format_some;                          \
     length = snprintf(NULL, 0, "none");                            \
     result = (char*)malloc(length + 1);                            \
     if (result == NULL) exit(1);                                   \
@@ -236,7 +236,7 @@ char* txy_join(const char* delimiter, array_string args);
     return result;                                                 \
                                                                    \
   format_some:                                                     \
-    string = TO_STRING(option->value);                             \
+    string = TO_STRING(option.value);                              \
     length = snprintf(NULL, 0, "some(%s)", string);                \
     result = (char*)malloc(length + 1);                            \
     if (result == NULL) exit(1);                                   \
@@ -317,7 +317,7 @@ typedef struct {
     return 0;                                                               \
   };                                                                        \
                                                                             \
-  char* range_##NAME##_to_string(const range_##NAME* range) {               \
+  char* range_##NAME##_to_string(range_##NAME range) {                      \
     const char* left_brack;                                                 \
     const char* right_brack;                                                \
     char* left_value;                                                       \
@@ -325,7 +325,7 @@ typedef struct {
     char* result;                                                           \
     int length;                                                             \
                                                                             \
-    if (range->left_inclusive) goto add_left_inclusive;                     \
+    if (range.left_inclusive) goto add_left_inclusive;                      \
     left_brack = "(";                                                       \
     goto check_left_value;                                                  \
                                                                             \
@@ -333,23 +333,23 @@ typedef struct {
     left_brack = "[";                                                       \
                                                                             \
   check_left_value:                                                         \
-    if (range->left.type == TYPE_UNBOUNDED) goto add_left_infinity;         \
-    left_value = TO_STRING(range->left.value.UNION_FIELD);                  \
+    if (range.left.type == TYPE_UNBOUNDED) goto add_left_infinity;          \
+    left_value = TO_STRING(range.left.value.UNION_FIELD);                   \
     goto check_right_brack;                                                 \
                                                                             \
   add_left_infinity:                                                        \
     left_value = string_to_string("-inf");                                  \
                                                                             \
   check_right_brack:                                                        \
-    if (range->right_inclusive) goto add_right_inclusive;                   \
+    if (range.right_inclusive) goto add_right_inclusive;                    \
     right_brack = ")";                                                      \
     goto check_right_value;                                                 \
   add_right_inclusive:                                                      \
     right_brack = "]";                                                      \
                                                                             \
   check_right_value:                                                        \
-    if (range->right.type == TYPE_UNBOUNDED) goto add_right_infinity;       \
-    right_value = TO_STRING(range->right.value.UNION_FIELD);                \
+    if (range.right.type == TYPE_UNBOUNDED) goto add_right_infinity;        \
+    right_value = TO_STRING(range.right.value.UNION_FIELD);                 \
     goto build;                                                             \
   add_right_infinity:                                                       \
     right_value = string_to_string("inf");                                  \
