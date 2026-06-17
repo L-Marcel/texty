@@ -128,6 +128,8 @@ end_string:
 
 char* bool_to_string(uint8_t value) {
   const char* string_value;
+  int len;
+  char* result;
   if (value) goto set_true;
   string_value = "false";
   goto alloc_bool;
@@ -136,8 +138,8 @@ set_true:
   string_value = "true";
 
 alloc_bool:
-  int len = snprintf(NULL, 0, "%s", string_value);
-  char* result = (char*)malloc(len + 1);
+  len = snprintf(NULL, 0, "%s", string_value);
+  result = (char*)malloc(len + 1);
   if (result == NULL) exit(1);
 
   snprintf(result, len + 1, "%s", string_value);

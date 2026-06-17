@@ -102,6 +102,7 @@ loop_end:
 
 void txy_trim_start(char* input) {
   size_t start = 0;
+  size_t i = 0;
   char character;
 
 find_start:
@@ -115,7 +116,6 @@ find_start:
 
 shift:
   if (start == 0) goto loop_end;
-  size_t i = 0;
 
 loop_start:
   input[i] = input[start + i];

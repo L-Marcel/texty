@@ -2,151 +2,158 @@
 #include "to_string.c"
 
 #define EQUALS(a, b) ((a) == (b))
-#define DEFINE_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)               \
-  typedef struct {                                                          \
-    TYPE* pointer;                                                          \
-    size_t capacity;                                                        \
-  } array_##NAME;                                                           \
-                                                                            \
-  array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {          \
-    array_##NAME array;                                                     \
-    array.capacity = capacity;                                              \
-    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                 \
-                                                                            \
-    size_t i = 0;                                                           \
-                                                                            \
-  loop_start:                                                               \
-    if (i == capacity) goto loop_end;                                       \
-    array.pointer[i] = fill;                                                \
-    i = i + 1;                                                              \
-    goto loop_start;                                                        \
-                                                                            \
-  loop_end:                                                                 \
-    return array;                                                           \
-  };                                                                        \
-                                                                            \
-  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, \
-                                          size_t capacity, TYPE fill) {     \
-    array_##NAME array;                                                     \
-    size_t i = 0;                                                           \
-                                                                            \
-    if (count > capacity) goto error;                                       \
-    array.capacity = capacity;                                              \
-    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                 \
-                                                                            \
-  fill_loop_start:                                                          \
-    if (i == count) goto loop_start;                                        \
-    array.pointer[i] = values[i];                                           \
-    i = i + 1;                                                              \
-    goto fill_loop_start;                                                   \
-                                                                            \
-  loop_start:                                                               \
-    if (i == capacity) goto loop_end;                                       \
-    array.pointer[i] = fill;                                                \
-    i = i + 1;                                                              \
-    goto loop_start;                                                        \
-                                                                            \
-  loop_end:                                                                 \
-    return array;                                                           \
-                                                                            \
-  error:                                                                    \
-    exit(1);                                                                \
-  };                                                                        \
-                                                                            \
-  void array_##NAME##_free(array_##NAME* array) {                           \
-    if (array->pointer == NULL) goto skip_free;                             \
-    free(array->pointer);                                                   \
-    array->pointer = NULL;                                                  \
-                                                                            \
-  skip_free:                                                                \
-    array->capacity = 0;                                                    \
-  };                                                                        \
-                                                                            \
-  int array_##NAME##_compare(array_##NAME a, array_##NAME b) {              \
-    if (a.capacity != b.capacity) goto not_equals;                          \
-    size_t i = 0;                                                           \
-                                                                            \
-  loop_start:                                                               \
-    if (i == a.capacity) goto equals;                                       \
-    if (!COMPARE_FUNCTION(a.pointer[i], b.pointer[i])) goto not_equals;     \
-    i = i + 1;                                                              \
-    goto loop_start;                                                        \
-                                                                            \
-  equals:                                                                   \
-    return 1;                                                               \
-                                                                            \
-  not_equals:                                                               \
-    return 0;                                                               \
-  };                                                                        \
-                                                                            \
-  int array_##NAME##_contains(const array_##NAME* array, TYPE value) {      \
-    size_t i = 0;                                                           \
-                                                                            \
-  loop_start:                                                               \
-    if (i == array->capacity) goto loop_end;                                \
-    if (COMPARE_FUNCTION(array->pointer[i], value)) goto found;             \
-    i = i + 1;                                                              \
-    goto loop_start;                                                        \
-                                                                            \
-  found:                                                                    \
-    return 1;                                                               \
-                                                                            \
-  loop_end:                                                                 \
-    return 0;                                                               \
-  };                                                                        \
-                                                                            \
-  TYPE array_##NAME##_get(const array_##NAME* array, size_t index) {        \
-    return array->pointer[index];                                           \
-  };                                                                        \
-                                                                            \
-  array_##NAME array_##NAME##_concat(const array_##NAME* a,                 \
-                                     const array_##NAME* b) {               \
-    array_##NAME result;                                                    \
-    result.capacity = a->capacity + b->capacity;                            \
-    result.pointer = (TYPE*)malloc(result.capacity * sizeof(TYPE));         \
-                                                                            \
-    size_t i = 0;                                                           \
-    size_t destiny_index = 0;                                               \
-                                                                            \
-  concat_a_start:                                                           \
-    if (i == a->capacity) goto concat_a_end;                                \
-    result.pointer[destiny_index] = a->pointer[i];                          \
-    i = i + 1;                                                              \
-    destiny_index = destiny_index + 1;                                      \
-    goto concat_a_start;                                                    \
-                                                                            \
-  concat_a_end:                                                             \
-    i = 0;                                                                  \
-                                                                            \
-  concat_b_start:                                                           \
-    if (i == b->capacity) goto concat_b_end;                                \
-    result.pointer[destiny_index] = b->pointer[i];                          \
-    i = i + 1;                                                              \
-    destiny_index = destiny_index + 1;                                      \
-    goto concat_b_start;                                                    \
-                                                                            \
-  concat_b_end:                                                             \
-    return result;                                                          \
-  };                                                                        \
-                                                                            \
-  char* array_##NAME##_to_string(const array_##NAME* array) {               \
-    size_t i = 0;                                                           \
-    char* delimiter = ", ";                                                 \
-    array_string elements = array_string_create(array->capacity, "");       \
-                                                                            \
-  convert_loop:                                                             \
-    if (i == array->capacity) goto join_elements;                           \
-    elements.pointer[i] = TO_STRING(array->pointer[i]);                     \
-    i = i + 1;                                                              \
-    goto convert_loop;                                                      \
-                                                                            \
-  join_elements:                                                            \
-    char* inner_content = txy_join(delimiter, elements);                    \
-    int final_length = snprintf(NULL, 0, "[%s]", inner_content);            \
-    char* result = (char*)malloc(final_length + 1);                         \
-    if (result == NULL) exit(1);                                            \
-    snprintf(result, final_length + 1, "[%s]", inner_content);              \
-    return result;                                                          \
+
+typedef struct array_string_s array_string;
+char* txy_join(const char* delimiter, array_string args);
+
+#define DEFINE_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)                \
+  typedef struct array_##NAME##_s {                                          \
+    TYPE* pointer;                                                           \
+    size_t capacity;                                                         \
+  } array_##NAME;                                                            \
+                                                                             \
+  array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {           \
+    array_##NAME array;                                                      \
+    array.capacity = capacity;                                               \
+    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                  \
+                                                                             \
+    size_t i = 0;                                                            \
+                                                                             \
+  loop_start:                                                                \
+    if (i == capacity) goto loop_end;                                        \
+    array.pointer[i] = fill;                                                 \
+    i = i + 1;                                                               \
+    goto loop_start;                                                         \
+                                                                             \
+  loop_end:                                                                  \
+    return array;                                                            \
+  };                                                                         \
+                                                                             \
+  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count,  \
+                                          size_t capacity, TYPE fill) {      \
+    array_##NAME array;                                                      \
+    size_t i = 0;                                                            \
+                                                                             \
+    if (count > capacity) goto error;                                        \
+    array.capacity = capacity;                                               \
+    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                  \
+                                                                             \
+  fill_loop_start:                                                           \
+    if (i == count) goto loop_start;                                         \
+    array.pointer[i] = (TYPE)values[i];                                      \
+    i = i + 1;                                                               \
+    goto fill_loop_start;                                                    \
+                                                                             \
+  loop_start:                                                                \
+    if (i == capacity) goto loop_end;                                        \
+    array.pointer[i] = fill;                                                 \
+    i = i + 1;                                                               \
+    goto loop_start;                                                         \
+                                                                             \
+  loop_end:                                                                  \
+    return array;                                                            \
+                                                                             \
+  error:                                                                     \
+    exit(1);                                                                 \
+  };                                                                         \
+                                                                             \
+  void array_##NAME##_free(array_##NAME* array) {                            \
+    if (array->pointer == NULL) goto skip_free;                              \
+    free(array->pointer);                                                    \
+    array->pointer = NULL;                                                   \
+                                                                             \
+  skip_free:                                                                 \
+    array->capacity = 0;                                                     \
+  };                                                                         \
+                                                                             \
+  int array_##NAME##_compare(array_##NAME a, array_##NAME b) {               \
+    size_t i = 0;                                                            \
+    if (a.capacity != b.capacity) goto not_equals;                           \
+                                                                             \
+  loop_start:                                                                \
+    if (i == a.capacity) goto equals;                                        \
+    if (!COMPARE_FUNCTION(a.pointer[i], b.pointer[i])) goto not_equals;      \
+    i = i + 1;                                                               \
+    goto loop_start;                                                         \
+                                                                             \
+  equals:                                                                    \
+    return 1;                                                                \
+                                                                             \
+  not_equals:                                                                \
+    return 0;                                                                \
+  };                                                                         \
+                                                                             \
+  int array_##NAME##_contains(const array_##NAME* array, TYPE value) {       \
+    size_t i = 0;                                                            \
+                                                                             \
+  loop_start:                                                                \
+    if (i == array->capacity) goto loop_end;                                 \
+    if (COMPARE_FUNCTION(array->pointer[i], value)) goto found;              \
+    i = i + 1;                                                               \
+    goto loop_start;                                                         \
+                                                                             \
+  found:                                                                     \
+    return 1;                                                                \
+                                                                             \
+  loop_end:                                                                  \
+    return 0;                                                                \
+  };                                                                         \
+                                                                             \
+  TYPE array_##NAME##_get(const array_##NAME* array, size_t index) {         \
+    return array->pointer[index];                                            \
+  };                                                                         \
+                                                                             \
+  array_##NAME array_##NAME##_concat(const array_##NAME* a,                  \
+                                     const array_##NAME* b) {                \
+    array_##NAME result;                                                     \
+    result.capacity = a->capacity + b->capacity;                             \
+    result.pointer = (TYPE*)malloc(result.capacity * sizeof(TYPE));          \
+                                                                             \
+    size_t i = 0;                                                            \
+    size_t destiny_index = 0;                                                \
+                                                                             \
+  concat_a_start:                                                            \
+    if (i == a->capacity) goto concat_a_end;                                 \
+    result.pointer[destiny_index] = a->pointer[i];                           \
+    i = i + 1;                                                               \
+    destiny_index = destiny_index + 1;                                       \
+    goto concat_a_start;                                                     \
+                                                                             \
+  concat_a_end:                                                              \
+    i = 0;                                                                   \
+                                                                             \
+  concat_b_start:                                                            \
+    if (i == b->capacity) goto concat_b_end;                                 \
+    result.pointer[destiny_index] = b->pointer[i];                           \
+    i = i + 1;                                                               \
+    destiny_index = destiny_index + 1;                                       \
+    goto concat_b_start;                                                     \
+                                                                             \
+  concat_b_end:                                                              \
+    return result;                                                           \
+  };                                                                         \
+                                                                             \
+  char* array_##NAME##_to_string(const array_##NAME* array) {                \
+    size_t i = 0;                                                            \
+    const char* delimiter = ", ";                                            \
+    char* inner_content;                                                     \
+    int final_length;                                                        \
+    char* result;                                                            \
+    array_string elements = array_string_create(array->capacity, (char*)""); \
+                                                                             \
+  convert_loop:                                                              \
+    if (i == array->capacity) goto join_elements;                            \
+    elements.pointer[i] = TO_STRING(array->pointer[i]);                      \
+    i = i + 1;                                                               \
+    goto convert_loop;                                                       \
+                                                                             \
+  join_elements:                                                             \
+    inner_content = txy_join(delimiter, elements);                           \
+    final_length = snprintf(NULL, 0, "[%s]", inner_content);                 \
+    result = (char*)malloc(final_length + 1);                                \
+    if (result == NULL) exit(1);                                             \
+    snprintf(result, final_length + 1, "[%s]", inner_content);               \
+    return result;                                                           \
   };
 
 #define DEFINE_OPTION(TYPE, NAME, TO_STRING)                       \
@@ -311,8 +318,8 @@ typedef struct {
   };                                                                        \
                                                                             \
   char* range_##NAME##_to_string(const range_##NAME* range) {               \
-    char* left_brack;                                                       \
-    char* right_brack;                                                      \
+    const char* left_brack;                                                 \
+    const char* right_brack;                                                \
     char* left_value;                                                       \
     char* right_value;                                                      \
     char* result;                                                           \
@@ -367,8 +374,8 @@ DEFINE_RANGE(double, double, TYPE_DOUBLE, v_double, double_to_string)
 // TODO - Definir todos sarray e option empre que tiver um tipo de array ou
 // option novo no programa (garantindo cobertura de tipos)
 
-DEFINE_ARRAY(char, char, EQUALS, char_to_string)
 DEFINE_ARRAY(char*, string, EQUALS, string_to_string)
+DEFINE_ARRAY(char, char, EQUALS, char_to_string)
 DEFINE_ARRAY(uint8_t, bool, EQUALS, bool_to_string)
 DEFINE_ARRAY(uint8_t, byte, EQUALS, byte_to_string)
 DEFINE_ARRAY(int32_t, int, EQUALS, int_to_string)
