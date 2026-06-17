@@ -151,7 +151,7 @@ void Compiler::create_code(Context& ctx, string filename) {
 #endif
 
     string command =
-        "g++ -O2 -std=c++17 " + cpp_filename + " -o " + output_filename;
+        "gcc -O2 " + cpp_filename + " -o " + output_filename + " -lm";
 
     int result = std::system(command.c_str());
 
