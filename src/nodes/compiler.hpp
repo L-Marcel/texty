@@ -2,7 +2,9 @@
 
 #include "context.hpp"
 
-extern stringstream generated_code;
+extern stringstream generated_implementations;
+extern stringstream generated_declarations;
+extern stringstream generated_type_implementations;
 
 struct Compiler {
   static set<string> defined_arrays;

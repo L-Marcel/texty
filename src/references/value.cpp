@@ -128,9 +128,7 @@ string Type::get_default_value() const {
     case TypeKind::OPTION:
       return this->get_name() + "_none()";
     case TypeKind::ARRAY:
-      return this->get_name() + "_create(0, " +
-             (this->inner_type ? this->inner_type->get_default_value() : "0") +
-             ")";
+      return this->get_name() + "_empty()";
     case TypeKind::NAMED:
       return this->name + "_default()";
     default:

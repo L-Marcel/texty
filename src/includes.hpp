@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <ostream>
@@ -11,6 +12,7 @@
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
+#include <unordered_set>
 #include <variant>
 #include <vector>
 

@@ -134,12 +134,21 @@ char* pointer_to_string(void* pointer) {
 #define EQUALS(a, b) ((a) == (b))
 typedef struct array_string_s array_string;
 char* txy_join(const char* delimiter, array_string args);
-#define DEFINE_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)               \
+#define DECLARE_ARRAY(TYPE, NAME)                                           \
   typedef struct array_##NAME##_s {                                         \
     TYPE* pointer;                                                          \
     size_t capacity;                                                        \
   } array_##NAME;                                                           \
-                                                                            \
+  array_##NAME array_##NAME##_create(size_t capacity, TYPE fill);           \
+  array_##NAME array_##NAME##_empty();                                      \
+  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, size_t capacity, TYPE fill); \
+  void array_##NAME##_free(array_##NAME* array);                            \
+  int array_##NAME##_compare(array_##NAME a, array_##NAME b);               \
+  int array_##NAME##_contains(const array_##NAME* array, TYPE value);       \
+  TYPE array_##NAME##_get(const array_##NAME* array, size_t index);         \
+  array_##NAME array_##NAME##_concat(const array_##NAME* a, const array_##NAME* b); \
+  char* array_##NAME##_to_string(array_##NAME array);
+#define IMPLEMENT_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)            \
   array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {          \
     array_##NAME array;                                                     \
     array.capacity = capacity;                                              \
@@ -154,6 +163,13 @@ char* txy_join(const char* delimiter, array_string args);
     goto loop_start;                                                        \
                                                                             \
   loop_end:                                                                 \
+    return array;                                                           \
+  };                                                                        \
+                                                                            \
+  array_##NAME array_##NAME##_empty() {                                     \
+    array_##NAME array;                                                     \
+    array.capacity = 0;                                                     \
+    array.pointer = NULL;                                                   \
     return array;                                                           \
   };                                                                        \
                                                                             \
@@ -283,12 +299,19 @@ char* txy_join(const char* delimiter, array_string args);
     snprintf(result, final_length + 1, "[%s]", inner_content);              \
     return result;                                                          \
   };
-#define DEFINE_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)     \
+#define DECLARE_OPTION(TYPE, NAME)                                 \
   typedef struct {                                                 \
     uint8_t is_some;                                               \
-    TYPE value;                                                    \
+    TYPE* value;                                                   \
   } option_##NAME;                                                 \
-                                                                   \
+  option_##NAME option_##NAME##_none();                            \
+  option_##NAME option_##NAME##_some(TYPE val);                    \
+  TYPE option_##NAME##_unwrap(const option_##NAME* option);        \
+  option_##NAME option_##NAME##_copy(const option_##NAME* other);  \
+  void option_##NAME##_assign(option_##NAME* destiny, const option_##NAME* source); \
+  int option_##NAME##_compare(option_##NAME a, option_##NAME b);   \
+  char* option_##NAME##_to_string(option_##NAME option);
+#define IMPLEMENT_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)  \
   option_##NAME option_##NAME##_none() {                           \
     option_##NAME option;                                          \
     option.is_some = 0;                                            \
@@ -298,7 +321,9 @@ char* txy_join(const char* delimiter, array_string args);
   option_##NAME option_##NAME##_some(TYPE val) {                   \
     option_##NAME option;                                          \
     option.is_some = 1;                                            \
-    option.value = val;                                            \
+    option.value = (TYPE*)malloc(sizeof(TYPE));                    \
+    if (option.value == NULL) exit(1);                             \
+    *option.value = val;                                           \
     return option;                                                 \
   };                                                               \
                                                                    \
@@ -317,18 +342,21 @@ char* txy_join(const char* delimiter, array_string args);
     if (option->is_some) goto success;                             \
     exit(1);                                                       \
   success:                                                         \
-    return option->value;                                          \
+    return *option->value;                                         \
   };                                                               \
                                                                    \
   option_##NAME option_##NAME##_copy(const option_##NAME* other) { \
     option_##NAME option;                                          \
     if (other->is_some) goto copy_some;                            \
     option.is_some = 0;                                            \
+    option.value = NULL;                                           \
     goto copy_end;                                                 \
                                                                    \
   copy_some:                                                       \
     option.is_some = 1;                                            \
-    option.value = other->value;                                   \
+    option.value = (TYPE*)malloc(sizeof(TYPE));                    \
+    if (option.value == NULL) exit(1);                             \
+    *option.value = *other->value;                                 \
                                                                    \
   copy_end:                                                        \
     return option;                                                 \
@@ -340,11 +368,19 @@ char* txy_join(const char* delimiter, array_string args);
                                                                    \
     if (source->is_some) goto assign_some;                         \
     destiny->is_some = 0;                                          \
+    if (destiny->value != NULL) {                                  \
+      free(destiny->value);                                        \
+      destiny->value = NULL;                                       \
+    }                                                              \
     goto assign_end;                                               \
                                                                    \
   assign_some:                                                     \
     destiny->is_some = 1;                                          \
-    destiny->value = source->value;                                \
+    if (destiny->value == NULL) {                                  \
+      destiny->value = (TYPE*)malloc(sizeof(TYPE));                \
+      if (destiny->value == NULL) exit(1);                         \
+    }                                                              \
+    *destiny->value = *source->value;                              \
                                                                    \
   assign_end:                                                      \
     return;                                                        \
@@ -356,7 +392,7 @@ char* txy_join(const char* delimiter, array_string args);
     goto equals;                                                   \
                                                                    \
   check_value:                                                     \
-    if (COMPARE_FUNCTION(a.value, b.value)) goto equals;           \
+    if (COMPARE_FUNCTION(*a.value, *b.value)) goto equals;         \
     goto not_equals;                                               \
                                                                    \
   equals:                                                          \
@@ -379,7 +415,7 @@ char* txy_join(const char* delimiter, array_string args);
     return result;                                                 \
                                                                    \
   format_some:                                                     \
-    string = TO_STRING(option.value);                              \
+    string = TO_STRING(*option.value);                             \
     length = snprintf(NULL, 0, "some(%s)", string);                \
     result = (char*)malloc(length + 1);                            \
     if (result == NULL) exit(1);                                   \
@@ -534,22 +570,38 @@ DEFINE_RANGE(int32_t, int, TYPE_INT, v_int, EQUALS, int_to_string)
 DEFINE_RANGE(int64_t, long, TYPE_LONG, v_long, EQUALS, long_to_string)
 DEFINE_RANGE(float, float, TYPE_FLOAT, v_float, EQUALS, float_to_string)
 DEFINE_RANGE(double, double, TYPE_DOUBLE, v_double, EQUALS, double_to_string)
-DEFINE_ARRAY(char*, string, EQUALS, string_to_string)
-DEFINE_ARRAY(char, char, EQUALS, char_to_string)
-DEFINE_ARRAY(uint8_t, bool, EQUALS, bool_to_string)
-DEFINE_ARRAY(uint8_t, byte, EQUALS, byte_to_string)
-DEFINE_ARRAY(int32_t, int, EQUALS, int_to_string)
-DEFINE_ARRAY(int64_t, long, EQUALS, long_to_string)
-DEFINE_ARRAY(float, float, EQUALS, float_to_string)
-DEFINE_ARRAY(double, double, EQUALS, double_to_string)
-DEFINE_OPTION(char, char, EQUALS, char_to_string)
-DEFINE_OPTION(char*, string, EQUALS, string_to_string)
-DEFINE_OPTION(uint8_t, bool, EQUALS, bool_to_string)
-DEFINE_OPTION(uint8_t, byte, EQUALS, byte_to_string)
-DEFINE_OPTION(int32_t, int, EQUALS, int_to_string)
-DEFINE_OPTION(int64_t, long, EQUALS, long_to_string)
-DEFINE_OPTION(float, float, EQUALS, float_to_string)
-DEFINE_OPTION(double, double, EQUALS, double_to_string)
+DECLARE_ARRAY(char*, string)
+DECLARE_ARRAY(char, char)
+DECLARE_ARRAY(uint8_t, bool)
+DECLARE_ARRAY(uint8_t, byte)
+DECLARE_ARRAY(int32_t, int)
+DECLARE_ARRAY(int64_t, long)
+DECLARE_ARRAY(float, float)
+DECLARE_ARRAY(double, double)
+IMPLEMENT_ARRAY(char*, string, EQUALS, string_to_string)
+IMPLEMENT_ARRAY(char, char, EQUALS, char_to_string)
+IMPLEMENT_ARRAY(uint8_t, bool, EQUALS, bool_to_string)
+IMPLEMENT_ARRAY(uint8_t, byte, EQUALS, byte_to_string)
+IMPLEMENT_ARRAY(int32_t, int, EQUALS, int_to_string)
+IMPLEMENT_ARRAY(int64_t, long, EQUALS, long_to_string)
+IMPLEMENT_ARRAY(float, float, EQUALS, float_to_string)
+IMPLEMENT_ARRAY(double, double, EQUALS, double_to_string)
+DECLARE_OPTION(char, char)
+DECLARE_OPTION(char*, string)
+DECLARE_OPTION(uint8_t, bool)
+DECLARE_OPTION(uint8_t, byte)
+DECLARE_OPTION(int32_t, int)
+DECLARE_OPTION(int64_t, long)
+DECLARE_OPTION(float, float)
+DECLARE_OPTION(double, double)
+IMPLEMENT_OPTION(char, char, EQUALS, char_to_string)
+IMPLEMENT_OPTION(char*, string, EQUALS, string_to_string)
+IMPLEMENT_OPTION(uint8_t, bool, EQUALS, bool_to_string)
+IMPLEMENT_OPTION(uint8_t, byte, EQUALS, byte_to_string)
+IMPLEMENT_OPTION(int32_t, int, EQUALS, int_to_string)
+IMPLEMENT_OPTION(int64_t, long, EQUALS, long_to_string)
+IMPLEMENT_OPTION(float, float, EQUALS, float_to_string)
+IMPLEMENT_OPTION(double, double, EQUALS, double_to_string)
 char* txy_format(const char* pattern, array_string args) {
   size_t i = 0, j = 0, arg_index = 0;
   size_t total_length = 0;

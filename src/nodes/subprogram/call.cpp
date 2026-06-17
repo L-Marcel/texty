@@ -34,16 +34,18 @@ void SubprogramCallNode::compile_code(ostream& os) const {
       if (generated_formats.find(signature) == generated_formats.end()) {
         generated_formats.insert(signature);
 
-        generated_code << "char* " << name << "(const char* pattern";
+        generated_implementations << "char* " << name << "(const char* pattern";
         for (size_t i = 1; i < this->params.size(); i++) {
-          generated_code << ", " << this->params[i]->get_type().to_production()
-                         << " arg" << i;
+          generated_implementations
+              << ", " << this->params[i]->get_type().to_production() << " arg"
+              << i;
         };
-        generated_code << ") {" << std::endl;
+        generated_implementations << ") {" << std::endl;
 
         size_t count = this->params.size() - 1;
-        generated_code << "  array_string array = array_string_create(" << count
-                       << ", \"\");" << std::endl;
+        generated_implementations
+            << "  array_string array = array_string_create(" << count
+            << ", \"\");" << std::endl;
 
         for (size_t i = 1; i < this->params.size(); i++) {
           Type type = this->params[i]->get_type();
@@ -53,13 +55,14 @@ void SubprogramCallNode::compile_code(ostream& os) const {
             to_string_function = "pointer_to_string";
           };
 
-          generated_code << "  array.pointer[" << (i - 1)
-                         << "] = " << to_string_function << "(arg" << i << ");"
-                         << std::endl;
+          generated_implementations << "  array.pointer[" << (i - 1)
+                                    << "] = " << to_string_function << "(arg"
+                                    << i << ");" << std::endl;
         };
 
-        generated_code << "  return txy_format(pattern, array);" << std::endl;
-        generated_code << "};" << std::endl << std::endl;
+        generated_implementations << "  return txy_format(pattern, array);"
+                                  << std::endl;
+        generated_implementations << "};" << std::endl << std::endl;
       };
 
       os << name << "(";
