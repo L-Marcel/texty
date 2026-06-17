@@ -10,6 +10,146 @@ const char* TEXTY_STANDARD_LIBRARY = R"__texty_std__(
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include <string.h>
+int32_t input_key_pressed() {
+#ifdef _WIN32
+  return (int32_t)_getch();
+#else
+  struct termios old_terminal, new_terminal;
+  int32_t caractere;
+  tcgetattr(STDIN_FILENO, &old_terminal);
+  new_terminal = old_terminal;
+  new_terminal.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
+  caractere = (int32_t)getchar();
+  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
+  return caractere;
+#endif
+};
+char* input_line() {
+  size_t capacity = 64;
+  size_t length = 0;
+  char* buffer = (char*)malloc(capacity);
+  int current_char;
+loop_start:
+  current_char = getchar();
+  if (current_char == EOF) goto loop_end;
+  if (current_char == '\n') goto loop_end;
+  buffer[length] = (char)current_char;
+  length = length + 1;
+  if (length < capacity) goto loop_start;
+  capacity = capacity * 2;
+  buffer = (char*)realloc(buffer, capacity);
+  goto loop_start;
+loop_end:
+  buffer[length] = '\0';
+  return buffer;
+};
+void txy_print(const char* input) { printf("%s", input); };
+void txy_println(const char* input) { printf("%s\n", input); };
+int txy_is_empty(const char* input) {
+  if (input[0] == '\0') goto is_empty;
+  return 0;
+is_empty:
+  return 1;
+};
+int txy_is_blank(const char* input) {
+  size_t i = 0;
+  char character;
+loop_start:
+  character = input[i];
+  if (character == '\0') goto is_blank;
+  if (character != ' ' && character != '\t' && character != '\n' &&
+      character != '\v' && character != '\f' && character != '\r')
+    goto is_not_blank;
+  i = i + 1;
+  goto loop_start;
+is_blank:
+  return 1;
+is_not_blank:
+  return 0;
+};
+void txy_uppercase(char* input) {
+  size_t i = 0;
+  char character;
+loop_start:
+  character = input[i];
+  if (character == '\0') goto loop_end;
+  if (character < 'a') goto skip;
+  if (character > 'z') goto skip;
+  input[i] = character - 32;
+skip:
+  i = i + 1;
+  goto loop_start;
+loop_end:
+  return;
+};
+void txy_lowercase(char* input) {
+  size_t i = 0;
+  char character;
+loop_start:
+  character = input[i];
+  if (character == '\0') goto loop_end;
+  if (character < 'A') goto skip;
+  if (character > 'Z') goto skip;
+  input[i] = character + 32;
+skip:
+  i = i + 1;
+  goto loop_start;
+loop_end:
+  return;
+};
+void txy_trim_end(char* input) {
+  size_t end = 0;
+  char character;
+find_end:
+  if (input[end] == '\0') goto end_found;
+  end = end + 1;
+  goto find_end;
+end_found:
+  if (end == 0) goto loop_end;
+loop_start:
+  end = end - 1;
+  character = input[end];
+  if (character == ' ') goto trim;
+  if (character == '\t') goto trim;
+  if (character == '\n') goto trim;
+  if (character == '\r') goto trim;
+  goto loop_end;
+trim:
+  input[end] = '\0';
+  if (end == 0) goto loop_end;
+  goto loop_start;
+loop_end:
+  return;
+};
+void txy_trim_start(char* input) {
+  size_t start = 0;
+  size_t i = 0;
+  char character;
+find_start:
+  character = input[start];
+  if (character == '\0') goto shift;
+  if (character != ' ' && character != '\t' && character != '\n' &&
+      character != '\r')
+    goto shift;
+  start = start + 1;
+  goto find_start;
+shift:
+  if (start == 0) goto loop_end;
+loop_start:
+  input[i] = input[start + i];
+  if (input[i] == '\0') goto loop_end;
+  i = i + 1;
+  goto loop_start;
+loop_end:
+  return;
+};
+void txy_trim(char* input) {
+  txy_trim_start(input);
+  txy_trim_end(input);
+};
 char* txy_float_decimals(float value, int64_t left, int64_t right) {
   int total_width;
   int len;
@@ -743,143 +883,5 @@ empty:
   if (result == NULL) exit(1);
   result[0] = '\0';
   return result;
-};
-int32_t input_key_pressed() {
-#ifdef _WIN32
-  return (int32_t)_getch();
-#else
-  struct termios old_terminal, new_terminal;
-  int32_t caractere;
-  tcgetattr(STDIN_FILENO, &old_terminal);
-  new_terminal = old_terminal;
-  new_terminal.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
-  caractere = (int32_t)getchar();
-  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
-  return caractere;
-#endif
-};
-char* input_line() {
-  size_t capacity = 64;
-  size_t length = 0;
-  char* buffer = (char*)malloc(capacity);
-  int current_char;
-loop_start:
-  current_char = getchar();
-  if (current_char == EOF) goto loop_end;
-  if (current_char == '\n') goto loop_end;
-  buffer[length] = (char)current_char;
-  length = length + 1;
-  if (length < capacity) goto loop_start;
-  capacity = capacity * 2;
-  buffer = (char*)realloc(buffer, capacity);
-  goto loop_start;
-loop_end:
-  buffer[length] = '\0';
-  return buffer;
-};
-void txy_print(const char* input) { printf("%s", input); };
-void txy_println(const char* input) { printf("%s\n", input); };
-int txy_is_empty(const char* input) {
-  if (input[0] == '\0') goto is_empty;
-  return 0;
-is_empty:
-  return 1;
-};
-int txy_is_blank(const char* input) {
-  size_t i = 0;
-  char character;
-loop_start:
-  character = input[i];
-  if (character == '\0') goto is_blank;
-  if (character != ' ' && character != '\t' && character != '\n' &&
-      character != '\v' && character != '\f' && character != '\r')
-    goto is_not_blank;
-  i = i + 1;
-  goto loop_start;
-is_blank:
-  return 1;
-is_not_blank:
-  return 0;
-};
-void txy_uppercase(char* input) {
-  size_t i = 0;
-  char character;
-loop_start:
-  character = input[i];
-  if (character == '\0') goto loop_end;
-  if (character < 'a') goto skip;
-  if (character > 'z') goto skip;
-  input[i] = character - 32;
-skip:
-  i = i + 1;
-  goto loop_start;
-loop_end:
-  return;
-};
-void txy_lowercase(char* input) {
-  size_t i = 0;
-  char character;
-loop_start:
-  character = input[i];
-  if (character == '\0') goto loop_end;
-  if (character < 'A') goto skip;
-  if (character > 'Z') goto skip;
-  input[i] = character + 32;
-skip:
-  i = i + 1;
-  goto loop_start;
-loop_end:
-  return;
-};
-void txy_trim_end(char* input) {
-  size_t end = 0;
-  char character;
-find_end:
-  if (input[end] == '\0') goto end_found;
-  end = end + 1;
-  goto find_end;
-end_found:
-  if (end == 0) goto loop_end;
-loop_start:
-  end = end - 1;
-  character = input[end];
-  if (character == ' ') goto trim;
-  if (character == '\t') goto trim;
-  if (character == '\n') goto trim;
-  if (character == '\r') goto trim;
-  goto loop_end;
-trim:
-  input[end] = '\0';
-  if (end == 0) goto loop_end;
-  goto loop_start;
-loop_end:
-  return;
-};
-void txy_trim_start(char* input) {
-  size_t start = 0;
-  size_t i = 0;
-  char character;
-find_start:
-  character = input[start];
-  if (character == '\0') goto shift;
-  if (character != ' ' && character != '\t' && character != '\n' &&
-      character != '\r')
-    goto shift;
-  start = start + 1;
-  goto find_start;
-shift:
-  if (start == 0) goto loop_end;
-loop_start:
-  input[i] = input[start + i];
-  if (input[i] == '\0') goto loop_end;
-  i = i + 1;
-  goto loop_start;
-loop_end:
-  return;
-};
-void txy_trim(char* input) {
-  txy_trim_start(input);
-  txy_trim_end(input);
 };
 )__texty_std__";
