@@ -46,15 +46,20 @@ void SubprogramCallNode::compile_code(ostream& os) const {
                        << ", \"\");" << std::endl;
 
         for (size_t i = 1; i < this->params.size(); i++) {
-          string to_string_function =
-              this->params[i]->get_type().get_name() + "_to_string";
+          Type type = this->params[i]->get_type();
+          string to_string_function = type.get_name() + "_to_string";
+
+          if (type.kind == TypeKind::POINTER) {
+            to_string_function = "pointer_to_string";
+          };
+
           generated_code << "  array.pointer[" << (i - 1)
-                         << "] = " << to_string_function << "(arg" << i
-                         << ");\n";
+                         << "] = " << to_string_function << "(arg" << i << ");"
+                         << std::endl;
         };
 
-        generated_code << "  return txy_format(pattern, array);\n";
-        generated_code << "}\n\n";
+        generated_code << "  return txy_format(pattern, array);" << std::endl;
+        generated_code << "};" << std::endl << std::endl;
       };
 
       os << name << "(";

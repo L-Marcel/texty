@@ -13,11 +13,19 @@ void StructAllocationNode::compile_dot(ostream& os) const {
 
 // Código
 void StructAllocationNode::compile_code(ostream& os) const {
-  // TODO
+  os << "({" << this->name << " instance = " << this->name << "_default(); ";
+  for (size_t i = 0; i < this->attributes.size(); i++) {
+    os << "instance." << this->attributes[i].first << " = ";
+    this->attributes[i].second->compile_code(os);
+    os << "; ";
+  }
+  os << "instance; })";
 };
 
 // Tipagem
-Type StructAllocationNode::get_type() const { return Type(TypeKind::VOID); };
+Type StructAllocationNode::get_type() const {
+  return Type(TypeKind::NAMED, this->name);
+};
 
 // Construtores
 StructAllocationNode::StructAllocationNode(

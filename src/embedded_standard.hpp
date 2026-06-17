@@ -122,6 +122,15 @@ alloc_bool:
   snprintf(result, len + 1, "%s", string_value);
   return result;
 };
+char* pointer_to_string(void* pointer) {
+  char* result;
+  int length;
+  length = snprintf(NULL, 0, "%p", pointer);
+  result = (char*)malloc(length + 1);
+  if (result == NULL) exit(1);
+  snprintf(result, length + 1, "%p", pointer);
+  return result;
+};
 #define EQUALS(a, b) ((a) == (b))
 typedef struct array_string_s array_string;
 char* txy_join(const char* delimiter, array_string args);
