@@ -28,6 +28,7 @@ proc quick_sort(array: int[]; min, max: int)
 endproc;
 
 fn main(): int
+	# TODO - Espaçamento do GENERATED
 	# TODO - Está dando segmentation fault
 	print("Digite o tamanho do array: ");
 	var size: int = 0;

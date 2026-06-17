@@ -554,29 +554,29 @@ calculate_length_loop_start:
   i = i + 1;
   goto calculate_length_loop_start;
 skip_tag_calculate_length:
-  if (arg_index == args.capacity) goto ignore_extra_calc;
+  if (arg_index == args.capacity) goto ignore_extra_calculate;
   j = 0;
-count_arg_len:
-  if (args.pointer[arg_index][j] == '\0') goto end_arg_len;
+count_arg_length:
+  if (args.pointer[arg_index][j] == '\0') goto end_arg_length;
   total_length = total_length + 1;
   j = j + 1;
-  goto count_arg_len;
-end_arg_len:
+  goto count_arg_length;
+end_arg_length:
   arg_index = arg_index + 1;
-ignore_extra_calc:
+ignore_extra_calculate:
   i = i + 1;
-consume_tag_calc:
+consume_tag_calculate:
   character = pattern[i];
   if (character == '\0') goto alloc_result;
   if ((character >= 'a' && character <= 'z') ||
       (character >= '0' && character <= '9') || character == ',' ||
       character == ']' || character == '{' || character == '}' ||
       character == '[')
-    goto cont_skip_calc;
+    goto cont_skip_calculate;
   goto calculate_length_loop_start;
-cont_skip_calc:
+cont_skip_calculate:
   i = i + 1;
-  goto consume_tag_calc;
+  goto consume_tag_calculate;
 alloc_result:
   result = (char*)malloc(total_length + 1);
   if (result == NULL) exit(1);
@@ -585,7 +585,7 @@ alloc_result:
   total_length = 0;
 copy_loop:
   character = pattern[i];
-  if (character == '\0') goto end_func;
+  if (character == '\0') goto finish;
   if (character == '%') goto skip_tag_copy;
   result[total_length] = character;
   total_length = total_length + 1;
@@ -606,7 +606,7 @@ ignore_extra_copy:
   i = i + 1;
 consume_tag_copy:
   character = pattern[i];
-  if (character == '\0') goto alloc_result;
+  if (character == '\0') goto finish;
   if ((character >= 'a' && character <= 'z') ||
       (character >= '0' && character <= '9') || character == ',' ||
       character == ']' || character == '{' || character == '}' ||
@@ -616,7 +616,7 @@ consume_tag_copy:
 cont_skip_copy:
   i = i + 1;
   goto consume_tag_copy;
-end_func:
+finish:
   result[total_length] = '\0';
   return result;
 };

@@ -1,7 +1,7 @@
 proc main()
   var array: int[] = new int[]{0, 2, 3};
   println(format(
-    "%long %int %float %double %byte %string %bool %int[] %char %option",
+    "%long %int %float %double %byte %string %bool %int[] %char %pointer %range %option",
     0L,
     1,
     2.0f,
@@ -10,8 +10,8 @@ proc main()
     "Olá mundo!!!",
     true,
     'a',
-    #*array,
-    #0..1,
+    &array,
+    0..1,
     some(array)
   ));
 endproc;
