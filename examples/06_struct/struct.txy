@@ -2,6 +2,8 @@ struct Address
   street, city, country: string;
 endstruct;
 
+# TODO - Valor padrão quebrado
+
 struct User
   id: long;
   age: int;

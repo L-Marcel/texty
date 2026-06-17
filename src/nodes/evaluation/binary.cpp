@@ -121,7 +121,7 @@ void BinaryOperationNode::compile_code(ostream& os) const {
         if (right_option != nullptr && left_option != nullptr &&
             right_option->type == OptionNodeType::UNDEFINED &&
             left_option->type == OptionNodeType::UNDEFINED) {
-          os << "true";
+          os << "((uint8_t)1)";
         } else {
           this->left->set_expected_type(this->right->get_type());
           this->left->compile_code(os);

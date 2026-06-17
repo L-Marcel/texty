@@ -15,3 +15,5 @@ proc main()
     some(array)
   ));
 endproc;
+
+# TODO - Está com execução infinita

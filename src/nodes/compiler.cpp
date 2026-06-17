@@ -134,7 +134,10 @@ void Compiler::create_code(Context& ctx, string filename) {
     file << "// ---------------------------------------------- //" << std::endl;
     file << "// ================== GENERATED ================= //" << std::endl;
     file << "// ---------------------------------------------- //" << std::endl;
-    file << std::endl << generated_code.str() << std::endl << std::endl;
+    file << std::endl
+         << std::endl
+         << generated_code.str() << std::endl
+         << std::endl;
     file << "// ---------------------------------------------- //" << std::endl;
     file << "// ================== PROGRAM =================== //" << std::endl;
     file << "// ---------------------------------------------- //" << std::endl;

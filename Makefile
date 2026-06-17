@@ -145,7 +145,7 @@ ifeq ($(OS),Windows_NT)
 	\$$c_file = \$$file.FullName -replace '\.txy$$$$', '.c'; \
 	\$$bin_file = \$$file.FullName -replace '\.txy$$$$', '.exe'; \
 	if (Test-Path \$$c_file) { \
-		Write-Host '[ RUN ] Compilando $$c_file e executando...'; \
+		Write-Host '[ RUN ] $$c_file'; \
 		gcc \$$c_file -o \$$bin_file; \
 		if (\$$LASTEXITCODE -eq 0) { & \$$bin_file } \
 	} else { \
@@ -156,7 +156,7 @@ else
 	c_file="$${file%.txy}.c"; \
 	bin_file="$${file%.txy}.out"; \
 	if [ -f "$$c_file" ]; then \
-		echo "[ RUN ] Compilando $$c_file e executando..."; \
+		echo "[ RUN ] $$c_file"; \
 		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
 	else \
 		echo "[ ERRO ] Binário não encontrado"; \

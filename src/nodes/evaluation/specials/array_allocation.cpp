@@ -29,11 +29,11 @@ void ArrayAllocationNode::compile_code(ostream& os) const {
 
   if (this->children.empty() &&
       this->size_type == ArrayAllocationSizeType::UNDEFINED) {
-    os << name << "_create(0, (" << type_production << ")0)";
+    os << name << "_create(0, " << this->inner_type.get_default_value() << ")";
   } else if (this->children.empty()) {
     os << name << "_create(";
     this->size_expression->compile_code(os);
-    os << ", (" << type_production << ")0)";
+    os << ", " << this->inner_type.get_default_value() << ")";
   } else if (this->size_type == ArrayAllocationSizeType::UNDEFINED) {
     os << name << "_from_values((" << type_production << "[]){";
     for (size_t i = 0; i < this->children.size(); i++) {
@@ -41,7 +41,7 @@ void ArrayAllocationNode::compile_code(ostream& os) const {
       if (i != this->children.size() - 1) os << ", ";
     };
     os << "}, " << this->children.size() << ", " << this->children.size()
-       << ", (" << type_production << ")0)";
+       << ", " << this->inner_type.get_default_value() << ")";
   } else {
     os << name << "_from_values((" << type_production << "[]){";
     for (size_t i = 0; i < this->children.size(); i++) {
@@ -50,7 +50,7 @@ void ArrayAllocationNode::compile_code(ostream& os) const {
     };
     os << "}, " << this->children.size() << ", ";
     this->size_expression->compile_code(os);
-    os << ", (" << type_production << ")0)";
+    os << ", " << this->inner_type.get_default_value() << ")";
   };
 };
 

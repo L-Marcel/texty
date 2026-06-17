@@ -6,157 +6,157 @@
 typedef struct array_string_s array_string;
 char* txy_join(const char* delimiter, array_string args);
 
-#define DEFINE_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)                \
-  typedef struct array_##NAME##_s {                                          \
-    TYPE* pointer;                                                           \
-    size_t capacity;                                                         \
-  } array_##NAME;                                                            \
-                                                                             \
-  array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {           \
-    array_##NAME array;                                                      \
-    array.capacity = capacity;                                               \
-    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                  \
-                                                                             \
-    size_t i = 0;                                                            \
-                                                                             \
-  loop_start:                                                                \
-    if (i == capacity) goto loop_end;                                        \
-    array.pointer[i] = fill;                                                 \
-    i = i + 1;                                                               \
-    goto loop_start;                                                         \
-                                                                             \
-  loop_end:                                                                  \
-    return array;                                                            \
-  };                                                                         \
-                                                                             \
-  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count,  \
-                                          size_t capacity, TYPE fill) {      \
-    array_##NAME array;                                                      \
-    size_t i = 0;                                                            \
-                                                                             \
-    if (count > capacity) goto error;                                        \
-    array.capacity = capacity;                                               \
-    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                  \
-                                                                             \
-  fill_loop_start:                                                           \
-    if (i == count) goto loop_start;                                         \
-    array.pointer[i] = (TYPE)values[i];                                      \
-    i = i + 1;                                                               \
-    goto fill_loop_start;                                                    \
-                                                                             \
-  loop_start:                                                                \
-    if (i == capacity) goto loop_end;                                        \
-    array.pointer[i] = fill;                                                 \
-    i = i + 1;                                                               \
-    goto loop_start;                                                         \
-                                                                             \
-  loop_end:                                                                  \
-    return array;                                                            \
-                                                                             \
-  error:                                                                     \
-    exit(1);                                                                 \
-  };                                                                         \
-                                                                             \
-  void array_##NAME##_free(array_##NAME* array) {                            \
-    if (array->pointer == NULL) goto skip_free;                              \
-    free(array->pointer);                                                    \
-    array->pointer = NULL;                                                   \
-                                                                             \
-  skip_free:                                                                 \
-    array->capacity = 0;                                                     \
-  };                                                                         \
-                                                                             \
-  int array_##NAME##_compare(array_##NAME a, array_##NAME b) {               \
-    size_t i = 0;                                                            \
-    if (a.capacity != b.capacity) goto not_equals;                           \
-                                                                             \
-  loop_start:                                                                \
-    if (i == a.capacity) goto equals;                                        \
-    if (!COMPARE_FUNCTION(a.pointer[i], b.pointer[i])) goto not_equals;      \
-    i = i + 1;                                                               \
-    goto loop_start;                                                         \
-                                                                             \
-  equals:                                                                    \
-    return 1;                                                                \
-                                                                             \
-  not_equals:                                                                \
-    return 0;                                                                \
-  };                                                                         \
-                                                                             \
-  int array_##NAME##_contains(const array_##NAME* array, TYPE value) {       \
-    size_t i = 0;                                                            \
-                                                                             \
-  loop_start:                                                                \
-    if (i == array->capacity) goto loop_end;                                 \
-    if (COMPARE_FUNCTION(array->pointer[i], value)) goto found;              \
-    i = i + 1;                                                               \
-    goto loop_start;                                                         \
-                                                                             \
-  found:                                                                     \
-    return 1;                                                                \
-                                                                             \
-  loop_end:                                                                  \
-    return 0;                                                                \
-  };                                                                         \
-                                                                             \
-  TYPE array_##NAME##_get(const array_##NAME* array, size_t index) {         \
-    return array->pointer[index];                                            \
-  };                                                                         \
-                                                                             \
-  array_##NAME array_##NAME##_concat(const array_##NAME* a,                  \
-                                     const array_##NAME* b) {                \
-    array_##NAME result;                                                     \
-    result.capacity = a->capacity + b->capacity;                             \
-    result.pointer = (TYPE*)malloc(result.capacity * sizeof(TYPE));          \
-                                                                             \
-    size_t i = 0;                                                            \
-    size_t destiny_index = 0;                                                \
-                                                                             \
-  concat_a_start:                                                            \
-    if (i == a->capacity) goto concat_a_end;                                 \
-    result.pointer[destiny_index] = a->pointer[i];                           \
-    i = i + 1;                                                               \
-    destiny_index = destiny_index + 1;                                       \
-    goto concat_a_start;                                                     \
-                                                                             \
-  concat_a_end:                                                              \
-    i = 0;                                                                   \
-                                                                             \
-  concat_b_start:                                                            \
-    if (i == b->capacity) goto concat_b_end;                                 \
-    result.pointer[destiny_index] = b->pointer[i];                           \
-    i = i + 1;                                                               \
-    destiny_index = destiny_index + 1;                                       \
-    goto concat_b_start;                                                     \
-                                                                             \
-  concat_b_end:                                                              \
-    return result;                                                           \
-  };                                                                         \
-                                                                             \
-  char* array_##NAME##_to_string(array_##NAME array) {                       \
-    size_t i = 0;                                                            \
-    const char* delimiter = ", ";                                            \
-    char* inner_content;                                                     \
-    int final_length;                                                        \
-    char* result;                                                            \
-    array_string elements = array_string_create(array.capacity, (char*)"");  \
-                                                                             \
-  convert_loop:                                                              \
-    if (i == array.capacity) goto join_elements;                             \
-    elements.pointer[i] = TO_STRING(array.pointer[i]);                       \
-    i = i + 1;                                                               \
-    goto convert_loop;                                                       \
-                                                                             \
-  join_elements:                                                             \
-    inner_content = txy_join(delimiter, elements);                           \
-    final_length = snprintf(NULL, 0, "[%s]", inner_content);                 \
-    result = (char*)malloc(final_length + 1);                                \
-    if (result == NULL) exit(1);                                             \
-    snprintf(result, final_length + 1, "[%s]", inner_content);               \
-    return result;                                                           \
+#define DEFINE_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)               \
+  typedef struct array_##NAME##_s {                                         \
+    TYPE* pointer;                                                          \
+    size_t capacity;                                                        \
+  } array_##NAME;                                                           \
+                                                                            \
+  array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {          \
+    array_##NAME array;                                                     \
+    array.capacity = capacity;                                              \
+    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                 \
+                                                                            \
+    size_t i = 0;                                                           \
+                                                                            \
+  loop_start:                                                               \
+    if (i == capacity) goto loop_end;                                       \
+    array.pointer[i] = fill;                                                \
+    i = i + 1;                                                              \
+    goto loop_start;                                                        \
+                                                                            \
+  loop_end:                                                                 \
+    return array;                                                           \
+  };                                                                        \
+                                                                            \
+  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, \
+                                          size_t capacity, TYPE fill) {     \
+    array_##NAME array;                                                     \
+    size_t i = 0;                                                           \
+                                                                            \
+    if (count > capacity) goto error;                                       \
+    array.capacity = capacity;                                              \
+    array.pointer = (TYPE*)malloc(capacity * sizeof(TYPE));                 \
+                                                                            \
+  fill_loop_start:                                                          \
+    if (i == count) goto loop_start;                                        \
+    array.pointer[i] = (TYPE)values[i];                                     \
+    i = i + 1;                                                              \
+    goto fill_loop_start;                                                   \
+                                                                            \
+  loop_start:                                                               \
+    if (i == capacity) goto loop_end;                                       \
+    array.pointer[i] = fill;                                                \
+    i = i + 1;                                                              \
+    goto loop_start;                                                        \
+                                                                            \
+  loop_end:                                                                 \
+    return array;                                                           \
+                                                                            \
+  error:                                                                    \
+    exit(1);                                                                \
+  };                                                                        \
+                                                                            \
+  void array_##NAME##_free(array_##NAME* array) {                           \
+    if (array->pointer == NULL) goto skip_free;                             \
+    free(array->pointer);                                                   \
+    array->pointer = NULL;                                                  \
+                                                                            \
+  skip_free:                                                                \
+    array->capacity = 0;                                                    \
+  };                                                                        \
+                                                                            \
+  int array_##NAME##_compare(array_##NAME a, array_##NAME b) {              \
+    size_t i = 0;                                                           \
+    if (a.capacity != b.capacity) goto not_equals;                          \
+                                                                            \
+  loop_start:                                                               \
+    if (i == a.capacity) goto equals;                                       \
+    if (!COMPARE_FUNCTION(a.pointer[i], b.pointer[i])) goto not_equals;     \
+    i = i + 1;                                                              \
+    goto loop_start;                                                        \
+                                                                            \
+  equals:                                                                   \
+    return 1;                                                               \
+                                                                            \
+  not_equals:                                                               \
+    return 0;                                                               \
+  };                                                                        \
+                                                                            \
+  int array_##NAME##_contains(const array_##NAME* array, TYPE value) {      \
+    size_t i = 0;                                                           \
+                                                                            \
+  loop_start:                                                               \
+    if (i == array->capacity) goto loop_end;                                \
+    if (COMPARE_FUNCTION(array->pointer[i], value)) goto found;             \
+    i = i + 1;                                                              \
+    goto loop_start;                                                        \
+                                                                            \
+  found:                                                                    \
+    return 1;                                                               \
+                                                                            \
+  loop_end:                                                                 \
+    return 0;                                                               \
+  };                                                                        \
+                                                                            \
+  TYPE array_##NAME##_get(const array_##NAME* array, size_t index) {        \
+    return array->pointer[index];                                           \
+  };                                                                        \
+                                                                            \
+  array_##NAME array_##NAME##_concat(const array_##NAME* a,                 \
+                                     const array_##NAME* b) {               \
+    array_##NAME result;                                                    \
+    result.capacity = a->capacity + b->capacity;                            \
+    result.pointer = (TYPE*)malloc(result.capacity * sizeof(TYPE));         \
+                                                                            \
+    size_t i = 0;                                                           \
+    size_t destiny_index = 0;                                               \
+                                                                            \
+  concat_a_start:                                                           \
+    if (i == a->capacity) goto concat_a_end;                                \
+    result.pointer[destiny_index] = a->pointer[i];                          \
+    i = i + 1;                                                              \
+    destiny_index = destiny_index + 1;                                      \
+    goto concat_a_start;                                                    \
+                                                                            \
+  concat_a_end:                                                             \
+    i = 0;                                                                  \
+                                                                            \
+  concat_b_start:                                                           \
+    if (i == b->capacity) goto concat_b_end;                                \
+    result.pointer[destiny_index] = b->pointer[i];                          \
+    i = i + 1;                                                              \
+    destiny_index = destiny_index + 1;                                      \
+    goto concat_b_start;                                                    \
+                                                                            \
+  concat_b_end:                                                             \
+    return result;                                                          \
+  };                                                                        \
+                                                                            \
+  char* array_##NAME##_to_string(array_##NAME array) {                      \
+    size_t i = 0;                                                           \
+    const char* delimiter = ", ";                                           \
+    char* inner_content;                                                    \
+    int final_length;                                                       \
+    char* result;                                                           \
+    array_string elements = array_string_create(array.capacity, (char*)""); \
+                                                                            \
+  convert_loop:                                                             \
+    if (i == array.capacity) goto join_elements;                            \
+    elements.pointer[i] = TO_STRING(array.pointer[i]);                      \
+    i = i + 1;                                                              \
+    goto convert_loop;                                                      \
+                                                                            \
+  join_elements:                                                            \
+    inner_content = txy_join(delimiter, elements);                          \
+    final_length = snprintf(NULL, 0, "[%s]", inner_content);                \
+    result = (char*)malloc(final_length + 1);                               \
+    if (result == NULL) exit(1);                                            \
+    snprintf(result, final_length + 1, "[%s]", inner_content);              \
+    return result;                                                          \
   };
 
-#define DEFINE_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)       \
+#define DEFINE_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)     \
   typedef struct {                                                 \
     uint8_t is_some;                                               \
     TYPE value;                                                    \
@@ -280,128 +280,130 @@ typedef struct {
   } value;
 } bound_value;
 
-#define DEFINE_RANGE(TYPE, NAME, ENUM_TYPE, UNION_FIELD, COMPARE_FUNCTION, TO_STRING) \
-  typedef struct {                                                          \
-    bound_value left;                                                       \
-    bound_value right;                                                      \
-    uint8_t left_inclusive;                                                 \
-    uint8_t right_inclusive;                                                \
-  } range_##NAME;                                                           \
-                                                                            \
-  range_##NAME range_##NAME##_create(bound_value left, bound_value right,   \
-                                     uint8_t left_inclusive,                \
-                                     uint8_t right_inclusive) {             \
-    range_##NAME range;                                                     \
-    range.left = left;                                                      \
-    range.right = right;                                                    \
-    range.left_inclusive = left_inclusive;                                  \
-    range.right_inclusive = right_inclusive;                                \
-    return range;                                                           \
-  };                                                                        \
-                                                                            \
-  int range_##NAME##_contains(const range_##NAME* range, bound_value val) { \
-    TYPE checked_value;                                                     \
-    TYPE left;                                                              \
-    TYPE right;                                                             \
-                                                                            \
-    if (val.type != ENUM_TYPE) goto not_included;                           \
-    checked_value = val.value.UNION_FIELD;                                  \
-                                                                            \
-    if (range->left.type == TYPE_UNBOUNDED) goto check_right;               \
-    left = range->left.value.UNION_FIELD;                                   \
-    if (range->left_inclusive) goto check_left_inclusion;                   \
-    if (checked_value <= left) goto not_included;                           \
-    goto check_right;                                                       \
-                                                                            \
-  check_left_inclusion:                                                     \
-    if (checked_value < left) goto not_included;                            \
-                                                                            \
-  check_right:                                                              \
-    if (range->right.type == TYPE_UNBOUNDED) goto included;                 \
-    right = range->right.value.UNION_FIELD;                                 \
-    if (range->right_inclusive) goto chekc_right_inclusion;                 \
-    if (checked_value >= right) goto not_included;                          \
-    goto included;                                                          \
-                                                                            \
-  chekc_right_inclusion:                                                    \
-    if (checked_value > right) goto not_included;                           \
-                                                                            \
-  included:                                                                 \
-    return 1;                                                               \
-                                                                            \
-  not_included:                                                             \
-    return 0;                                                               \
-  };                                                                        \
-                                                                            \
-  int range_##NAME##_compare(range_##NAME a, range_##NAME b) {              \
-    if (a.left.type != b.left.type) goto not_equals;                        \
-    if (a.left.type == TYPE_UNBOUNDED) goto check_left_inclusive;           \
+#define DEFINE_RANGE(TYPE, NAME, ENUM_TYPE, UNION_FIELD, COMPARE_FUNCTION,     \
+                     TO_STRING)                                                \
+  typedef struct {                                                             \
+    bound_value left;                                                          \
+    bound_value right;                                                         \
+    uint8_t left_inclusive;                                                    \
+    uint8_t right_inclusive;                                                   \
+  } range_##NAME;                                                              \
+                                                                               \
+  range_##NAME range_##NAME##_create(bound_value left, bound_value right,      \
+                                     uint8_t left_inclusive,                   \
+                                     uint8_t right_inclusive) {                \
+    range_##NAME range;                                                        \
+    range.left = left;                                                         \
+    range.right = right;                                                       \
+    range.left_inclusive = left_inclusive;                                     \
+    range.right_inclusive = right_inclusive;                                   \
+    return range;                                                              \
+  };                                                                           \
+                                                                               \
+  int range_##NAME##_contains(const range_##NAME* range, bound_value val) {    \
+    TYPE checked_value;                                                        \
+    TYPE left;                                                                 \
+    TYPE right;                                                                \
+                                                                               \
+    if (val.type != ENUM_TYPE) goto not_included;                              \
+    checked_value = val.value.UNION_FIELD;                                     \
+                                                                               \
+    if (range->left.type == TYPE_UNBOUNDED) goto check_right;                  \
+    left = range->left.value.UNION_FIELD;                                      \
+    if (range->left_inclusive) goto check_left_inclusion;                      \
+    if (checked_value <= left) goto not_included;                              \
+    goto check_right;                                                          \
+                                                                               \
+  check_left_inclusion:                                                        \
+    if (checked_value < left) goto not_included;                               \
+                                                                               \
+  check_right:                                                                 \
+    if (range->right.type == TYPE_UNBOUNDED) goto included;                    \
+    right = range->right.value.UNION_FIELD;                                    \
+    if (range->right_inclusive) goto chekc_right_inclusion;                    \
+    if (checked_value >= right) goto not_included;                             \
+    goto included;                                                             \
+                                                                               \
+  chekc_right_inclusion:                                                       \
+    if (checked_value > right) goto not_included;                              \
+                                                                               \
+  included:                                                                    \
+    return 1;                                                                  \
+                                                                               \
+  not_included:                                                                \
+    return 0;                                                                  \
+  };                                                                           \
+                                                                               \
+  int range_##NAME##_compare(range_##NAME a, range_##NAME b) {                 \
+    if (a.left.type != b.left.type) goto not_equals;                           \
+    if (a.left.type == TYPE_UNBOUNDED) goto check_left_inclusive;              \
     if (!COMPARE_FUNCTION(a.left.value.UNION_FIELD, b.left.value.UNION_FIELD)) \
-      goto not_equals;                                                      \
-                                                                            \
-  check_left_inclusive:                                                     \
-    if (a.left_inclusive != b.left_inclusive) goto not_equals;              \
-    if (a.right.type != b.right.type) goto not_equals;                      \
-    if (a.right.type == TYPE_UNBOUNDED) goto check_right_inclusive;         \
-    if (!COMPARE_FUNCTION(a.right.value.UNION_FIELD, b.right.value.UNION_FIELD)) \
-      goto not_equals;                                                      \
-                                                                            \
-  check_right_inclusive:                                                    \
-    if (a.right_inclusive != b.right_inclusive) goto not_equals;            \
-    goto equals;                                                            \
-                                                                            \
-  equals:                                                                   \
-    return 1;                                                               \
-                                                                            \
-  not_equals:                                                               \
-    return 0;                                                               \
-  };                                                                        \
-                                                                            \
-  char* range_##NAME##_to_string(range_##NAME range) {                      \
-    const char* left_brack;                                                 \
-    const char* right_brack;                                                \
-    char* left_value;                                                       \
-    char* right_value;                                                      \
-    char* result;                                                           \
-    int length;                                                             \
-                                                                            \
-    if (range.left_inclusive) goto add_left_inclusive;                      \
-    left_brack = "(";                                                       \
-    goto check_left_value;                                                  \
-                                                                            \
-  add_left_inclusive:                                                       \
-    left_brack = "[";                                                       \
-                                                                            \
-  check_left_value:                                                         \
-    if (range.left.type == TYPE_UNBOUNDED) goto add_left_infinity;          \
-    left_value = TO_STRING(range.left.value.UNION_FIELD);                   \
-    goto check_right_brack;                                                 \
-                                                                            \
-  add_left_infinity:                                                        \
-    left_value = string_to_string("-inf");                                  \
-                                                                            \
-  check_right_brack:                                                        \
-    if (range.right_inclusive) goto add_right_inclusive;                    \
-    right_brack = ")";                                                      \
-    goto check_right_value;                                                 \
-  add_right_inclusive:                                                      \
-    right_brack = "]";                                                      \
-                                                                            \
-  check_right_value:                                                        \
-    if (range.right.type == TYPE_UNBOUNDED) goto add_right_infinity;        \
-    right_value = TO_STRING(range.right.value.UNION_FIELD);                 \
-    goto build;                                                             \
-  add_right_infinity:                                                       \
-    right_value = string_to_string("inf");                                  \
-                                                                            \
-  build:                                                                    \
-    length = snprintf(NULL, 0, "%s%s, %s%s", left_brack, left_value,        \
-                      right_value, right_brack);                            \
-    result = (char*)malloc(length + 1);                                     \
-    if (result == NULL) exit(1);                                            \
-    snprintf(result, length + 1, "%s%s, %s%s", left_brack, left_value,      \
-             right_value, right_brack);                                     \
-    return result;                                                          \
+      goto not_equals;                                                         \
+                                                                               \
+  check_left_inclusive:                                                        \
+    if (a.left_inclusive != b.left_inclusive) goto not_equals;                 \
+    if (a.right.type != b.right.type) goto not_equals;                         \
+    if (a.right.type == TYPE_UNBOUNDED) goto check_right_inclusive;            \
+    if (!COMPARE_FUNCTION(a.right.value.UNION_FIELD,                           \
+                          b.right.value.UNION_FIELD))                          \
+      goto not_equals;                                                         \
+                                                                               \
+  check_right_inclusive:                                                       \
+    if (a.right_inclusive != b.right_inclusive) goto not_equals;               \
+    goto equals;                                                               \
+                                                                               \
+  equals:                                                                      \
+    return 1;                                                                  \
+                                                                               \
+  not_equals:                                                                  \
+    return 0;                                                                  \
+  };                                                                           \
+                                                                               \
+  char* range_##NAME##_to_string(range_##NAME range) {                         \
+    const char* left_brack;                                                    \
+    const char* right_brack;                                                   \
+    char* left_value;                                                          \
+    char* right_value;                                                         \
+    char* result;                                                              \
+    int length;                                                                \
+                                                                               \
+    if (range.left_inclusive) goto add_left_inclusive;                         \
+    left_brack = "(";                                                          \
+    goto check_left_value;                                                     \
+                                                                               \
+  add_left_inclusive:                                                          \
+    left_brack = "[";                                                          \
+                                                                               \
+  check_left_value:                                                            \
+    if (range.left.type == TYPE_UNBOUNDED) goto add_left_infinity;             \
+    left_value = TO_STRING(range.left.value.UNION_FIELD);                      \
+    goto check_right_brack;                                                    \
+                                                                               \
+  add_left_infinity:                                                           \
+    left_value = string_to_string("-inf");                                     \
+                                                                               \
+  check_right_brack:                                                           \
+    if (range.right_inclusive) goto add_right_inclusive;                       \
+    right_brack = ")";                                                         \
+    goto check_right_value;                                                    \
+  add_right_inclusive:                                                         \
+    right_brack = "]";                                                         \
+                                                                               \
+  check_right_value:                                                           \
+    if (range.right.type == TYPE_UNBOUNDED) goto add_right_infinity;           \
+    right_value = TO_STRING(range.right.value.UNION_FIELD);                    \
+    goto build;                                                                \
+  add_right_infinity:                                                          \
+    right_value = string_to_string("inf");                                     \
+                                                                               \
+  build:                                                                       \
+    length = snprintf(NULL, 0, "%s%s, %s%s", left_brack, left_value,           \
+                      right_value, right_brack);                               \
+    result = (char*)malloc(length + 1);                                        \
+    if (result == NULL) exit(1);                                               \
+    snprintf(result, length + 1, "%s%s, %s%s", left_brack, left_value,         \
+             right_value, right_brack);                                        \
+    return result;                                                             \
   };
 
 DEFINE_RANGE(uint8_t, byte, TYPE_BYTE, v_byte, EQUALS, byte_to_string)
@@ -409,10 +411,6 @@ DEFINE_RANGE(int32_t, int, TYPE_INT, v_int, EQUALS, int_to_string)
 DEFINE_RANGE(int64_t, long, TYPE_LONG, v_long, EQUALS, long_to_string)
 DEFINE_RANGE(float, float, TYPE_FLOAT, v_float, EQUALS, float_to_string)
 DEFINE_RANGE(double, double, TYPE_DOUBLE, v_double, EQUALS, double_to_string)
-
-// TODO - Definir todos array e option sempre que declarar um struct
-// TODO - Definir todos sarray e option empre que tiver um tipo de array ou
-// option novo no programa (garantindo cobertura de tipos)
 
 DEFINE_ARRAY(char*, string, EQUALS, string_to_string)
 DEFINE_ARRAY(char, char, EQUALS, char_to_string)
