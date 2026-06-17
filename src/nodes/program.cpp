@@ -2,6 +2,7 @@
 
 #include "../references/references.hpp"
 #include "compiler.hpp"
+#include "structures/struct.hpp"
 
 // Debug
 void ProgramNode::compile_dot(ostream& os) const {
@@ -20,6 +21,15 @@ void ProgramNode::compile_dot(ostream& os) const {
 void ProgramNode::compile_code(ostream& os) const {
   References::get_instance()->push_scope();
   References::get_instance()->initialize();
+
+  for (size_t i = 0; i < this->children.size(); i++) {
+    if (StructNode* struct_node = dynamic_cast<StructNode*>(this->children[i])) {
+      References::get_instance()->add_struct_reference(struct_node->name, struct_node->attributes);
+      generated_code << "typedef struct " << struct_node->name << " " << struct_node->name << ";" << std::endl;
+      generated_code << "int " << struct_node->name << "_compare(" << struct_node->name << " a, " << struct_node->name << " b);" << std::endl;
+      generated_code << "char* " << struct_node->name << "_to_string(" << struct_node->name << " instance);" << std::endl;
+    }
+  };
 
   for (size_t i = 0; i < this->children.size(); i++) {
     this->children[i]->compile_code(os);

@@ -23,7 +23,8 @@ void Compiler::register_array(Type inner_type) {
     string compare_function = "EQUALS";
     if (inner_type.kind == TypeKind::ARRAY ||
         inner_type.kind == TypeKind::OPTION ||
-        inner_type.kind == TypeKind::RANGE) {
+        inner_type.kind == TypeKind::RANGE ||
+        inner_type.kind == TypeKind::NAMED) {
       compare_function = inner_type.get_name() + "_compare";
     };
 
@@ -49,7 +50,8 @@ void Compiler::register_option(Type inner_type) {
     string compare_functiontion = "EQUALS";
     if (inner_type.kind == TypeKind::ARRAY ||
         inner_type.kind == TypeKind::OPTION ||
-        inner_type.kind == TypeKind::RANGE) {
+        inner_type.kind == TypeKind::RANGE ||
+        inner_type.kind == TypeKind::NAMED) {
       compare_functiontion = inner_type.get_name() + "_compare";
     };
 

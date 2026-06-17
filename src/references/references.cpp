@@ -8,9 +8,21 @@ References* References::_instance = nullptr;
 References* References::get_instance() {
   if (References::_instance == nullptr) {
     References::_instance = new References();
+  }
+  return References::_instance;
+};
+
+// Structs
+void References::add_struct_reference(string name,
+                                      vector<pair<string, Type>> attributes) {
+  this->structs[name] = attributes;
+};
+vector<pair<string, Type>> References::get_struct_reference(string name) {
+  if (this->structs.find(name) != this->structs.end()) {
+    return this->structs[name];
   };
 
-  return References::_instance;
+  return {};
 };
 
 // Escopo

@@ -32,6 +32,10 @@ struct References {
                               bool self, bool implemented);
   void initialize();
 
+  unordered_map<string, vector<pair<string, Type>>> structs;
+  void add_struct_reference(string name, vector<pair<string, Type>> attributes);
+  vector<pair<string, Type>> get_struct_reference(string name);
+
   static References* _instance;
   static References* get_instance();
   References();
