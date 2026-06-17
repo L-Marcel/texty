@@ -20,26 +20,77 @@ void RangeNode::compile_dot(ostream& os) const {
 // Código
 void RangeNode::compile_code(ostream& os) const {
   Type type = this->get_type();
+  string range_name = "range_" + type.inner_type->get_name();
+  string type_production = type.inner_type->to_production();
 
-  os << "::txy::range<" << type.inner_type->to_production() << ">(";
+  string type_enum;
+  switch (type.inner_type->kind) {
+    case TypeKind::BYTE:
+      type_enum = "TYPE_BYTE";
+      break;
+    case TypeKind::INT:
+      type_enum = "TYPE_INT";
+      break;
+    case TypeKind::LONG:
+      type_enum = "TYPE_LONG";
+      break;
+    case TypeKind::FLOAT:
+      type_enum = "TYPE_FLOAT";
+      break;
+    case TypeKind::DOUBLE:
+      type_enum = "TYPE_DOUBLE";
+      break;
+    default:
+      type_enum = "TYPE_UNBOUNDED";
+      break;
+  };
+
+  string type_field;
+  switch (type.inner_type->kind) {
+    case TypeKind::BYTE:
+      type_field = ".v_byte";
+      break;
+    case TypeKind::INT:
+      type_field = ".v_int";
+      break;
+    case TypeKind::LONG:
+      type_field = ".v_long";
+      break;
+    case TypeKind::FLOAT:
+      type_field = ".v_float";
+      break;
+    case TypeKind::DOUBLE:
+      type_field = ".v_double";
+      break;
+    default:
+      type_field = "";
+      break;
+  };
+
+  os << range_name << "_create(";
+
   if (this->left_inclusion == RangeInclusionType::UNBOUNDED) {
-    os << "::txy::unbounded_value{}";
+    os << "(bound_value){TYPE_UNBOUNDED, {0}}";
   } else {
+    os << "(bound_value){" << type_enum << ", {" << type_field << " = ("
+       << type_production << ")(";
     this->left->compile_code(os);
+    os << ")}}";
   };
 
   os << ", ";
 
   if (this->right_inclusion == RangeInclusionType::UNBOUNDED) {
-    os << "::txy::unbounded_value{}";
+    os << "(bound_value){TYPE_UNBOUNDED, {0}}";
   } else {
+    os << "(bound_value){" << type_enum << ", {" << type_field << " = ("
+       << type_production << ")(";
     this->right->compile_code(os);
+    os << ")}}";
   };
 
-  os << ", "
-     << (range_inclusion_to_bool(this->left_inclusion) ? "true" : "false")
-     << ", "
-     << (range_inclusion_to_bool(this->right_inclusion) ? "true" : "false")
+  os << ", " << (range_inclusion_to_bool(this->left_inclusion) ? "1" : "0")
+     << ", " << (range_inclusion_to_bool(this->right_inclusion) ? "1" : "0")
      << ")";
 };
 

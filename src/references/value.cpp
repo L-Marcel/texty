@@ -46,20 +46,17 @@ string Type::to_production() const {
   if (this->kind == TypeKind::NAMED)
     return this->name;
   else if (this->kind == TypeKind::ARRAY) {
-    return "::txy::array<" +
-           (this->inner_type ? this->inner_type->to_production() : "unknown") +
-           ">";
+    return "array_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
   } else if (this->kind == TypeKind::RANGE) {
-    return "::txy::range<" +
-           (this->inner_type ? this->inner_type->to_production() : "unknown") +
-           ">";
+    return "range_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
   } else if (this->kind == TypeKind::POINTER) {
     return (this->inner_type ? this->inner_type->to_production() : "unknown") +
            "*";
   } else if (this->kind == TypeKind::OPTION) {
-    return "::txy::option<" +
-           (this->inner_type ? this->inner_type->to_production() : "unknown") +
-           ">";
+    return "option_" +
+           (this->inner_type ? this->inner_type->get_name() : "unknown");
   };
 
   string name = "unknown";
@@ -69,10 +66,10 @@ string Type::to_production() const {
       name = "char";
       break;
     case TypeKind::STRING:
-      name = "::std::string";
+      name = "char*";
       break;
     case TypeKind::BOOL:
-      name = "bool";
+      name = "uint8_t";
       break;
     case TypeKind::FLOAT:
       name = "float";
@@ -81,15 +78,16 @@ string Type::to_production() const {
       name = "double";
       break;
     case TypeKind::LONG:
-      name = "::std::int64_t";
+      name = "int64_t";
       break;
     case TypeKind::INT:
-      name = "::std::int32_t";
+      name = "int32_t";
       break;
     case TypeKind::BYTE:
-      name = "::std::uint8_t";
+      name = "uint8_t";
       break;
     case TypeKind::VOID:
+      name = "void";
       break;
     default:
       break;
