@@ -20,9 +20,16 @@ void Compiler::register_array(Type inner_type) {
       register_option(*inner_type.inner_type);
     };
 
+    string compare_function = "EQUALS";
+    if (inner_type.kind == TypeKind::ARRAY ||
+        inner_type.kind == TypeKind::OPTION ||
+        inner_type.kind == TypeKind::RANGE) {
+      compare_function = inner_type.get_name() + "_compare";
+    };
+
     generated_code << "DEFINE_ARRAY(";
     generated_code << inner_type.to_production();
-    generated_code << ", " << name << ", EQUALS, ";
+    generated_code << ", " << name << ", " << compare_function << ", ";
     generated_code << name << "_to_string";
     generated_code << ")" << std::endl;
   };
@@ -39,9 +46,16 @@ void Compiler::register_option(Type inner_type) {
       register_option(*inner_type.inner_type);
     };
 
+    string compare_functiontion = "EQUALS";
+    if (inner_type.kind == TypeKind::ARRAY ||
+        inner_type.kind == TypeKind::OPTION ||
+        inner_type.kind == TypeKind::RANGE) {
+      compare_functiontion = inner_type.get_name() + "_compare";
+    };
+
     generated_code << "DEFINE_OPTION(";
     generated_code << inner_type.to_production();
-    generated_code << ", " << name << ", ";
+    generated_code << ", " << name << ", " << compare_functiontion << ", ";
     generated_code << name << "_to_string";
     generated_code << ")" << std::endl;
   };

@@ -252,17 +252,17 @@ char* txy_join(const char* delimiter, array_string args);
     return result;                                                           \
   };                                                                         \
                                                                              \
-  char* array_##NAME##_to_string(const array_##NAME* array) {                \
+  char* array_##NAME##_to_string(array_##NAME array) {                       \
     size_t i = 0;                                                            \
     const char* delimiter = ", ";                                            \
     char* inner_content;                                                     \
     int final_length;                                                        \
     char* result;                                                            \
-    array_string elements = array_string_create(array->capacity, (char*)""); \
+    array_string elements = array_string_create(array.capacity, (char*)"");  \
                                                                              \
   convert_loop:                                                              \
-    if (i == array->capacity) goto join_elements;                            \
-    elements.pointer[i] = TO_STRING(array->pointer[i]);                      \
+    if (i == array.capacity) goto join_elements;                             \
+    elements.pointer[i] = TO_STRING(array.pointer[i]);                       \
     i = i + 1;                                                               \
     goto convert_loop;                                                       \
                                                                              \
@@ -274,7 +274,7 @@ char* txy_join(const char* delimiter, array_string args);
     snprintf(result, final_length + 1, "[%s]", inner_content);               \
     return result;                                                           \
   };
-#define DEFINE_OPTION(TYPE, NAME, TO_STRING)                       \
+#define DEFINE_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)       \
   typedef struct {                                                 \
     uint8_t is_some;                                               \
     TYPE value;                                                    \
@@ -341,12 +341,28 @@ char* txy_join(const char* delimiter, array_string args);
     return;                                                        \
   };                                                               \
                                                                    \
-  char* option_##NAME##_to_string(const option_##NAME* option) {   \
+  int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
+    if (a.is_some != b.is_some) goto not_equals;                   \
+    if (a.is_some) goto check_value;                               \
+    goto equals;                                                   \
+                                                                   \
+  check_value:                                                     \
+    if (COMPARE_FUNCTION(a.value, b.value)) goto equals;           \
+    goto not_equals;                                               \
+                                                                   \
+  equals:                                                          \
+    return 1;                                                      \
+                                                                   \
+  not_equals:                                                      \
+    return 0;                                                      \
+  };                                                               \
+                                                                   \
+  char* option_##NAME##_to_string(option_##NAME option) {          \
     char* result;                                                  \
     char* string;                                                  \
     int length;                                                    \
                                                                    \
-    if (option->is_some) goto format_some;                         \
+    if (option.is_some) goto format_some;                          \
     length = snprintf(NULL, 0, "none");                            \
     result = (char*)malloc(length + 1);                            \
     if (result == NULL) exit(1);                                   \
@@ -354,7 +370,7 @@ char* txy_join(const char* delimiter, array_string args);
     return result;                                                 \
                                                                    \
   format_some:                                                     \
-    string = TO_STRING(option->value);                             \
+    string = TO_STRING(option.value);                              \
     length = snprintf(NULL, 0, "some(%s)", string);                \
     result = (char*)malloc(length + 1);                            \
     if (result == NULL) exit(1);                                   \
@@ -379,7 +395,7 @@ typedef struct {
     double v_double;
   } value;
 } bound_value;
-#define DEFINE_RANGE(TYPE, NAME, ENUM_TYPE, UNION_FIELD, TO_STRING)         \
+#define DEFINE_RANGE(TYPE, NAME, ENUM_TYPE, UNION_FIELD, COMPARE_FUNCTION, TO_STRING) \
   typedef struct {                                                          \
     bound_value left;                                                       \
     bound_value right;                                                      \
@@ -432,7 +448,31 @@ typedef struct {
     return 0;                                                               \
   };                                                                        \
                                                                             \
-  char* range_##NAME##_to_string(const range_##NAME* range) {               \
+  int range_##NAME##_compare(range_##NAME a, range_##NAME b) {              \
+    if (a.left.type != b.left.type) goto not_equals;                        \
+    if (a.left.type == TYPE_UNBOUNDED) goto check_left_inclusive;           \
+    if (!COMPARE_FUNCTION(a.left.value.UNION_FIELD, b.left.value.UNION_FIELD)) \
+      goto not_equals;                                                      \
+                                                                            \
+  check_left_inclusive:                                                     \
+    if (a.left_inclusive != b.left_inclusive) goto not_equals;              \
+    if (a.right.type != b.right.type) goto not_equals;                      \
+    if (a.right.type == TYPE_UNBOUNDED) goto check_right_inclusive;         \
+    if (!COMPARE_FUNCTION(a.right.value.UNION_FIELD, b.right.value.UNION_FIELD)) \
+      goto not_equals;                                                      \
+                                                                            \
+  check_right_inclusive:                                                    \
+    if (a.right_inclusive != b.right_inclusive) goto not_equals;            \
+    goto equals;                                                            \
+                                                                            \
+  equals:                                                                   \
+    return 1;                                                               \
+                                                                            \
+  not_equals:                                                               \
+    return 0;                                                               \
+  };                                                                        \
+                                                                            \
+  char* range_##NAME##_to_string(range_##NAME range) {                      \
     const char* left_brack;                                                 \
     const char* right_brack;                                                \
     char* left_value;                                                       \
@@ -440,7 +480,7 @@ typedef struct {
     char* result;                                                           \
     int length;                                                             \
                                                                             \
-    if (range->left_inclusive) goto add_left_inclusive;                     \
+    if (range.left_inclusive) goto add_left_inclusive;                      \
     left_brack = "(";                                                       \
     goto check_left_value;                                                  \
                                                                             \
@@ -448,23 +488,23 @@ typedef struct {
     left_brack = "[";                                                       \
                                                                             \
   check_left_value:                                                         \
-    if (range->left.type == TYPE_UNBOUNDED) goto add_left_infinity;         \
-    left_value = TO_STRING(range->left.value.UNION_FIELD);                  \
+    if (range.left.type == TYPE_UNBOUNDED) goto add_left_infinity;          \
+    left_value = TO_STRING(range.left.value.UNION_FIELD);                   \
     goto check_right_brack;                                                 \
                                                                             \
   add_left_infinity:                                                        \
     left_value = string_to_string("-inf");                                  \
                                                                             \
   check_right_brack:                                                        \
-    if (range->right_inclusive) goto add_right_inclusive;                   \
+    if (range.right_inclusive) goto add_right_inclusive;                    \
     right_brack = ")";                                                      \
     goto check_right_value;                                                 \
   add_right_inclusive:                                                      \
     right_brack = "]";                                                      \
                                                                             \
   check_right_value:                                                        \
-    if (range->right.type == TYPE_UNBOUNDED) goto add_right_infinity;       \
-    right_value = TO_STRING(range->right.value.UNION_FIELD);                \
+    if (range.right.type == TYPE_UNBOUNDED) goto add_right_infinity;        \
+    right_value = TO_STRING(range.right.value.UNION_FIELD);                 \
     goto build;                                                             \
   add_right_infinity:                                                       \
     right_value = string_to_string("inf");                                  \
@@ -478,11 +518,11 @@ typedef struct {
              right_value, right_brack);                                     \
     return result;                                                          \
   };
-DEFINE_RANGE(uint8_t, byte, TYPE_BYTE, v_byte, byte_to_string)
-DEFINE_RANGE(int32_t, int, TYPE_INT, v_int, int_to_string)
-DEFINE_RANGE(int64_t, long, TYPE_LONG, v_long, long_to_string)
-DEFINE_RANGE(float, float, TYPE_FLOAT, v_float, float_to_string)
-DEFINE_RANGE(double, double, TYPE_DOUBLE, v_double, double_to_string)
+DEFINE_RANGE(uint8_t, byte, TYPE_BYTE, v_byte, EQUALS, byte_to_string)
+DEFINE_RANGE(int32_t, int, TYPE_INT, v_int, EQUALS, int_to_string)
+DEFINE_RANGE(int64_t, long, TYPE_LONG, v_long, EQUALS, long_to_string)
+DEFINE_RANGE(float, float, TYPE_FLOAT, v_float, EQUALS, float_to_string)
+DEFINE_RANGE(double, double, TYPE_DOUBLE, v_double, EQUALS, double_to_string)
 DEFINE_ARRAY(char*, string, EQUALS, string_to_string)
 DEFINE_ARRAY(char, char, EQUALS, char_to_string)
 DEFINE_ARRAY(uint8_t, bool, EQUALS, bool_to_string)
@@ -491,14 +531,14 @@ DEFINE_ARRAY(int32_t, int, EQUALS, int_to_string)
 DEFINE_ARRAY(int64_t, long, EQUALS, long_to_string)
 DEFINE_ARRAY(float, float, EQUALS, float_to_string)
 DEFINE_ARRAY(double, double, EQUALS, double_to_string)
-DEFINE_OPTION(char, char, char_to_string)
-DEFINE_OPTION(char*, string, string_to_string)
-DEFINE_OPTION(uint8_t, bool, bool_to_string)
-DEFINE_OPTION(uint8_t, byte, byte_to_string)
-DEFINE_OPTION(int32_t, int, int_to_string)
-DEFINE_OPTION(int64_t, long, long_to_string)
-DEFINE_OPTION(float, float, float_to_string)
-DEFINE_OPTION(double, double, double_to_string)
+DEFINE_OPTION(char, char, EQUALS, char_to_string)
+DEFINE_OPTION(char*, string, EQUALS, string_to_string)
+DEFINE_OPTION(uint8_t, bool, EQUALS, bool_to_string)
+DEFINE_OPTION(uint8_t, byte, EQUALS, byte_to_string)
+DEFINE_OPTION(int32_t, int, EQUALS, int_to_string)
+DEFINE_OPTION(int64_t, long, EQUALS, long_to_string)
+DEFINE_OPTION(float, float, EQUALS, float_to_string)
+DEFINE_OPTION(double, double, EQUALS, double_to_string)
 char* txy_format(const char* pattern, array_string args) {
   size_t i = 0, j = 0, arg_index = 0;
   size_t total_length = 0;

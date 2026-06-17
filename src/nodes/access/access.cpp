@@ -41,7 +41,7 @@ void AccessNode::compile_code(ostream& os) const {
       break;
     case AccessType::BRACKET:
       this->previous->compile_code(os);
-      os << "[";
+      os << ".pointer[";
       this->expression->compile_code(os);
       os << "]";
       break;
