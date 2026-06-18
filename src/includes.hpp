@@ -45,7 +45,6 @@
 #include "enums/type.hpp"
 #include "enums/while.hpp"
 #include "errors.hpp"
-#include "lib/CLI11.hpp"
 #include "lib/magic_enum.hpp"
 
 #define ANSI_RESET "\033[0m"
