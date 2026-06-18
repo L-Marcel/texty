@@ -1,27 +1,27 @@
 #include "../core.h"
 
-int32_t input_key_pressed() {
+int32_t txy_key_pressed() {
 #ifdef _WIN32
   return (int32_t)_getch();
 #else
-  struct termios old_terminal, new_terminal;
+  // struct termios old_terminal, new_terminal;
   int32_t caractere;
 
-  tcgetattr(STDIN_FILENO, &old_terminal);
-  new_terminal = old_terminal;
-  new_terminal.c_lflag &= ~(ICANON | ECHO);
+  // tcgetattr(STDIN_FILENO, &old_terminal);
+  // new_terminal = old_terminal;
+  // new_terminal.c_lflag &= ~(ICANON | ECHO);
 
-  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
+  // tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
 
   caractere = (int32_t)getchar();
 
-  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
+  // tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
 
   return caractere;
 #endif
 };
 
-char* input_line() {
+char* txy_input_line() {
   size_t capacity = 64;
   size_t length = 0;
   char* buffer = (char*)malloc(capacity);

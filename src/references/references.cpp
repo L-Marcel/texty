@@ -110,5 +110,7 @@ void References::initialize() {
                                true);
   this->add_function_reference("txy_join", Type(TypeKind::STRING), {}, false,
                                true);
+  this->add_function_reference("txy_key_pressed", Type(TypeKind::INT), {},
+                               false, false);
   // TODO: Registrar métodos e procedures nativos
 };

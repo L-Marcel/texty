@@ -1,0 +1,4 @@
+proc main()
+  var key: int = key_pressed();
+  println(format("key pressed: %int", key));
+endproc;
