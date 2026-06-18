@@ -14,4 +14,11 @@ proc main()
       endif;
     endif;
   endif;
+
+  var frac_base: double = 4.0d;
+  var frac_exp: double = 0.5d;
+  var frac_result: double = frac_base ** frac_exp;
+
+  println("Resultado fracionario (4.0 ** 0.5 = 2.0): ");
+  println(format("%double", frac_result));
 endproc;

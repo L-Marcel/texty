@@ -40,13 +40,15 @@ void BinaryOperationNode::compile_code(ostream& os) const {
       os << " % ";
       this->right->compile_code(os);
       break;
-    case BinaryOperation::EXP:
-      os << "::std::pow(";
+    case BinaryOperation::EXP: {
+      Type type = this->left->get_type();
+      os << "txy_pow_" << type.get_name() << "(";
       this->left->compile_code(os);
       os << ", ";
       this->right->compile_code(os);
       os << ")";
       break;
+    }
     case BinaryOperation::AND:
       this->left->compile_code(os);
       os << " && ";
@@ -102,16 +104,27 @@ void BinaryOperationNode::compile_code(ostream& os) const {
       os << " >= ";
       this->right->compile_code(os);
       break;
-    case BinaryOperation::CONCAT:
+    case BinaryOperation::CONCAT: {
+      Type type = this->left->get_type();
+      os << "array_" << type.inner_type->get_name() << "_concat(&(";
       this->left->compile_code(os);
-      os << " << ";
+      os << "), &(";
       this->right->compile_code(os);
+      os << "))";
       break;
+    }
     case BinaryOperation::IN: {
       Type type = this->right->get_type();
-      if (type.kind == TypeKind::ARRAY || type.kind == TypeKind::RANGE) {
+      if (type.kind == TypeKind::ARRAY) {
+        os << "array_" << type.inner_type->get_name() << "_contains(&(";
         this->right->compile_code(os);
-        os << ".contains(";
+        os << "), ";
+        this->left->compile_code(os);
+        os << ")";
+      } else if (type.kind == TypeKind::RANGE) {
+        os << "range_" << type.inner_type->get_name() << "_contains(&(";
+        this->right->compile_code(os);
+        os << "), ";
         this->left->compile_code(os);
         os << ")";
       } else if (type.kind == TypeKind::OPTION) {
@@ -123,17 +136,19 @@ void BinaryOperationNode::compile_code(ostream& os) const {
             left_option->type == OptionNodeType::UNDEFINED) {
           os << "((uint8_t)1)";
         } else {
-          this->left->set_expected_type(this->right->get_type());
+          this->left->set_expected_type(type);
+          os << "option_" << type.inner_type->get_name() << "_is_some(&(";
           this->left->compile_code(os);
-          os << ".is_some() == ";
+          os << ")) == option_" << type.inner_type->get_name() << "_is_some(&(";
           this->right->compile_code(os);
-          os << ".is_some()";
+          os << "))";
         };
       } else if (type.kind == TypeKind::STRING) {
+        os << "txy_string_contains(";
         this->right->compile_code(os);
-        os << ".find(";
+        os << ", ";
         this->left->compile_code(os);
-        os << ") != ::std::string::npos";
+        os << ")";
       };
       break;
     }

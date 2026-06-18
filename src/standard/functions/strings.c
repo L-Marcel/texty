@@ -131,3 +131,31 @@ void txy_trim(char* input) {
   txy_trim_start(input);
   txy_trim_end(input);
 };
+
+int txy_string_contains(const char* text, const char* substr) {
+  size_t i = 0;
+  size_t j = 0;
+
+  if (substr[0] == '\0') goto found;
+
+outer_loop:
+  if (text[i] == '\0') goto not_found;
+  j = 0;
+
+inner_loop:
+  if (substr[j] == '\0') goto found;
+  if (text[i + j] == '\0') goto not_found;
+  if (text[i + j] != substr[j]) goto next_i;
+  j = j + 1;
+  goto inner_loop;
+
+next_i:
+  i = i + 1;
+  goto outer_loop;
+
+found:
+  return 1;
+
+not_found:
+  return 0;
+};
