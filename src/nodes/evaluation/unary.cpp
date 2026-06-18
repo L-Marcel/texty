@@ -1,5 +1,6 @@
 #include "unary.hpp"
 
+#include "../../lib/magic_enum.hpp"
 #include "../../operations/unary/unary.hpp"
 
 // Debug

@@ -1,5 +1,6 @@
 #include "value.hpp"
 
+#include "../lib/magic_enum.hpp"
 #include "../nodes/compiler.hpp"
 
 // Operadores

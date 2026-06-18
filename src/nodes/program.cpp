@@ -1,5 +1,6 @@
 #include "program.hpp"
 
+#include "../lib/magic_enum.hpp"
 #include "../references/references.hpp"
 #include "compiler.hpp"
 #include "structures/struct.hpp"

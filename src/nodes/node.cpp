@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 
+#include "../lib/magic_enum.hpp"
+
 // Debug
 void Node::compile_dot(ostream& os) const {
   if (this->name == "")

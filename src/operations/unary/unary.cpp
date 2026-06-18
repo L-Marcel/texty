@@ -1,5 +1,7 @@
 #include "implementations/unary.hpp"
 
+#include "../../lib/magic_enum.hpp"
+
 // Inicialização de variáveis
 bool UnaryOperations::initialized = false;
 UnaryOperationsTypeTable UnaryOperations::table = {};
