@@ -164,6 +164,11 @@ else
 endif
 
 clean:
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "Get-ChildItem -Path examples -File -Recurse | Where-Object { $$_.Extension -ne '.txy' } | Remove-Item -Force"
+else
+	find examples -type f ! -name "*.txy" -delete
+endif
 	@$(call RD,$(BUILD_DIR))
 	@$(call RD,$(GRAMMAR_BUILD_DIR))
 	@$(call RM_FILE,$(TARGET)$(TARGET_EXT))
