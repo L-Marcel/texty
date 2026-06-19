@@ -5,7 +5,12 @@ int32_t txy_byte_to_int(uint8_t value) { return (int32_t)value; };
 int64_t txy_byte_to_long(uint8_t value) { return (int64_t)value; };
 float txy_byte_to_float(uint8_t value) { return (float)value; };
 double txy_byte_to_double(uint8_t value) { return (double)value; };
-uint8_t txy_byte_to_bool(uint8_t value) { return value != 0 ? 1 : 0; };
+uint8_t txy_byte_to_bool(uint8_t value) {
+  if (value != 0) goto max;
+  return 0;
+max:
+  return 1;
+};
 char txy_byte_to_char(uint8_t value) { return (char)value; };
 
 uint8_t txy_int_to_byte(int32_t value) {
@@ -21,7 +26,12 @@ int32_t txy_int_to_int(int32_t value) { return value; };
 int64_t txy_int_to_long(int32_t value) { return (int64_t)value; };
 float txy_int_to_float(int32_t value) { return (float)value; };
 double txy_int_to_double(int32_t value) { return (double)value; };
-uint8_t txy_int_to_bool(int32_t value) { return value != 0 ? 1 : 0; };
+uint8_t txy_int_to_bool(int32_t value) {
+  if (value != 0) goto max;
+  return 0;
+max:
+  return 1;
+};
 char txy_int_to_char(int32_t value) { return (char)value; };
 
 uint8_t txy_long_to_byte(int64_t value) {
@@ -45,7 +55,12 @@ max:
 int64_t txy_long_to_long(int64_t value) { return value; };
 float txy_long_to_float(int64_t value) { return (float)value; };
 double txy_long_to_double(int64_t value) { return (double)value; };
-uint8_t txy_long_to_bool(int64_t value) { return value != 0 ? 1 : 0; };
+uint8_t txy_long_to_bool(int64_t value) {
+  if (value != 0) goto max;
+  return 0;
+max:
+  return 1;
+};
 char txy_long_to_char(int64_t value) { return (char)value; };
 
 uint8_t txy_float_to_byte(float value) {
@@ -77,7 +92,12 @@ max:
 };
 float txy_float_to_float(float value) { return value; };
 double txy_float_to_double(float value) { return (double)value; };
-uint8_t txy_float_to_bool(float value) { return value != 0.0f ? 1 : 0; };
+uint8_t txy_float_to_bool(float value) {
+  if (value != 0.0f) goto max;
+  return 0;
+max:
+  return 1;
+};
 char txy_float_to_char(float value) { return (char)value; };
 
 uint8_t txy_double_to_byte(double value) {
@@ -109,7 +129,12 @@ max:
 };
 float txy_double_to_float(double value) { return (float)value; };
 double txy_double_to_double(double value) { return value; };
-uint8_t txy_double_to_bool(double value) { return value != 0.0 ? 1 : 0; };
+uint8_t txy_double_to_bool(double value) {
+  if (value != 0.0) goto max;
+  return 0;
+max:
+  return 1;
+};
 char txy_double_to_char(double value) { return (char)value; };
 
 uint8_t txy_bool_to_bool(uint8_t value) { return value; };
@@ -120,7 +145,12 @@ int64_t txy_bool_to_long(uint8_t value) { return (int64_t)value; };
 float txy_bool_to_float(uint8_t value) { return (float)value; };
 double txy_bool_to_double(uint8_t value) { return (double)value; };
 
-uint8_t txy_char_to_bool(char value) { return value != 0 ? 1 : 0; };
+uint8_t txy_char_to_bool(char value) {
+  if (value != 0) goto max;
+  return 0;
+max:
+  return 1;
+};
 char txy_char_to_char(char value) { return value; };
 uint8_t txy_char_to_byte(char value) { return (uint8_t)value; };
 int32_t txy_char_to_int(char value) { return (int32_t)value; };
@@ -129,7 +159,10 @@ float txy_char_to_float(char value) { return (float)value; };
 double txy_char_to_double(char value) { return (double)value; };
 
 uint8_t txy_string_to_bool(const char* value) {
-  return value[0] != '\0' ? 1 : 0;
+  if (value[0] != '\0') goto max;
+  return 0;
+max:
+  return 1;
 };
 char txy_string_to_char(const char* value) { return value[0]; };
 uint8_t txy_string_to_byte(const char* value) {
