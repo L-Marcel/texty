@@ -8,12 +8,12 @@ proc main()
     var y: double = 21f;
     var x: double = 18f;
     var c: int = 5;
-    var result: double = (x ** x) - y + double(c);
-    # TODO - Negação e soma não estão surtindo efeito
-    println(format("(%double ^ %double): %double", x, x, (x ** x)));
-    println(format("(%double ^ %double) - %double: %double", x, x, y, (x ** x) - y));
-    println(format("(%double ^ %double) - %double + %int: %double", x, x, y, c, result));
-    println("===================================================")
+    var result: double = (x ** 2d) - y + double(c);
+    # Negação e soma não estavam surtindo efeito porque x ** x é 18^18 (gigante, perdendo precisão flutuante)
+    println(format("(%double ^ 2): %double", x, (x ** 2d)));
+    println(format("(%double ^ 2) - %double: %double", x, y, (x ** 2d) - y));
+    println(format("(%double ^ 2) - %double + %int: %double", x, y, c, result));
+    println("===================================================");
     println(format("Resultado: %double", result));
     println("===================================================");
 endproc;
