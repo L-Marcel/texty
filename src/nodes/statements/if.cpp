@@ -93,9 +93,18 @@ void IfNode::compile_code(ostream& os) const {
       os << body_label << ":;" << std::endl;
       os << ident;
 
-      string name_suffix = references->add_variable_reference(this->variable_id, *type.inner_type, true);
+      if (references->has_reference_in_current_scope(this->variable_id,
+                                                     ReferenceType::VARIABLE)) {
+        throw error("variável '" + this->variable_id.substr(4) +
+                        "' já foi declarada neste escopo",
+                    this->line);
+      };
+
+      string name_suffix = references->add_variable_reference(
+          this->variable_id, *type.inner_type, true);
       os << type.inner_type->to_production() << " ";
-      os << this->variable_id << name_suffix << " = " << option_name << "_unwrap(&" << temp_opt << ");" << std::endl;
+      os << this->variable_id << name_suffix << " = " << option_name
+         << "_unwrap(&" << temp_opt << ");" << std::endl;
       for (size_t i = 0; i < this->children.size(); i++) {
         os << ident;
         this->children[i]->compile_code(os);

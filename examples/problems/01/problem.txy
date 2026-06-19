@@ -5,9 +5,8 @@
 
 proc main()
     println("=================== PROBLEMA 01 ===================");
-    # TODO - 'f' é para float, não deveria permitir aqui
-    var y: double = 21f;
-    var x: double = 18f;
+    var y: double = 21d;
+    var x: double = 18d;
     var c: int = 5;
     var result: double = (x ** 2d) - y + double(c);
     println(format("(%double ^ 2): %double", x, (x ** 2d)));

@@ -92,7 +92,16 @@ bool References::has_reference(string name, ReferenceType reference_type) {
   return false;
 };
 
-
+bool References::has_reference_in_current_scope(string name, ReferenceType reference_type) {
+  if (this->scopes.empty()) return false;
+  Scope& scope = this->get_scope();
+  Scope::iterator scope_iterator = scope.find(name);
+  if (scope_iterator != scope.end() &&
+      scope_iterator->second->reference_type == reference_type) {
+    return true;
+  }
+  return false;
+};
 
 Reference* References::get_reference(int line, string name) {
   for (reverse_iterator iterator = this->scopes.rbegin();
