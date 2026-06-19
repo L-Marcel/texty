@@ -28,9 +28,11 @@ has_decimal:
 format_step:
   len = snprintf(NULL, 0, "%0*.*f", total_width, (int)right, value);
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, len + 1, "%0*.*f", total_width, (int)right, value);
   return result;
+error:
+  exit(1);
 };
 char* txy_double_decimals(double value, int64_t left, int64_t right) {
   int total_width;
@@ -50,9 +52,11 @@ has_decimal:
 format_step:
   len = snprintf(NULL, 0, "%0*.*lf", total_width, (int)right, value);
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, len + 1, "%0*.*lf", total_width, (int)right, value);
   return result;
+error:
+  exit(1);
 };
 char* float_to_string(float value) { return txy_float_decimals(value, 0, 6); };
 char* double_to_string(double value) {
@@ -61,30 +65,38 @@ char* double_to_string(double value) {
 char* int_to_string(int32_t value) {
   int len = snprintf(NULL, 0, "%d", value);
   char* result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, len + 1, "%d", value);
   return result;
+error:
+  exit(1);
 };
 char* long_to_string(int64_t value) {
   int len = snprintf(NULL, 0, "%lld", (long long)value);
   char* result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, len + 1, "%lld", (long long)value);
   return result;
+error:
+  exit(1);
 };
 char* byte_to_string(uint8_t value) {
   int len = snprintf(NULL, 0, "%u", (unsigned int)value);
   char* result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, len + 1, "%u", (unsigned int)value);
   return result;
+error:
+  exit(1);
 };
 char* char_to_string(char value) {
   char* result = (char*)malloc(2);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   result[0] = value;
   result[1] = '\0';
   return result;
+error:
+  exit(1);
 };
 char* string_to_string(const char* value) {
   size_t len = 0;
@@ -96,7 +108,7 @@ calculate_length:
   goto calculate_length;
 alloc_string:
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 copy_string:
   if (i == len) goto end_string;
   result[i] = value[i];
@@ -105,6 +117,8 @@ copy_string:
 end_string:
   result[len] = '\0';
   return result;
+error:
+  exit(1);
 };
 char* bool_to_string(uint8_t value) {
   const char* string_value;
@@ -118,18 +132,22 @@ set_true:
 alloc_bool:
   len = snprintf(NULL, 0, "%s", string_value);
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, len + 1, "%s", string_value);
   return result;
+error:
+  exit(1);
 };
 char* pointer_to_string(void* pointer) {
   char* result;
   int length;
   length = snprintf(NULL, 0, "%p", pointer);
   result = (char*)malloc(length + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, length + 1, "%p", pointer);
   return result;
+error:
+  exit(1);
 };
 #define EQUALS(a, b) ((a) == (b))
 typedef struct array_string_s array_string;
@@ -141,12 +159,14 @@ char* txy_join(const char* delimiter, array_string args);
   } array_##NAME;                                                           \
   array_##NAME array_##NAME##_create(size_t capacity, TYPE fill);           \
   array_##NAME array_##NAME##_empty();                                      \
-  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, size_t capacity, TYPE fill); \
+  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, \
+                                          size_t capacity, TYPE fill);      \
   void array_##NAME##_free(array_##NAME* array);                            \
   int array_##NAME##_compare(array_##NAME a, array_##NAME b);               \
   int array_##NAME##_contains(const array_##NAME* array, TYPE value);       \
   TYPE array_##NAME##_get(const array_##NAME* array, size_t index);         \
-  array_##NAME array_##NAME##_concat(const array_##NAME* a, const array_##NAME* b); \
+  array_##NAME array_##NAME##_concat(const array_##NAME* a,                 \
+                                     const array_##NAME* b);                \
   char* array_##NAME##_to_string(array_##NAME array);
 #define IMPLEMENT_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)            \
   array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {          \
@@ -295,21 +315,25 @@ char* txy_join(const char* delimiter, array_string args);
     inner_content = txy_join(delimiter, elements);                          \
     final_length = snprintf(NULL, 0, "[%s]", inner_content);                \
     result = (char*)malloc(final_length + 1);                               \
-    if (result == NULL) exit(1);                                            \
+    if (result == NULL) goto error;                                         \
     snprintf(result, final_length + 1, "[%s]", inner_content);              \
     return result;                                                          \
+                                                                            \
+  error:                                                                    \
+    exit(1);                                                                \
   };
-#define DECLARE_OPTION(TYPE, NAME)                                 \
-  typedef struct {                                                 \
-    uint8_t is_some;                                               \
-    TYPE* value;                                                   \
-  } option_##NAME;                                                 \
-  option_##NAME option_##NAME##_none();                            \
-  option_##NAME option_##NAME##_some(TYPE val);                    \
-  TYPE option_##NAME##_unwrap(const option_##NAME* option);        \
-  option_##NAME option_##NAME##_copy(const option_##NAME* other);  \
-  void option_##NAME##_assign(option_##NAME* destiny, const option_##NAME* source); \
-  int option_##NAME##_compare(option_##NAME a, option_##NAME b);   \
+#define DECLARE_OPTION(TYPE, NAME)                                \
+  typedef struct {                                                \
+    uint8_t is_some;                                              \
+    TYPE* value;                                                  \
+  } option_##NAME;                                                \
+  option_##NAME option_##NAME##_none();                           \
+  option_##NAME option_##NAME##_some(TYPE val);                   \
+  TYPE option_##NAME##_unwrap(const option_##NAME* option);       \
+  option_##NAME option_##NAME##_copy(const option_##NAME* other); \
+  void option_##NAME##_assign(option_##NAME* destiny,             \
+                              const option_##NAME* source);       \
+  int option_##NAME##_compare(option_##NAME a, option_##NAME b);  \
   char* option_##NAME##_to_string(option_##NAME option);
 #define IMPLEMENT_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)  \
   option_##NAME option_##NAME##_none() {                           \
@@ -322,9 +346,12 @@ char* txy_join(const char* delimiter, array_string args);
     option_##NAME option;                                          \
     option.is_some = 1;                                            \
     option.value = (TYPE*)malloc(sizeof(TYPE));                    \
-    if (option.value == NULL) exit(1);                             \
+    if (option.value == NULL) goto error;                          \
     *option.value = val;                                           \
     return option;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };                                                               \
                                                                    \
   int option_##NAME##_is_some(const option_##NAME* option) {       \
@@ -355,11 +382,14 @@ char* txy_join(const char* delimiter, array_string args);
   copy_some:                                                       \
     option.is_some = 1;                                            \
     option.value = (TYPE*)malloc(sizeof(TYPE));                    \
-    if (option.value == NULL) exit(1);                             \
+    if (option.value == NULL) goto error;                          \
     *option.value = *other->value;                                 \
                                                                    \
   copy_end:                                                        \
     return option;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };                                                               \
                                                                    \
   void option_##NAME##_assign(option_##NAME* destiny,              \
@@ -376,14 +406,18 @@ char* txy_join(const char* delimiter, array_string args);
                                                                    \
   assign_some:                                                     \
     destiny->is_some = 1;                                          \
-    if (destiny->value == NULL) {                                  \
-      destiny->value = (TYPE*)malloc(sizeof(TYPE));                \
-      if (destiny->value == NULL) exit(1);                         \
-    }                                                              \
+    if (destiny->value != NULL) goto assign_value;                 \
+    destiny->value = (TYPE*)malloc(sizeof(TYPE));                  \
+    if (destiny->value == NULL) goto error;                        \
+                                                                   \
+  assign_value:                                                    \
     *destiny->value = *source->value;                              \
                                                                    \
   assign_end:                                                      \
     return;                                                        \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };                                                               \
                                                                    \
   int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
@@ -410,7 +444,7 @@ char* txy_join(const char* delimiter, array_string args);
     if (option.is_some) goto format_some;                          \
     length = snprintf(NULL, 0, "none");                            \
     result = (char*)malloc(length + 1);                            \
-    if (result == NULL) exit(1);                                   \
+    if (result == NULL) goto error;                                \
     snprintf(result, length + 1, "none");                          \
     return result;                                                 \
                                                                    \
@@ -418,9 +452,12 @@ char* txy_join(const char* delimiter, array_string args);
     string = TO_STRING(*option.value);                             \
     length = snprintf(NULL, 0, "some(%s)", string);                \
     result = (char*)malloc(length + 1);                            \
-    if (result == NULL) exit(1);                                   \
+    if (result == NULL) goto error;                                \
     snprintf(result, length + 1, "some(%s)", string);              \
     return result;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };
 typedef enum {
   TYPE_UNBOUNDED,
@@ -560,10 +597,13 @@ typedef struct {
     length = snprintf(NULL, 0, "%s%s, %s%s", left_brack, left_value,           \
                       right_value, right_brack);                               \
     result = (char*)malloc(length + 1);                                        \
-    if (result == NULL) exit(1);                                               \
+    if (result == NULL) goto error;                                            \
     snprintf(result, length + 1, "%s%s, %s%s", left_brack, left_value,         \
              right_value, right_brack);                                        \
     return result;                                                             \
+                                                                               \
+  error:                                                                       \
+    exit(1);                                                                   \
   };
 DEFINE_RANGE(uint8_t, byte, TYPE_BYTE, v_byte, EQUALS, byte_to_string)
 DEFINE_RANGE(int32_t, int, TYPE_INT, v_int, EQUALS, int_to_string)
@@ -640,7 +680,7 @@ cont_skip_calculate:
   goto consume_tag_calculate;
 alloc_result:
   result = (char*)malloc(total_length + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   i = 0;
   arg_index = 0;
   total_length = 0;
@@ -680,6 +720,8 @@ cont_skip_copy:
 finish:
   result[total_length] = '\0';
   return result;
+error:
+  exit(1);
 };
 char* txy_join(const char* delimiter, array_string args) {
   size_t delimiter_length = 0;
@@ -711,7 +753,7 @@ next_str:
 calculate_append_string_length_end:
   total_length = total_length + (args.capacity - 1) * delimiter_length;
   result = (char*)malloc(total_length + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   i = 0;
 copy_loop:
   if (i == args.capacity) goto copy_end;
@@ -740,9 +782,119 @@ copy_end:
   return result;
 empty:
   result = (char*)malloc(1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   result[0] = '\0';
   return result;
+error:
+  exit(1);
+};
+int32_t txy_key_pressed() {
+#ifdef _WIN32
+  return (int32_t)_getch();
+#else
+  struct termios old_terminal, new_terminal;
+  int32_t caractere;
+  tcgetattr(STDIN_FILENO, &old_terminal);
+  new_terminal = old_terminal;
+  new_terminal.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
+  caractere = (int32_t)getchar();
+  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
+  return caractere;
+#endif
+};
+char* txy_input_line() {
+  size_t capacity = 64;
+  size_t length = 0;
+  char* buffer = (char*)malloc(capacity);
+  int current_char;
+loop_start:
+  current_char = getchar();
+  if (current_char == EOF) goto loop_end;
+  if (current_char == '\n') goto loop_end;
+  buffer[length] = (char)current_char;
+  length = length + 1;
+  if (length < capacity) goto loop_start;
+  capacity = capacity * 2;
+  buffer = (char*)realloc(buffer, capacity);
+  goto loop_start;
+loop_end:
+  buffer[length] = '\0';
+  return buffer;
+};
+int32_t txy_pow_int(int32_t base, int32_t exp) {
+  int32_t result = 1;
+  int32_t current_exp = exp;
+loop_start:
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
+loop_end:
+  return result;
+};
+int64_t txy_pow_long(int64_t base, int64_t exp) {
+  int64_t result = 1;
+  int64_t current_exp = exp;
+loop_start:
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
+loop_end:
+  return result;
+};
+double txy_exp_double(double x) {
+  double sum = 1.0;
+  double term = 1.0;
+  int32_t i = 1;
+loop_start:
+  if (i > 30) goto loop_end;
+  term = term * x / i;
+  sum = sum + term;
+  i = i + 1;
+  goto loop_start;
+loop_end:
+  return sum;
+};
+double txy_ln_double(double x) {
+  if (x <= 0.0) return 0.0;
+  double y = (x - 1.0) / (x + 1.0);
+  double y_squared = y * y;
+  double sum = 0.0;
+  double term = y;
+  int32_t n = 0;
+loop_start:
+  if (n > 30) goto loop_end;
+  sum = sum + term / (2 * n + 1);
+  term = term * y_squared;
+  n = n + 1;
+  goto loop_start;
+loop_end:
+  return 2.0 * sum;
+};
+double txy_pow_double(double base, double exp) {
+  if (base == 0.0) return 0.0;
+  if (exp == 0.0) return 1.0;
+  if (exp == (int64_t)exp) {
+    double result = 1.0;
+    int64_t current_exp = (int64_t)exp;
+    if (current_exp < 0) {
+      base = 1.0 / base;
+      current_exp = -current_exp;
+    }
+loop_start:
+    if (current_exp <= 0) goto loop_end;
+    result = result * base;
+    current_exp = current_exp - 1;
+    goto loop_start;
+loop_end:
+    return result;
+  }
+  return txy_exp_double(exp * txy_ln_double(base));
+};
+float txy_pow_float(float base, float exp) {
+  return (float)txy_pow_double((double)base, (double)exp);
 };
 void txy_print(const char* input) { printf("%s", input); };
 void txy_println(const char* input) { printf("%s\n", input); };
@@ -868,113 +1020,5 @@ found:
   return 1;
 not_found:
   return 0;
-};
-int32_t txy_key_pressed() {
-#ifdef _WIN32
-  return (int32_t)_getch();
-#else
-  struct termios old_terminal, new_terminal;
-  int32_t caractere;
-  tcgetattr(STDIN_FILENO, &old_terminal);
-  new_terminal = old_terminal;
-  new_terminal.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
-  caractere = (int32_t)getchar();
-  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
-  return caractere;
-#endif
-};
-char* txy_input_line() {
-  size_t capacity = 64;
-  size_t length = 0;
-  char* buffer = (char*)malloc(capacity);
-  int current_char;
-loop_start:
-  current_char = getchar();
-  if (current_char == EOF) goto loop_end;
-  if (current_char == '\n') goto loop_end;
-  buffer[length] = (char)current_char;
-  length = length + 1;
-  if (length < capacity) goto loop_start;
-  capacity = capacity * 2;
-  buffer = (char*)realloc(buffer, capacity);
-  goto loop_start;
-loop_end:
-  buffer[length] = '\0';
-  return buffer;
-};
-int32_t txy_pow_int(int32_t base, int32_t exp) {
-  int32_t result = 1;
-  int32_t current_exp = exp;
-loop_start:
-  if (current_exp <= 0) goto loop_end;
-  result = result * base;
-  current_exp = current_exp - 1;
-  goto loop_start;
-loop_end:
-  return result;
-};
-int64_t txy_pow_long(int64_t base, int64_t exp) {
-  int64_t result = 1;
-  int64_t current_exp = exp;
-loop_start:
-  if (current_exp <= 0) goto loop_end;
-  result = result * base;
-  current_exp = current_exp - 1;
-  goto loop_start;
-loop_end:
-  return result;
-};
-double txy_exp_double(double x) {
-  double sum = 1.0;
-  double term = 1.0;
-  int32_t i = 1;
-loop_start:
-  if (i > 30) goto loop_end;
-  term = term * x / i;
-  sum = sum + term;
-  i = i + 1;
-  goto loop_start;
-loop_end:
-  return sum;
-};
-double txy_ln_double(double x) {
-  if (x <= 0.0) return 0.0;
-  double y = (x - 1.0) / (x + 1.0);
-  double y_squared = y * y;
-  double sum = 0.0;
-  double term = y;
-  int32_t n = 0;
-loop_start:
-  if (n > 30) goto loop_end;
-  sum = sum + term / (2 * n + 1);
-  term = term * y_squared;
-  n = n + 1;
-  goto loop_start;
-loop_end:
-  return 2.0 * sum;
-};
-double txy_pow_double(double base, double exp) {
-  if (base == 0.0) return 0.0;
-  if (exp == 0.0) return 1.0;
-  if (exp == (int64_t)exp) {
-    double result = 1.0;
-    int64_t current_exp = (int64_t)exp;
-    if (current_exp < 0) {
-      base = 1.0 / base;
-      current_exp = -current_exp;
-    }
-loop_start:
-    if (current_exp <= 0) goto loop_end;
-    result = result * base;
-    current_exp = current_exp - 1;
-    goto loop_start;
-loop_end:
-    return result;
-  }
-  return txy_exp_double(exp * txy_ln_double(base));
-};
-float txy_pow_float(float base, float exp) {
-  return (float)txy_pow_double((double)base, (double)exp);
 };
 )__texty_std__";

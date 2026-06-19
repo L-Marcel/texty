@@ -1,0 +1,14 @@
+# Crie um programa que, dados três valores numéricos x, y e c, 
+# onde x e y são números racionais e c é um número inteiro, 
+# previamente armazenados no códigofonte, avalia a expressão 
+# x^2 − y + c e imprime seu resultado na tela.
+
+proc main()
+    var y: double = 21f;
+    var x: double = 18f;
+    var c: int = 5;
+    # TODO - Falta adicionar o + c, antes precisamos de 
+    # conversão de tipos
+    var result: double = (x ** x) - y;
+    println(format("%double", result));
+endproc;
