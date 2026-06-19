@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 
+#include <fstream>
+
 #include "../embedded_standard.hpp"
 
 stringstream generated_implementations;

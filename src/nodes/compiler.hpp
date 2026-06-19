@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #include "context.hpp"
 
 extern stringstream generated_implementations;
