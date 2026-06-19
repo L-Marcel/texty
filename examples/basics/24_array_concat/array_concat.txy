@@ -1,0 +1,6 @@
+proc main()
+    var first: int[] = new int[]{1};
+    var second: int[] = new int[]{4, 1, 6};
+    var result: int[] = first << second;
+    println(string(result));
+endproc;

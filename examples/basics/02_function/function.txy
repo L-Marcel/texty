@@ -1,11 +1,11 @@
-# Swap the position of two elements in the array 
+# Troca a posição de dois elementos no array 
 proc swap(array: int[]; a, b: int)
 	var temp: int = array[a];
   array[a] = array[b];
   array[b] = temp;
 endproc;
 
-# Take the pivot
+# Pega o pivô
 fn partition(array: int[]; min, max: int): int
 	var i: int = (min - 1);
 	for (j in min..max)
@@ -18,7 +18,7 @@ fn partition(array: int[]; min, max: int): int
 	return pivot;
 endfn;
 
-# Perform quick sorting
+# Executa o quick sort
 proc quick_sort(array: int[]; min, max: int)
 	if min < max then 
 		var pivot: int = partition(array, min, max);

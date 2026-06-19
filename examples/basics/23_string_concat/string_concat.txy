@@ -1,0 +1,6 @@
+proc main()
+  var first: string = "hello ";
+  var second: string = "world";
+  var result: string = first << second;
+  println(result);
+endproc;

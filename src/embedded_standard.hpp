@@ -152,6 +152,7 @@ error:
 #define EQUALS(a, b) ((a) == (b))
 typedef struct array_string_s array_string;
 char* txy_join(const char* delimiter, array_string args);
+char* txy_string_concat(const char* a, const char* b);
 #define DECLARE_ARRAY(TYPE, NAME)                                           \
   typedef struct array_##NAME##_s {                                         \
     TYPE* pointer;                                                          \
@@ -165,8 +166,8 @@ char* txy_join(const char* delimiter, array_string args);
   int array_##NAME##_compare(array_##NAME a, array_##NAME b);               \
   int array_##NAME##_contains(const array_##NAME* array, TYPE value);       \
   TYPE array_##NAME##_get(const array_##NAME* array, size_t index);         \
-  array_##NAME array_##NAME##_concat(const array_##NAME* a,                 \
-                                     const array_##NAME* b);                \
+  array_##NAME array_##NAME##_concat(array_##NAME a,                        \
+                                     array_##NAME b);                       \
   char* array_##NAME##_to_string(array_##NAME array);
 #define IMPLEMENT_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)            \
   array_##NAME array_##NAME##_create(size_t capacity, TYPE fill) {          \
@@ -267,18 +268,18 @@ char* txy_join(const char* delimiter, array_string args);
     return array->pointer[index];                                           \
   };                                                                        \
                                                                             \
-  array_##NAME array_##NAME##_concat(const array_##NAME* a,                 \
-                                     const array_##NAME* b) {               \
+  array_##NAME array_##NAME##_concat(array_##NAME a,                        \
+                                     array_##NAME b) {                      \
     array_##NAME result;                                                    \
-    result.capacity = a->capacity + b->capacity;                            \
+    result.capacity = a.capacity + b.capacity;                              \
     result.pointer = (TYPE*)malloc(result.capacity * sizeof(TYPE));         \
                                                                             \
     size_t i = 0;                                                           \
     size_t destiny_index = 0;                                               \
                                                                             \
   concat_a_start:                                                           \
-    if (i == a->capacity) goto concat_a_end;                                \
-    result.pointer[destiny_index] = a->pointer[i];                          \
+    if (i == a.capacity) goto concat_a_end;                                 \
+    result.pointer[destiny_index] = a.pointer[i];                           \
     i = i + 1;                                                              \
     destiny_index = destiny_index + 1;                                      \
     goto concat_a_start;                                                    \
@@ -287,8 +288,8 @@ char* txy_join(const char* delimiter, array_string args);
     i = 0;                                                                  \
                                                                             \
   concat_b_start:                                                           \
-    if (i == b->capacity) goto concat_b_end;                                \
-    result.pointer[destiny_index] = b->pointer[i];                          \
+    if (i == b.capacity) goto concat_b_end;                                 \
+    result.pointer[destiny_index] = b.pointer[i];                           \
     i = i + 1;                                                              \
     destiny_index = destiny_index + 1;                                      \
     goto concat_b_start;                                                    \
@@ -822,6 +823,41 @@ loop_end:
   buffer[length] = '\0';
   return buffer;
 };
+char* txy_string_concat(const char* a, const char* b) {
+  size_t len_a = 0;
+  size_t len_b = 0;
+  size_t i = 0;
+  size_t destiny_index = 0;
+  char* result;
+calc_a:
+  if (a[len_a] == '\0') goto calc_b;
+  len_a = len_a + 1;
+  goto calc_a;
+calc_b:
+  if (b[len_b] == '\0') goto alloc;
+  len_b = len_b + 1;
+  goto calc_b;
+alloc:
+  result = (char*)malloc(len_a + len_b + 1);
+  if (result == NULL) exit(1);
+copy_a:
+  if (i == len_a) goto end_a;
+  result[destiny_index] = a[i];
+  i = i + 1;
+  destiny_index = destiny_index + 1;
+  goto copy_a;
+end_a:
+  i = 0;
+copy_b:
+  if (i == len_b) goto end_b;
+  result[destiny_index] = b[i];
+  i = i + 1;
+  destiny_index = destiny_index + 1;
+  goto copy_b;
+end_b:
+  result[destiny_index] = '\0';
+  return result;
+}
 int32_t txy_pow_int(int32_t base, int32_t exp) {
   int32_t result = 1;
   int32_t current_exp = exp;
