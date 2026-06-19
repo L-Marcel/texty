@@ -112,6 +112,8 @@ void References::initialize() {
                                true);
   this->add_function_reference("txy_key_pressed", Type(TypeKind::INT), {},
                                false, false);
+  this->add_function_reference("txy_input_line", Type(TypeKind::STRING), {},
+                               false, false);
 
   Type types[] = {Type(TypeKind::BOOL),   Type(TypeKind::CHAR),
                   Type(TypeKind::BYTE),   Type(TypeKind::INT),
