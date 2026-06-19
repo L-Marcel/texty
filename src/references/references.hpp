@@ -16,6 +16,12 @@ struct References {
   size_t get_scope_level();
   string get_scope_ident();
 
+  vector<pair<string, string>> loop_labels;
+  void push_loop(string continue_label, string break_label);
+  void pop_loop();
+  string get_continue_label();
+  string get_break_label();
+
   Type get_suprogram_return_type();
   void set_subprogram_return_type(Type type);
   void clear_subprogram_return_type();

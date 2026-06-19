@@ -38,6 +38,20 @@ string References::get_scope_ident() {
     return repeat("\t", level - 1);
 };
 
+// Laços de repetição
+void References::push_loop(string continue_label, string break_label) {
+  this->loop_labels.push_back({continue_label, break_label});
+};
+void References::pop_loop() { this->loop_labels.pop_back(); };
+string References::get_continue_label() {
+  if (this->loop_labels.empty()) return "";
+  return this->loop_labels.back().first;
+};
+string References::get_break_label() {
+  if (this->loop_labels.empty()) return "";
+  return this->loop_labels.back().second;
+};
+
 // Tipo de retorno
 Type References::get_suprogram_return_type() {
   return this->subprogam_return_type;
@@ -58,12 +72,14 @@ bool References::get_main_is_procedure() { return this->main_is_procedure; };
 // Referências
 static int variable_suffix_counter = 0;
 
-string References::add_variable_reference(string name, Type type, bool is_const, bool generate_suffix) {
+string References::add_variable_reference(string name, Type type, bool is_const,
+                                          bool generate_suffix) {
   string name_suffix = "";
   if (generate_suffix) {
-      name_suffix = "_" + to_string(++variable_suffix_counter);
+    name_suffix = "_" + to_string(++variable_suffix_counter);
   }
-  this->get_scope().insert({name, new VariableReference(type, is_const, name_suffix)});
+  this->get_scope().insert(
+      {name, new VariableReference(type, is_const, name_suffix)});
   return name_suffix;
 };
 void References::add_procedure_reference(string name, vector<Type> params,
@@ -92,7 +108,8 @@ bool References::has_reference(string name, ReferenceType reference_type) {
   return false;
 };
 
-bool References::has_reference_in_current_scope(string name, ReferenceType reference_type) {
+bool References::has_reference_in_current_scope(string name,
+                                                ReferenceType reference_type) {
   if (this->scopes.empty()) return false;
   Scope& scope = this->get_scope();
   Scope::iterator scope_iterator = scope.find(name);

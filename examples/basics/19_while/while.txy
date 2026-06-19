@@ -1,0 +1,7 @@
+proc main()
+  var i: int = 0;
+  while (i < 10)
+    println(format("item: %int", i));
+    i = i + 1;
+  endwhile;
+endproc;

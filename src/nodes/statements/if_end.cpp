@@ -83,7 +83,7 @@ void IfEndNode::compile_chain(ostream& os, const string& end_label) const {
       if (type.kind != TypeKind::OPTION)
         throw error(
             "a estrutura condicional 'if some' espera uma condição do tipo "
-            "(option<unknown>), "
+            "(option<unknown>) "
             "mas recebeu (" +
                 type.to_string() + ")",
             this->line);

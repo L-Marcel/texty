@@ -1,5 +1,7 @@
 #include "continue.hpp"
 
+#include "../../references/references.hpp"
+
 // Debug
 void ContinueNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this, "CONTINUE");
@@ -7,9 +9,15 @@ void ContinueNode::compile_dot(ostream& os) const {
 
 // Código
 void ContinueNode::compile_code(ostream& os) const {
-  // TODO - Break só pode dentro de loop, mesma coisa do break
-  // (não tente)
-  os << "continue";
+  References* references = References::get_instance();
+  string continue_label = references->get_continue_label();
+
+  if (continue_label == "") {
+    throw error("comando 'continue' usado fora de um laço de repetição",
+                this->line);
+  };
+
+  os << "goto " << continue_label << ";";
 };
 
 // Tipagem

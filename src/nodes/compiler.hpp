@@ -1,7 +1,5 @@
 #pragma once
 
-#include <sstream>
-
 #include "context.hpp"
 
 extern stringstream generated_implementations;
@@ -11,6 +9,7 @@ extern stringstream generated_type_implementations;
 struct Compiler {
   static set<string> defined_arrays;
   static set<string> defined_options;
+
   static int label_counter;
   static string get_next_label(const string& prefix);
 
