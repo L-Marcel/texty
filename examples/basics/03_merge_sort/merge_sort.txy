@@ -18,7 +18,6 @@ fn partition(array: int[]; min, max: int): int
 	return pivot;
 endfn;
 
-# Perform quick sorting
 proc quick_sort(array: int[]; min, max: int)
 	if min < max then 
 		var pivot: int = partition(array, min, max);
@@ -33,15 +32,13 @@ fn main(): int
 	var size: int = int(input_line());
 	println("");
 
-	# Build the array
 	var array: int[] = new int[size];
 	for (i in 0..size)
 		print(format(
 			"Digite o valor do %int° elemento: ",
 			i + 1
 		));
-		#array[i] = int(input_line());
-		println("");
+		array[i] = int(input_line());
 	endfor;
 
 	println(format(
