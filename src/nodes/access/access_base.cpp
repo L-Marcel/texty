@@ -1,6 +1,7 @@
 #include "access_base.hpp"
 
 #include "../../references/references.hpp"
+#include "../../references/variables/variable.hpp"
 
 // Debug
 void AccessBaseNode::compile_dot(ostream& os) const {
@@ -23,9 +24,16 @@ void AccessBaseNode::compile_dot(ostream& os) const {
 // Código
 void AccessBaseNode::compile_code(ostream& os) const {
   switch (this->access_type) {
-    case AccessBaseType::ID:
-      os << this->name;
+    case AccessBaseType::ID: {
+      Reference* ref = this->get_reference(this->line);
+      if (ref->reference_type == ReferenceType::VARIABLE) {
+        VariableReference* variable_reference = (VariableReference*)ref;
+        os << this->name << variable_reference->name_suffix;
+      } else {
+        os << this->name;
+      };
       break;
+    }
     case AccessBaseType::SELF:
       os << "this";
       break;

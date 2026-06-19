@@ -38,7 +38,7 @@ void ProcedureNode::compile_code(ostream& os) const {
       references->set_main_is_procedure(true);
       for (size_t i = 0; i < this->params.size(); i++) {
         references->add_variable_reference(this->params[i].first,
-                                           this->params[i].second, false);
+                                           this->params[i].second, false, false);
       };
 
       string ident = references->get_scope_ident();
@@ -55,7 +55,7 @@ void ProcedureNode::compile_code(ostream& os) const {
       references->set_subprogram_return_type(this->get_type());
       for (size_t i = 0; i < this->params.size(); i++) {
         references->add_variable_reference(this->params[i].first,
-                                           this->params[i].second, false);
+                                           this->params[i].second, false, false);
       };
 
       string ident = references->get_scope_ident();

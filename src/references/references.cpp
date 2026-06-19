@@ -44,19 +44,9 @@ Type References::get_suprogram_return_type() {
 };
 void References::set_subprogram_return_type(Type type) {
   this->subprogam_return_type = Type(type);
-  this->declared_variables.clear();
 };
 void References::clear_subprogram_return_type() {
   this->subprogam_return_type = Type(TypeKind::UNKNOWN);
-  this->declared_variables.clear();
-};
-
-bool References::declare_c_variable(string name) {
-  if (this->declared_variables.find(name) != this->declared_variables.end()) {
-    return false;
-  }
-  this->declared_variables.insert(name);
-  return true;
 };
 
 // Caso main seja um procedimento
@@ -66,8 +56,15 @@ void References::set_main_is_procedure(bool main_is_procedure) {
 bool References::get_main_is_procedure() { return this->main_is_procedure; };
 
 // Referências
-void References::add_variable_reference(string name, Type type, bool is_const) {
-  this->get_scope().insert({name, new VariableReference(type, is_const)});
+static int variable_suffix_counter = 0;
+
+string References::add_variable_reference(string name, Type type, bool is_const, bool generate_suffix) {
+  string name_suffix = "";
+  if (generate_suffix) {
+      name_suffix = "_" + to_string(++variable_suffix_counter);
+  }
+  this->get_scope().insert({name, new VariableReference(type, is_const, name_suffix)});
+  return name_suffix;
 };
 void References::add_procedure_reference(string name, vector<Type> params,
                                          bool self, bool implemented) {
@@ -95,16 +92,7 @@ bool References::has_reference(string name, ReferenceType reference_type) {
   return false;
 };
 
-bool References::has_reference_in_current_scope(string name, ReferenceType reference_type) {
-  if (this->scopes.empty()) return false;
-  Scope& scope = this->get_scope();
-  Scope::iterator scope_iterator = scope.find(name);
-  if (scope_iterator != scope.end() &&
-      scope_iterator->second->reference_type == reference_type) {
-    return true;
-  }
-  return false;
-};
+
 
 Reference* References::get_reference(int line, string name) {
   for (reverse_iterator iterator = this->scopes.rbegin();

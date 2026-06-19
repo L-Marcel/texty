@@ -15,24 +15,13 @@ void AttrNode::compile_code(ostream& os) const {
       expression_type.kind == TypeKind::OPTION &&
       expression_type.inner_type->kind == TypeKind::UNKNOWN) {
     this->expression->set_expected_type(this->type);
-    expression_type = this->expression->get_type();
   };
 
-  if (References::get_instance()->has_reference_in_current_scope(
-          this->name, ReferenceType::VARIABLE)) {
-    throw error(
-        "variável '" + this->name.substr(4) + "' já foi declarada neste escopo",
-        this->line);
-  };
+  string name_suffix = References::get_instance()->add_variable_reference(
+      this->name, this->type, false);
 
-  if (References::get_instance()->declare_c_variable(this->name)) {
-    os << this->type.to_production() << " ";
-  };
-
-  os << this->name << " = ";
+  os << this->type.to_production() << " " << this->name << name_suffix << " = ";
   this->expression->compile_code(os);
-  References::get_instance()->add_variable_reference(this->name, this->type,
-                                                     false);
 };
 
 // Tipagem

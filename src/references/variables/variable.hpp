@@ -3,6 +3,7 @@
 
 struct VariableReference : public Reference {
   bool is_const;
+  string name_suffix;
 
-  VariableReference(Type node_type, bool is_const);
+  VariableReference(Type node_type, bool is_const, string name_suffix);
 };
