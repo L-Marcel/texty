@@ -1,0 +1,12 @@
+proc main()
+    # Pode
+    var x: int = 0;
+    if true then
+        var x: float = 0f;
+        var y: int = 1;
+    endif;
+    var y: int = 2;
+
+    # Não pode
+    var y: int = 3;
+endproc;
