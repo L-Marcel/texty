@@ -34,7 +34,7 @@ Type ReturnNode::get_type() const {
     return return_type;
   } else if (this->type == ReturnNodeType::EXPRESSION) {
     throw error("subprograma espera retorno do tipo (" +
-                    return_type.to_string() + "), mas recebeu (" +
+                    return_type.to_string() + ") mas recebeu (" +
                     this->expression->get_type().to_string() + ")",
                 this->line);
   } else {

@@ -1,0 +1,7 @@
+fn test(): int
+  var i: int = 0;
+endfn;
+
+proc main()
+    test();
+endproc;

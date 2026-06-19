@@ -1,0 +1,7 @@
+proc sum(a, b: int)
+    println(string(a + b));
+endproc;
+
+proc main()
+    sum(1, 2.5f);
+endproc;

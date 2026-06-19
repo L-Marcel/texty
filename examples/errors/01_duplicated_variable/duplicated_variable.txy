@@ -6,6 +6,10 @@ proc main()
         var y: int = 1;
     endif;
     var y: int = 2;
+    if true then
+        var x: float = 0f;
+        var y: int = 1;
+    endif;
 
     # Não pode
     var y: int = 3;
