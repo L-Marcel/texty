@@ -5,7 +5,10 @@
 # negativo.
 
 proc main()
-    println("Informe um número (ou aperte enter para encerrar): ");
+    println("=================== PROBLEMA 02 ===================");
+    println("Informe quantos números desejar, aperte enter para encerrar");
+    println("===================================================");
+    print("Próximo número: ");
     var key: int = key_pressed();
     println(format("%int", key));
 endproc;

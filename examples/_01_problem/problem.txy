@@ -4,11 +4,13 @@
 # x^2 − y + c e imprime seu resultado na tela.
 
 proc main()
+    println("=================== PROBLEMA 01 ===================");
     var y: double = 21f;
     var x: double = 18f;
     var c: int = 5;
     # TODO - Falta adicionar o + c, antes precisamos de 
     # conversão de tipos
     var result: double = (x ** x) - y;
-    println(format("%double", result));
+    println(format("Resultado: %double", result));
+    println("===================================================");
 endproc;
