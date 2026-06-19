@@ -3,14 +3,26 @@
 #include "../helpers/string.hpp"
 
 // Singleton
-References::References() {};
+References::References() : subprogam_return_type(Type(TypeKind::UNKNOWN)) {};
 References* References::_instance = nullptr;
 References* References::get_instance() {
   if (References::_instance == nullptr) {
     References::_instance = new References();
   }
-
   return References::_instance;
+};
+
+// Structs
+void References::add_struct_reference(string name,
+                                      vector<pair<string, Type>> attributes) {
+  this->structs[name] = attributes;
+};
+vector<pair<string, Type>> References::get_struct_reference(string name) {
+  if (this->structs.find(name) != this->structs.end()) {
+    return this->structs[name];
+  };
+
+  return {};
 };
 
 // Escopo
@@ -26,9 +38,49 @@ string References::get_scope_ident() {
     return repeat("\t", level - 1);
 };
 
+// Laços de repetição
+void References::push_loop(string continue_label, string break_label) {
+  this->loop_labels.push_back({continue_label, break_label});
+};
+void References::pop_loop() { this->loop_labels.pop_back(); };
+string References::get_continue_label() {
+  if (this->loop_labels.empty()) return "";
+  return this->loop_labels.back().first;
+};
+string References::get_break_label() {
+  if (this->loop_labels.empty()) return "";
+  return this->loop_labels.back().second;
+};
+
+// Tipo de retorno
+Type References::get_suprogram_return_type() {
+  return this->subprogam_return_type;
+};
+void References::set_subprogram_return_type(Type type) {
+  this->subprogam_return_type = Type(type);
+};
+void References::clear_subprogram_return_type() {
+  this->subprogam_return_type = Type(TypeKind::UNKNOWN);
+};
+
+// Caso main seja um procedimento
+void References::set_main_is_procedure(bool main_is_procedure) {
+  this->main_is_procedure = main_is_procedure;
+};
+bool References::get_main_is_procedure() { return this->main_is_procedure; };
+
 // Referências
-void References::add_variable_reference(string name, Type type, bool is_const) {
-  this->get_scope().insert({name, new VariableReference(type, is_const)});
+static int variable_suffix_counter = 0;
+
+string References::add_variable_reference(string name, Type type, bool is_const,
+                                          bool generate_suffix) {
+  string name_suffix = "";
+  if (generate_suffix) {
+    name_suffix = "_" + to_string(++variable_suffix_counter);
+  }
+  this->get_scope().insert(
+      {name, new VariableReference(type, is_const, name_suffix)});
+  return name_suffix;
 };
 void References::add_procedure_reference(string name, vector<Type> params,
                                          bool self, bool implemented) {
@@ -53,6 +105,18 @@ bool References::has_reference(string name, ReferenceType reference_type) {
     }
   }
 
+  return false;
+};
+
+bool References::has_reference_in_current_scope(string name,
+                                                ReferenceType reference_type) {
+  if (this->scopes.empty()) return false;
+  Scope& scope = this->get_scope();
+  Scope::iterator scope_iterator = scope.find(name);
+  if (scope_iterator != scope.end() &&
+      scope_iterator->second->reference_type == reference_type) {
+    return true;
+  }
   return false;
 };
 
@@ -81,5 +145,19 @@ void References::initialize() {
                                true);
   this->add_function_reference("txy_join", Type(TypeKind::STRING), {}, false,
                                true);
+  this->add_function_reference("txy_key_pressed", Type(TypeKind::INT), {},
+                               false, false);
+  this->add_function_reference("txy_input_line", Type(TypeKind::STRING), {},
+                               false, false);
+
+  Type types[] = {Type(TypeKind::BOOL),   Type(TypeKind::CHAR),
+                  Type(TypeKind::BYTE),   Type(TypeKind::INT),
+                  Type(TypeKind::LONG),   Type(TypeKind::FLOAT),
+                  Type(TypeKind::DOUBLE), Type(TypeKind::STRING)};
+
+  for (const Type& to : types) {
+    this->add_function_reference("txy_" + to.get_name(), to, {}, false, true);
+  };
+
   // TODO: Registrar métodos e procedures nativos
 };

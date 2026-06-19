@@ -1,5 +1,6 @@
 #include "main.hpp"
 
+#include "lib/CLI11.hpp"
 #include "lex.yy.h"
 #include "nodes/compiler.hpp"
 #include "syntax.tab.hh"
@@ -72,9 +73,9 @@ int main(int argc, char** argv) {
     return result;
   } catch (const error& e) {
     std::cerr << e.what() << std::endl;
-    return 0;
+    return 1;
   } catch (const std::exception& e) {
     std::cerr << FATAL_LABEL << e.what() << std::endl;
-    return 0;
+    return 1;
   }
 };

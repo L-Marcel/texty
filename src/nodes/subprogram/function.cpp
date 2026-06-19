@@ -20,10 +20,6 @@ void FunctionNode::compile_code(ostream& os) const {
     types.push_back(this->params[i].second);
   };
 
-  // TODO - Verificar os returns: tem que ter um
-  // para cada bifurcação (checar os ifs recursivamente, não é uma recursão
-  // trivial, serio, não tente fazer).
-
   References* references = References::get_instance();
   references->add_function_reference(this->name, this->type, types, this->self,
                                      this->implemented);
@@ -31,14 +27,21 @@ void FunctionNode::compile_code(ostream& os) const {
   if (this->implemented) {
     os << std::endl;
 
+    ReturnCoverage coverage = this->get_return_coverage();
+    if (coverage == ReturnCoverage::PARTIAL)
+      throw error("função sem retorno garantido", this->line);
+    else if (coverage == ReturnCoverage::NONE)
+      throw error("função sem retorno", this->line);
+
     string params = params_to_string(this->params, true);
     os << this->type.to_production() << " " << this->name << "(" << params
        << ") {" << std::endl;
 
     references->push_scope();
+    references->set_subprogram_return_type(this->get_type());
     for (size_t i = 0; i < this->params.size(); i++) {
       references->add_variable_reference(this->params[i].first,
-                                         this->params[i].second, false);
+                                         this->params[i].second, false, false);
     };
 
     string ident = references->get_scope_ident();
@@ -49,6 +52,7 @@ void FunctionNode::compile_code(ostream& os) const {
     };
 
     references->pop_scope();
+    references->clear_subprogram_return_type();
     os << "};" << std::endl;
 
     if (this->name == "txy_main") {

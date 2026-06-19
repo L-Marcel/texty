@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 
+#include "../lib/magic_enum.hpp"
+
 // Debug
 void Node::compile_dot(ostream& os) const {
   if (this->name == "")
@@ -22,6 +24,11 @@ void Node::compile_code(ostream& os) const {
 
 // Tipagem
 Type Node::get_type() const { return Type(TypeKind::UNKNOWN); };
+
+// Cobertura de retorno
+ReturnCoverage Node::get_return_coverage() const {
+  return ReturnCoverage::NONE;
+};
 
 // Construtores
 Node::Node(int line) : children({}), name(""), line(line) {};

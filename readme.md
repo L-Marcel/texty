@@ -40,3 +40,23 @@ dot -Tsvg code.dot -o code.svg
 ```
 
 A imagem se encontrará disponível na raíz do projeto com o nome de [`ast.png`](/ast.png).
+
+## Execução rápida de exemplos
+
+Há uma pasta dedicada só para os exemplos chamada `/examples`.
+
+Para compilar os grupos de teste você pode utilizar os seguintes comandos:
+```cmd
+make examples
+make problems
+make errors
+```
+
+Para rodar um teste específico você pode utilizar os seguintes comandos:
+```cmd
+make run-example 1
+make run-problem 1
+make run-error 1
+```
+
+Você pode substituir o '1' pelo número identificador de qualquer um dos testes.

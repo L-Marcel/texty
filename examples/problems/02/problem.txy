@@ -1,0 +1,15 @@
+# Crie um programa que leia uma quantidade desconhecida 
+# de números e informe quantos deles estão nos seguintes 
+# intervalos fechados: [0, 25], [26, 50], [51, 75] e [76, 100]. 
+# A entrada de dados deve terminar quando for lido um número
+# negativo.
+
+proc main()
+    println("=================== PROBLEMA 02 ===================");
+    println("Informe quantos números desejar, aperte enter para encerrar");
+    println("===================================================");
+    # TODO - Precisamos de um for ou while para continuar
+    print("Próximo número: ");
+    var key: int = key_pressed();
+    println(format("%int", key));
+endproc;

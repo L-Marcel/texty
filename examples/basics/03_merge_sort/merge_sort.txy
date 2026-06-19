@@ -1,11 +1,11 @@
-# Swap the position of two elements in the array 
+# Troca a posição de dois elementos no array 
 proc swap(array: int[]; a, b: int)
 	var temp: int = array[a];
   array[a] = array[b];
   array[b] = temp;
 endproc;
 
-# Take the pivot
+# Pega o pivô
 fn partition(array: int[]; min, max: int): int
 	var i: int = (min - 1);
 	for (j in min..max)
@@ -18,7 +18,6 @@ fn partition(array: int[]; min, max: int): int
 	return pivot;
 endfn;
 
-# Perform quick sorting
 proc quick_sort(array: int[]; min, max: int)
 	if min < max then 
 		var pivot: int = partition(array, min, max);
@@ -28,21 +27,18 @@ proc quick_sort(array: int[]; min, max: int)
 endproc;
 
 fn main(): int
-	# TODO - Está dando segmentation fault
+	# TODO - Espaçamento do GENERATED
 	print("Digite o tamanho do array: ");
-	var size: int = 0;
-	#var size: int = int(input_line());
+	var size: int = int(input_line());
 	println("");
 
-	# Build the array
 	var array: int[] = new int[size];
 	for (i in 0..size)
 		print(format(
 			"Digite o valor do %int° elemento: ",
 			i + 1
 		));
-		#array[i] = int(input_line());
-		println("");
+		array[i] = int(input_line());
 	endfor;
 
 	println(format(

@@ -33,10 +33,18 @@ rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
 SRCS_ALL = $(call rwildcard,src/,*.cpp)
 SRCS = $(filter-out $(PACKER_SRC), $(SRCS_ALL))
-EXAMPLES = $(call rwildcard,examples/,*.txy)
+EXAMPLES = $(call rwildcard,examples/basics/,*.txy)
+PROBLEMS = $(call rwildcard,examples/problems/,*.txy)
+ERRORS = $(call rwildcard,examples/errors/,*.txy)
+
+ifeq ($(firstword $(MAKECMDGOALS)),$(filter $(firstword $(MAKECMDGOALS)),example run-example problem run-problem error run-error))
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(RUN_ARGS):;@:)
+endif
+
 OBJS = $(addprefix $(BUILD_DIR)/, $(SRCS:.cpp=.o) $(BISON_CC:.cc=.o) $(FLEX_C:.c=.o))
 
-.PHONY: build all check clean examples examples-pendrive
+.PHONY: build all check clean examples example run-example examples-pendrive
 
 build: all
 all: $(TARGET)$(TARGET_EXT)
@@ -83,6 +91,10 @@ ifeq ($(OS),Windows_NT)
 	$$failed=0; \
 	foreach ($$file in '$(EXAMPLES)'.Split(' ')) { \
 		if ($$file -eq '') { continue; } \
+		$$name = (Get-Item $$file).Directory.Name; \
+		$$group = (Get-Item $$file).Directory.Parent.Name; \
+		Write-Host ''; \
+		Write-Host \"======== $$group / $$name ========\"; \
 		Write-Host '[ COMPILE ]' $$file; \
 		& .\$(TARGET)$(TARGET_EXT) --file $$file; \
 		if ($$LASTEXITCODE -eq 0) { \
@@ -97,21 +109,241 @@ ifeq ($(OS),Windows_NT)
 else
 	@failed=0; \
 	for file in $(EXAMPLES); do \
+		name=$$(basename "$$(dirname "$$file")"); \
+		group=$$(basename "$$(dirname "$$(dirname "$$file")")"); \
+		echo ""; \
+		echo "======== $$group / $$name ========"; \
 		echo "[ COMPILE ] $$file"; \
 		(./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
 	done; \
 	if [ $$failed -ne 0 ]; then exit 1; fi
 endif
 
-examples-pendrive: build $(EXAMPLES)
+problems: build $(PROBLEMS)
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	$$failed=0; \
+	foreach ($$file in '$(PROBLEMS)'.Split(' ')) { \
+		if ($$file -eq '') { continue; } \
+		$$name = (Get-Item $$file).Directory.Name; \
+		$$group = (Get-Item $$file).Directory.Parent.Name; \
+		Write-Host ''; \
+		Write-Host \"======== $$group / $$name ========\"; \
+		Write-Host '[ COMPILE ]' $$file; \
+		& .\$(TARGET)$(TARGET_EXT) --file $$file; \
+		if ($$LASTEXITCODE -eq 0) { \
+			$$dot = $$file -replace '\.txy$$', '.dot'; \
+			$$svg = $$file -replace '\.txy$$', '.svg'; \
+			dot -Tsvg $$dot -o $$svg; \
+		} else { \
+			$$failed=1; \
+		} \
+	}; \
+	if ($$failed -ne 0) { exit 1; }"
+else
 	@failed=0; \
-	for file in $(EXAMPLES); do \
+	for file in $(PROBLEMS); do \
+		name=$$(basename "$$(dirname "$$file")"); \
+		group=$$(basename "$$(dirname "$$(dirname "$$file")")"); \
+		echo ""; \
+		echo "======== $$group / $$name ========"; \
 		echo "[ COMPILE ] $$file"; \
-		(/lib64/ld-linux-x86-64.so.2 ./$(TARGET) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
+		(./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
 	done; \
 	if [ $$failed -ne 0 ]; then exit 1; fi
+endif
+
+errors: build $(ERRORS)
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	$$failed=0; \
+	foreach ($$file in '$(ERRORS)'.Split(' ')) { \
+		if ($$file -eq '') { continue; } \
+		$$name = (Get-Item $$file).Directory.Name; \
+		$$group = (Get-Item $$file).Directory.Parent.Name; \
+		Write-Host ''; \
+		Write-Host \"======== $$group / $$name ========\"; \
+		Write-Host '[ COMPILE ]' $$file; \
+		& .\$(TARGET)$(TARGET_EXT) --file $$file; \
+		if ($$LASTEXITCODE -eq 0) { \
+			$$dot = $$file -replace '\.txy$$', '.dot'; \
+			$$svg = $$file -replace '\.txy$$', '.svg'; \
+			dot -Tsvg $$dot -o $$svg; \
+		} else { \
+			$$failed=1; \
+		} \
+	}; \
+	if ($$failed -ne 0) { exit 1; }"
+else
+	@failed=0; \
+	for file in $(ERRORS); do \
+		name=$$(basename "$$(dirname "$$file")"); \
+		group=$$(basename "$$(dirname "$$(dirname "$$file")")"); \
+		echo ""; \
+		echo "======== $$group / $$name ========"; \
+		echo "[ COMPILE ] $$file"; \
+		(./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg") || failed=1; \
+	done; \
+	if [ $$failed -ne 0 ]; then exit 1; fi
+endif
+
+example: build
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$padded = '{0:d2}' -f [int]'$(RUN_ARGS)'; \
+	\$$file = Get-ChildItem -Path examples\basics -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match \"\\\$$\$$padded\" } | Select-Object -First 1; \
+	if (!\$$file) { Write-Host '[ ERRO ] Código fonte não encontrado'; exit 1; } \
+	Write-Host '[ COMPILE ]' \$$file.FullName; \
+	& .\$(TARGET)$(TARGET_EXT) --file \$$file.FullName; \
+	if (\$$LASTEXITCODE -eq 0) { \
+		\$$dot = \$$file.FullName -replace '\.txy$$$$', '.dot'; \
+		\$$svg = \$$file.FullName -replace '\.txy$$$$', '.svg'; \
+		dot -Tsvg \$$dot -o \$$svg; \
+	}"
+else
+	@padded=$$(printf "%02d" $(RUN_ARGS)); \
+	file=$$(find examples/basics -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
+	if [ -z "$$file" ]; then \
+		echo "[ ERRO ] Código fonte nao encontrado"; exit 1; \
+	fi; \
+	echo "[ COMPILE ] $$file"; \
+	./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg"
+endif
+
+run-example: example
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$padded = '{0:d2}' -f [int]'$(RUN_ARGS)'; \
+	\$$file = Get-ChildItem -Path examples\basics -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match \"\\\$$\$$padded\" } | Select-Object -First 1; \
+	\$$c_file = \$$file.FullName -replace '\.txy$$$$', '.c'; \
+	\$$bin_file = \$$file.FullName -replace '\.txy$$$$', '.exe'; \
+	if (Test-Path \$$c_file) { \
+		Write-Host '[ RUN ] $$c_file'; \
+		gcc \$$c_file -o \$$bin_file; \
+		if (\$$LASTEXITCODE -eq 0) { & \$$bin_file } \
+	} else { \
+		Write-Host '[ ERRO ] Binário não encontrado'; \
+	}"
+else
+	@padded=$$(printf "%02d" $(RUN_ARGS)); \
+	file=$$(find examples/basics -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
+	c_file="$${file%.txy}.c"; \
+	bin_file="$${file%.txy}.out"; \
+	if [ -f "$$c_file" ]; then \
+		echo "[ RUN ] $$c_file"; \
+		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
+	else \
+		echo "[ ERRO ] Binário não encontrado"; \
+	fi
+endif
+
+problem: build
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$padded = '{0:d2}' -f [int]'$(RUN_ARGS)'; \
+	\$$file = Get-ChildItem -Path examples\problems -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match \"\\\$$\$$padded\" } | Select-Object -First 1; \
+	if (!\$$file) { Write-Host '[ ERRO ] Código fonte não encontrado'; exit 1; } \
+	Write-Host '[ COMPILE ]' \$$file.FullName; \
+	& .\$(TARGET)$(TARGET_EXT) --file \$$file.FullName; \
+	if (\$$LASTEXITCODE -eq 0) { \
+		\$$dot = \$$file.FullName -replace '\.txy$$$$', '.dot'; \
+		\$$svg = \$$file.FullName -replace '\.txy$$$$', '.svg'; \
+		dot -Tsvg \$$dot -o \$$svg; \
+	}"
+else
+	@padded=$$(printf "%02d" $(RUN_ARGS)); \
+	file=$$(find examples/problems -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
+	if [ -z "$$file" ]; then \
+		echo "[ ERRO ] Código fonte nao encontrado"; exit 1; \
+	fi; \
+	echo "[ COMPILE ] $$file"; \
+	./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg"
+endif
+
+run-problem: problem
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$padded = '{0:d2}' -f [int]'$(RUN_ARGS)'; \
+	\$$file = Get-ChildItem -Path examples\problems -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match \"\\\$$\$$padded\" } | Select-Object -First 1; \
+	\$$c_file = \$$file.FullName -replace '\.txy$$$$', '.c'; \
+	\$$bin_file = \$$file.FullName -replace '\.txy$$$$', '.exe'; \
+	if (Test-Path \$$c_file) { \
+		Write-Host '[ RUN ] $$c_file'; \
+		gcc \$$c_file -o \$$bin_file; \
+		if (\$$LASTEXITCODE -eq 0) { & \$$bin_file } \
+	} else { \
+		Write-Host '[ ERRO ] Binário não encontrado'; \
+	}"
+else
+	@padded=$$(printf "%02d" $(RUN_ARGS)); \
+	file=$$(find examples/problems -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
+	c_file="$${file%.txy}.c"; \
+	bin_file="$${file%.txy}.out"; \
+	if [ -f "$$c_file" ]; then \
+		echo "[ RUN ] $$c_file"; \
+		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
+	else \
+		echo "[ ERRO ] Binário não encontrado"; \
+	fi
+endif
+
+error: build
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$padded = '{0:d2}' -f [int]'$(RUN_ARGS)'; \
+	\$$file = Get-ChildItem -Path examples\errors -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match \"\\\$$\$$padded\" } | Select-Object -First 1; \
+	if (!\$$file) { Write-Host '[ ERRO ] Código fonte não encontrado'; exit 1; } \
+	Write-Host '[ COMPILE ]' \$$file.FullName; \
+	& .\$(TARGET)$(TARGET_EXT) --file \$$file.FullName; \
+	if (\$$LASTEXITCODE -eq 0) { \
+		\$$dot = \$$file.FullName -replace '\.txy$$$$', '.dot'; \
+		\$$svg = \$$file.FullName -replace '\.txy$$$$', '.svg'; \
+		dot -Tsvg \$$dot -o \$$svg; \
+	}"
+else
+	@padded=$$(printf "%02d" $(RUN_ARGS)); \
+	file=$$(find examples/errors -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
+	if [ -z "$$file" ]; then \
+		echo "[ ERRO ] Código fonte nao encontrado"; exit 1; \
+	fi; \
+	echo "[ COMPILE ] $$file"; \
+	./$(TARGET)$(TARGET_EXT) --file "$$file" && dot -Tsvg "$${file%.txy}.dot" -o "$${file%.txy}.svg"
+endif
+
+run-error: error
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "\
+	\$$padded = '{0:d2}' -f [int]'$(RUN_ARGS)'; \
+	\$$file = Get-ChildItem -Path examples\errors -Filter '*.txy' -Recurse | Where-Object { \$$_.FullName -match \"\\\$$\$$padded\" } | Select-Object -First 1; \
+	\$$c_file = \$$file.FullName -replace '\.txy$$$$', '.c'; \
+	\$$bin_file = \$$file.FullName -replace '\.txy$$$$', '.exe'; \
+	if (Test-Path \$$c_file) { \
+		Write-Host '[ RUN ] $$c_file'; \
+		gcc \$$c_file -o \$$bin_file; \
+		if (\$$LASTEXITCODE -eq 0) { & \$$bin_file } \
+	} else { \
+		Write-Host '[ ERRO ] Binário não encontrado'; \
+	}"
+else
+	@padded=$$(printf "%02d" $(RUN_ARGS)); \
+	file=$$(find examples/errors -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
+	c_file="$${file%.txy}.c"; \
+	bin_file="$${file%.txy}.out"; \
+	if [ -f "$$c_file" ]; then \
+		echo "[ RUN ] $$c_file"; \
+		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
+	else \
+		echo "[ ERRO ] Binário não encontrado"; \
+	fi
+endif
+
 
 clean:
+ifeq ($(OS),Windows_NT)
+	@powershell -ExecutionPolicy Bypass -Command "Get-ChildItem -Path examples -File -Recurse | Where-Object { $$_.Extension -ne '.txy' } | Remove-Item -Force"
+else
+	find examples -type f ! -name "*.txy" -delete
+endif
 	@$(call RD,$(BUILD_DIR))
 	@$(call RD,$(GRAMMAR_BUILD_DIR))
 	@$(call RM_FILE,$(TARGET)$(TARGET_EXT))

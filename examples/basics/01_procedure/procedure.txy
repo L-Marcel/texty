@@ -1,4 +1,4 @@
-# Swap the position of two elements in the array 
+# Troca a posição de dois elementos no array 
 proc swap(array: int[]; a, b: int)
   var temp: int = array[a];
   array[a] = array[b];

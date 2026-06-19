@@ -1,5 +1,7 @@
 #include "string.hpp"
 
+#include "../../../lib/magic_enum.hpp"
+
 // Debug
 void StringNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
@@ -9,7 +11,7 @@ void StringNode::compile_dot(ostream& os) const {
 
 // Código
 void StringNode::compile_code(ostream& os) const {
-  os << "::std::string(\"" << this->value << "\")";
+  os << "(char*)(\"" << this->value << "\")";
 };
 
 // Tipagem

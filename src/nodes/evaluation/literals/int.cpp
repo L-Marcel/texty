@@ -1,5 +1,7 @@
 #include "int.hpp"
 
+#include "../../../lib/magic_enum.hpp"
+
 // Debug
 void IntNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
@@ -9,7 +11,7 @@ void IntNode::compile_dot(ostream& os) const {
 
 // Código
 void IntNode::compile_code(ostream& os) const {
-  os << "static_cast<::std::int32_t>(" << this->value << ")";
+  os << "((int32_t)" << this->value << ")";
 };
 
 // Tipagem

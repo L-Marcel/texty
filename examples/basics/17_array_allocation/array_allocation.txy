@@ -1,0 +1,7 @@
+proc test(array: int[][][]; value: option<option<option<string>[]>>)
+  array = new int[][][1];
+  value = some(some(new option<string>[1]));
+endproc;
+
+proc main()
+endproc;

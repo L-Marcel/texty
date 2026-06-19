@@ -2,6 +2,12 @@ struct Address
   street, city, country: string;
 endstruct;
 
+struct Room
+  owner: User;
+endstruct;
+
+# TODO - Erro semântico nos casos que não permite
+
 struct User
   id: long;
   age: int;
@@ -12,8 +18,14 @@ struct User
   gender: char;
   version: int;
   permission: byte;
-  supervisor: option<User>;
   address: Address;
+  # brother: User; # Não pode ser permitido na linguagem
+  # room: Room; # Também não é permitido por que Room -> User
+  monther_address: option<Address>;
+  monther: pointer<User>;
+  supervisor: option<pointer<User>>;
+  father: option<User>;
+  children: User[];
 endstruct;
 
 fn main(): int

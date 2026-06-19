@@ -1,0 +1,15 @@
+proc main()
+  for (var j: int = 0; j < 5; j++)
+    println(format("default item: %int", j));
+  endfor;
+
+  var array: int[] = new int[5];
+  array[2] = 4;
+  for (i in array)
+    println(format("array item: %int", i));
+  endfor;
+
+  for (k in 0..5)
+    println(format("range item: %int", k));
+  endfor;
+endproc;

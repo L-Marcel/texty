@@ -1,5 +1,7 @@
 #include "array_allocation.hpp"
 
+#include "../../../lib/magic_enum.hpp"
+
 // Debug
 void ArrayAllocationNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(
@@ -21,34 +23,36 @@ void ArrayAllocationNode::compile_dot(ostream& os) const {
 
 // Código
 void ArrayAllocationNode::compile_code(ostream& os) const {
-  os << "::txy::array<";
-  os << this->inner_type.to_production();
-  os << ">(";
+  Type type = this->get_type();
+  type.get_name();
+
+  string name = "array_" + this->inner_type.get_name();
+  string type_production = this->inner_type.to_production();
+
   if (this->children.empty() &&
       this->size_type == ArrayAllocationSizeType::UNDEFINED) {
-    os << ")";
+    os << name << "_create(0, " << this->inner_type.get_default_value() << ")";
   } else if (this->children.empty()) {
+    os << name << "_create(";
     this->size_expression->compile_code(os);
-    os << ")";
+    os << ", " << this->inner_type.get_default_value() << ")";
   } else if (this->size_type == ArrayAllocationSizeType::UNDEFINED) {
-    os << "{";
+    os << name << "_from_values((" << type_production << "[]){";
     for (size_t i = 0; i < this->children.size(); i++) {
       this->children[i]->compile_code(os);
-      if (i != this->children.size() - 1) {
-        os << ", ";
-      };
+      if (i != this->children.size() - 1) os << ", ";
     };
-    os << "})";
+    os << "}, " << this->children.size() << ", " << this->children.size()
+       << ", " << this->inner_type.get_default_value() << ")";
   } else {
-    this->size_expression->compile_code(os);
-    os << ", {";
+    os << name << "_from_values((" << type_production << "[]){";
     for (size_t i = 0; i < this->children.size(); i++) {
       this->children[i]->compile_code(os);
-      if (i != this->children.size() - 1) {
-        os << ", ";
-      };
+      if (i != this->children.size() - 1) os << ", ";
     };
-    os << "})";
+    os << "}, " << this->children.size() << ", ";
+    this->size_expression->compile_code(os);
+    os << ", " << this->inner_type.get_default_value() << ")";
   };
 };
 

@@ -1,0 +1,9 @@
+fn min(a, b: int): int
+    if a < b then return a;
+    else return b;
+    endif;
+endfn;
+
+proc main()
+    println(string(min(1, 2.5f)));
+endproc;

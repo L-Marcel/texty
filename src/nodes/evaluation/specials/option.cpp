@@ -7,19 +7,20 @@ void OptionNode::compile_dot(ostream& os) const {
 
 // Código
 void OptionNode::compile_code(ostream& os) const {
+  Type type = this->get_type();
+  if (type.inner_type->kind == TypeKind::UNKNOWN) {
+    throw error("tipo desconhecido para option", this->line);
+  };
+
+  type.get_name();
+  string name = "option_" + type.inner_type->get_name();
+
   if (this->type == OptionNodeType::DEFINED) {
-    os << "::txy::option(";
+    os << name << "_some(";
     this->value->compile_code(os);
     os << ")";
   } else {
-    os << "::txy::option<";
-    Type type = this->get_type();
-    if (type.inner_type->kind == TypeKind::UNKNOWN) {
-      throw error("tipo desconhecido para option", this->line);
-    };
-
-    os << type.inner_type->to_production();
-    os << ">()";
+    os << name << "_none()";
   };
 };
 

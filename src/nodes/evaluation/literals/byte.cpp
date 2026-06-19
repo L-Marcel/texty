@@ -1,5 +1,7 @@
 #include "byte.hpp"
 
+#include "../../../lib/magic_enum.hpp"
+
 // Debug
 void ByteNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(os, this,
@@ -9,7 +11,7 @@ void ByteNode::compile_dot(ostream& os) const {
 
 // Código
 void ByteNode::compile_code(ostream& os) const {
-  os << "static_cast<::std::uint8_t>(" << static_cast<unsigned int>(this->value)
+  os << "((uint8_t)" << static_cast<unsigned int>(this->value)
      << "U)";
 };
 

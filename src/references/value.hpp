@@ -14,4 +14,6 @@ struct Type {
   bool operator<(const Type& a) const;
   string to_string() const;
   string to_production() const;
+  string get_name() const;
+  string get_default_value() const;
 };

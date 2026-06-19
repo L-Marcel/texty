@@ -9,6 +9,7 @@ struct Node {
   virtual void compile_dot(ostream& os) const;
   virtual void compile_code(ostream& os) const;
   virtual Type get_type() const;
+  virtual ReturnCoverage get_return_coverage() const;
   virtual ~Node() = default;
 
   Node(int line);
