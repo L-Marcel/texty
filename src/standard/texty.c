@@ -1,5 +1,5 @@
 #include "core.h"
-#include "to_string.c"
+#include "functions/to_string.c"
 
 #define EQUALS(a, b) ((a) == (b))
 

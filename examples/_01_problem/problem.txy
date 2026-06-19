@@ -8,9 +8,12 @@ proc main()
     var y: double = 21f;
     var x: double = 18f;
     var c: int = 5;
-    # TODO - Falta adicionar o + c, antes precisamos de 
-    # conversão de tipos
-    var result: double = (x ** x) - y;
+    var result: double = (x ** x) - y + double(c);
+    # TODO - Negação e soma não estão surtindo efeito
+    println(format("(%double ^ %double): %double", x, x, (x ** x)));
+    println(format("(%double ^ %double) - %double: %double", x, x, y, (x ** x) - y));
+    println(format("(%double ^ %double) - %double + %int: %double", x, x, y, c, result));
+    println("===================================================")
     println(format("Resultado: %double", result));
     println("===================================================");
 endproc;

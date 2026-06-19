@@ -20,91 +20,105 @@ void SubprogramCallNode::compile_dot(ostream& os) const {
 
 // Código
 void SubprogramCallNode::compile_code(ostream& os) const {
-  if (this->access->access_type == AccessType::BASE) {
-    AccessBaseNode* base = this->access->base;
-    if (base->access_type == AccessBaseType::ID && base->name == "txy_format") {
-      string signature = "";
-      for (size_t i = 1; i < this->params.size(); i++) {
-        signature += this->params[i]->get_type().get_name();
-        if (i != this->params.size() - 1) signature += "_";
-      };
-
-      string name = "__txy_fmt_" + signature;
-      static set<string> generated_formats;
-      if (generated_formats.find(signature) == generated_formats.end()) {
-        generated_formats.insert(signature);
-
-        generated_implementations << "char* " << name << "(const char* pattern";
+  if (this->call_type == CallType::CONVERTION) {
+    Type source_type = this->params[0]->get_type();
+    if (this->target_type.kind == TypeKind::STRING) {
+      os << source_type.get_name() << "_to_string(";
+    } else {
+      os << "txy_" << source_type.get_name() << "_to_"
+         << this->target_type.get_name() << "(";
+    };
+    this->params[0]->compile_code(os);
+    os << ")";
+  } else {
+    if (this->access->access_type == AccessType::BASE) {
+      AccessBaseNode* base = this->access->base;
+      if (base->access_type == AccessBaseType::ID &&
+          base->name == "txy_format") {
+        string signature = "";
         for (size_t i = 1; i < this->params.size(); i++) {
-          generated_implementations
-              << ", " << this->params[i]->get_type().to_production() << " arg"
-              << i;
+          signature += this->params[i]->get_type().get_name();
+          if (i != this->params.size() - 1) signature += "_";
         };
-        generated_implementations << ") {" << std::endl;
 
-        size_t count = this->params.size() - 1;
-        generated_implementations
-            << "  array_string array = array_string_create(" << count
-            << ", \"\");" << std::endl;
+        string name = "__txy_fmt_" + signature;
+        static set<string> generated_formats;
+        if (generated_formats.find(signature) == generated_formats.end()) {
+          generated_formats.insert(signature);
 
-        for (size_t i = 1; i < this->params.size(); i++) {
-          Type type = this->params[i]->get_type();
-          string to_string_function = type.get_name() + "_to_string";
+          generated_implementations << "char* " << name
+                                    << "(const char* pattern";
+          for (size_t i = 1; i < this->params.size(); i++) {
+            generated_implementations
+                << ", " << this->params[i]->get_type().to_production() << " arg"
+                << i;
+          };
+          generated_implementations << ") {" << std::endl;
 
-          if (type.kind == TypeKind::POINTER) {
-            to_string_function = "pointer_to_string";
+          size_t count = this->params.size() - 1;
+          generated_implementations
+              << "  array_string array = array_string_create(" << count
+              << ", \"\");" << std::endl;
+
+          for (size_t i = 1; i < this->params.size(); i++) {
+            Type type = this->params[i]->get_type();
+            string to_string_function = type.get_name() + "_to_string";
+
+            if (type.kind == TypeKind::POINTER) {
+              to_string_function = "pointer_to_string";
+            };
+
+            generated_implementations << "  array.pointer[" << (i - 1)
+                                      << "] = " << to_string_function << "(arg"
+                                      << i << ");" << std::endl;
           };
 
-          generated_implementations << "  array.pointer[" << (i - 1)
-                                    << "] = " << to_string_function << "(arg"
-                                    << i << ");" << std::endl;
+          generated_implementations << "  return txy_format(pattern, array);"
+                                    << std::endl;
+          generated_implementations << "};" << std::endl << std::endl;
         };
 
-        generated_implementations << "  return txy_format(pattern, array);"
-                                  << std::endl;
-        generated_implementations << "};" << std::endl << std::endl;
-      };
+        os << name << "(";
+        for (size_t i = 0; i < this->params.size(); i++) {
+          this->params[i]->compile_code(os);
+          if (i != this->params.size() - 1) os << ", ";
+        }
+        os << ")";
 
-      os << name << "(";
-      for (size_t i = 0; i < this->params.size(); i++) {
-        this->params[i]->compile_code(os);
-        if (i != this->params.size() - 1) os << ", ";
-      }
-      os << ")";
+        return;
+      } else if (base->access_type == AccessBaseType::ID &&
+                 base->name == "txy_join" && this->params.size() > 1) {
+        os << "txy_join(";
+        this->params[0]->compile_code(os);
+        os << ", array_string_from_values(";
+        os << "(char*[]){";
 
-      return;
-    } else if (base->access_type == AccessBaseType::ID &&
-               base->name == "txy_join" && this->params.size() > 1) {
-      os << "txy_join(";
-      this->params[0]->compile_code(os);
-      os << ", array_string_from_values(";
-      os << "(char*[]){";
-
-      for (size_t i = 1; i < this->params.size(); i++) {
-        this->params[i]->compile_code(os);
-        if (i != this->params.size() - 1) {
-          os << ", ";
+        for (size_t i = 1; i < this->params.size(); i++) {
+          this->params[i]->compile_code(os);
+          if (i != this->params.size() - 1) {
+            os << ", ";
+          };
         };
+
+        os << "}, ";
+        os << (this->params.size() - 1) << ", ";
+        os << (this->params.size() - 1) << ", ";
+        os << "\"\"";
+        os << "))";
+        return;
       };
-
-      os << "}, ";
-      os << (this->params.size() - 1) << ", ";
-      os << (this->params.size() - 1) << ", ";
-      os << "\"\"";
-      os << "))";
-      return;
     };
-  };
 
-  this->access->compile_code(os);
-  os << "(";
-  for (size_t i = 0; i < this->params.size(); i++) {
-    this->params[i]->compile_code(os);
-    if (i != this->params.size() - 1) {
-      os << ", ";
+    this->access->compile_code(os);
+    os << "(";
+    for (size_t i = 0; i < this->params.size(); i++) {
+      this->params[i]->compile_code(os);
+      if (i != this->params.size() - 1) {
+        os << ", ";
+      };
     };
+    os << ")";
   };
-  os << ")";
 };
 
 // Tipagem
@@ -212,7 +226,6 @@ Type SubprogramCallNode::get_type() const {
                   this->line);
     };
   } else {
-    // TODO
     return this->target_type;
   };
 };

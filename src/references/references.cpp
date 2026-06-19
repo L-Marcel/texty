@@ -112,5 +112,15 @@ void References::initialize() {
                                true);
   this->add_function_reference("txy_key_pressed", Type(TypeKind::INT), {},
                                false, false);
+
+  Type types[] = {Type(TypeKind::BOOL),   Type(TypeKind::CHAR),
+                  Type(TypeKind::BYTE),   Type(TypeKind::INT),
+                  Type(TypeKind::LONG),   Type(TypeKind::FLOAT),
+                  Type(TypeKind::DOUBLE), Type(TypeKind::STRING)};
+
+  for (const Type& to : types) {
+    this->add_function_reference("txy_" + to.get_name(), to, {}, false, true);
+  };
+
   // TODO: Registrar métodos e procedures nativos
 };

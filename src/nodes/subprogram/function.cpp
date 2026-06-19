@@ -20,10 +20,6 @@ void FunctionNode::compile_code(ostream& os) const {
     types.push_back(this->params[i].second);
   };
 
-  // TODO - Verificar os returns: tem que ter um
-  // para cada bifurcação (checar os ifs recursivamente, não é uma recursão
-  // trivial, serio, não tente fazer).
-
   References* references = References::get_instance();
   references->add_function_reference(this->name, this->type, types, this->self,
                                      this->implemented);
@@ -32,11 +28,11 @@ void FunctionNode::compile_code(ostream& os) const {
     os << std::endl;
 
     ReturnCoverage coverage = this->get_return_coverage();
-    if(coverage == ReturnCoverage::PARTIAL)
+    if (coverage == ReturnCoverage::PARTIAL)
       throw error("função sem retorno garantido");
-    else if(coverage == ReturnCoverage::NONE)
+    else if (coverage == ReturnCoverage::NONE)
       throw error("função sem retorno");
-    
+
     string params = params_to_string(this->params, true);
     os << this->type.to_production() << " " << this->name << "(" << params
        << ") {" << std::endl;
