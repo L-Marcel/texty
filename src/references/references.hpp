@@ -27,6 +27,7 @@ struct References {
   bool get_main_is_procedure();
 
   bool has_reference(string name, ReferenceType reference_type);
+  bool has_reference_in_current_scope(string name, ReferenceType reference_type);
   Reference* get_reference(int line, string name);
   void add_variable_reference(string name, Type type, bool is_const);
   void add_procedure_reference(string name, vector<Type> params, bool self,

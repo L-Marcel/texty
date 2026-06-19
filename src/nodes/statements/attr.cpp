@@ -18,6 +18,13 @@ void AttrNode::compile_code(ostream& os) const {
     expression_type = this->expression->get_type();
   };
 
+  if (References::get_instance()->has_reference_in_current_scope(
+          this->name, ReferenceType::VARIABLE)) {
+    throw error(
+        "variável '" + this->name.substr(4) + "' já foi declarada neste escopo",
+        this->line);
+  };
+
   if (References::get_instance()->declare_c_variable(this->name)) {
     os << this->type.to_production() << " ";
   };

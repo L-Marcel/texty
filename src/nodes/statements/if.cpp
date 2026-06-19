@@ -46,11 +46,11 @@ void IfNode::compile_code(ostream& os) const {
       this->expression->compile_code(os);
       os << ") goto " << body_label << ";" << std::endl;
       os << "goto " << next_label << ";" << std::endl;
-      
+
       references->push_scope();
       string ident = references->get_scope_ident();
-      
-      os << body_label << ":" << std::endl;
+
+      os << body_label << ":;" << std::endl;
       for (size_t i = 0; i < this->children.size(); i++) {
         os << ident;
         this->children[i]->compile_code(os);
@@ -58,10 +58,10 @@ void IfNode::compile_code(ostream& os) const {
       };
 
       os << ident << "goto " << end_label << ";" << std::endl;
-      
+
       references->pop_scope();
-      
-      os << next_label << ":" << std::endl;
+
+      os << next_label << ":;" << std::endl;
       this->next->compile_chain(os, end_label);
       os << end_label << ":";
       break;
@@ -83,18 +83,28 @@ void IfNode::compile_code(ostream& os) const {
       this->expression->compile_code(os);
       os << ";" << std::endl;
 
-      os << "if (" << temp_opt << ".is_some) goto " << body_label << ";" << std::endl;
+      os << "if (" << temp_opt << ".is_some) goto " << body_label << ";"
+         << std::endl;
       os << "goto " << next_label << ";" << std::endl;
-      
+
       references->push_scope();
       string ident = references->get_scope_ident();
 
-      os << body_label << ":" << std::endl;
+      os << body_label << ":;" << std::endl;
       os << ident;
+
+      if (references->has_reference_in_current_scope(this->variable_id,
+                                                     ReferenceType::VARIABLE)) {
+        throw error("variável '" + this->variable_id.substr(4) +
+                        "' já foi declarada neste escopo",
+                    this->line);
+      };
+
       if (references->declare_c_variable(this->variable_id)) {
         os << type.inner_type->to_production() << " ";
       }
-      os << this->variable_id << " = " << option_name << "_unwrap(&" << temp_opt << ");" << std::endl;
+      os << this->variable_id << " = " << option_name << "_unwrap(&" << temp_opt
+         << ");" << std::endl;
 
       references->add_variable_reference(this->variable_id, *type.inner_type,
                                          true);
@@ -105,10 +115,10 @@ void IfNode::compile_code(ostream& os) const {
       };
 
       os << ident << "goto " << end_label << ";" << std::endl;
-      
+
       references->pop_scope();
-      
-      os << next_label << ":" << std::endl;
+
+      os << next_label << ":;" << std::endl;
       this->next->compile_chain(os, end_label);
       os << end_label << ":";
       break;
@@ -129,7 +139,7 @@ ReturnCoverage IfNode::get_return_coverage() const {
       block_coverage = ReturnCoverage::GUARANTEED;
 
       if (i + 1 < this->children.size()) {
-        throw error("código inalcançável detectado após instrução de retorno", 
+        throw error("código inalcançável detectado após instrução de retorno",
                     this->children[i + 1]->line);
       };
 
@@ -139,11 +149,14 @@ ReturnCoverage IfNode::get_return_coverage() const {
     };
   };
 
-  ReturnCoverage next_coverage = this->next ? this->next->get_return_coverage() : ReturnCoverage::NONE;
+  ReturnCoverage next_coverage =
+      this->next ? this->next->get_return_coverage() : ReturnCoverage::NONE;
 
-  if (block_coverage == ReturnCoverage::GUARANTEED && next_coverage == ReturnCoverage::GUARANTEED) {
+  if (block_coverage == ReturnCoverage::GUARANTEED &&
+      next_coverage == ReturnCoverage::GUARANTEED) {
     return ReturnCoverage::GUARANTEED;
-  } else if (block_coverage != ReturnCoverage::NONE || next_coverage != ReturnCoverage::NONE) {
+  } else if (block_coverage != ReturnCoverage::NONE ||
+             next_coverage != ReturnCoverage::NONE) {
     return ReturnCoverage::PARTIAL;
   };
 
