@@ -13,12 +13,14 @@ char* txy_join(const char* delimiter, array_string args);
   } array_##NAME;                                                           \
   array_##NAME array_##NAME##_create(size_t capacity, TYPE fill);           \
   array_##NAME array_##NAME##_empty();                                      \
-  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, size_t capacity, TYPE fill); \
+  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, \
+                                          size_t capacity, TYPE fill);      \
   void array_##NAME##_free(array_##NAME* array);                            \
   int array_##NAME##_compare(array_##NAME a, array_##NAME b);               \
   int array_##NAME##_contains(const array_##NAME* array, TYPE value);       \
   TYPE array_##NAME##_get(const array_##NAME* array, size_t index);         \
-  array_##NAME array_##NAME##_concat(const array_##NAME* a, const array_##NAME* b); \
+  array_##NAME array_##NAME##_concat(const array_##NAME* a,                 \
+                                     const array_##NAME* b);                \
   char* array_##NAME##_to_string(array_##NAME array);
 
 #define IMPLEMENT_ARRAY(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)            \
@@ -168,22 +170,26 @@ char* txy_join(const char* delimiter, array_string args);
     inner_content = txy_join(delimiter, elements);                          \
     final_length = snprintf(NULL, 0, "[%s]", inner_content);                \
     result = (char*)malloc(final_length + 1);                               \
-    if (result == NULL) exit(1);                                            \
+    if (result == NULL) goto error;                                         \
     snprintf(result, final_length + 1, "[%s]", inner_content);              \
     return result;                                                          \
+                                                                            \
+  error:                                                                    \
+    exit(1);                                                                \
   };
 
-#define DECLARE_OPTION(TYPE, NAME)                                 \
-  typedef struct {                                                 \
-    uint8_t is_some;                                               \
-    TYPE* value;                                                   \
-  } option_##NAME;                                                 \
-  option_##NAME option_##NAME##_none();                            \
-  option_##NAME option_##NAME##_some(TYPE val);                    \
-  TYPE option_##NAME##_unwrap(const option_##NAME* option);        \
-  option_##NAME option_##NAME##_copy(const option_##NAME* other);  \
-  void option_##NAME##_assign(option_##NAME* destiny, const option_##NAME* source); \
-  int option_##NAME##_compare(option_##NAME a, option_##NAME b);   \
+#define DECLARE_OPTION(TYPE, NAME)                                \
+  typedef struct {                                                \
+    uint8_t is_some;                                              \
+    TYPE* value;                                                  \
+  } option_##NAME;                                                \
+  option_##NAME option_##NAME##_none();                           \
+  option_##NAME option_##NAME##_some(TYPE val);                   \
+  TYPE option_##NAME##_unwrap(const option_##NAME* option);       \
+  option_##NAME option_##NAME##_copy(const option_##NAME* other); \
+  void option_##NAME##_assign(option_##NAME* destiny,             \
+                              const option_##NAME* source);       \
+  int option_##NAME##_compare(option_##NAME a, option_##NAME b);  \
   char* option_##NAME##_to_string(option_##NAME option);
 
 #define IMPLEMENT_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)  \
@@ -197,9 +203,12 @@ char* txy_join(const char* delimiter, array_string args);
     option_##NAME option;                                          \
     option.is_some = 1;                                            \
     option.value = (TYPE*)malloc(sizeof(TYPE));                    \
-    if (option.value == NULL) exit(1);                             \
+    if (option.value == NULL) goto error;                          \
     *option.value = val;                                           \
     return option;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };                                                               \
                                                                    \
   int option_##NAME##_is_some(const option_##NAME* option) {       \
@@ -230,11 +239,14 @@ char* txy_join(const char* delimiter, array_string args);
   copy_some:                                                       \
     option.is_some = 1;                                            \
     option.value = (TYPE*)malloc(sizeof(TYPE));                    \
-    if (option.value == NULL) exit(1);                             \
+    if (option.value == NULL) goto error;                          \
     *option.value = *other->value;                                 \
                                                                    \
   copy_end:                                                        \
     return option;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };                                                               \
                                                                    \
   void option_##NAME##_assign(option_##NAME* destiny,              \
@@ -251,14 +263,18 @@ char* txy_join(const char* delimiter, array_string args);
                                                                    \
   assign_some:                                                     \
     destiny->is_some = 1;                                          \
-    if (destiny->value == NULL) {                                  \
-      destiny->value = (TYPE*)malloc(sizeof(TYPE));                \
-      if (destiny->value == NULL) exit(1);                         \
-    }                                                              \
+    if (destiny->value != NULL) goto assign_value;                 \
+    destiny->value = (TYPE*)malloc(sizeof(TYPE));                  \
+    if (destiny->value == NULL) goto error;                        \
+                                                                   \
+  assign_value:                                                    \
     *destiny->value = *source->value;                              \
                                                                    \
   assign_end:                                                      \
     return;                                                        \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };                                                               \
                                                                    \
   int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
@@ -285,7 +301,7 @@ char* txy_join(const char* delimiter, array_string args);
     if (option.is_some) goto format_some;                          \
     length = snprintf(NULL, 0, "none");                            \
     result = (char*)malloc(length + 1);                            \
-    if (result == NULL) exit(1);                                   \
+    if (result == NULL) goto error;                                \
     snprintf(result, length + 1, "none");                          \
     return result;                                                 \
                                                                    \
@@ -293,9 +309,12 @@ char* txy_join(const char* delimiter, array_string args);
     string = TO_STRING(*option.value);                             \
     length = snprintf(NULL, 0, "some(%s)", string);                \
     result = (char*)malloc(length + 1);                            \
-    if (result == NULL) exit(1);                                   \
+    if (result == NULL) goto error;                                \
     snprintf(result, length + 1, "some(%s)", string);              \
     return result;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
   };
 
 typedef enum {
@@ -438,10 +457,13 @@ typedef struct {
     length = snprintf(NULL, 0, "%s%s, %s%s", left_brack, left_value,           \
                       right_value, right_brack);                               \
     result = (char*)malloc(length + 1);                                        \
-    if (result == NULL) exit(1);                                               \
+    if (result == NULL) goto error;                                            \
     snprintf(result, length + 1, "%s%s, %s%s", left_brack, left_value,         \
              right_value, right_brack);                                        \
     return result;                                                             \
+                                                                               \
+  error:                                                                       \
+    exit(1);                                                                   \
   };
 
 DEFINE_RANGE(uint8_t, byte, TYPE_BYTE, v_byte, EQUALS, byte_to_string)
@@ -532,7 +554,7 @@ cont_skip_calculate:
 
 alloc_result:
   result = (char*)malloc(total_length + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   i = 0;
   arg_index = 0;
   total_length = 0;
@@ -580,6 +602,9 @@ cont_skip_copy:
 finish:
   result[total_length] = '\0';
   return result;
+
+error:
+  exit(1);
 };
 
 char* txy_join(const char* delimiter, array_string args) {
@@ -620,7 +645,7 @@ calculate_append_string_length_end:
   total_length = total_length + (args.capacity - 1) * delimiter_length;
 
   result = (char*)malloc(total_length + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   i = 0;
 
 copy_loop:
@@ -656,7 +681,10 @@ copy_end:
 
 empty:
   result = (char*)malloc(1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   result[0] = '\0';
   return result;
+
+error:
+  exit(1);
 };

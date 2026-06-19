@@ -24,10 +24,13 @@ has_decimal:
 format_step:
   len = snprintf(NULL, 0, "%0*.*f", total_width, (int)right, value);
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   snprintf(result, len + 1, "%0*.*f", total_width, (int)right, value);
   return result;
+
+error:
+  exit(1);
 };
 
 char* txy_double_decimals(double value, int64_t left, int64_t right) {
@@ -53,10 +56,13 @@ has_decimal:
 format_step:
   len = snprintf(NULL, 0, "%0*.*lf", total_width, (int)right, value);
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   snprintf(result, len + 1, "%0*.*lf", total_width, (int)right, value);
   return result;
+
+error:
+  exit(1);
 };
 
 char* float_to_string(float value) { return txy_float_decimals(value, 0, 6); };
@@ -68,37 +74,49 @@ char* double_to_string(double value) {
 char* int_to_string(int32_t value) {
   int len = snprintf(NULL, 0, "%d", value);
   char* result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   snprintf(result, len + 1, "%d", value);
   return result;
+
+error:
+  exit(1);
 };
 
 char* long_to_string(int64_t value) {
   int len = snprintf(NULL, 0, "%lld", (long long)value);
   char* result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   snprintf(result, len + 1, "%lld", (long long)value);
   return result;
+
+error:
+  exit(1);
 };
 
 char* byte_to_string(uint8_t value) {
   int len = snprintf(NULL, 0, "%u", (unsigned int)value);
   char* result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   snprintf(result, len + 1, "%u", (unsigned int)value);
   return result;
+
+error:
+  exit(1);
 };
 
 char* char_to_string(char value) {
   char* result = (char*)malloc(2);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   result[0] = value;
   result[1] = '\0';
   return result;
+
+error:
+  exit(1);
 };
 
 char* string_to_string(const char* value) {
@@ -113,7 +131,7 @@ calculate_length:
 
 alloc_string:
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
 copy_string:
   if (i == len) goto end_string;
@@ -124,6 +142,9 @@ copy_string:
 end_string:
   result[len] = '\0';
   return result;
+
+error:
+  exit(1);
 };
 
 char* bool_to_string(uint8_t value) {
@@ -140,10 +161,13 @@ set_true:
 alloc_bool:
   len = snprintf(NULL, 0, "%s", string_value);
   result = (char*)malloc(len + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 
   snprintf(result, len + 1, "%s", string_value);
   return result;
+
+error:
+  exit(1);
 };
 
 char* pointer_to_string(void* pointer) {
@@ -152,7 +176,10 @@ char* pointer_to_string(void* pointer) {
 
   length = snprintf(NULL, 0, "%p", pointer);
   result = (char*)malloc(length + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
   snprintf(result, length + 1, "%p", pointer);
   return result;
+
+error:
+  exit(1);
 };
