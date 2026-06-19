@@ -20,6 +20,9 @@ struct References {
   void set_subprogram_return_type(Type type);
   void clear_subprogram_return_type();
 
+  set<string> declared_variables;
+  bool declare_c_variable(string name);
+
   void set_main_is_procedure(bool main_is_procedure);
   bool get_main_is_procedure();
 

@@ -11,6 +11,9 @@ extern stringstream generated_type_implementations;
 struct Compiler {
   static set<string> defined_arrays;
   static set<string> defined_options;
+  static int label_counter;
+  static string get_next_label(const string& prefix);
+
   static void register_array(Type inner_type);
   static void register_option(Type inner_type);
 

@@ -18,7 +18,11 @@ void AttrNode::compile_code(ostream& os) const {
     expression_type = this->expression->get_type();
   };
 
-  os << this->type.to_production() << " " << this->name << " = ";
+  if (References::get_instance()->declare_c_variable(this->name)) {
+    os << this->type.to_production() << " ";
+  };
+
+  os << this->name << " = ";
   this->expression->compile_code(os);
   References::get_instance()->add_variable_reference(this->name, this->type,
                                                      false);

@@ -11,6 +11,12 @@ set<string> Compiler::defined_arrays = {"string", "char", "bool",  "byte",
                                         "int",    "long", "float", "double"};
 set<string> Compiler::defined_options = {"string", "char", "bool",  "byte",
                                          "int",    "long", "float", "double"};
+int Compiler::label_counter = 0;
+
+// Labels
+string Compiler::get_next_label(const string& prefix) {
+  return prefix + "_" + to_string(label_counter++);
+};
 
 // Registro de tipos
 void Compiler::register_array(Type inner_type) {

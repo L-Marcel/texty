@@ -138,11 +138,11 @@ void BinaryOperationNode::compile_code(ostream& os) const {
           os << "((uint8_t)1)";
         } else {
           this->left->set_expected_type(type);
-          os << "option_" << type.inner_type->get_name() << "_is_some(&(";
+          os << "(";
           this->left->compile_code(os);
-          os << ")) == option_" << type.inner_type->get_name() << "_is_some(&(";
+          os << ").is_some == (";
           this->right->compile_code(os);
-          os << "))";
+          os << ").is_some";
         };
       } else if (type.kind == TypeKind::STRING) {
         os << "txy_string_contains(";

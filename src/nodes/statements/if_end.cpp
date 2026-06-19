@@ -1,6 +1,7 @@
 #include "if_end.hpp"
 
 #include "../../references/references.hpp"
+#include "../compiler.hpp"
 
 // Debug
 void IfEndNode::compile_dot(ostream& os) const {
@@ -35,8 +36,13 @@ void IfEndNode::compile_dot(ostream& os) const {
 };
 
 // Código
-void IfEndNode::compile_code(ostream& os) const {
+// Código
+void IfEndNode::compile_code(ostream& os) const {}
+
+void IfEndNode::compile_chain(ostream& os, const string& end_label) const {
   References* references = References::get_instance();
+  string body_label = Compiler::get_next_label("if_body");
+  string next_label = Compiler::get_next_label("if_next");
 
   switch (this->type) {
     case IfEndType::EXPRESSION: {
@@ -50,20 +56,26 @@ void IfEndNode::compile_code(ostream& os) const {
 
       os << "if (";
       this->expression->compile_code(os);
-      os << ") {" << std::endl;
+      os << ") goto " << body_label << ";" << std::endl;
+      os << "goto " << next_label << ";" << std::endl;
+      
       references->push_scope();
-
       string ident = references->get_scope_ident();
+      
+      os << body_label << ":" << std::endl;
       for (size_t i = 0; i < this->children.size(); i++) {
         os << ident;
         this->children[i]->compile_code(os);
         os << ";" << std::endl;
       };
 
+      os << ident << "goto " << end_label << ";" << std::endl;
+      
       references->pop_scope();
       ident = references->get_scope_ident();
-      os << ident << "}";
-      this->next->compile_code(os);
+
+      os << next_label << ":" << std::endl;
+      this->next->compile_chain(os, end_label);
       break;
     }
     case IfEndType::UNWRAP: {
@@ -76,18 +88,25 @@ void IfEndNode::compile_code(ostream& os) const {
                 type.to_string() + ")",
             this->line);
 
-      os << "if (";
-      this->expression->compile_code(os);
-      os << ".is_some()";
-      os << ") {" << std::endl;
-      references->push_scope();
+      string option_name = "option_" + type.inner_type->get_name();
+      string temp_opt = Compiler::get_next_label("txy_opt");
 
-      string ident = references->get_scope_ident();
-      os << ident;
-      os << type.inner_type->to_production() << " ";
-      os << this->variable_id << " = ";
+      os << option_name << " " << temp_opt << " = ";
       this->expression->compile_code(os);
-      os << ".unwrap();" << std::endl;
+      os << ";" << std::endl;
+
+      os << "if (" << temp_opt << ".is_some) goto " << body_label << ";" << std::endl;
+      os << "goto " << next_label << ";" << std::endl;
+      
+      references->push_scope();
+      string ident = references->get_scope_ident();
+
+      os << body_label << ":" << std::endl;
+      os << ident;
+      if (references->declare_c_variable(this->variable_id)) {
+        os << type.inner_type->to_production() << " ";
+      }
+      os << this->variable_id << " = " << option_name << "_unwrap(&" << temp_opt << ");" << std::endl;
 
       references->add_variable_reference(this->variable_id, *type.inner_type,
                                          true);
@@ -97,26 +116,28 @@ void IfEndNode::compile_code(ostream& os) const {
         os << ";" << std::endl;
       };
 
+      os << ident << "goto " << end_label << ";" << std::endl;
+      
       references->pop_scope();
-      ident = references->get_scope_ident();
-      os << ident << "}";
-      this->next->compile_code(os);
+
+      os << next_label << ":" << std::endl;
+      this->next->compile_chain(os, end_label);
       break;
     }
     case IfEndType::ELSE: {
-      os << " else {" << std::endl;
       references->push_scope();
-
       string ident = references->get_scope_ident();
+
       for (size_t i = 0; i < this->children.size(); i++) {
         os << ident;
         this->children[i]->compile_code(os);
         os << ";" << std::endl;
       };
 
+      os << ident << "goto " << end_label << ";" << std::endl;
+      
       references->pop_scope();
       ident = references->get_scope_ident();
-      os << ident << "}";
       break;
     }
     default:

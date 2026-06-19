@@ -44,9 +44,19 @@ Type References::get_suprogram_return_type() {
 };
 void References::set_subprogram_return_type(Type type) {
   this->subprogam_return_type = Type(type);
+  this->declared_variables.clear();
 };
 void References::clear_subprogram_return_type() {
   this->subprogam_return_type = Type(TypeKind::UNKNOWN);
+  this->declared_variables.clear();
+};
+
+bool References::declare_c_variable(string name) {
+  if (this->declared_variables.find(name) != this->declared_variables.end()) {
+    return false;
+  }
+  this->declared_variables.insert(name);
+  return true;
 };
 
 // Caso main seja um procedimento
