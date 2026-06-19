@@ -1,5 +1,7 @@
 #include "array_allocation.hpp"
 
+#include "../../../lib/magic_enum.hpp"
+
 // Debug
 void ArrayAllocationNode::compile_dot(ostream& os) const {
   Compiler::add_dot_node(

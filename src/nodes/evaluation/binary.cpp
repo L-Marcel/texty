@@ -1,5 +1,6 @@
 #include "binary.hpp"
 
+#include "../../lib/magic_enum.hpp"
 #include "../../operations/binary/binary.hpp"
 #include "specials/option.hpp"
 

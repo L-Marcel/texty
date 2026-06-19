@@ -1,5 +1,6 @@
 #include "main.hpp"
 
+#include "lib/CLI11.hpp"
 #include "lex.yy.h"
 #include "nodes/compiler.hpp"
 #include "syntax.tab.hh"
