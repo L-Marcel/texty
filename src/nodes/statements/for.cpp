@@ -142,7 +142,7 @@ void ForNode::compile_code(ostream& os) const {
          << std::endl;
       os << ident_outer << "goto " << start_label << ";" << std::endl;
 
-      os << end_label << ":;";
+      os << end_label << ":";
       break;
     };
     case ForType::THREE_EXPRESSION: {
@@ -192,7 +192,7 @@ void ForNode::compile_code(ostream& os) const {
 
       references->pop_scope();
 
-      os << end_label << ":;";
+      os << end_label << ":";
       break;
     };
   };

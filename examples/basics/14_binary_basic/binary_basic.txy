@@ -10,15 +10,15 @@ proc main()
   if soma > 10 || subtracao < 10 then
     if multiplicacao >= 50 && divisao <= 2 then
       if modulo != 0 then
-        println("Matematica e Relacionais OK");
+        println("Sucesso");
       endif;
     endif;
   endif;
 
-  var frac_base: double = 4.0d;
-  var frac_exp: double = 0.5d;
-  var frac_result: double = frac_base ** frac_exp;
+  var base: double = 4.0d;
+  var exp: double = 0.5d;
+  var result: double = base ** exp;
 
-  println("Resultado fracionario (4.0 ** 0.5 = 2.0): ");
-  println(format("%double", frac_result));
+  print("Resultado de (4.0 ** 0.5 = 2.0): ");
+  println(format("%double", result));
 endproc;

@@ -5,6 +5,6 @@ proc main()
   var lista3: int[] = lista1 << lista2;
   
   if 3 in lista3 then
-    println("Operacao IN funcionando!");
+    println("Sucesso");
   endif;
 endproc;

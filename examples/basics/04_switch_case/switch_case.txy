@@ -1,7 +1,13 @@
-fn test(): int
-  var i: int = 0;
-  switch i
-    case 0: println("Zero!");
-    default: println("Diferente de zero!");
-  endswitch;
-endfn;
+proc main()
+  for (i in 0..8)
+    switch i
+      case 0: 
+        println("Zero!");
+        break;
+      case 1, 2, 3:
+        println("Um, dois ou tres!");
+      default: 
+        println("Diferente de zero, um, dois e tres!");
+    endswitch;
+  endfor;
+endproc;
