@@ -131,11 +131,32 @@ void BinaryOperationNode::compile_code(ostream& os) const {
         this->left->compile_code(os);
         os << ")";
       } else if (type.kind == TypeKind::RANGE) {
+        string type_enum;
+        switch (type.inner_type->kind) {
+          case TypeKind::BYTE: type_enum = "TYPE_BYTE"; break;
+          case TypeKind::INT: type_enum = "TYPE_INT"; break;
+          case TypeKind::LONG: type_enum = "TYPE_LONG"; break;
+          case TypeKind::FLOAT: type_enum = "TYPE_FLOAT"; break;
+          case TypeKind::DOUBLE: type_enum = "TYPE_DOUBLE"; break;
+          default: type_enum = "TYPE_UNBOUNDED"; break;
+        };
+
+        string type_field;
+        switch (type.inner_type->kind) {
+          case TypeKind::BYTE: type_field = ".v_byte"; break;
+          case TypeKind::INT: type_field = ".v_int"; break;
+          case TypeKind::LONG: type_field = ".v_long"; break;
+          case TypeKind::FLOAT: type_field = ".v_float"; break;
+          case TypeKind::DOUBLE: type_field = ".v_double"; break;
+          default: type_field = ""; break;
+        };
+
         os << "range_" << type.inner_type->get_name() << "_contains(&(";
         this->right->compile_code(os);
-        os << "), ";
+        os << "), (bound_value){" << type_enum << ", {" << type_field << " = ("
+           << type.inner_type->to_production() << ")(";
         this->left->compile_code(os);
-        os << ")";
+        os << ")}})";
       } else if (type.kind == TypeKind::OPTION) {
         OptionNode* right_option = dynamic_cast<OptionNode*>(this->right);
         OptionNode* left_option = dynamic_cast<OptionNode*>(this->left);

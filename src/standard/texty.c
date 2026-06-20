@@ -358,6 +358,15 @@ typedef struct {
     return range;                                                              \
   };                                                                           \
                                                                                \
+  range_##NAME range_##NAME##_default() {                                      \
+    range_##NAME range;                                                        \
+    range.left.type = TYPE_UNBOUNDED;                                          \
+    range.right.type = TYPE_UNBOUNDED;                                         \
+    range.left_inclusive = 0;                                                  \
+    range.right_inclusive = 0;                                                 \
+    return range;                                                              \
+  };                                                                           \
+                                                                               \
   int range_##NAME##_contains(const range_##NAME* range, bound_value val) {    \
     TYPE checked_value;                                                        \
     TYPE left;                                                                 \

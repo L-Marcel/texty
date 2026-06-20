@@ -128,6 +128,8 @@ string Type::get_default_value() const {
       return "0.0";
     case TypeKind::OPTION:
       return this->get_name() + "_none()";
+    case TypeKind::RANGE:
+      return this->get_name() + "_default()";
     case TypeKind::ARRAY:
       return this->get_name() + "_empty()";
     case TypeKind::NAMED:
