@@ -125,15 +125,15 @@ void BinaryOperationNode::compile_code(ostream& os) const {
     case BinaryOperation::IN: {
       Type type = this->right->get_type();
       if (type.kind == TypeKind::ARRAY) {
-        os << "array_" << type.inner_type->get_name() << "_contains(";
+        os << "array_" << type.inner_type->get_name() << "_contains(&(";
         this->right->compile_code(os);
-        os << ", ";
+        os << "), ";
         this->left->compile_code(os);
         os << ")";
       } else if (type.kind == TypeKind::RANGE) {
-        os << "range_" << type.inner_type->get_name() << "_contains(";
+        os << "range_" << type.inner_type->get_name() << "_contains(&(";
         this->right->compile_code(os);
-        os << ", ";
+        os << "), ";
         this->left->compile_code(os);
         os << ")";
       } else if (type.kind == TypeKind::OPTION) {
