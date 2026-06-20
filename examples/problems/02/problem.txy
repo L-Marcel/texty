@@ -15,6 +15,11 @@ proc main()
         print("Próximo número: ");
         var key: int = int(input_line());
         if key > 0 then
+            # TODO - Push e resize, o problema é que 
+            # to achando que Umberto não vai gostar se
+            # a gente tiver .resize ou .push, então
+            # vou conversar com ele
+
             array = array << new int[1]{key};
         endif;
     until key < 0;
@@ -25,7 +30,6 @@ proc main()
         51..=75, 
         76..=100
     };
-
     println("==================== ARRAYS ======================");
     println(string(array));
     println(string(ranges));
@@ -33,7 +37,7 @@ proc main()
 
     var count: int[] = new int[4];
     for (i in array)
-        for (j in 0..4)
+        for (j in 0..4) 
             if i in ranges[j] then
                 count[j]++;
             endif;
