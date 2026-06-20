@@ -4,6 +4,7 @@
 struct CaseNode : public Node {
   CaseType type;
   vector<ExpressionNode*> expressions;
+  string label;
 
   CaseNode(int line, vector<ExpressionNode*> expressions);
   CaseNode(int line);

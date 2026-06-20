@@ -12,12 +12,11 @@ void BreakNode::compile_code(ostream& os) const {
   string break_label = references->get_break_label();
 
   if (break_label == "") {
-    // TODO - Ainda pode em um switch
-    throw error("comando 'break' usado fora de um laço de repetição",
+    throw error("comando 'break' usado fora de um laço de repetição ou switch",
                 this->line);
   };
 
-  os << "goto " << break_label << ";";
+  os << "goto " << break_label;
 };
 
 // Tipagem

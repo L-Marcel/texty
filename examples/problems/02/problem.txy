@@ -6,10 +6,45 @@
 
 proc main()
     println("=================== PROBLEMA 02 ===================");
-    println("Informe quantos números desejar, aperte enter para encerrar");
+    println("Informe quantos números desejar, forneça um negativo para finalizar");
     println("===================================================");
-    # TODO - Precisamos de um for ou while para continuar
-    print("Próximo número: ");
-    var key: int = key_pressed();
-    println(format("%int", key));
+
+    var array: int[] = new int[];
+    var size: int = 0;
+    repeat
+        print("Próximo número: ");
+        var key: int = int(input_line());
+        if key > 0 then
+            # TODO - Push e resize, o problema é que 
+            # to achando que Umberto não vai gostar se
+            # a gente tiver .resize ou .push, então
+            # vou conversar com ele
+
+            array = array << new int[1]{key};
+        endif;
+    until key < 0;
+
+    var ranges: range<int>[] = new range<int>[4]{
+        0..=25, 
+        26..=50, 
+        51..=75, 
+        76..=100
+    };
+    println("==================== ARRAYS ======================");
+    println(string(array));
+    println(string(ranges));
+    println("=================== AGREGAÇÃO ====================");
+
+    var count: int[] = new int[4];
+    for (i in array)
+        for (j in 0..4) 
+            if i in ranges[j] then
+                count[j]++;
+            endif;
+        endfor;
+    endfor;
+
+    for (j in 0..4)
+        println(format("%range: %int", ranges[j], count[j]));
+    endfor;
 endproc;

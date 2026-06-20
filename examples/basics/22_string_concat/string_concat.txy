@@ -1,6 +1,6 @@
 proc main()
-  var first: string = "hello ";
-  var second: string = "world";
+  var first: string = "Olá ";
+  var second: string = "mundo";
   var result: string = first << second;
   println(result);
 endproc;

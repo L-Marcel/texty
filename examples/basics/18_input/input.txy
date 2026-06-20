@@ -1,4 +1,5 @@
 proc main()
+  println("Digite qualquer coisa...");
   var key: int = key_pressed();
-  println(format("key pressed: %int", key));
+  println(format("Tecla pressionada: %int", key));
 endproc;

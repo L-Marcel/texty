@@ -31,19 +31,15 @@ void WhileNode::compile_code(ostream& os) const {
   string cond_label = Compiler::get_next_label("while_cond");
   string end_label = Compiler::get_next_label("while_end");
 
-  Type type = this->condition->get_type();
-  if (type != Type(TypeKind::BOOL) && this->type == WhileType::WHILE) {
-    throw error(
-        "estrutura de repetição 'while' espera uma condição do tipo (bool) "
-        "mas recebeu (" +
-            type.to_string() + ")",
-        this->line);
-  } else if (type != Type(TypeKind::BOOL) && this->type == WhileType::REPEAT) {
-    throw error(
-        "estrutura de repetição 'repeat' espera uma condição do tipo (bool) "
-        "mas recebeu (" +
-            type.to_string() + ")",
-        this->line);
+  if (this->type == WhileType::WHILE) {
+    Type type = this->condition->get_type();
+    if (type != Type(TypeKind::BOOL)) {
+      throw error(
+          "estrutura de repetição 'while' espera uma condição do tipo (bool) "
+          "mas recebeu (" +
+              type.to_string() + ")",
+          this->line);
+    };
   };
 
   references->push_loop(cond_label, end_label);
@@ -73,6 +69,7 @@ void WhileNode::compile_code(ostream& os) const {
     }
     case WhileType::REPEAT: {
       string ident_outer = references->get_scope_ident();
+      ident_outer = ident_outer.substr(0, ident_outer.length() > 0 ? ident_outer.length() - 1 : 0);
       os << start_label << ":;" << std::endl;
 
       references->push_scope();
@@ -83,12 +80,22 @@ void WhileNode::compile_code(ostream& os) const {
         this->children[i]->compile_code(os);
         os << ";" << std::endl;
       }
-      references->pop_scope();
+
+      Type type = this->condition->get_type();
+      if (type != Type(TypeKind::BOOL)) {
+        throw error(
+            "estrutura de repetição 'repeat' espera uma condição do tipo (bool) "
+            "mas recebeu (" +
+                type.to_string() + ")",
+            this->line);
+      }
 
       os << cond_label << ":;" << std::endl;
-      os << ident_outer << "if (!(";
+      os << ident << "if (!(";
       this->condition->compile_code(os);
       os << ")) goto " << start_label << ";" << std::endl;
+      
+      references->pop_scope();
       os << ident_outer << "goto " << end_label << ";" << std::endl;
 
       os << end_label << ":;";

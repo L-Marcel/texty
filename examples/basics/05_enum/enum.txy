@@ -3,3 +3,7 @@ enum State
   HALF_OPEN,
   CLOSED
 endenum;
+
+fn main(): int
+	return 0;
+endfn;

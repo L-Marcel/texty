@@ -498,6 +498,15 @@ typedef struct {
     return range;                                                              \
   };                                                                           \
                                                                                \
+  range_##NAME range_##NAME##_default() {                                      \
+    range_##NAME range;                                                        \
+    range.left.type = TYPE_UNBOUNDED;                                          \
+    range.right.type = TYPE_UNBOUNDED;                                         \
+    range.left_inclusive = 0;                                                  \
+    range.right_inclusive = 0;                                                 \
+    return range;                                                              \
+  };                                                                           \
+                                                                               \
   int range_##NAME##_contains(const range_##NAME* range, bound_value val) {    \
     TYPE checked_value;                                                        \
     TYPE left;                                                                 \
@@ -789,40 +798,6 @@ empty:
 error:
   exit(1);
 };
-int32_t txy_key_pressed() {
-#ifdef _WIN32
-  return (int32_t)_getch();
-#else
-  struct termios old_terminal, new_terminal;
-  int32_t caractere;
-  tcgetattr(STDIN_FILENO, &old_terminal);
-  new_terminal = old_terminal;
-  new_terminal.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
-  caractere = (int32_t)getchar();
-  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
-  return caractere;
-#endif
-};
-char* txy_input_line() {
-  size_t capacity = 64;
-  size_t length = 0;
-  char* buffer = (char*)malloc(capacity);
-  int current_char;
-loop_start:
-  current_char = getchar();
-  if (current_char == EOF) goto loop_end;
-  if (current_char == '\n') goto loop_end;
-  buffer[length] = (char)current_char;
-  length = length + 1;
-  if (length < capacity) goto loop_start;
-  capacity = capacity * 2;
-  buffer = (char*)realloc(buffer, capacity);
-  goto loop_start;
-loop_end:
-  buffer[length] = '\0';
-  return buffer;
-};
 char* txy_string_concat(const char* a, const char* b) {
   size_t len_a = 0;
   size_t len_b = 0;
@@ -857,80 +832,40 @@ copy_b:
 end_b:
   result[destiny_index] = '\0';
   return result;
-}
-int32_t txy_pow_int(int32_t base, int32_t exp) {
-  int32_t result = 1;
-  int32_t current_exp = exp;
+};
+int32_t txy_key_pressed() {
+#ifdef _WIN32
+  return (int32_t)_getch();
+#else
+  struct termios old_terminal, new_terminal;
+  int32_t caractere;
+  tcgetattr(STDIN_FILENO, &old_terminal);
+  new_terminal = old_terminal;
+  new_terminal.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &new_terminal);
+  caractere = (int32_t)getchar();
+  tcsetattr(STDIN_FILENO, TCSANOW, &old_terminal);
+  return caractere;
+#endif
+};
+char* txy_input_line() {
+  size_t capacity = 64;
+  size_t length = 0;
+  char* buffer = (char*)malloc(capacity);
+  int current_char;
 loop_start:
-  if (current_exp <= 0) goto loop_end;
-  result = result * base;
-  current_exp = current_exp - 1;
+  current_char = getchar();
+  if (current_char == EOF) goto loop_end;
+  if (current_char == '\n') goto loop_end;
+  buffer[length] = (char)current_char;
+  length = length + 1;
+  if (length < capacity) goto loop_start;
+  capacity = capacity * 2;
+  buffer = (char*)realloc(buffer, capacity);
   goto loop_start;
 loop_end:
-  return result;
-};
-int64_t txy_pow_long(int64_t base, int64_t exp) {
-  int64_t result = 1;
-  int64_t current_exp = exp;
-loop_start:
-  if (current_exp <= 0) goto loop_end;
-  result = result * base;
-  current_exp = current_exp - 1;
-  goto loop_start;
-loop_end:
-  return result;
-};
-double txy_exp_double(double x) {
-  double sum = 1.0;
-  double term = 1.0;
-  int32_t i = 1;
-loop_start:
-  if (i > 30) goto loop_end;
-  term = term * x / i;
-  sum = sum + term;
-  i = i + 1;
-  goto loop_start;
-loop_end:
-  return sum;
-};
-double txy_ln_double(double x) {
-  if (x <= 0.0) return 0.0;
-  double y = (x - 1.0) / (x + 1.0);
-  double y_squared = y * y;
-  double sum = 0.0;
-  double term = y;
-  int32_t n = 0;
-loop_start:
-  if (n > 30) goto loop_end;
-  sum = sum + term / (2 * n + 1);
-  term = term * y_squared;
-  n = n + 1;
-  goto loop_start;
-loop_end:
-  return 2.0 * sum;
-};
-double txy_pow_double(double base, double exp) {
-  if (base == 0.0) return 0.0;
-  if (exp == 0.0) return 1.0;
-  if (exp == (int64_t)exp) {
-    double result = 1.0;
-    int64_t current_exp = (int64_t)exp;
-    if (current_exp < 0) {
-      base = 1.0 / base;
-      current_exp = -current_exp;
-    }
-loop_start:
-    if (current_exp <= 0) goto loop_end;
-    result = result * base;
-    current_exp = current_exp - 1;
-    goto loop_start;
-loop_end:
-    return result;
-  }
-  return txy_exp_double(exp * txy_ln_double(base));
-};
-float txy_pow_float(float base, float exp) {
-  return (float)txy_pow_double((double)base, (double)exp);
+  buffer[length] = '\0';
+  return buffer;
 };
 void txy_print(const char* input) { printf("%s", input); };
 void txy_println(const char* input) { printf("%s\n", input); };
@@ -1056,6 +991,80 @@ found:
   return 1;
 not_found:
   return 0;
+};
+int32_t txy_pow_int(int32_t base, int32_t exp) {
+  int32_t result = 1;
+  int32_t current_exp = exp;
+loop_start:
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
+loop_end:
+  return result;
+};
+int64_t txy_pow_long(int64_t base, int64_t exp) {
+  int64_t result = 1;
+  int64_t current_exp = exp;
+loop_start:
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
+loop_end:
+  return result;
+};
+double txy_exp_double(double x) {
+  double sum = 1.0;
+  double term = 1.0;
+  int32_t i = 1;
+loop_start:
+  if (i > 30) goto loop_end;
+  term = term * x / i;
+  sum = sum + term;
+  i = i + 1;
+  goto loop_start;
+loop_end:
+  return sum;
+};
+double txy_ln_double(double x) {
+  if (x <= 0.0) return 0.0;
+  double y = (x - 1.0) / (x + 1.0);
+  double y_squared = y * y;
+  double sum = 0.0;
+  double term = y;
+  int32_t n = 0;
+loop_start:
+  if (n > 30) goto loop_end;
+  sum = sum + term / (2 * n + 1);
+  term = term * y_squared;
+  n = n + 1;
+  goto loop_start;
+loop_end:
+  return 2.0 * sum;
+};
+double txy_pow_double(double base, double exp) {
+  if (base == 0.0) return 0.0;
+  if (exp == 0.0) return 1.0;
+  if (exp == (int64_t)exp) {
+    double result = 1.0;
+    int64_t current_exp = (int64_t)exp;
+    if (current_exp < 0) {
+      base = 1.0 / base;
+      current_exp = -current_exp;
+    }
+loop_start:
+    if (current_exp <= 0) goto loop_end;
+    result = result * base;
+    current_exp = current_exp - 1;
+    goto loop_start;
+loop_end:
+    return result;
+  }
+  return txy_exp_double(exp * txy_ln_double(base));
+};
+float txy_pow_float(float base, float exp) {
+  return (float)txy_pow_double((double)base, (double)exp);
 };
 uint8_t txy_byte_to_byte(uint8_t value) { return value; };
 int32_t txy_byte_to_int(uint8_t value) { return (int32_t)value; };

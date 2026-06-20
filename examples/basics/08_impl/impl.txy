@@ -67,7 +67,5 @@ fn main(): int
     age: 20,
     gender: 'm'
   };
-  continue; # apenas teste sintático
-  break; # outro teste sintático
 	return 0;
 endfn;

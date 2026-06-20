@@ -21,7 +21,7 @@ void FunctionNode::compile_code(ostream& os) const {
   };
 
   References* references = References::get_instance();
-  references->add_function_reference(this->name, this->type, types, this->self,
+  references->add_function_reference(this->line, this->name, this->type, types, this->self,
                                      this->implemented);
 
   if (this->implemented) {

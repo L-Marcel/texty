@@ -1,0 +1,9 @@
+proc test()
+endproc;
+
+fn test(): int
+	return 0;
+endfn;
+
+proc main()
+endproc;

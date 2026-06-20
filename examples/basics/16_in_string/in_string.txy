@@ -1,6 +1,6 @@
 proc main()
   if "ab" in "abc" then
-    println("'ab' in 'ac'");
+    println("'ab' in 'abc'");
   endif;
 
   if "ab" in "ac" then

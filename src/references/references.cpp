@@ -13,8 +13,11 @@ References* References::get_instance() {
 };
 
 // Structs
-void References::add_struct_reference(string name,
+void References::add_struct_reference(int line, string name,
                                       vector<pair<string, Type>> attributes) {
+  if (this->structs.find(name) != this->structs.end()) {
+    if (line != -1) throw error("estrutura '" + name.substr(4) + "' já declarada", line);
+  }
   this->structs[name] = attributes;
 };
 vector<pair<string, Type>> References::get_struct_reference(string name) {
@@ -82,16 +85,38 @@ string References::add_variable_reference(string name, Type type, bool is_const,
       {name, new VariableReference(type, is_const, name_suffix)});
   return name_suffix;
 };
-void References::add_procedure_reference(string name, vector<Type> params,
+void References::add_procedure_reference(int line, string name, vector<Type> params,
                                          bool self, bool implemented) {
-  this->get_scope().insert(
-      {name, new ProcedureReference(params, self, implemented)});
+  Scope& scope = this->get_scope();
+  if (scope.find(name) != scope.end()) {
+    Reference* existing = scope[name];
+    if (existing->reference_type == ReferenceType::PROCEDURE) {
+        ProcedureReference* p_ref = dynamic_cast<ProcedureReference*>(existing);
+        if (!p_ref->implemented && implemented) {
+            p_ref->implemented = true;
+            return;
+        }
+    }
+    if (line != -1) throw error("subprograma ou variável '" + name.substr(4) + "' já declarada neste escopo", line);
+  }
+  scope.insert({name, new ProcedureReference(params, self, implemented)});
 };
-void References::add_function_reference(string name, Type type,
+void References::add_function_reference(int line, string name, Type type,
                                         vector<Type> params, bool self,
                                         bool implemented) {
-  this->get_scope().insert(
-      {name, new FunctionReference(type, params, self, implemented)});
+  Scope& scope = this->get_scope();
+  if (scope.find(name) != scope.end()) {
+    Reference* existing = scope[name];
+    if (existing->reference_type == ReferenceType::FUNCTION) {
+        FunctionReference* f_ref = dynamic_cast<FunctionReference*>(existing);
+        if (!f_ref->implemented && implemented) {
+            f_ref->implemented = true;
+            return;
+        }
+    }
+    if (line != -1) throw error("subprograma ou variável '" + name.substr(4) + "' já declarada neste escopo", line);
+  }
+  scope.insert({name, new FunctionReference(type, params, self, implemented)});
 };
 
 bool References::has_reference(string name, ReferenceType reference_type) {
@@ -137,17 +162,17 @@ Reference* References::get_reference(int line, string name) {
 
 // Inicialização
 void References::initialize() {
-  this->add_procedure_reference("txy_print", {Type(TypeKind::STRING)}, false,
+  this->add_procedure_reference(-1, "txy_print", {Type(TypeKind::STRING)}, false,
                                 true);
-  this->add_procedure_reference("txy_println", {Type(TypeKind::STRING)}, false,
+  this->add_procedure_reference(-1, "txy_println", {Type(TypeKind::STRING)}, false,
                                 true);
-  this->add_function_reference("txy_format", Type(TypeKind::STRING), {}, false,
+  this->add_function_reference(-1, "txy_format", Type(TypeKind::STRING), {}, false,
                                true);
-  this->add_function_reference("txy_join", Type(TypeKind::STRING), {}, false,
+  this->add_function_reference(-1, "txy_join", Type(TypeKind::STRING), {}, false,
                                true);
-  this->add_function_reference("txy_key_pressed", Type(TypeKind::INT), {},
+  this->add_function_reference(-1, "txy_key_pressed", Type(TypeKind::INT), {},
                                false, false);
-  this->add_function_reference("txy_input_line", Type(TypeKind::STRING), {},
+  this->add_function_reference(-1, "txy_input_line", Type(TypeKind::STRING), {},
                                false, false);
 
   Type types[] = {Type(TypeKind::BOOL),   Type(TypeKind::CHAR),
@@ -156,7 +181,7 @@ void References::initialize() {
                   Type(TypeKind::DOUBLE), Type(TypeKind::STRING)};
 
   for (const Type& to : types) {
-    this->add_function_reference("txy_" + to.get_name(), to, {}, false, true);
+    this->add_function_reference(-1, "txy_" + to.get_name(), to, {}, false, true);
   };
 
   // TODO: Registrar métodos e procedures nativos

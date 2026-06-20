@@ -21,6 +21,7 @@
 "bool"                                         { return yy::parser::make_TYPE_BOOL(TypeKind::BOOL); }
 "pointer"                                      { return yy::parser::make_TYPE_POINTER(TypeKind::POINTER); }
 "option"                                       { return yy::parser::make_TYPE_OPTION(TypeKind::OPTION); }
+"range"                                        { return yy::parser::make_TYPE_RANGE(TypeKind::RANGE); }
 "--"                                           { return yy::parser::make_DECREMENT(); }
 "++"                                           { return yy::parser::make_INCREMENT(); }
 "**"                                           { return yy::parser::make_EXP(); }      

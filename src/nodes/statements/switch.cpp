@@ -1,4 +1,5 @@
 #include "switch.hpp"
+#include "../../references/references.hpp"
 
 // Debug
 void SwitchNode::compile_dot(ostream& os) const {
@@ -11,7 +12,71 @@ void SwitchNode::compile_dot(ostream& os) const {
 
 // Código
 void SwitchNode::compile_code(ostream& os) const {
-  // TODO
+  string end_label = Compiler::get_next_label("switch_end");
+  string default_label = Compiler::get_next_label("switch_default");
+  string switch_expr_name = Compiler::get_next_label("switch_expr");
+
+  References* references = References::get_instance();
+  string current_continue = references->get_continue_label();
+  references->push_loop(current_continue, end_label);
+
+  Type expr_type = this->expression->get_type();
+  os << expr_type.to_production() << " " << switch_expr_name << " = ";
+  this->expression->compile_code(os);
+  os << ";" << endl;
+
+  string original_ident = references->get_scope_ident();
+
+  bool has_default = false;
+
+  for (size_t i = 0; i < this->cases.size(); i++) {
+    CaseNode* case_node = this->cases[i];
+    string case_label = Compiler::get_next_label("switch_case");
+
+    case_node->label = case_label;
+
+    if (case_node->type == CaseType::DEFAULT) {
+      has_default = true;
+    } else {
+      for (size_t j = 0; j < case_node->expressions.size(); j++) {
+        Type case_expr_type = case_node->expressions[j]->get_type();
+        if (expr_type != case_expr_type) {
+          throw error("tipo do caso (" + case_expr_type.to_string() + ") não compatível com tipo do switch (" + expr_type.to_string() + ")", case_node->line);
+        };
+
+        os << original_ident << "if (" << switch_expr_name << " == (";
+        case_node->expressions[j]->compile_code(os);
+        os << ")) goto " << case_label << ";" << endl;
+      };
+    };
+  };
+
+  if (has_default) {
+    os << original_ident << "goto " << default_label << ";" << endl;
+  } else {
+    os << original_ident << "goto " << end_label << ";" << endl;
+  };
+
+  references->push_scope();
+  string switch_ident = references->get_scope_ident();
+
+  for (size_t i = 0; i < this->cases.size(); i++) {
+    CaseNode* case_node = this->cases[i];
+
+    if (case_node->type == CaseType::DEFAULT) {
+      os << switch_ident << default_label << ":" << endl;
+    } else {
+      os << switch_ident << case_node->label << ":" << endl;
+    };
+    
+    case_node->compile_code(os);
+    os << switch_ident << "\t" << "goto " << end_label << ";" << endl;
+  };
+
+  references->pop_scope();
+  os << original_ident << end_label << ":";
+
+  references->pop_loop();
 };
 
 // Tipagem

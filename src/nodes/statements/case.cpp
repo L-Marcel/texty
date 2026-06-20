@@ -1,4 +1,5 @@
 #include "case.hpp"
+#include "../../references/references.hpp"
 
 // Debug
 void CaseNode::compile_dot(ostream& os) const {
@@ -23,7 +24,17 @@ void CaseNode::compile_dot(ostream& os) const {
 
 // Código
 void CaseNode::compile_code(ostream& os) const {
-  // TODO
+  References* references = References::get_instance();
+  references->push_scope();
+  
+  string ident = references->get_scope_ident();
+  for (size_t i = 0; i < this->children.size(); i++) {
+    os << ident;
+    this->children[i]->compile_code(os);
+    os << ";" << std::endl;
+  };
+  
+  references->pop_scope();
 };
 
 // Tipagem

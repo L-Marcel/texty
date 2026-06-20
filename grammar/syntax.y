@@ -35,6 +35,7 @@
 %token <TypeKind>    TYPE_CHAR
 %token <TypeKind>    TYPE_POINTER
 %token <TypeKind>    TYPE_OPTION
+%token <TypeKind>    TYPE_RANGE
 
 %token DECREMENT INCREMENT EXP EQ AND_ATTR OR_ATTR CONCAT
 %token LAZY_AND_ATTR LAZY_OR_ATTR MOD_ATTR XOR_ATTR PLUS_ATTR
@@ -416,6 +417,8 @@ type: basic_type {
   $$ = new Type(TypeKind::POINTER, $3);
 } | TYPE_OPTION LT type GT {
   $$ = new Type(TypeKind::OPTION, $3);
+} | TYPE_RANGE LT type GT {
+  $$ = new Type(TypeKind::RANGE, $3);
 } | name {
   $$ = new Type(TypeKind::NAMED, $1);
 };
