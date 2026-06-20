@@ -33,14 +33,14 @@ struct References {
   bool has_reference_in_current_scope(string name, ReferenceType reference_type);
   Reference* get_reference(int line, string name);
   string add_variable_reference(string name, Type type, bool is_const, bool generate_suffix = true);
-  void add_procedure_reference(string name, vector<Type> params, bool self,
+  void add_procedure_reference(int line, string name, vector<Type> params, bool self,
                                bool implemented);
-  void add_function_reference(string name, Type type, vector<Type> params,
+  void add_function_reference(int line, string name, Type type, vector<Type> params,
                               bool self, bool implemented);
   void initialize();
 
   unordered_map<string, vector<pair<string, Type>>> structs;
-  void add_struct_reference(string name, vector<pair<string, Type>> attributes);
+  void add_struct_reference(int line, string name, vector<pair<string, Type>> attributes);
   vector<pair<string, Type>> get_struct_reference(string name);
 
   static References* _instance;

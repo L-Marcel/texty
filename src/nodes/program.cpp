@@ -61,7 +61,7 @@ void ProgramNode::compile_code(ostream& os) const {
   for (size_t i = 0; i < this->children.size(); i++) {
     if (StructNode* struct_node =
             dynamic_cast<StructNode*>(this->children[i])) {
-      References::get_instance()->add_struct_reference(struct_node->name,
+      References::get_instance()->add_struct_reference(struct_node->line, struct_node->name,
                                                        struct_node->attributes);
       generated_declarations << "typedef struct " << struct_node->name << " "
                              << struct_node->name << ";" << std::endl;

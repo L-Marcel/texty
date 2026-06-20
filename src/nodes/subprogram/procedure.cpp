@@ -21,7 +21,7 @@ void ProcedureNode::compile_code(ostream& os) const {
   };
 
   References* references = References::get_instance();
-  references->add_procedure_reference(this->name, types, this->self,
+  references->add_procedure_reference(this->line, this->name, types, this->self,
                                       this->implemented);
 
   if (this->implemented) {

@@ -1,4 +1,4 @@
 fn main(): int
-  continue;
+  break;
 	return 0;
 endfn;
