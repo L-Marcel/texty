@@ -57,10 +57,14 @@ string Type::to_production() const {
     case TypeKind::RANGE:
     case TypeKind::OPTION:
       return this->get_name();
-    case TypeKind::POINTER:
+    case TypeKind::POINTER: {
+      if (this->inner_type && this->inner_type->kind == TypeKind::NAMED) {
+         return this->inner_type->to_production();
+      }
       return (this->inner_type ? this->inner_type->to_production()
                                : "unknown") +
              "*";
+    }
     case TypeKind::CHAR:
       return "char";
     case TypeKind::STRING:

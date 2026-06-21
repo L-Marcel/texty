@@ -96,7 +96,13 @@ void SubprogramCallNode::compile_code(ostream& os) const {
 
         if (type.inner_type->kind == TypeKind::ARRAY || type.inner_type->kind == TypeKind::OPTION || type.inner_type->kind == TypeKind::NAMED) {
           os << type.inner_type->get_name() << "_free(";
-          this->params[0]->compile_code(os);
+          if (type.inner_type->kind == TypeKind::NAMED) {
+            os << "&(";
+            this->params[0]->compile_code(os);
+            os << ")";
+          } else {
+            this->params[0]->compile_code(os);
+          }
           os << ")";
         } else if (type.inner_type->kind == TypeKind::POINTER) {
           os << "(*(";

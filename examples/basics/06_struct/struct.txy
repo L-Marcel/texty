@@ -30,5 +30,6 @@ fn main(): int
     age: 20,
     gender: 'm'
   };
+  delete(&user);
 	return 0;
 endfn;

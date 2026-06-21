@@ -6,83 +6,88 @@
 # C) encontrar a chave maxima da arvore, indicando seu nivel;
 # D) imprimir a arvore de busca na saida padrao, nivel a nivel.
 
-# Representacao usada:
-# - keys[i] guarda a chave do no i;
-# - left[i] guarda o indice do filho esquerdo ou -1;
-# - right[i] guarda o indice do filho direito ou -1;
-# - count[0] guarda a quantidade de nos ja inseridos.
+struct Node
+    value: int;
+    left: pointer<Node>;
+    right: pointer<Node>;
+endstruct;
 
-proc insert_value(keys, left, right, count: int[]; value: int)
-    if count[0] == 0 then
-        keys[0] = value;
-        left[0] = -1;
-        right[0] = -1;
-        count[0] = 1;
-    else
-        var current: int = 0;
-        var inserted: bool = false;
+fn insert_value(root: pointer<Node>; value: int): pointer<Node>
+    var new_node: Node = new Node {
+        value: value
+    };
 
-        repeat
-            if value <= keys[current] then
-                if left[current] == -1 then
-                    var index: int = count[0];
-                    keys[index] = value;
-                    left[index] = -1;
-                    right[index] = -1;
-                    left[current] = index;
-                    count[0]++;
-                    inserted = true;
-                else
-                    current = left[current];
-                endif;
-            else
-                if right[current] == -1 then
-                    var index: int = count[0];
-                    keys[index] = value;
-                    left[index] = -1;
-                    right[index] = -1;
-                    right[current] = index;
-                    count[0]++;
-                    inserted = true;
-                else
-                    current = right[current];
-                endif;
-            endif;
-        until inserted;
+    if root == null then
+        return &new_node;
     endif;
-endproc;
 
-proc print_minimum(keys, left: int[])
-    var current: int = 0;
+    var current: pointer<Node> = root;
+    var inserted: bool = false;
+
+    repeat
+        if value <= (*current).value then
+            if (*current).left == null then
+                (*current).left = &new_node;
+                inserted = true;
+            else
+                current = (*current).left;
+            endif;
+        else
+            if (*current).right == null then
+                (*current).right = &new_node;
+                inserted = true;
+            else
+                current = (*current).right;
+            endif;
+        endif;
+    until inserted;
+
+    return root;
+endfn;
+
+proc print_minimum(root: pointer<Node>)
+    if root == null then
+        return;
+    endif;
+
+    var current: pointer<Node> = root;
     var level: int = 0;
 
-    while (left[current] != -1)
-        current = left[current];
+    while ((*current).left != null)
+        current = (*current).left;
         level++;
     endwhile;
 
-    println(format("Minimo: chave %int nivel %int", keys[current], level));
+    println(format("Minimo: chave %int nivel %int", (*current).value, level));
 endproc;
 
-proc print_maximum(keys, right: int[])
-    var current: int = 0;
+proc print_maximum(root: pointer<Node>)
+    if root == null then
+        return;
+    endif;
+
+    var current: pointer<Node> = root;
     var level: int = 0;
 
-    while (right[current] != -1)
-        current = right[current];
+    while ((*current).right != null)
+        current = (*current).right;
         level++;
     endwhile;
 
-    println(format("Maximo: chave %int nivel %int", keys[current], level));
+    println(format("Maximo: chave %int nivel %int", (*current).value, level));
 endproc;
 
-proc print_by_level(keys, left, right, count: int[])
-    var queue: int[] = new int[count[0]];
+proc print_by_level(root: pointer<Node>; count: int)
+    if root == null then
+        return;
+    endif;
+
+    var queue: pointer<Node>[] = new pointer<Node>[count];
     var start: int = 0;
     var end: int = 0;
     var level: int = 0;
 
-    queue[end] = 0;
+    queue[end] = root;
     end++;
 
     while (start < end)
@@ -91,21 +96,21 @@ proc print_by_level(keys, left, right, count: int[])
         print(format("Nivel %int: ", level));
 
         for (i in 0..level_count)
-            var current: int = queue[start];
+            var current: pointer<Node> = queue[start];
             start++;
 
-            print(format("%int", keys[current]));
+            print(format("%int", (*current).value));
             if i < level_count - 1 then
                 print(" ");
             endif;
 
-            if left[current] != -1 then
-                queue[end] = left[current];
+            if (*current).left != null then
+                queue[end] = (*current).left;
                 end++;
             endif;
 
-            if right[current] != -1 then
-                queue[end] = right[current];
+            if (*current).right != null then
+                queue[end] = (*current).right;
                 end++;
             endif;
         endfor;
@@ -113,6 +118,16 @@ proc print_by_level(keys, left, right, count: int[])
         println("");
         level++;
     endwhile;
+
+    delete(&queue);
+endproc;
+
+proc free_tree(root: pointer<Node>)
+    if root != null then
+        free_tree((*root).left);
+        free_tree((*root).right);
+        delete(root);
+    endif;
 endproc;
 
 proc main()
@@ -120,23 +135,20 @@ proc main()
 
     print("Quantidade de valores: ");
     var quantity: int = int(input_line());
-
-    var keys: int[] = new int[quantity];
-    var left: int[] = new int[quantity];
-    var right: int[] = new int[quantity];
-    var count: int[] = new int[1];
-    count[0] = 0;
+    var root: pointer<Node> = null;
 
     for (i in 0..quantity)
         print(format("Valor %int: ", i));
         var value: int = int(input_line());
-        insert_value(keys, left, right, count, value);
+        root = insert_value(root, value);
     endfor;
 
     println("===================== ARVORE ======================");
-    print_by_level(keys, left, right, count);
-    print_minimum(keys, left);
-    print_maximum(keys, right);
+    print_by_level(root, quantity);
+    print_minimum(root);
+    print_maximum(root);
+
+    free_tree(root);
 
     println("===================================================");
 endproc;

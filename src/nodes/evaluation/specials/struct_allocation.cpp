@@ -15,9 +15,10 @@ void StructAllocationNode::compile_dot(ostream& os) const {
 
 // Código
 void StructAllocationNode::compile_code(ostream& os) const {
-  os << "({" << this->name << " instance = " << this->name << "_default(); ";
+  os << "({" << this->name << " instance = (" << this->name << ")malloc(sizeof(" << this->name << "_s)); ";
+  os << "*instance = " << this->name << "_s_default(); ";
   for (size_t i = 0; i < this->attributes.size(); i++) {
-    os << "instance." << this->attributes[i].first << " = ";
+    os << "instance->" << this->attributes[i].first << " = ";
     this->attributes[i].second->compile_code(os);
     os << "; ";
   }

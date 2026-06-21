@@ -53,7 +53,12 @@ void AccessNode::compile_code(ostream& os) const {
         break;
       }
       this->previous->compile_code(os);
-      os << "." << this->name;
+      Type previous_type = this->previous->get_type();
+      if (previous_type.kind == TypeKind::NAMED) {
+          os << "->" << this->name;
+      } else {
+          os << "." << this->name;
+      }
       break;
     }
     case AccessType::BRACKET: {

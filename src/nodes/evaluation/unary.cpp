@@ -14,12 +14,24 @@ void UnaryOperationNode::compile_dot(ostream& os) const {
 void UnaryOperationNode::compile_code(ostream& os) const {
   this->get_type();
 
-  if (this->postfix) {
-    os << "(";
-    this->node->compile_code(os);
-  } else {
-    os << "(";
-  };
+  bool ignore_parenthesis = false;
+  if (operation == UnaryOperation::REF || operation == UnaryOperation::DEREF) {
+      Type node_type = this->node->get_type();
+      if (operation == UnaryOperation::REF && node_type.kind == TypeKind::NAMED) {
+          ignore_parenthesis = true;
+      } else if (operation == UnaryOperation::DEREF && node_type.kind == TypeKind::POINTER && node_type.inner_type != nullptr && node_type.inner_type->kind == TypeKind::NAMED) {
+          ignore_parenthesis = true;
+      }
+  }
+
+  if (!ignore_parenthesis) {
+      if (this->postfix) {
+        os << "(";
+        this->node->compile_code(os);
+      } else {
+        os << "(";
+      };
+  }
 
   switch (operation) {
     case UnaryOperation::MINUS:
@@ -31,12 +43,24 @@ void UnaryOperationNode::compile_code(ostream& os) const {
     case UnaryOperation::NOT:
       os << "!";
       break;
-    case UnaryOperation::REF:
+    case UnaryOperation::REF: {
+      Type node_type = this->node->get_type();
+      if (node_type.kind == TypeKind::NAMED) {
+          this->node->compile_code(os);
+          return;
+      }
       os << "&";
       break;
-    case UnaryOperation::DEREF:
+    }
+    case UnaryOperation::DEREF: {
+      Type node_type = this->node->get_type();
+      if (node_type.kind == TypeKind::POINTER && node_type.inner_type != nullptr && node_type.inner_type->kind == TypeKind::NAMED) {
+          this->node->compile_code(os);
+          return;
+      }
       os << "*";
       break;
+    }
     case UnaryOperation::INCREMENT:
       os << "++";
       break;

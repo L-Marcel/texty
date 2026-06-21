@@ -228,7 +228,7 @@ else
 	@padded=$$(printf "%02d" $(RUN_ARGS)); \
 	file=$$(find examples/basics -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
 	c_file="$${file%.txy}.c"; \
-	bin_file="$${file%.txy}.out"; \
+	bin_file="$${file%.txy}"; \
 	if [ -f "$$c_file" ]; then \
 		echo "[ RUN ] $$c_file"; \
 		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
@@ -278,7 +278,7 @@ else
 	@padded=$$(printf "%02d" $(RUN_ARGS)); \
 	file=$$(find examples/problems -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
 	c_file="$${file%.txy}.c"; \
-	bin_file="$${file%.txy}.out"; \
+	bin_file="$${file%.txy}"; \
 	if [ -f "$$c_file" ]; then \
 		echo "[ RUN ] $$c_file"; \
 		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \
@@ -328,7 +328,7 @@ else
 	@padded=$$(printf "%02d" $(RUN_ARGS)); \
 	file=$$(find examples/errors -type f -name "*.txy" | grep "/$$padded" | head -n 1); \
 	c_file="$${file%.txy}.c"; \
-	bin_file="$${file%.txy}.out"; \
+	bin_file="$${file%.txy}"; \
 	if [ -f "$$c_file" ]; then \
 		echo "[ RUN ] $$c_file"; \
 		gcc "$$c_file" -o "$$bin_file" -lm && "./$$bin_file"; \

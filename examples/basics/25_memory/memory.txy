@@ -64,15 +64,19 @@ proc main()
     println("Option depois: " << string(optional));
     println("Option esperado: none");
 
+    println("");
     var ptr: pointer<int[]> = null;
     println("Pointer antes: " << string(ptr));
     var temp: int[] = new int[1]{10};
     ptr = &temp;
+    println("Array alocado: " << string(temp));
     println("Pointer alocado: " << string(ptr));
     delete(ptr);
+    println("Array depois: " << string(temp));
     println("Pointer depois: " << string(ptr));
-    println("Pointer esperado: null");
-
+    println("Array depois esperado: null");
+    println("");
+    
     var user: User = new User {
         id: 1,
         name: "Marcel"

@@ -1,10 +1,6 @@
 proc main()
-  var lista1: int[] = new int[] {1, 2};
-  var lista2: int[] = new int[] {3, 4};
-  
-  var lista3: int[] = lista1 << lista2;
-  
-  if 3 in lista3 then
-    println("Sucesso");
-  endif;
+  var first: int[] = new int[] {1, 2};
+  var second: int[] = new int[] {3, 4};
+  var result: int[] = first << second;
+  println(string(result));
 endproc;

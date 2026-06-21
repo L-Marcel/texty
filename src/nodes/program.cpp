@@ -9,8 +9,8 @@
 // Extração de estruturas e suas dependências
 StructNode* get_struct_node(const vector<Node*>& children, string name) {
   for (size_t i = 0; i < children.size(); i++) {
-    if (StructNode* sn = dynamic_cast<StructNode*>(children[i])) {
-      if (sn->name == name) return sn;
+    if (StructNode* node = dynamic_cast<StructNode*>(children[i])) {
+      if (node->name == name) return node;
     }
   };
 
@@ -21,8 +21,6 @@ bool get_direct_dependency(const Type& type, string& out_name) {
   if (type.kind == TypeKind::NAMED) {
     out_name = type.get_name();
     return true;
-  } else if (type.kind == TypeKind::OPTION && type.inner_type != nullptr) {
-    return get_direct_dependency(*type.inner_type, out_name);
   };
 
   return false;
@@ -83,13 +81,16 @@ void ProgramNode::compile_code(ostream& os) const {
             dynamic_cast<StructNode*>(this->children[i])) {
       References::get_instance()->add_struct_reference(struct_node->line, struct_node->name,
                                                        struct_node->attributes);
-      generated_declarations << "typedef struct " << struct_node->name << " "
+      generated_declarations << "typedef struct " << struct_node->name << "_s " << struct_node->name << "_s;" << std::endl;
+      generated_declarations << "typedef " << struct_node->name << "_s* "
                              << struct_node->name << ";" << std::endl;
       generated_declarations << "int " << struct_node->name << "_compare("
                              << struct_node->name << " a, " << struct_node->name
                              << " b);" << std::endl;
       generated_declarations << "char* " << struct_node->name << "_to_string("
                              << struct_node->name << " instance);" << std::endl;
+      generated_declarations << "void " << struct_node->name << "_free("
+                             << struct_node->name << "* instance);" << std::endl;
       generated_declarations << struct_node->name << " " << struct_node->name
                              << "_default();" << std::endl;
     } else if (EnumNode* enum_node =
