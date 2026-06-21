@@ -15,14 +15,72 @@ References* References::get_instance() {
 // Structs
 void References::add_struct_reference(int line, string name,
                                       vector<pair<string, Type>> attributes) {
+  if (this->enums.find(name) != this->enums.end()) {
+    if (line != -1) throw error("tipo '" + name.substr(4) + "' já declarado como enumeração", line);
+  };
+
   if (this->structs.find(name) != this->structs.end()) {
     if (line != -1) throw error("estrutura '" + name.substr(4) + "' já declarada", line);
-  }
+  };
+  
+  unordered_set<string> seen_attributes;
+  for (const auto& attr : attributes) {
+    if (seen_attributes.count(attr.first)) {
+      if (line != -1) throw error("campo '" +  attr.first.substr(4) + "' declarado múltiplas vezes na estrutura '" + name.substr(4) + "'", line);
+    };
+    seen_attributes.insert(attr.first);
+  };
+
   this->structs[name] = attributes;
+};
+bool References::has_struct_reference(string name) {
+  return this->structs.find(name) != this->structs.end();
 };
 vector<pair<string, Type>> References::get_struct_reference(string name) {
   if (this->structs.find(name) != this->structs.end()) {
     return this->structs[name];
+  };
+
+  return {};
+};
+
+// Enums
+void References::add_enum_reference(int line, string name,
+                                    vector<string> values) {
+  if (this->structs.find(name) != this->structs.end()) {
+    if (line != -1) throw error("tipo '" + name.substr(4) + "' já declarado como estrutura", line);
+  }
+  if (this->enums.find(name) != this->enums.end()) {
+    if (line != -1) throw error("enumeração '" + name.substr(4) + "' já declarada", line);
+  }
+
+  unordered_set<string> declared_values;
+  for (size_t i = 0; i < values.size(); i++) {
+    if (declared_values.find(values[i]) != declared_values.end()) {
+      if (line != -1) {
+        throw error("valor '" + values[i].substr(4) +
+                        "' já declarado na enumeração '" + name.substr(4) + "'",
+                    line);
+      }
+    }
+    declared_values.insert(values[i]);
+  }
+
+  this->enums[name] = values;
+};
+bool References::has_enum_reference(string name) {
+  return this->enums.find(name) != this->enums.end();
+};
+bool References::has_enum_value(string enum_name, string value_name) {
+  vector<string> values = this->get_enum_reference(enum_name);
+  for (size_t i = 0; i < values.size(); i++) {
+    if (values[i] == value_name) return true;
+  }
+  return false;
+};
+vector<string> References::get_enum_reference(string name) {
+  if (this->enums.find(name) != this->enums.end()) {
+    return this->enums[name];
   };
 
   return {};
@@ -166,6 +224,8 @@ void References::initialize() {
                                 true);
   this->add_procedure_reference(-1, "txy_println", {Type(TypeKind::STRING)}, false,
                                 true);
+  this->add_procedure_reference(-1, "txy_delete", {Type(TypeKind::POINTER)}, false,
+                                true);
   this->add_function_reference(-1, "txy_format", Type(TypeKind::STRING), {}, false,
                                true);
   this->add_function_reference(-1, "txy_join", Type(TypeKind::STRING), {}, false,
@@ -174,7 +234,16 @@ void References::initialize() {
                                false, false);
   this->add_function_reference(-1, "txy_input_line", Type(TypeKind::STRING), {},
                                false, false);
-
+  this->add_function_reference(-1, "txy_wrap", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_align_left", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_align_right", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_align_center", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_string_length", Type(TypeKind::LONG), {Type(TypeKind::STRING)}, false,
+                               true);
   Type types[] = {Type(TypeKind::BOOL),   Type(TypeKind::CHAR),
                   Type(TypeKind::BYTE),   Type(TypeKind::INT),
                   Type(TypeKind::LONG),   Type(TypeKind::FLOAT),
@@ -183,6 +252,4 @@ void References::initialize() {
   for (const Type& to : types) {
     this->add_function_reference(-1, "txy_" + to.get_name(), to, {}, false, true);
   };
-
-  // TODO: Registrar métodos e procedures nativos
 };

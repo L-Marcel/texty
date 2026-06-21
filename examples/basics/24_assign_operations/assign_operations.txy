@@ -1,0 +1,13 @@
+proc main()
+    var value: int = 10;
+    value += 5;
+    value *= 2;
+    value -= 4;
+    value /= 2;
+    value %= 6;
+
+    var text: string = "Text";
+    text <<= "y";
+
+    println(format("%int %string", value, text));
+endproc;

@@ -39,42 +39,56 @@ loop_end:
 };
 
 double txy_ln_double(double x) {
-  if (x <= 0.0) return 0.0;
-  double y = (x - 1.0) / (x + 1.0);
-  double y_squared = y * y;
+  double y;
+  double y_squared;
   double sum = 0.0;
-  double term = y;
+  double term;
   int32_t n = 0;
+  if (x > 0.0) goto valid;
+  return 0.0;
+
+valid:
+  y = (x - 1.0) / (x + 1.0);
+  y_squared = y * y;
+  term = y;
+
 loop_start:
   if (n > 30) goto loop_end;
   sum = sum + term / (2 * n + 1);
   term = term * y_squared;
   n = n + 1;
   goto loop_start;
+
 loop_end:
   return 2.0 * sum;
 };
 
 double txy_pow_double(double base, double exp) {
-  if (base == 0.0) return 0.0;
-  if (exp == 0.0) return 1.0;
+  if (base != 0.0) goto check_exp;
+  return 0.0;
 
-  if (exp == (int64_t)exp) {
-    double result = 1.0;
-    int64_t current_exp = (int64_t)exp;
-    if (current_exp < 0) {
-      base = 1.0 / base;
-      current_exp = -current_exp;
-    }
+check_exp:
+  if (exp != 0.0) goto check_int_exp;
+  return 1.0;
+
+check_int_exp:
+  if (exp != (int64_t)exp) goto use_pow;
+  double result = 1.0;
+  int64_t current_exp = (int64_t)exp;
+  if (current_exp >= 0) goto loop_start;
+  base = 1.0 / base;
+  current_exp = -current_exp;
+
 loop_start:
-    if (current_exp <= 0) goto loop_end;
-    result = result * base;
-    current_exp = current_exp - 1;
-    goto loop_start;
-loop_end:
-    return result;
-  }
+  if (current_exp <= 0) goto loop_end;
+  result = result * base;
+  current_exp = current_exp - 1;
+  goto loop_start;
 
+loop_end:
+  return result;
+
+use_pow:
   return txy_exp_double(exp * txy_ln_double(base));
 };
 

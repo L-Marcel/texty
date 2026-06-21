@@ -5,11 +5,11 @@
 struct AssignNode : public Node {
   AssignType assign_type;
   BinaryOperation operation;
-  AccessNode* access;
+  ExpressionNode* access;
   ExpressionNode* expression;
 
-  AssignNode(int line, AccessNode* access, ExpressionNode* expression);
-  AssignNode(int line, BinaryOperation operation, AccessNode* access,
+  AssignNode(int line, ExpressionNode* access, ExpressionNode* expression);
+  AssignNode(int line, BinaryOperation operation, ExpressionNode* access,
              ExpressionNode* expression);
 
   void compile_dot(ostream& os) const override;

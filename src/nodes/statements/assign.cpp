@@ -1,6 +1,7 @@
 #include "assign.hpp"
 
 #include "../../operations/binary/binary.hpp"
+#include "../evaluation/binary.hpp"
 
 // Debug
 void AssignNode::compile_dot(ostream& os) const {
@@ -17,7 +18,12 @@ void AssignNode::compile_code(ostream& os) const {
     os << " = ";
     this->expression->compile_code(os);
   } else {
-    // TODO
+    this->get_type();
+    this->access->compile_code(os);
+    os << " = ";
+    BinaryOperationNode operation =
+        BinaryOperationNode(this->operation, this->access, this->expression);
+    operation.compile_code(os);
   };
 };
 
@@ -26,8 +32,13 @@ Type AssignNode::get_type() const {
   Type left = this->access->get_type();
   Type right = this->expression->get_type();
 
-  if (left.kind == TypeKind::OPTION && right.kind == TypeKind::OPTION &&
-      right.inner_type->kind == TypeKind::UNKNOWN) {
+  if ((
+    left.kind == TypeKind::OPTION && right.kind == TypeKind::OPTION &&
+      right.inner_type->kind == TypeKind::UNKNOWN
+  ) || (
+    left.kind == TypeKind::POINTER && right.kind == TypeKind::POINTER &&
+      right.inner_type->kind == TypeKind::UNKNOWN
+  )) {
     this->expression->set_expected_type(left);
     right = this->expression->get_type();
   };
@@ -46,14 +57,15 @@ Type AssignNode::get_type() const {
 };
 
 // Construtores
-AssignNode::AssignNode(int line, AccessNode* access, ExpressionNode* expression)
+AssignNode::AssignNode(int line, ExpressionNode* access, ExpressionNode* expression)
     : Node(line),
       assign_type(AssignType::SIMPLE),
       access(access),
       expression(expression) {};
-AssignNode::AssignNode(int line, BinaryOperation operation, AccessNode* access,
+AssignNode::AssignNode(int line, BinaryOperation operation, ExpressionNode* access,
                        ExpressionNode* expression)
     : Node(line),
       assign_type(AssignType::OPERATION),
+      operation(operation),
       access(access),
       expression(expression) {};

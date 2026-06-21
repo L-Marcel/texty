@@ -1,0 +1,105 @@
+# Crie um programa que leia duas matrizes numericas e, quando possivel,
+# imprima a soma e o produto dessas matrizes. Caso uma operacao nao possa
+# ser realizada para as matrizes lidas, imprima uma mensagem informando da
+# impossibilidade.
+
+proc print_matrix(matrix: int[][]; rows, cols: int)
+    for (i in 0..rows)
+        print("[");
+        for (j in 0..cols)
+            print(format("%int", matrix[i][j]));
+            if j < cols - 1 then
+                print(", ");
+            endif;
+        endfor;
+        println("]");
+    endfor;
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 03 ===================");
+
+    print("Quantidade de linhas da matriz A: ");
+    var rows_a: int = int(input_line());
+    print("Quantidade de colunas da matriz A: ");
+    var cols_a: int = int(input_line());
+
+    var matrix_a: int[][] = new int[][rows_a];
+    for (i in 0..rows_a)
+        matrix_a[i] = new int[cols_a];
+    endfor;
+
+    println("Informe os valores da matriz A:");
+    for (i in 0..rows_a)
+        for (j in 0..cols_a)
+            print(format("A linha %int coluna %int: ", i, j));
+            matrix_a[i][j] = int(input_line());
+        endfor;
+    endfor;
+
+    print("Quantidade de linhas da matriz B: ");
+    var rows_b: int = int(input_line());
+    print("Quantidade de colunas da matriz B: ");
+    var cols_b: int = int(input_line());
+
+    var matrix_b: int[][] = new int[][rows_b];
+    for (i in 0..rows_b)
+        matrix_b[i] = new int[cols_b];
+    endfor;
+
+    println("Informe os valores da matriz B:");
+    for (i in 0..rows_b)
+        for (j in 0..cols_b)
+            print(format("B linha %int coluna %int: ", i, j));
+            matrix_b[i][j] = int(input_line());
+        endfor;
+    endfor;
+
+    println("==================== MATRIZ A =====================");
+    print_matrix(matrix_a, rows_a, cols_a);
+    println("==================== MATRIZ B =====================");
+    print_matrix(matrix_b, rows_b, cols_b);
+
+    if rows_a == rows_b && cols_a == cols_b then
+        var sum: int[][] = new int[][rows_a];
+        for (i in 0..rows_a)
+            sum[i] = new int[cols_a];
+        endfor;
+
+        for (i in 0..rows_a)
+            for (j in 0..cols_a)
+                sum[i][j] = matrix_a[i][j] + matrix_b[i][j];
+            endfor;
+        endfor;
+
+        println("====================== SOMA =======================");
+        print_matrix(sum, rows_a, cols_a);
+    else
+        println("====================== SOMA =======================");
+        println("Nao e possivel somar as matrizes informadas.");
+    endif;
+
+    if cols_a == rows_b then
+        var product: int[][] = new int[][rows_a];
+        for (i in 0..rows_a)
+            product[i] = new int[cols_b];
+        endfor;
+
+        for (i in 0..rows_a)
+            for (j in 0..cols_b)
+                product[i][j] = 0;
+                for (k in 0..cols_a)
+                    product[i][j] = product[i][j] + matrix_a[i][k] * matrix_b[k][j];
+                endfor;
+            endfor;
+        endfor;
+
+        println("==================== PRODUTO ======================");
+        print_matrix(product, rows_a, cols_b);
+    else
+        println("==================== PRODUTO ======================");
+        println("Nao e possivel multiplicar as matrizes informadas.");
+    endif;
+
+    println("===================================================");
+endproc;

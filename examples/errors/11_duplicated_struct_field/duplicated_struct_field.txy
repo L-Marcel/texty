@@ -1,0 +1,13 @@
+struct User
+  name: string;
+  id: long;
+  name: int;
+endstruct;
+
+fn main(): int
+	var user: User = new User {
+    name: "Marcel",
+    id: 10
+  };
+	return 0;
+endfn;

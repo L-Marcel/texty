@@ -1,6 +1,7 @@
 proc test(array: int[][][]; value: option<option<option<string>[]>>)
   array = new int[][][1];
-  value = some(some(new option<string>[1]));
+  var options: option<string>[] = new option<string>[1];
+  value = some(some(options));
 endproc;
 
 proc main()

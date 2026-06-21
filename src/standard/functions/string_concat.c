@@ -1,6 +1,5 @@
 #include "../core.h"
 
-// TODO - Melhorar essa função depois
 char* txy_string_concat(const char* a, const char* b) {
   size_t len_a = 0;
   size_t len_b = 0;
@@ -17,7 +16,7 @@ calc_b:
   goto calc_b;
 alloc:
   result = (char*)malloc(len_a + len_b + 1);
-  if (result == NULL) exit(1);
+  if (result == NULL) goto error;
 copy_a:
   if (i == len_a) goto end_a;
   result[destiny_index] = a[i];
@@ -35,4 +34,6 @@ copy_b:
 end_b:
   result[destiny_index] = '\0';
   return result;
+error:
+  exit(1);
 };

@@ -15,12 +15,9 @@ proc main()
         print("Próximo número: ");
         var key: int = int(input_line());
         if key > 0 then
-            # TODO - Push e resize, o problema é que 
-            # to achando que Umberto não vai gostar se
-            # a gente tiver .resize ou .push, então
-            # vou conversar com ele
-
-            array = array << new int[1]{key};
+            var temp: int[] = new int[1]{key};
+            array = array << temp;
+            delete(&temp);
         endif;
     until key < 0;
 

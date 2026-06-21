@@ -5,5 +5,12 @@ enum State
 endenum;
 
 fn main(): int
+  var state: State = State.OPEN;
+  var is_open: bool = state == State.OPEN;
+  var is_closed: bool = state == State.CLOSED;
+  var half_state: State = State[1];
+  var open_state: State = State[-3];
+
+  println(join(" ", string(is_open), string(is_closed), string(half_state), string(open_state)));
 	return 0;
 endfn;

@@ -57,10 +57,14 @@ string Type::to_production() const {
     case TypeKind::RANGE:
     case TypeKind::OPTION:
       return this->get_name();
-    case TypeKind::POINTER:
+    case TypeKind::POINTER: {
+      if (this->inner_type && this->inner_type->kind == TypeKind::NAMED) {
+         return this->inner_type->to_production();
+      }
       return (this->inner_type ? this->inner_type->to_production()
                                : "unknown") +
              "*";
+    }
     case TypeKind::CHAR:
       return "char";
     case TypeKind::STRING:
@@ -128,6 +132,8 @@ string Type::get_default_value() const {
       return "0.0";
     case TypeKind::OPTION:
       return this->get_name() + "_none()";
+    case TypeKind::POINTER:
+      return "NULL";
     case TypeKind::RANGE:
       return this->get_name() + "_default()";
     case TypeKind::ARRAY:

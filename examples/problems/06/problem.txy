@@ -1,0 +1,154 @@
+# Uma arvore binaria de busca generaliza a ideia de listas encadeadas
+# crescentes. Implemente uma arvore binaria de busca com chaves de tipo inteiro
+# e as seguintes operacoes:
+# A) transformar uma sequencia de valores em uma arvore binaria de busca;
+# B) encontrar a chave minima da arvore, indicando seu nivel;
+# C) encontrar a chave maxima da arvore, indicando seu nivel;
+# D) imprimir a arvore de busca na saida padrao, nivel a nivel.
+
+struct Node
+    value: int;
+    left: pointer<Node>;
+    right: pointer<Node>;
+endstruct;
+
+fn insert_value(root: pointer<Node>; value: int): pointer<Node>
+    var new_node: Node = new Node {
+        value: value
+    };
+
+    if root == null then
+        return &new_node;
+    endif;
+
+    var current: pointer<Node> = root;
+    var inserted: bool = false;
+
+    repeat
+        if value <= (*current).value then
+            if (*current).left == null then
+                (*current).left = &new_node;
+                inserted = true;
+            else
+                current = (*current).left;
+            endif;
+        else
+            if (*current).right == null then
+                (*current).right = &new_node;
+                inserted = true;
+            else
+                current = (*current).right;
+            endif;
+        endif;
+    until inserted;
+
+    return root;
+endfn;
+
+proc print_minimum(root: pointer<Node>)
+    if root == null then
+        return;
+    endif;
+
+    var current: pointer<Node> = root;
+    var level: int = 0;
+
+    while ((*current).left != null)
+        current = (*current).left;
+        level++;
+    endwhile;
+
+    println(format("Minimo: chave %int nivel %int", (*current).value, level));
+endproc;
+
+proc print_maximum(root: pointer<Node>)
+    if root == null then
+        return;
+    endif;
+
+    var current: pointer<Node> = root;
+    var level: int = 0;
+
+    while ((*current).right != null)
+        current = (*current).right;
+        level++;
+    endwhile;
+
+    println(format("Maximo: chave %int nivel %int", (*current).value, level));
+endproc;
+
+proc print_by_level(root: pointer<Node>; count: int)
+    if root == null then
+        return;
+    endif;
+
+    var queue: pointer<Node>[] = new pointer<Node>[count];
+    var start: int = 0;
+    var end: int = 0;
+    var level: int = 0;
+
+    queue[end] = root;
+    end++;
+
+    while (start < end)
+        var level_count: int = end - start;
+
+        print(format("Nivel %int: ", level));
+
+        for (i in 0..level_count)
+            var current: pointer<Node> = queue[start];
+            start++;
+
+            print(format("%int", (*current).value));
+            if i < level_count - 1 then
+                print(" ");
+            endif;
+
+            if (*current).left != null then
+                queue[end] = (*current).left;
+                end++;
+            endif;
+
+            if (*current).right != null then
+                queue[end] = (*current).right;
+                end++;
+            endif;
+        endfor;
+
+        println("");
+        level++;
+    endwhile;
+
+    delete(&queue);
+endproc;
+
+proc free_tree(root: pointer<Node>)
+    if root != null then
+        free_tree((*root).left);
+        free_tree((*root).right);
+        delete(root);
+    endif;
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 06 ===================");
+
+    print("Quantidade de valores: ");
+    var quantity: int = int(input_line());
+    var root: pointer<Node> = null;
+
+    for (i in 0..quantity)
+        print(format("Valor %int: ", i));
+        var value: int = int(input_line());
+        root = insert_value(root, value);
+    endfor;
+
+    println("===================== ARVORE ======================");
+    print_by_level(root, quantity);
+    print_minimum(root);
+    print_maximum(root);
+
+    free_tree(root);
+
+    println("===================================================");
+endproc;
