@@ -27,7 +27,6 @@ proc quick_sort(array: int[]; min, max: int)
 endproc;
 
 fn main(): int
-	# TODO - Espaçamento do GENERATED
 	print("Digite o tamanho do array: ");
 	var size: int = int(input_line());
 	println("");
