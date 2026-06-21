@@ -1,13 +1,11 @@
 #pragma once
-#include "../unary.hpp"
+#include "../expression.hpp"
 
-struct OptionNode : public ExpressionNode {
-  OptionNodeType type;
-  ExpressionNode* value;
+struct NullNode : public ExpressionNode {
   Type expected_type;
+  
+  NullNode(int line);
 
-  OptionNode(int line);
-  OptionNode(int line, ExpressionNode* value);
   void compile_dot(ostream& os) const override;
   void compile_code(ostream& os) const override;
   Type get_type() const override;

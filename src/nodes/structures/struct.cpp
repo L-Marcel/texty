@@ -16,14 +16,14 @@ void StructNode::compile_code(ostream& os) const {
     this->attributes[i].second.get_name();
   };
 
-  generated_implementations << std::endl
+  generated_declarations << std::endl
                             << "struct " << this->name << " {" << std::endl;
   for (size_t i = 0; i < this->attributes.size(); i++) {
     pair<string, Type> attribute = this->attributes[i];
-    generated_implementations << "\t" << attribute.second.to_production() << " "
+    generated_declarations << "\t" << attribute.second.to_production() << " "
                               << attribute.first << ";" << std::endl;
   };
-  generated_implementations << "};" << std::endl;
+  generated_declarations << "};" << std::endl;
 
   // Default
   generated_implementations << this->name << " " << this->name << "_default() {"
@@ -59,11 +59,30 @@ void StructNode::compile_code(ostream& os) const {
   generated_implementations << "\treturn 1;" << std::endl << std::endl;
   generated_implementations << "not_equals:" << std::endl;
   generated_implementations << "\treturn 0;" << std::endl;
-  generated_implementations << "};" << std::endl;
+  generated_implementations << "};" << std::endl << std::endl;
+
+  // Free
+  generated_implementations << "void " << this->name << "_free(" << this->name
+                            << "* instance) {" << std::endl;
+  for (size_t i = 0; i < this->attributes.size(); i++) {
+    pair<string, Type> attribute = this->attributes[i];
+    TypeKind kind = attribute.second.kind;
+    if (kind == TypeKind::ARRAY || kind == TypeKind::NAMED) {
+      generated_implementations << "\t" << attribute.second.get_name() << "_free(&instance->"
+                                << attribute.first << ");" << std::endl;
+    } else if (kind == TypeKind::POINTER) {
+      generated_implementations << "\tif (instance->" << attribute.first << " != NULL) {" << std::endl;
+      generated_implementations << "\t\tfree(instance->" << attribute.first << ");" << std::endl;
+      generated_implementations << "\t}" << std::endl;
+    }
+  }
+  generated_implementations << "\t*instance = " << this->name << "_default();" << std::endl;
+  generated_implementations << "};" << std::endl << std::endl;
 
   // String
   generated_implementations << "char* " << this->name << "_to_string("
                             << this->name << " instance) {" << std::endl;
+  generated_implementations << "\tif (" << this->name << "_compare(instance, " << this->name << "_default())) return (char*)\"null\";" << std::endl;
   generated_implementations << "\tarray_string props = array_string_create("
                             << this->attributes.size() << ", \"\");"
                             << std::endl;

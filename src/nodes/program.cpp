@@ -96,6 +96,13 @@ void ProgramNode::compile_code(ostream& os) const {
   unordered_set<Node*> visiting;
 
   for (size_t i = 0; i < this->children.size(); i++) {
+    if (dynamic_cast<StructNode*>(this->children[i]) || dynamic_cast<EnumNode*>(this->children[i])) {
+      visit_node(this->children[i], this->children, visited, visiting,
+                 sorted_children);
+    }
+  };
+
+  for (size_t i = 0; i < this->children.size(); i++) {
     visit_node(this->children[i], this->children, visited, visiting,
                sorted_children);
   };

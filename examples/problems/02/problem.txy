@@ -20,7 +20,9 @@ proc main()
             # a gente tiver .resize ou .push, então
             # vou conversar com ele
 
-            array = array << new int[1]{key};
+            var temp: int[] = new int[1]{key};
+            array = array << temp;
+            delete(temp);
         endif;
     until key < 0;
 

@@ -14,19 +14,19 @@ void EnumNode::compile_code(ostream& os) const {
                               ? this->name + "_" + this->values[0].substr(4)
                               : this->name + "_EMPTY";
 
-  generated_implementations << std::endl
+  generated_declarations << std::endl
                             << "enum " << this->name << " {" << std::endl;
   if (this->values.size() == 0) {
-    generated_implementations << "\t" << fallback_value << std::endl;
+    generated_declarations << "\t" << fallback_value << std::endl;
   } else {
     for (size_t i = 0; i < this->values.size(); i++) {
-      generated_implementations << "\t" << this->name << "_"
+      generated_declarations << "\t" << this->name << "_"
                                 << this->values[i].substr(4);
-      if (i != this->values.size() - 1) generated_implementations << ",";
-      generated_implementations << std::endl;
+      if (i != this->values.size() - 1) generated_declarations << ",";
+      generated_declarations << std::endl;
     };
   }
-  generated_implementations << "};" << std::endl;
+  generated_declarations << "};" << std::endl;
 
   // Default
   generated_implementations << this->name << " " << this->name

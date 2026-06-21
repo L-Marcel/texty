@@ -1,0 +1,84 @@
+struct User
+    id: int;
+    name: string;
+endstruct;
+
+proc main()
+    var number_byte: byte = 2b;
+    println("Byte antes: " << string(number_byte));
+    delete(&number_byte);
+    println("Byte depois: " << string(number_byte));
+    println("Byte depois esperado: 0");
+
+    var number_int: int = 42;
+    println("Int antes: " << string(number_int));
+    delete(&number_int);
+    println("Int depois: " << string(number_int));
+    println("Int depois esperado: 0");
+
+    var number_long: long = 42l;
+    println("Long antes: " << string(number_long));
+    delete(&number_long);
+    println("Long depois: " << string(number_long));
+    println("Long depois esperado: 0");
+
+    var number_float: float = 42.0f;
+    println("Float antes: " << string(number_float));
+    delete(&number_float);
+    println("Float depois: " << string(number_float));
+    println("Float depois esperado: 0.000000");
+
+    var number_double: double = 42.0d;
+    println("Double antes: " << string(number_double));
+    delete(&number_double);
+    println("Double depois: " << string(number_double));
+    println("Double depois esperado: 0.000000");
+
+    var text_char: char = 'a';
+    println("Caracetere antes: " << string(text_char));
+    delete(&text_char);
+    println("Caracetere depois: " << string(text_char));
+    println("Caracetere depois esperado: ");
+
+    var text_string: string = "Marcel";
+    println("String antes: " << string(text_string));
+    delete(&text_string);
+    println("String depois: " << string(text_string));
+    println("String depois esperado: ");
+
+    var boolean: bool = true;
+    println("Bool antes: " << string(boolean));
+    delete(&boolean);
+    println("Bool depois: " << string(boolean));
+    println("Bool depois esperado: false");
+    
+    var array: int[] = new int[3]{1, 2, 3};
+    println("Array antes: " << string(array));
+    delete(&array);
+    println("Array depois: " << string(array));
+    println("Array depois esperado: null");
+
+    var optional: option<int> = some(10);
+    println("Option antes: " << string(optional));
+    delete(&optional);
+    println("Option depois: " << string(optional));
+    println("Option esperado: none");
+
+    var ptr: pointer<int[]> = null;
+    println("Pointer antes: " << string(ptr));
+    var temp: int[] = new int[1]{10};
+    ptr = &temp;
+    println("Pointer alocado: " << string(ptr));
+    delete(ptr);
+    println("Pointer depois: " << string(ptr));
+    println("Pointer esperado: null");
+
+    var user: User = new User {
+        id: 1,
+        name: "Marcel"
+    };
+    println("User antes: " << string(user));
+    delete(&user);
+    println("User depois: " << string(user));
+    println("User esperado: null");
+endproc;

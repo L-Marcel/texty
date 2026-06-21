@@ -23,7 +23,11 @@ void SubprogramCallNode::compile_code(ostream& os) const {
   if (this->call_type == CallType::CONVERTION) {
     Type source_type = this->params[0]->get_type();
     if (this->target_type.kind == TypeKind::STRING) {
-      os << source_type.get_name() << "_to_string(";
+      if (source_type.kind == TypeKind::POINTER) {
+        os << "pointer_to_string(";
+      } else {
+        os << source_type.get_name() << "_to_string(";
+      };
     } else {
       os << "txy_" << source_type.get_name() << "_to_"
          << this->target_type.get_name() << "(";
@@ -85,6 +89,24 @@ void SubprogramCallNode::compile_code(ostream& os) const {
         }
         os << ")";
 
+        return;
+      } else if (base->access_type == AccessBaseType::ID &&
+                 base->name == "txy_delete" && this->params.size() == 1) {
+        Type type = this->params[0]->get_type();
+
+        if (type.inner_type->kind == TypeKind::ARRAY || type.inner_type->kind == TypeKind::OPTION || type.inner_type->kind == TypeKind::NAMED) {
+          os << type.inner_type->get_name() << "_free(";
+          this->params[0]->compile_code(os);
+          os << ")";
+        } else if (type.inner_type->kind == TypeKind::POINTER) {
+          os << "(*(";
+          this->params[0]->compile_code(os);
+          os << ") = NULL)";
+        } else {
+          os << "(*(";
+          this->params[0]->compile_code(os);
+          os << ") = " << type.inner_type->get_default_value() << ")";
+        }
         return;
       } else if (base->access_type == AccessBaseType::ID &&
                  base->name == "txy_join" && this->params.size() > 1) {
@@ -210,7 +232,13 @@ Type SubprogramCallNode::get_type() const {
       };
 
       for (size_t i = 0; i < procedure_reference->params.size(); i++) {
-        if (this->params[i]->get_type() != procedure_reference->params[i]) {
+        if (
+          this->params[i]->get_type() != procedure_reference->params[i]
+          && (reference_name != "delete" || (
+            reference_name == "delete"
+            && this->params[i]->get_type().kind != TypeKind::POINTER
+          ))
+        ) {
           throw error(
               "tipo incorreto nos parâmetros da chamada, o procedimento \'" +
                   reference_name + "\' espera receber (" + reference_types +

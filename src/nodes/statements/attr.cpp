@@ -11,9 +11,15 @@ void AttrNode::compile_dot(ostream& os) const {
 // Código
 void AttrNode::compile_code(ostream& os) const {
   Type expression_type = this->expression->get_type();
-  if (this->type.kind == TypeKind::OPTION &&
+  if ((
+    this->type.kind == TypeKind::OPTION &&
       expression_type.kind == TypeKind::OPTION &&
-      expression_type.inner_type->kind == TypeKind::UNKNOWN) {
+      expression_type.inner_type->kind == TypeKind::UNKNOWN
+  ) || (
+    this->type.kind == TypeKind::POINTER &&
+      expression_type.kind == TypeKind::POINTER &&
+      expression_type.inner_type->kind == TypeKind::UNKNOWN
+  )) {
     this->expression->set_expected_type(this->type);
   } else if (this->type.kind != TypeKind::UNKNOWN &&
              this->type != expression_type) {

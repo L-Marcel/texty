@@ -41,7 +41,7 @@
 %token LAZY_AND_ATTR LAZY_OR_ATTR MOD_ATTR XOR_ATTR PLUS_ATTR
 %token CONCAT_ATTR MINUS_ATTR MULT_ATTR DIV_ATTR AND OR REF BAR
 %token NOT_EQ LT_EQ GT_EQ LT GT NOT REV MOD XOR ATTR MINUS PLUS
-%token MULT DIV NEW VAR CONST RANGE RANGE_INC RANGE_EXC RANGE_EXC_INC 
+%token MULT DIV NEW VAR CONST RANGE RANGE_INC RANGE_EXC RANGE_EXC_INC NULL_VALUE
 %token DOT COMMA COLON DOUBLE_COLON SEMICOLON LEFT_PAREN RIGHT_PAREN 
 %token LEFT_BRACKET RIGHT_BRACKET LEFT_BRACE RIGHT_BRACE IF END_IF THEN 
 %token ELIF ELSE FOR WHILE END_WHILE REPEAT UNTIL END_FOR BREAK CONTINUE 
@@ -381,6 +381,10 @@ stmt: BREAK {
 
 return: RETURN expr {
   $$ = new ReturnNode(ctx.line, $2);
+} | RETURN array_allocation {
+  $$ = new ReturnNode(ctx.line, $2);
+} | RETURN struct_allocation {
+  $$ = new ReturnNode(ctx.line, $2);
 } | RETURN {
   $$ = new ReturnNode(ctx.line);
 };
@@ -388,6 +392,14 @@ return: RETURN expr {
 attr: VAR ID COLON type ATTR expr {
   $$ = new AttrNode(ctx.line, $2, false, *$4, $6);
 } | CONST ID COLON type ATTR expr {
+  $$ = new AttrNode(ctx.line, $2, true, *$4, $6);
+} | VAR ID COLON type ATTR array_allocation {
+  $$ = new AttrNode(ctx.line, $2, false, *$4, $6);
+} | CONST ID COLON type ATTR array_allocation {
+  $$ = new AttrNode(ctx.line, $2, true, *$4, $6);
+} | VAR ID COLON type ATTR struct_allocation {
+  $$ = new AttrNode(ctx.line, $2, false, *$4, $6);
+} | CONST ID COLON type ATTR struct_allocation {
   $$ = new AttrNode(ctx.line, $2, true, *$4, $6);
 };
 
@@ -424,6 +436,12 @@ type: basic_type {
 };
 
 assign: access ATTR expr {
+  $$ = new AssignNode(ctx.line, $1, $3);
+} | MULT access ATTR expr {
+  $$ = new AssignNode(ctx.line, new UnaryOperationNode(UnaryOperation::DEREF, $2), $4);
+} | access ATTR array_allocation {
+  $$ = new AssignNode(ctx.line, $1, $3);
+} | access ATTR struct_allocation {
   $$ = new AssignNode(ctx.line, $1, $3);
 } | access AND_ATTR expr {
   $$ = new AssignNode(ctx.line, BinaryOperation::AND, $1, $3);
@@ -720,10 +738,8 @@ term: INT {
   $$ = new CharNode(ctx.line, $1);
 } | NONE {
   $$ = new OptionNode(ctx.line);
-} | array_allocation {
-  $$ = $1;
-} | struct_allocation {
-  $$ = $1;
+} | NULL_VALUE {
+  $$ = new NullNode(ctx.line);
 } | access {
   $$ = $1;
 } | SOME LEFT_PAREN expr RIGHT_PAREN {

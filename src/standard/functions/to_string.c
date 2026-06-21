@@ -173,6 +173,14 @@ char* pointer_to_string(void* pointer) {
   char* result;
   int length;
 
+  if (pointer != NULL) goto format_ptr;
+  length = snprintf(NULL, 0, "null");
+  result = (char*)malloc(length + 1);
+  if (result == NULL) goto error;
+  snprintf(result, length + 1, "null");
+  return result;
+
+format_ptr:
   length = snprintf(NULL, 0, "%p", pointer);
   result = (char*)malloc(length + 1);
   if (result == NULL) goto error;

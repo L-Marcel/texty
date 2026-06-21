@@ -1,4 +1,5 @@
 # Defina o tipo rational_t para representar numeros racionais.
+# TODO - Resto do enunciado
 
 struct Rational
     numerator, denominator: int;

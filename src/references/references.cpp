@@ -214,6 +214,8 @@ void References::initialize() {
                                 true);
   this->add_procedure_reference(-1, "txy_println", {Type(TypeKind::STRING)}, false,
                                 true);
+  this->add_procedure_reference(-1, "txy_delete", {Type(TypeKind::POINTER)}, false,
+                                true);
   this->add_function_reference(-1, "txy_format", Type(TypeKind::STRING), {}, false,
                                true);
   this->add_function_reference(-1, "txy_join", Type(TypeKind::STRING), {}, false,

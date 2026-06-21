@@ -80,11 +80,21 @@ void Compiler::register_option(Type inner_type) {
       to_string_function = "pointer_to_string";
     };
 
-    generated_declarations << "DECLARE_OPTION(";
+    if (inner_type.kind == TypeKind::NAMED) {
+      generated_declarations << "DECLARE_OPTION_PTR(";
+    } else {
+      generated_declarations << "DECLARE_OPTION(";
+    };
+
     generated_declarations << inner_type.to_production();
     generated_declarations << ", " << name << ")" << std::endl;
 
-    generated_type_implementations << "IMPLEMENT_OPTION(";
+    if (inner_type.kind == TypeKind::NAMED) {
+      generated_type_implementations << "IMPLEMENT_OPTION_POINTER(";
+    } else {
+      generated_type_implementations << "IMPLEMENT_OPTION(";
+    };
+    
     generated_type_implementations << inner_type.to_production();
     generated_type_implementations << ", " << name << ", "
                                    << compare_functiontion << ", ";

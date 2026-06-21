@@ -14,7 +14,7 @@ char* txy_string_concat(const char* a, const char* b);
   } array_##NAME;                                                           \
   array_##NAME array_##NAME##_create(size_t capacity, TYPE fill);           \
   array_##NAME array_##NAME##_empty();                                      \
-  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, \
+  array_##NAME array_##NAME##_from_values(TYPE* values, size_t count, \
                                           size_t capacity, TYPE fill);      \
   void array_##NAME##_free(array_##NAME* array);                            \
   int array_##NAME##_compare(array_##NAME a, array_##NAME b);               \
@@ -49,7 +49,7 @@ char* txy_string_concat(const char* a, const char* b);
     return array;                                                           \
   };                                                                        \
                                                                             \
-  array_##NAME array_##NAME##_from_values(const TYPE* values, size_t count, \
+  array_##NAME array_##NAME##_from_values(TYPE* values, size_t count, \
                                           size_t capacity, TYPE fill) {     \
     array_##NAME array;                                                     \
     size_t i = 0;                                                           \
@@ -159,7 +159,11 @@ char* txy_string_concat(const char* a, const char* b);
     char* inner_content;                                                    \
     int final_length;                                                       \
     char* result;                                                           \
-    array_string elements = array_string_create(array.capacity, (char*)""); \
+    array_string elements;                                                  \
+    if (array.pointer == NULL) {                                            \
+      return (char*)"null";                                                 \
+    }                                                                       \
+    elements = array_string_create(array.capacity, (char*)"");              \
                                                                             \
   convert_loop:                                                             \
     if (i == array.capacity) goto join_elements;                            \
@@ -182,6 +186,34 @@ char* txy_string_concat(const char* a, const char* b);
 #define DECLARE_OPTION(TYPE, NAME)                                \
   typedef struct {                                                \
     uint8_t is_some;                                              \
+    TYPE value;                                                   \
+  } option_##NAME;                                                \
+  option_##NAME option_##NAME##_none();                           \
+  option_##NAME option_##NAME##_some(TYPE val);                   \
+  TYPE option_##NAME##_unwrap(const option_##NAME* option);       \
+  option_##NAME option_##NAME##_copy(const option_##NAME* other); \
+  void option_##NAME##_assign(option_##NAME* destiny,             \
+                              const option_##NAME* source);       \
+  int option_##NAME##_compare(option_##NAME a, option_##NAME b);  \
+  char* option_##NAME##_to_string(option_##NAME option);          \
+  void option_##NAME##_free(option_##NAME* option);               \
+                                                                  \
+  typedef struct {                                                \
+    uint8_t is_some;                                              \
+    TYPE* value;                                                  \
+  } option_##NAME##_ptr;                                          \
+  option_##NAME##_ptr option_##NAME##_ptr_none();                 \
+  option_##NAME##_ptr option_##NAME##_ptr_some(TYPE val);         \
+  TYPE option_##NAME##_ptr_unwrap(const option_##NAME##_ptr* option); \
+  option_##NAME##_ptr option_##NAME##_ptr_copy(const option_##NAME##_ptr* other); \
+  void option_##NAME##_ptr_assign(option_##NAME##_ptr* destiny,   \
+                                  const option_##NAME##_ptr* source); \
+  int option_##NAME##_ptr_compare(option_##NAME##_ptr a, option_##NAME##_ptr b); \
+  char* option_##NAME##_ptr_to_string(option_##NAME##_ptr option);
+
+#define DECLARE_OPTION_PTR(TYPE, NAME)                            \
+  typedef struct {                                                \
+    uint8_t is_some;                                              \
     TYPE* value;                                                  \
   } option_##NAME;                                                \
   option_##NAME option_##NAME##_none();                           \
@@ -191,11 +223,12 @@ char* txy_string_concat(const char* a, const char* b);
   void option_##NAME##_assign(option_##NAME* destiny,             \
                               const option_##NAME* source);       \
   int option_##NAME##_compare(option_##NAME a, option_##NAME b);  \
-  char* option_##NAME##_to_string(option_##NAME option);
+  char* option_##NAME##_to_string(option_##NAME option);          \
+  void option_##NAME##_free(option_##NAME* option);
 
 #define IMPLEMENT_OPTION(TYPE, NAME, COMPARE_FUNCTION, TO_STRING)  \
   option_##NAME option_##NAME##_none() {                           \
-    option_##NAME option;                                          \
+    option_##NAME option = {0};                                    \
     option.is_some = 0;                                            \
     return option;                                                 \
   };                                                               \
@@ -203,8 +236,100 @@ char* txy_string_concat(const char* a, const char* b);
   option_##NAME option_##NAME##_some(TYPE val) {                   \
     option_##NAME option;                                          \
     option.is_some = 1;                                            \
+    option.value = val;                                            \
+    return option;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
+  };                                                               \
+                                                                   \
+  int option_##NAME##_is_some(const option_##NAME* option) {       \
+    return option->is_some;                                        \
+  };                                                               \
+                                                                   \
+  int option_##NAME##_is_none(const option_##NAME* option) {       \
+    if (option->is_some) goto has_value;                           \
+    return 1;                                                      \
+  has_value:                                                       \
+    return 0;                                                      \
+  };                                                               \
+                                                                   \
+  TYPE option_##NAME##_unwrap(const option_##NAME* option) {       \
+    if (option->is_some) goto success;                             \
+    exit(1);                                                       \
+  success:                                                         \
+    return option->value;                                          \
+  };                                                               \
+                                                                   \
+  option_##NAME option_##NAME##_copy(const option_##NAME* other) { \
+    option_##NAME option;                                          \
+    option.is_some = other->is_some;                               \
+    if (other->is_some) option.value = other->value;               \
+    return option;                                                 \
+  };                                                               \
+                                                                   \
+  void option_##NAME##_assign(option_##NAME* destiny,              \
+                              const option_##NAME* source) {       \
+    destiny->is_some = source->is_some;                            \
+    if (source->is_some) destiny->value = source->value;           \
+  };                                                               \
+                                                                   \
+  int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
+    if (a.is_some != b.is_some) goto not_equals;                   \
+    if (a.is_some) goto check_value;                               \
+    goto equals;                                                   \
+                                                                   \
+  check_value:                                                     \
+    if (COMPARE_FUNCTION(a.value, b.value)) goto equals;           \
+    goto not_equals;                                               \
+                                                                   \
+  equals:                                                          \
+    return 1;                                                      \
+                                                                   \
+  not_equals:                                                      \
+    return 0;                                                      \
+  };                                                               \
+                                                                   \
+  void option_##NAME##_free(option_##NAME* option) {               \
+    option->is_some = 0;                                           \
+  };                                                               \
+                                                                   \
+  char* option_##NAME##_to_string(option_##NAME option) {          \
+    char* result;                                                  \
+    char* string;                                                  \
+    int length;                                                    \
+                                                                   \
+    if (option.is_some) goto format_some;                          \
+    length = snprintf(NULL, 0, "none");                            \
+    result = (char*)malloc(length + 1);                            \
+    if (result == NULL) goto error;                                \
+    snprintf(result, length + 1, "none");                          \
+    return result;                                                 \
+                                                                   \
+  format_some:                                                     \
+    string = TO_STRING(option.value);                              \
+    length = snprintf(NULL, 0, "some(%s)", string);                \
+    result = (char*)malloc(length + 1);                            \
+    if (result == NULL) goto error;                                \
+    snprintf(result, length + 1, "some(%s)", string);              \
+    return result;                                                 \
+                                                                   \
+  error:                                                           \
+    exit(1);                                                       \
+  };
+
+#define IMPLEMENT_OPTION_POINTER(TYPE, NAME, COMPARE_FUNCTION, TO_STRING) \
+  option_##NAME option_##NAME##_none() {                           \
+    option_##NAME option = {0};                                    \
+    option.is_some = 0;                                            \
+    option.value = NULL;                                           \
+    return option;                                                 \
+  };                                                               \
+                                                                   \
+  option_##NAME option_##NAME##_some(TYPE val) {                   \
+    option_##NAME option;                                          \
+    option.is_some = 1;                                            \
     option.value = (TYPE*)malloc(sizeof(TYPE));                    \
-    if (option.value == NULL) goto error;                          \
     *option.value = val;                                           \
     return option;                                                 \
                                                                    \
@@ -232,50 +357,25 @@ char* txy_string_concat(const char* a, const char* b);
                                                                    \
   option_##NAME option_##NAME##_copy(const option_##NAME* other) { \
     option_##NAME option;                                          \
-    if (other->is_some) goto copy_some;                            \
-    option.is_some = 0;                                            \
-    option.value = NULL;                                           \
-    goto copy_end;                                                 \
-                                                                   \
-  copy_some:                                                       \
-    option.is_some = 1;                                            \
-    option.value = (TYPE*)malloc(sizeof(TYPE));                    \
-    if (option.value == NULL) goto error;                          \
-    *option.value = *other->value;                                 \
-                                                                   \
-  copy_end:                                                        \
+    option.is_some = other->is_some;                               \
+    if (other->is_some) {                                          \
+      option.value = (TYPE*)malloc(sizeof(TYPE));                  \
+      *option.value = *other->value;                               \
+    } else {                                                       \
+      option.value = NULL;                                         \
+    }                                                              \
     return option;                                                 \
-                                                                   \
-  error:                                                           \
-    exit(1);                                                       \
   };                                                               \
                                                                    \
   void option_##NAME##_assign(option_##NAME* destiny,              \
                               const option_##NAME* source) {       \
-    if (destiny == source) goto assign_end;                        \
-                                                                   \
-    if (source->is_some) goto assign_some;                         \
-    destiny->is_some = 0;                                          \
-    if (destiny->value != NULL) {                                  \
-      free(destiny->value);                                        \
-      destiny->value = NULL;                                       \
+    destiny->is_some = source->is_some;                            \
+    if (source->is_some) {                                         \
+      if (destiny->value == NULL) {                                \
+        destiny->value = (TYPE*)malloc(sizeof(TYPE));              \
+      }                                                            \
+      *destiny->value = *source->value;                            \
     }                                                              \
-    goto assign_end;                                               \
-                                                                   \
-  assign_some:                                                     \
-    destiny->is_some = 1;                                          \
-    if (destiny->value != NULL) goto assign_value;                 \
-    destiny->value = (TYPE*)malloc(sizeof(TYPE));                  \
-    if (destiny->value == NULL) goto error;                        \
-                                                                   \
-  assign_value:                                                    \
-    *destiny->value = *source->value;                              \
-                                                                   \
-  assign_end:                                                      \
-    return;                                                        \
-                                                                   \
-  error:                                                           \
-    exit(1);                                                       \
   };                                                               \
                                                                    \
   int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
@@ -294,6 +394,14 @@ char* txy_string_concat(const char* a, const char* b);
     return 0;                                                      \
   };                                                               \
                                                                    \
+  void option_##NAME##_free(option_##NAME* option) {               \
+    if (option->is_some && option->value != NULL) {                \
+      free(option->value);                                         \
+      option->value = NULL;                                        \
+    }                                                              \
+    option->is_some = 0;                                           \
+  };                                                               \
+                                                                   \
   char* option_##NAME##_to_string(option_##NAME option) {          \
     char* result;                                                  \
     char* string;                                                  \
@@ -302,7 +410,7 @@ char* txy_string_concat(const char* a, const char* b);
     if (option.is_some) goto format_some;                          \
     length = snprintf(NULL, 0, "none");                            \
     result = (char*)malloc(length + 1);                            \
-    if (result == NULL) goto error;                                \
+    if (result == NULL) goto error_str;                            \
     snprintf(result, length + 1, "none");                          \
     return result;                                                 \
                                                                    \
@@ -310,11 +418,11 @@ char* txy_string_concat(const char* a, const char* b);
     string = TO_STRING(*option.value);                             \
     length = snprintf(NULL, 0, "some(%s)", string);                \
     result = (char*)malloc(length + 1);                            \
-    if (result == NULL) goto error;                                \
+    if (result == NULL) goto error_str;                            \
     snprintf(result, length + 1, "some(%s)", string);              \
     return result;                                                 \
                                                                    \
-  error:                                                           \
+  error_str:                                                       \
     exit(1);                                                       \
   };
 

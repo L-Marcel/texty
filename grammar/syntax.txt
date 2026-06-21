@@ -84,9 +84,15 @@
         | <switch>
         | <expr>
 <return> -> RETURN <expr>
+          | RETURN <array_allocation>
+          | RETURN <struct_allocation>
           | RETURN
 <attr> -> VAR ID COLON <type> ATTR <expr>
         | CONST ID COLON <type> ATTR <expr>
+        | VAR ID COLON <type> ATTR <array_allocation>
+        | CONST ID COLON <type> ATTR <array_allocation>
+        | VAR ID COLON <type> ATTR <struct_allocation>
+        | CONST ID COLON <type> ATTR <struct_allocation>
 <basic_type> -> TYPE_INT 
               | TYPE_FLOAT 
               | TYPE_DOUBLE 
@@ -101,6 +107,9 @@
         | TYPE_OPTION LT <type> GT
         | <name> 
 <assign> -> <access> ATTR <expr>
+          | <access> ATTR <array_allocation>
+          | <access> ATTR <struct_allocation>
+          | MULT <access> ATTR <expr>
           | <access> AND_ATTR <expr>
           | <access> OR_ATTR <expr>
           | <access> LAZY_AND_ATTR <expr>
@@ -209,8 +218,7 @@
         | STRING 
         | CHAR 
         | NONE
-        | <array_allocation> 
-        | <struct_allocation> 
+        | NULL_VALUE
         | <access>
         | SOME LEFT_PAREN <expr> RIGHT_PAREN
 

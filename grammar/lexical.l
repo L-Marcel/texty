@@ -65,6 +65,7 @@
 [0-9]+                                         { return yy::parser::make_INT(stoi(yytext)); }
 "true"                                         { return yy::parser::make_BOOL(true); }
 "false"                                        { return yy::parser::make_BOOL(false); }
+"null"                                         { return yy::parser::make_NULL_VALUE(); }
 "new"                                          { return yy::parser::make_NEW(); }
 "var"                                          { return yy::parser::make_VAR(); }
 "const"                                        { return yy::parser::make_CONST(); }
