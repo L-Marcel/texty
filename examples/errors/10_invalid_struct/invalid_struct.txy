@@ -17,10 +17,12 @@ struct User
   version: int;
   permission: byte;
   address: Address;
+  brother: User; # Não pode ser permitido na linguagem
+  room: Room; # Também não é permitido por que Room -> User
   monther_address: option<Address>;
   monther: pointer<User>;
   supervisor: option<pointer<User>>;
-  father: option<User>;
+  father: option<User>; # Não é permitido porque option contém o User
   children: User[];
 endstruct;
 

@@ -17,18 +17,37 @@ StructNode* get_struct_node(const vector<Node*>& children, string name) {
   return nullptr;
 };
 
+bool get_direct_dependency(const Type& type, string& out_name) {
+  if (type.kind == TypeKind::NAMED) {
+    out_name = type.get_name();
+    return true;
+  } else if (type.kind == TypeKind::OPTION && type.inner_type != nullptr) {
+    return get_direct_dependency(*type.inner_type, out_name);
+  };
+
+  return false;
+};
+
 void visit_node(Node* node, const vector<Node*>& children,
                 unordered_set<Node*>& visited, unordered_set<Node*>& visiting,
                 vector<Node*>& sorted_children) {
   if (visited.count(node)) return;
-  if (visiting.count(node)) return;
+  
+  if (visiting.count(node)) {
+    if (StructNode* struct_node = dynamic_cast<StructNode*>(node)) {
+      throw error("estrutura '" + struct_node->name.substr(4) + "' possui dependência circular de tamanho infinito", struct_node->line);
+    };
+    return;
+  };
+
   visiting.insert(node);
 
   if (StructNode* struct_node = dynamic_cast<StructNode*>(node)) {
     for (auto& attr : struct_node->attributes) {
-      if (attr.second.kind == TypeKind::NAMED) {
+      string dep_name;
+      if (get_direct_dependency(attr.second, dep_name)) {
         StructNode* dependency_struct_node =
-            get_struct_node(children, attr.second.get_name());
+            get_struct_node(children, dep_name);
         if (dependency_struct_node)
           visit_node(dependency_struct_node, children, visited, visiting,
                      sorted_children);

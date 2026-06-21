@@ -224,7 +224,16 @@ void References::initialize() {
                                false, false);
   this->add_function_reference(-1, "txy_input_line", Type(TypeKind::STRING), {},
                                false, false);
-
+  this->add_function_reference(-1, "txy_wrap", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_align_left", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_align_right", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_align_center", Type(TypeKind::STRING), {Type(TypeKind::STRING), Type(TypeKind::INT)}, false,
+                               true);
+  this->add_function_reference(-1, "txy_string_length", Type(TypeKind::LONG), {Type(TypeKind::STRING)}, false,
+                               true);
   Type types[] = {Type(TypeKind::BOOL),   Type(TypeKind::CHAR),
                   Type(TypeKind::BYTE),   Type(TypeKind::INT),
                   Type(TypeKind::LONG),   Type(TypeKind::FLOAT),

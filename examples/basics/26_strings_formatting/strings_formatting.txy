@@ -1,0 +1,15 @@
+fn main(): int
+    var base_text: string = "Olá mundo";
+    
+    println("Original: [" << base_text << "]");
+    println("Tamanho: " << string(string_length(base_text)));
+    println("Esquerda:   [" << align_left(base_text, 20) << "]");
+    println("Direita:  [" << align_right(base_text, 20) << "]");
+    println("Centro: [" << align_center(base_text, 20) << "]");
+    
+    var long_text: string = "Um texto bem grande, o suficiente para ser quebrado em linhas de tamanho 30.";
+    println("Wrap test:");
+    println(wrap(long_text, 30));
+    
+    return 0;
+endfn;
