@@ -17,10 +17,20 @@ void References::add_struct_reference(int line, string name,
                                       vector<pair<string, Type>> attributes) {
   if (this->enums.find(name) != this->enums.end()) {
     if (line != -1) throw error("tipo '" + name.substr(4) + "' já declarado como enumeração", line);
-  }
+  };
+
   if (this->structs.find(name) != this->structs.end()) {
     if (line != -1) throw error("estrutura '" + name.substr(4) + "' já declarada", line);
-  }
+  };
+  
+  unordered_set<string> seen_attributes;
+  for (const auto& attr : attributes) {
+    if (seen_attributes.count(attr.first)) {
+      if (line != -1) throw error("campo '" +  attr.first.substr(4) + "' declarado múltiplas vezes na estrutura '" + name.substr(4) + "'", line);
+    };
+    seen_attributes.insert(attr.first);
+  };
+
   this->structs[name] = attributes;
 };
 bool References::has_struct_reference(string name) {
