@@ -75,6 +75,7 @@ proc main()
         println("====================== SOMA =======================");
         print_matrix(sum, rows_a, cols_a);
     else
+        println("====================== SOMA =======================");
         println("Nao e possivel somar as matrizes informadas.");
     endif;
 
@@ -96,6 +97,7 @@ proc main()
         println("==================== PRODUTO ======================");
         print_matrix(product, rows_a, cols_b);
     else
+        println("==================== PRODUTO ======================");
         println("Nao e possivel multiplicar as matrizes informadas.");
     endif;
 

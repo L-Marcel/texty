@@ -5,7 +5,7 @@
 # B) encontrar a chave minima da arvore, indicando seu nivel;
 # C) encontrar a chave maxima da arvore, indicando seu nivel;
 # D) imprimir a arvore de busca na saida padrao, nivel a nivel.
-#
+
 # Representacao usada:
 # - keys[i] guarda a chave do no i;
 # - left[i] guarda o indice do filho esquerdo ou -1;

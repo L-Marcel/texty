@@ -57,7 +57,7 @@ fn rational_division(a, b: Rational): Rational
 endfn;
 
 proc print_rational(label: string; value: Rational)
-    println(format("%string: numerador = %int denominador = %int", label, value.numerator, value.denominator));
+    println(format("%string: (numerador = %int; denominador = %int)", label, value.numerator, value.denominator));
 endproc;
 
 proc main()
@@ -76,12 +76,12 @@ proc main()
     println(format("primeiro == terceiro: %bool", rational_equals(first, third)));
 
     println("==================== OPERACOES ====================");
-    print_rational("soma", rational_sum(first, second));
+    print_rational("soma do primeiro com o segundo", rational_sum(first, second));
     print_rational("negacao do primeiro", rational_negation(first));
-    print_rational("subtracao", rational_subtraction(first, second));
-    print_rational("multiplicacao", rational_multiplication(first, second));
+    print_rational("subtracao do primeiro com o segundo", rational_subtraction(first, second));
+    print_rational("multiplicacao do primeiro com o segundo", rational_multiplication(first, second));
     print_rational("inverso do primeiro", rational_inverse(first));
-    print_rational("divisao", rational_division(first, second));
+    print_rational("divisao do primeiro com o segundo", rational_division(first, second));
 
     println("===================================================");
 endproc;

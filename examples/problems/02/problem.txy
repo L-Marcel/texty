@@ -17,7 +17,7 @@ proc main()
         if key > 0 then
             var temp: int[] = new int[1]{key};
             array = array << temp;
-            delete(temp);
+            delete(&temp);
         endif;
     until key < 0;
 
