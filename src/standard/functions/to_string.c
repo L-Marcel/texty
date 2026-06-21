@@ -1,6 +1,5 @@
 #include "../core.h"
 
-// TODO - Melhorar essas funções
 char* txy_float_decimals(float value, int64_t left, int64_t right) {
   int total_width;
   int len;

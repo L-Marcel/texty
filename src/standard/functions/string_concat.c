@@ -1,6 +1,5 @@
 #include "../core.h"
 
-// TODO - Melhorar essa função depois
 char* txy_string_concat(const char* a, const char* b) {
   size_t len_a = 0;
   size_t len_b = 0;

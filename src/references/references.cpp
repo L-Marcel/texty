@@ -231,6 +231,4 @@ void References::initialize() {
   for (const Type& to : types) {
     this->add_function_reference(-1, "txy_" + to.get_name(), to, {}, false, true);
   };
-
-  // TODO: Registrar métodos e procedures nativos
 };
