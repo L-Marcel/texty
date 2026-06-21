@@ -20,6 +20,9 @@ void References::add_struct_reference(int line, string name,
   }
   this->structs[name] = attributes;
 };
+bool References::has_struct_reference(string name) {
+  return this->structs.find(name) != this->structs.end();
+};
 vector<pair<string, Type>> References::get_struct_reference(string name) {
   if (this->structs.find(name) != this->structs.end()) {
     return this->structs[name];

@@ -78,11 +78,26 @@ string AccessNode::to_string() const {
 // Tipagem
 Type AccessNode::get_type() const {
   switch (this->access_type) {
-    case AccessType::DOT:
-      // TODO - Tem que considerar o caminho
-      return References::get_instance()
-          ->get_reference(line, this->name)
-          ->node_type;
+    case AccessType::DOT: {
+      Type previous_type = this->previous->get_type();
+      if (previous_type.kind != TypeKind::NAMED) {
+        throw error("tentativa inválida de acesso ao campo '" +
+                        this->name.substr(4) + "' em valor do tipo (" +
+                        previous_type.to_string() + ")",
+                    this->line);
+      }
+
+      vector<pair<string, Type>> attributes =
+          References::get_instance()->get_struct_reference(previous_type.name);
+      for (size_t i = 0; i < attributes.size(); i++) {
+        if (attributes[i].first == this->name) return attributes[i].second;
+      }
+
+      throw error("tentativa inválida de acesso ao campo '" +
+                      this->name.substr(4) + "' não declarado na estrutura '" +
+                      previous_type.name.substr(4) + "'",
+                  this->line);
+    }
     case AccessType::BRACKET: {
       Type type = this->previous->get_type();
       if (type.kind != TypeKind::ARRAY)
