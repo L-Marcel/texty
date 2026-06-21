@@ -3,6 +3,7 @@
 #include "../lib/magic_enum.hpp"
 #include "../references/references.hpp"
 #include "compiler.hpp"
+#include "structures/enum.hpp"
 #include "structures/struct.hpp"
 
 // Extração de estruturas e suas dependências
@@ -72,6 +73,21 @@ void ProgramNode::compile_code(ostream& os) const {
                              << struct_node->name << " instance);" << std::endl;
       generated_declarations << struct_node->name << " " << struct_node->name
                              << "_default();" << std::endl;
+    } else if (EnumNode* enum_node =
+                   dynamic_cast<EnumNode*>(this->children[i])) {
+      References::get_instance()->add_enum_reference(enum_node->line, enum_node->name,
+                                                     enum_node->values);
+      generated_declarations << "typedef enum " << enum_node->name << " "
+                             << enum_node->name << ";" << std::endl;
+      generated_declarations << "int " << enum_node->name << "_compare("
+                             << enum_node->name << " a, " << enum_node->name
+                             << " b);" << std::endl;
+      generated_declarations << "char* " << enum_node->name << "_to_string("
+                             << enum_node->name << " instance);" << std::endl;
+      generated_declarations << enum_node->name << " " << enum_node->name
+                             << "_default();" << std::endl;
+      generated_declarations << enum_node->name << " " << enum_node->name
+                             << "_from_int(int32_t index);" << std::endl;
     }
   };
 

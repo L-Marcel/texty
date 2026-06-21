@@ -44,6 +44,12 @@ struct References {
   bool has_struct_reference(string name);
   vector<pair<string, Type>> get_struct_reference(string name);
 
+  unordered_map<string, vector<string>> enums;
+  void add_enum_reference(int line, string name, vector<string> values);
+  bool has_enum_reference(string name);
+  bool has_enum_value(string enum_name, string value_name);
+  vector<string> get_enum_reference(string name);
+
   static References* _instance;
   static References* get_instance();
   References();
