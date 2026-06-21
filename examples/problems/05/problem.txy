@@ -1,0 +1,31 @@
+# Crie um subprograma chamado mdc, com tres argumentos n, m e r.
+# n e m sao passados por valor, e r representa o resultado por referencia.
+
+
+proc mdc(n, m: int; r: pointer<int>)
+    if m % n == 0 then
+        *r = n;
+    elif n % m == 0 then
+        *r = m;
+    elif m > n then
+        mdc(n, m % n, r);
+    else
+        mdc(m, n % m, r);
+    endif;
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 05 ===================");
+
+    var n: int = 36;
+    var m: int = 60;
+    var result: int = 0;
+
+    mdc(n, m, &result);
+
+    println(format("n: %int", n));
+    println(format("m: %int", m));
+    println(format("mdc: %int", result));
+
+    println("===================================================");
+endproc;
