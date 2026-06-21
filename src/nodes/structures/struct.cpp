@@ -71,9 +71,9 @@ void StructNode::compile_code(ostream& os) const {
       generated_implementations << "\t" << attribute.second.get_name() << "_free(&instance->"
                                 << attribute.first << ");" << std::endl;
     } else if (kind == TypeKind::POINTER) {
-      generated_implementations << "\tif (instance->" << attribute.first << " != NULL) {" << std::endl;
-      generated_implementations << "\t\tfree(instance->" << attribute.first << ");" << std::endl;
-      generated_implementations << "\t}" << std::endl;
+      generated_implementations << "\tif (instance->" << attribute.first << " == NULL) goto skip_free_" << attribute.first << ";" << std::endl;
+      generated_implementations << "\tfree(instance->" << attribute.first << ");" << std::endl;
+      generated_implementations << "\tskip_free_" << attribute.first << ":" << std::endl;
     }
   }
   generated_implementations << "\t*instance = " << this->name << "_default();" << std::endl;
@@ -82,7 +82,9 @@ void StructNode::compile_code(ostream& os) const {
   // String
   generated_implementations << "char* " << this->name << "_to_string("
                             << this->name << " instance) {" << std::endl;
-  generated_implementations << "\tif (" << this->name << "_compare(instance, " << this->name << "_default())) return (char*)\"null\";" << std::endl;
+  generated_implementations << "\tif (!" << this->name << "_compare(instance, " << this->name << "_default())) goto is_not_null;" << std::endl;
+  generated_implementations << "\treturn (char*)\"null\";" << std::endl;
+  generated_implementations << "is_not_null:" << std::endl;
   generated_implementations << "\tarray_string props = array_string_create("
                             << this->attributes.size() << ", \"\");"
                             << std::endl;

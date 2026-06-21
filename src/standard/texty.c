@@ -160,9 +160,9 @@ char* txy_string_concat(const char* a, const char* b);
     int final_length;                                                       \
     char* result;                                                           \
     array_string elements;                                                  \
-    if (array.pointer == NULL) {                                            \
-      return (char*)"null";                                                 \
-    }                                                                       \
+    if (array.pointer != NULL) goto is_not_null;                            \
+    return (char*)"null";                                                   \
+  is_not_null:                                                              \
     elements = array_string_create(array.capacity, (char*)"");              \
                                                                             \
   convert_loop:                                                             \
@@ -264,14 +264,20 @@ char* txy_string_concat(const char* a, const char* b);
   option_##NAME option_##NAME##_copy(const option_##NAME* other) { \
     option_##NAME option;                                          \
     option.is_some = other->is_some;                               \
-    if (other->is_some) option.value = other->value;               \
+    if (other->is_some) goto define;                               \
+    return option;                                                 \
+  define:                                                          \
+    option.value = other->value;                                   \
     return option;                                                 \
   };                                                               \
                                                                    \
   void option_##NAME##_assign(option_##NAME* destiny,              \
                               const option_##NAME* source) {       \
     destiny->is_some = source->is_some;                            \
-    if (source->is_some) destiny->value = source->value;           \
+    if (source->is_some) goto define;                              \
+    return;                                                        \
+  define:                                                          \
+    destiny->value = source->value;                                \
   };                                                               \
                                                                    \
   int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
@@ -358,24 +364,26 @@ char* txy_string_concat(const char* a, const char* b);
   option_##NAME option_##NAME##_copy(const option_##NAME* other) { \
     option_##NAME option;                                          \
     option.is_some = other->is_some;                               \
-    if (other->is_some) {                                          \
-      option.value = (TYPE*)malloc(sizeof(TYPE));                  \
-      *option.value = *other->value;                               \
-    } else {                                                       \
-      option.value = NULL;                                         \
-    }                                                              \
+    if (!other->is_some) goto is_none;                             \
+    option.value = (TYPE*)malloc(sizeof(TYPE));                    \
+    *option.value = *other->value;                                 \
+    goto done;                                                     \
+  is_none:                                                         \
+    option.value = NULL;                                           \
+  done:                                                            \
     return option;                                                 \
   };                                                               \
                                                                    \
   void option_##NAME##_assign(option_##NAME* destiny,              \
                               const option_##NAME* source) {       \
     destiny->is_some = source->is_some;                            \
-    if (source->is_some) {                                         \
-      if (destiny->value == NULL) {                                \
-        destiny->value = (TYPE*)malloc(sizeof(TYPE));              \
-      }                                                            \
-      *destiny->value = *source->value;                            \
-    }                                                              \
+    if (!source->is_some) goto done;                               \
+    if (destiny->value != NULL) goto assign_value;                 \
+    destiny->value = (TYPE*)malloc(sizeof(TYPE));                  \
+  assign_value:                                                    \
+    *destiny->value = *source->value;                              \
+  done:                                                            \
+    return;                                                        \
   };                                                               \
                                                                    \
   int option_##NAME##_compare(option_##NAME a, option_##NAME b) {  \
@@ -395,10 +403,11 @@ char* txy_string_concat(const char* a, const char* b);
   };                                                               \
                                                                    \
   void option_##NAME##_free(option_##NAME* option) {               \
-    if (option->is_some && option->value != NULL) {                \
-      free(option->value);                                         \
-      option->value = NULL;                                        \
-    }                                                              \
+    if (!option->is_some) goto skip_free;                          \
+    if (option->value == NULL) goto skip_free;                     \
+    free(option->value);                                           \
+    option->value = NULL;                                          \
+  skip_free:                                                       \
     option->is_some = 0;                                           \
   };                                                               \
                                                                    \

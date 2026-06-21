@@ -86,13 +86,17 @@ void ForNode::compile_code(ostream& os) const {
         os << ident_outer << expr_type.inner_type->to_production() << " "
            << temp_idx << " = " << temp_expr << ".left.value." << v_field << ";"
            << std::endl;
-        os << ident_outer << "if (!" << temp_expr << ".left_inclusive) "
-           << temp_idx << " = " << temp_idx << " + 1;" << std::endl;
+        os << ident_outer << "if (" << temp_expr << ".left_inclusive) goto skip_left_" << temp_expr << ";" << std::endl;
+        os << ident_outer << temp_idx << " = " << temp_idx << " + 1;" << std::endl;
+        os << ident_outer << "skip_left_" << temp_expr << ":" << std::endl;
+
         os << ident_outer << expr_type.inner_type->to_production() << " "
            << temp_end << " = " << temp_expr << ".right.value." << v_field
            << ";" << std::endl;
-        os << ident_outer << "if (!" << temp_expr << ".right_inclusive) "
-           << temp_end << " = " << temp_end << " - 1;" << std::endl;
+
+        os << ident_outer << "if (" << temp_expr << ".right_inclusive) goto skip_right_" << temp_expr << ";" << std::endl;
+        os << ident_outer << temp_end << " = " << temp_end << " - 1;" << std::endl;
+        os << ident_outer << "skip_right_" << temp_expr << ":" << std::endl;
       };
 
       os << start_label << ":;" << std::endl;
