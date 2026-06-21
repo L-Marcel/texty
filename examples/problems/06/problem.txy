@@ -1,0 +1,142 @@
+# Uma arvore binaria de busca generaliza a ideia de listas encadeadas
+# crescentes. Implemente uma arvore binaria de busca com chaves de tipo inteiro
+# e as seguintes operacoes:
+# A) transformar uma sequencia de valores em uma arvore binaria de busca;
+# B) encontrar a chave minima da arvore, indicando seu nivel;
+# C) encontrar a chave maxima da arvore, indicando seu nivel;
+# D) imprimir a arvore de busca na saida padrao, nivel a nivel.
+#
+# Representacao usada:
+# - keys[i] guarda a chave do no i;
+# - left[i] guarda o indice do filho esquerdo ou -1;
+# - right[i] guarda o indice do filho direito ou -1;
+# - count[0] guarda a quantidade de nos ja inseridos.
+
+proc insert_value(keys, left, right, count: int[]; value: int)
+    if count[0] == 0 then
+        keys[0] = value;
+        left[0] = -1;
+        right[0] = -1;
+        count[0] = 1;
+    else
+        var current: int = 0;
+        var inserted: bool = false;
+
+        repeat
+            if value <= keys[current] then
+                if left[current] == -1 then
+                    var index: int = count[0];
+                    keys[index] = value;
+                    left[index] = -1;
+                    right[index] = -1;
+                    left[current] = index;
+                    count[0]++;
+                    inserted = true;
+                else
+                    current = left[current];
+                endif;
+            else
+                if right[current] == -1 then
+                    var index: int = count[0];
+                    keys[index] = value;
+                    left[index] = -1;
+                    right[index] = -1;
+                    right[current] = index;
+                    count[0]++;
+                    inserted = true;
+                else
+                    current = right[current];
+                endif;
+            endif;
+        until inserted;
+    endif;
+endproc;
+
+proc print_minimum(keys, left: int[])
+    var current: int = 0;
+    var level: int = 0;
+
+    while (left[current] != -1)
+        current = left[current];
+        level++;
+    endwhile;
+
+    println(format("Minimo: chave %int nivel %int", keys[current], level));
+endproc;
+
+proc print_maximum(keys, right: int[])
+    var current: int = 0;
+    var level: int = 0;
+
+    while (right[current] != -1)
+        current = right[current];
+        level++;
+    endwhile;
+
+    println(format("Maximo: chave %int nivel %int", keys[current], level));
+endproc;
+
+proc print_by_level(keys, left, right, count: int[])
+    var queue: int[] = new int[count[0]];
+    var start: int = 0;
+    var end: int = 0;
+    var level: int = 0;
+
+    queue[end] = 0;
+    end++;
+
+    while (start < end)
+        var level_count: int = end - start;
+
+        print(format("Nivel %int: ", level));
+
+        for (i in 0..level_count)
+            var current: int = queue[start];
+            start++;
+
+            print(format("%int", keys[current]));
+            if i < level_count - 1 then
+                print(" ");
+            endif;
+
+            if left[current] != -1 then
+                queue[end] = left[current];
+                end++;
+            endif;
+
+            if right[current] != -1 then
+                queue[end] = right[current];
+                end++;
+            endif;
+        endfor;
+
+        println("");
+        level++;
+    endwhile;
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 06 ===================");
+
+    print("Quantidade de valores: ");
+    var quantity: int = int(input_line());
+
+    var keys: int[] = new int[quantity];
+    var left: int[] = new int[quantity];
+    var right: int[] = new int[quantity];
+    var count: int[] = new int[1];
+    count[0] = 0;
+
+    for (i in 0..quantity)
+        print(format("Valor %int: ", i));
+        var value: int = int(input_line());
+        insert_value(keys, left, right, count, value);
+    endfor;
+
+    println("===================== ARVORE ======================");
+    print_by_level(keys, left, right, count);
+    print_minimum(keys, left);
+    print_maximum(keys, right);
+
+    println("===================================================");
+endproc;

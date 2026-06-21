@@ -15,14 +15,62 @@ References* References::get_instance() {
 // Structs
 void References::add_struct_reference(int line, string name,
                                       vector<pair<string, Type>> attributes) {
+  if (this->enums.find(name) != this->enums.end()) {
+    if (line != -1) throw error("tipo '" + name.substr(4) + "' já declarado como enumeração", line);
+  }
   if (this->structs.find(name) != this->structs.end()) {
     if (line != -1) throw error("estrutura '" + name.substr(4) + "' já declarada", line);
   }
   this->structs[name] = attributes;
 };
+bool References::has_struct_reference(string name) {
+  return this->structs.find(name) != this->structs.end();
+};
 vector<pair<string, Type>> References::get_struct_reference(string name) {
   if (this->structs.find(name) != this->structs.end()) {
     return this->structs[name];
+  };
+
+  return {};
+};
+
+// Enums
+void References::add_enum_reference(int line, string name,
+                                    vector<string> values) {
+  if (this->structs.find(name) != this->structs.end()) {
+    if (line != -1) throw error("tipo '" + name.substr(4) + "' já declarado como estrutura", line);
+  }
+  if (this->enums.find(name) != this->enums.end()) {
+    if (line != -1) throw error("enumeração '" + name.substr(4) + "' já declarada", line);
+  }
+
+  unordered_set<string> declared_values;
+  for (size_t i = 0; i < values.size(); i++) {
+    if (declared_values.find(values[i]) != declared_values.end()) {
+      if (line != -1) {
+        throw error("valor '" + values[i].substr(4) +
+                        "' já declarado na enumeração '" + name.substr(4) + "'",
+                    line);
+      }
+    }
+    declared_values.insert(values[i]);
+  }
+
+  this->enums[name] = values;
+};
+bool References::has_enum_reference(string name) {
+  return this->enums.find(name) != this->enums.end();
+};
+bool References::has_enum_value(string enum_name, string value_name) {
+  vector<string> values = this->get_enum_reference(enum_name);
+  for (size_t i = 0; i < values.size(); i++) {
+    if (values[i] == value_name) return true;
+  }
+  return false;
+};
+vector<string> References::get_enum_reference(string name) {
+  if (this->enums.find(name) != this->enums.end()) {
+    return this->enums[name];
   };
 
   return {};

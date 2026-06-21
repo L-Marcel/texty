@@ -1,0 +1,76 @@
+# Defina o tipo rational_t para representar numeros racionais.
+
+struct Rational
+    numerator, denominator: int;
+endstruct;
+
+fn rational(a, b: int): Rational
+    return new Rational {
+        numerator: a,
+        denominator: b
+    };
+endfn;
+
+fn rational_equals(a, b: Rational): bool
+    return a.numerator * b.denominator == b.numerator * a.denominator;
+endfn;
+
+fn rational_sum(a, b: Rational): Rational
+    return rational(
+        a.numerator * b.denominator + b.numerator * a.denominator,
+        a.denominator * b.denominator
+    );
+endfn;
+
+fn rational_negation(value: Rational): Rational
+    return rational(-value.numerator, value.denominator);
+endfn;
+
+fn rational_subtraction(a, b: Rational): Rational
+    return rational_sum(a, rational_negation(b));
+endfn;
+
+fn rational_multiplication(a, b: Rational): Rational
+    return rational(
+        a.numerator * b.numerator,
+        a.denominator * b.denominator
+    );
+endfn;
+
+fn rational_inverse(value: Rational): Rational
+    return rational(value.denominator, value.numerator);
+endfn;
+
+fn rational_division(a, b: Rational): Rational
+    return rational_multiplication(a, rational_inverse(b));
+endfn;
+
+proc print_rational(label: string; value: Rational)
+    println(format("%string: numerador = %int denominador = %int", label, value.numerator, value.denominator));
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 04 ===================");
+
+    var first: Rational = rational(1, 2);
+    var second: Rational = rational(3, 4);
+    var third: Rational = rational(2, 4);
+
+    print_rational("primeiro", first);
+    print_rational("segundo", second);
+    print_rational("terceiro", third);
+
+    println("==================== IGUALDADE ====================");
+    println(format("primeiro == segundo: %bool", rational_equals(first, second)));
+    println(format("primeiro == terceiro: %bool", rational_equals(first, third)));
+
+    println("==================== OPERACOES ====================");
+    print_rational("soma", rational_sum(first, second));
+    print_rational("negacao do primeiro", rational_negation(first));
+    print_rational("subtracao", rational_subtraction(first, second));
+    print_rational("multiplicacao", rational_multiplication(first, second));
+    print_rational("inverso do primeiro", rational_inverse(first));
+    print_rational("divisao", rational_division(first, second));
+
+    println("===================================================");
+endproc;

@@ -1,0 +1,40 @@
+# Crie um subprograma chamado mdc, com tres argumentos n, m, passados por
+# valor, e r, passado por referencia, nesta ordem. O subprograma mdc deve
+# calcular o maior divisor comum entre dois numeros naturais estritamente
+# positivos n e m, de acordo com o seguinte algoritmo recursivo:
+# - se n for um divisor de m, n e o maior divisor comum de n e m;
+# - se m for um divisor de n, m e o maior divisor comum de n e m;
+# - se n nao for um divisor de m, e se m for maior que n, entao o maior
+#   divisor comum de m e n tambem e o maior divisor comum de n e do resto
+#   da divisao de m por n.
+#
+# O subprograma deve retornar seu resultado por meio de parametro r, que deve
+# ser posteriormente impresso na tela pelo programa principal.
+
+proc mdc(n, m: int; r: pointer<int>)
+    if m % n == 0 then
+        *r = n;
+    elif n % m == 0 then
+        *r = m;
+    elif m > n then
+        mdc(n, m % n, r);
+    else
+        mdc(m, n % m, r);
+    endif;
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 05 ===================");
+
+    var n: int = 36;
+    var m: int = 60;
+    var result: int = 0;
+
+    mdc(n, m, &result);
+
+    println(format("n: %int", n));
+    println(format("m: %int", m));
+    println(format("mdc: %int", result));
+
+    println("===================================================");
+endproc;
