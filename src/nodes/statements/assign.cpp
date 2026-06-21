@@ -1,6 +1,7 @@
 #include "assign.hpp"
 
 #include "../../operations/binary/binary.hpp"
+#include "../evaluation/binary.hpp"
 
 // Debug
 void AssignNode::compile_dot(ostream& os) const {
@@ -17,7 +18,12 @@ void AssignNode::compile_code(ostream& os) const {
     os << " = ";
     this->expression->compile_code(os);
   } else {
-    // TODO
+    this->get_type();
+    this->access->compile_code(os);
+    os << " = ";
+    BinaryOperationNode operation =
+        BinaryOperationNode(this->operation, this->access, this->expression);
+    operation.compile_code(os);
   };
 };
 
@@ -55,5 +61,6 @@ AssignNode::AssignNode(int line, BinaryOperation operation, AccessNode* access,
                        ExpressionNode* expression)
     : Node(line),
       assign_type(AssignType::OPERATION),
+      operation(operation),
       access(access),
       expression(expression) {};
