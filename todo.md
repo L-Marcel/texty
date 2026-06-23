@@ -1,6 +1,5 @@
-* Mostrar a ele os problemas
-
 # Metas futuras
+* Verificação de acesso existente ou não
 * Tratar constantes
 * Adicionar resize e push de array (atualmente é possível adicionar concatenando)
 * Adicionar trait e impl
