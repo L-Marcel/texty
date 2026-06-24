@@ -41,7 +41,6 @@ struct References {
   void initialize();
 
   unordered_map<string, vector<pair<string, Type>>> structs;
-  unordered_map<string, StructReference*> struct_references;
   void add_struct_reference(int line, string name, vector<pair<string, Type>> attributes);
   bool has_struct_reference(string name);
   vector<pair<string, Type>> get_struct_reference(string name);
