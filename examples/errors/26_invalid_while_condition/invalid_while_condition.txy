@@ -6,7 +6,7 @@ proc main()
     println("=================== PROBLEMA 06 ===================");
     var start: int = 0;
     var end: int = 1;
-    while (start + end) # Erro injetado
+    while (start + end)
         start++;
     endwhile;
 endproc;

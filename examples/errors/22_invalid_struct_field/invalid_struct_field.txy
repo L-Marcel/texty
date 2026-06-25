@@ -8,5 +8,5 @@ proc main()
         numerator: 1,
         denominator: 2
     };
-    println(format("Numerador: %int", r.numerador)); # Erro injetado
+    println(format("Numerador: %int", r.numerador));
 endproc;

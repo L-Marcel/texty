@@ -9,7 +9,7 @@ proc main()
         print("Próximo número: ");
         var key: int = int(input_line()); 
         if key >= 0 then
-            array = key; # Erro injetado
+            array = key;
         endif;
     until int(key) < 0;
 endproc;

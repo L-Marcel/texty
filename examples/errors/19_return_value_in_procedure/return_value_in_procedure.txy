@@ -11,7 +11,7 @@ proc print_matrix(matrix: int[][]; rows, cols: int)
         endfor;
         println("]");
     endfor;
-    return 1; # Erro injetado
+    return 1;
 endproc;
 
 proc main()

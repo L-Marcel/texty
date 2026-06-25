@@ -6,5 +6,5 @@ proc main()
     var n: int = 36;
     var m: int = 60;
     var result: int = 0;
-    mdc(n, m, result); # Erro injetado
+    mdc(n, m, result);
 endproc;

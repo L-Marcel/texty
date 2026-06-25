@@ -3,6 +3,6 @@ proc main()
     var y: double = 21d;
     var x: double = 18d;
     var c: int = 5;
-    var result: double = (x ** "2d") - y + double(c); # Erro injetado
+    var result: double = (x ** "2d") - y + double(c);
     println(format("Resultado: %double", result));
 endproc;

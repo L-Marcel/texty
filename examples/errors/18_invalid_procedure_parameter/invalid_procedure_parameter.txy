@@ -26,5 +26,5 @@ proc main()
     endfor;
 
     println("==================== MATRIZ A =====================");
-    print_matrix(matrix_a[0], rows_a, cols_a); # Erro injetado
+    print_matrix(matrix_a[0], rows_a, cols_a);
 endproc;

@@ -7,5 +7,5 @@ endstruct;
 proc main()
     println("=================== PROBLEMA 06 ===================");
     var count: int = 5;
-    delete(count); # Erro injetado
+    delete(count);
 endproc;

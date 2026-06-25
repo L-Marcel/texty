@@ -1,5 +1,5 @@
 proc mdc(n, m: int; r: pointer<int>)
-    *r = "test"; # Erro injetado
+    *r = "test";
 endproc;
 
 proc main()

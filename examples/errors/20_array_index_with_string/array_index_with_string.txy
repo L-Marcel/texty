@@ -23,7 +23,7 @@ proc main()
     for (i in 0..rows_a)
         matrix_a[i] = new int[cols_a];
         for (j in 0..cols_a)
-            matrix_a["0"][j] = 0; # Erro injetado
+            matrix_a["0"][j] = 0;
         endfor;
     endfor;
 endproc;

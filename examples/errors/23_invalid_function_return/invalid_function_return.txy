@@ -5,7 +5,7 @@ struct Rational
 endstruct;
 
 fn rational(a, b: int): Rational
-    return 1; # Erro injetado
+    return 1;
 endfn;
 
 proc main()

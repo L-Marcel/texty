@@ -13,5 +13,5 @@ proc main()
             array = array << temp;
             delete(&temp);
         endif;
-    until key; # Erro injetado
+    until key;
 endproc;

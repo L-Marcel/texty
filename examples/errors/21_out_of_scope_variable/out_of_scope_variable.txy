@@ -10,7 +10,7 @@ proc print_matrix(matrix: int[][]; rows, cols: int)
         println("]");
     endfor;
     
-    println(format("Tamanho final de i era: %int", i)); # Erro injetado
+    println(format("Tamanho final de i era: %int", i));
 endproc;
 
 proc main()
