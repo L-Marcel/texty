@@ -1,0 +1,12 @@
+struct Node
+    value: int;
+endstruct;
+
+proc main()
+    println("=================== PROBLEMA 06 ===================");
+    var start: int = 0;
+    var end: int = 1;
+    while (start + end) # Erro injetado
+        start++;
+    endwhile;
+endproc;

@@ -1,0 +1,30 @@
+proc print_matrix(matrix: int[][]; rows, cols: int)
+    for (i in 0..rows)
+        print("[");
+        for (j in 0..cols)
+            print(format("%int", matrix[i][j]));
+            if j < cols - 1 then
+                print(", ");
+            endif;
+        endfor;
+        println("]");
+    endfor;
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 03 ===================");
+
+    var rows_a: int = 2;
+    var cols_a: int = 2;
+
+    var matrix_a: int[][] = new int[][rows_a];
+    for (i in 0..rows_a)
+        matrix_a[i] = new int[cols_a];
+        for (j in 0..cols_a)
+            matrix_a[i][j] = 0;
+        endfor;
+    endfor;
+
+    println("==================== MATRIZ A =====================");
+    print_matrix(matrix_a[0], rows_a, cols_a); # Erro injetado
+endproc;

@@ -1,0 +1,14 @@
+# Permitiu retornar 1 no lugar de um Rational
+
+struct Rational
+    numerator, denominator: int;
+endstruct;
+
+fn rational(a, b: int): Rational
+    return 1; # Erro injetado
+endfn;
+
+proc main()
+    println("=================== PROBLEMA 04 ===================");
+    var first: Rational = rational(1, 2);
+endproc;

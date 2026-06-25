@@ -1,0 +1,18 @@
+proc print_matrix(matrix: int[][]; rows, cols: int)
+    for (i in 0..rows)
+        print("[");
+        for (j in 0..cols)
+            print(format("%int", matrix[i][j]));
+            if j < cols - 1 then
+                print(", ");
+            endif;
+        endfor;
+        println("]");
+    endfor;
+    
+    println(format("Tamanho final de i era: %int", i)); # Erro injetado
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 03 ===================");
+endproc;

@@ -1,0 +1,15 @@
+proc main()
+    println("=================== PROBLEMA 02 ===================");
+    println("Informe quantos números desejar, forneça um negativo para finalizar");
+    println("===================================================");
+
+    var array: int[] = new int[];
+    var size: int = 0;
+    repeat
+        print("Próximo número: ");
+        var key: int = int(input_line()); 
+        if key >= 0 then
+            array = key; # Erro injetado
+        endif;
+    until int(key) < 0;
+endproc;

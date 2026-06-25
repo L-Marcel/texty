@@ -1,0 +1,7 @@
+proc mdc(n, m: int; r: pointer<int>)
+    *r = "test"; # Erro injetado
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 05 ===================");
+endproc;
