@@ -1,0 +1,10 @@
+struct Ponto
+  x: int;
+  y: int;
+endstruct;
+
+proc main()
+  var p: Ponto = new Ponto { x: 1, y: 2 };
+  p.valor;
+  println("Ok");
+endproc;

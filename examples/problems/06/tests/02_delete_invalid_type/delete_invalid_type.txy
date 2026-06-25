@@ -1,0 +1,11 @@
+# Explodiu o Texty silenciosamente antes mesmo do GCC rodar
+
+struct Node
+    value: int;
+endstruct;
+
+proc main()
+    println("=================== PROBLEMA 06 ===================");
+    var count: int = 5;
+    delete(count); # Erro injetado
+endproc;

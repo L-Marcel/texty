@@ -1,0 +1,15 @@
+struct Ponto
+  x: int;
+  y: int;
+endstruct;
+
+struct Usuario
+  id: int;
+  pos: Ponto;
+endstruct;
+
+proc main()
+  var p: Ponto = new Ponto { x: 10, y: 20 };
+  var u: Usuario = new Usuario { id: 1, pos: p };
+  println(format("{}", u.pos.z));
+endproc;

@@ -32,6 +32,12 @@ void References::add_struct_reference(int line, string name,
   };
 
   this->structs[name] = attributes;
+
+  StructReference* struct_ref = new StructReference(Type(TypeKind::NAMED, name), name);
+  this->get_scope().insert({name, struct_ref});
+  for (auto& attr : attributes) {
+    struct_ref->properties[attr.first] = new VariableReference(attr.second, false, "");
+  }
 };
 bool References::has_struct_reference(string name) {
   return this->structs.find(name) != this->structs.end();

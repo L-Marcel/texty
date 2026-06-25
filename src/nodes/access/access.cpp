@@ -173,9 +173,15 @@ Type AccessNode::get_type() const {
 // Referências
 Reference* AccessNode::get_reference(int line) const {
   switch (this->access_type) {
-    case AccessType::DOT:
-      // TODO - Tem que ser uma referência que considere a base
-      return References::get_instance()->get_reference(line, this->name);
+    case AccessType::DOT: {
+      Reference* prev = this->previous->get_reference(line);
+      if (!prev) throw error("referência base não encontrada", line);
+      Reference* prop = prev->get_property(this->name);
+      if (!prop) {
+        throw error("tentativa inválida de acesso ao campo '" + this->name.substr(4) + "' não declarado na estrutura", line);
+      }
+      return prop;
+    }
     case AccessType::BRACKET:
       return this->previous->get_reference(line);
     case AccessType::CALL:

@@ -1,6 +1,7 @@
 #pragma once
 #include "../nodes/access/access.hpp"
 #include "subprograms/procedure.hpp"
+#include "structures/struct_reference.hpp"
 
 typedef unordered_map<string, Reference*> Scope;
 
@@ -36,7 +37,7 @@ struct References {
   void add_procedure_reference(int line, string name, vector<Type> params, bool self,
                                bool implemented);
   void add_function_reference(int line, string name, Type type, vector<Type> params,
-                              bool self, bool implemented);
+                               bool self, bool implemented);
   void initialize();
 
   unordered_map<string, vector<pair<string, Type>>> structs;

@@ -1,0 +1,12 @@
+struct Rational
+    numerator, denominator: int;
+endstruct;
+
+proc main()
+    println("=================== PROBLEMA 04 ===================");
+    var r: Rational = new Rational {
+        numerator: 1,
+        denominator: 2
+    };
+    println(format("Numerador: %int", r.numerador)); # Erro injetado
+endproc;

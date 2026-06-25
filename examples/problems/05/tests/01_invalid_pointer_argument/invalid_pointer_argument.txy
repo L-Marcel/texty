@@ -1,0 +1,10 @@
+proc mdc(n, m: int; r: pointer<int>)
+endproc;
+
+proc main()
+    println("=================== PROBLEMA 05 ===================");
+    var n: int = 36;
+    var m: int = 60;
+    var result: int = 0;
+    mdc(n, m, result); # Erro injetado
+endproc;
