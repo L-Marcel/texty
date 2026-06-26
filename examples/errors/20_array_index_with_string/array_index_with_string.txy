@@ -1,5 +1,3 @@
-# Permitiu indexar matriz com string
-
 proc print_matrix(matrix: int[][]; rows, cols: int)
     for (i in 0..rows)
         print("[");
