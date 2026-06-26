@@ -152,9 +152,15 @@ Type AccessNode::get_type() const {
       }
 
       Type type = this->previous->get_type();
-      if (type.kind != TypeKind::ARRAY)
-        throw new error("acesso com colchetes é reservado para arrays",
-                        this->line);
+      if (type.kind != TypeKind::ARRAY) {
+        throw error("acesso com colchetes é reservado para arrays", this->line);
+      }
+
+      Type index_type = this->expression->get_type();
+      if (index_type.kind != TypeKind::INT) {
+        throw error("índice de acesso a array deve ser do tipo (int) mas recebeu (" + index_type.to_string() + ")", this->line);
+      }
+
       return *type.inner_type;
     }
     case AccessType::CALL:
