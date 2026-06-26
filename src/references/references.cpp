@@ -3,7 +3,7 @@
 #include "../helpers/string.hpp"
 
 // Singleton
-References::References() : subprogam_return_type(Type(TypeKind::UNKNOWN)) {};
+References::References() : subprogam_return_type(Type(TypeKind::UNKNOWN)), main_is_procedure(false) {};
 References* References::_instance = nullptr;
 References* References::get_instance() {
   if (References::_instance == nullptr) {

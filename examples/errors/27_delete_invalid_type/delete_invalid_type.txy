@@ -1,5 +1,3 @@
-# Explodiu o Texty silenciosamente antes mesmo do GCC rodar
-
 struct Node
     value: int;
 endstruct;

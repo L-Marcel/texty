@@ -20,6 +20,8 @@ void SubprogramCallNode::compile_dot(ostream& os) const {
 
 // Código
 void SubprogramCallNode::compile_code(ostream& os) const {
+  this->get_type();
+
   if (this->call_type == CallType::CONVERTION) {
     Type source_type = this->params[0]->get_type();
     if (this->target_type.kind == TypeKind::STRING) {

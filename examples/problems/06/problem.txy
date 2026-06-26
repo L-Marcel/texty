@@ -77,12 +77,31 @@ proc print_maximum(root: pointer<Node>)
     println(format("Maximo: chave %int nivel %int", (*current).value, level));
 endproc;
 
+fn get_height(root: pointer<Node>): int
+    if root == null then
+        return 0;
+    endif;
+    var left_h: int = get_height((*root).left);
+    var right_h: int = get_height((*root).right);
+    if left_h > right_h then
+        return left_h + 1;
+    else
+        return right_h + 1;
+    endif;
+endfn;
+
 proc print_by_level(root: pointer<Node>; count: int)
     if root == null then
         return;
     endif;
 
-    var queue: pointer<Node>[] = new pointer<Node>[count];
+    var height: int = get_height(root);
+    var max_nodes: int = 2;
+    for (i in 0..height)
+        max_nodes = max_nodes * 2;
+    endfor;
+
+    var queue: pointer<Node>[] = new pointer<Node>[max_nodes];
     var start: int = 0;
     var end: int = 0;
     var level: int = 0;
@@ -90,7 +109,7 @@ proc print_by_level(root: pointer<Node>; count: int)
     queue[end] = root;
     end++;
 
-    while (start < end)
+    while (level < height)
         var level_count: int = end - start;
 
         print(format("Nivel %int: ", level));
@@ -99,19 +118,22 @@ proc print_by_level(root: pointer<Node>; count: int)
             var current: pointer<Node> = queue[start];
             start++;
 
-            print(format("%int", (*current).value));
-            if i < level_count - 1 then
-                print(" ");
-            endif;
-
-            if (*current).left != null then
+            if current != null then
+                print(format("%int", (*current).value));
                 queue[end] = (*current).left;
                 end++;
-            endif;
-
-            if (*current).right != null then
                 queue[end] = (*current).right;
                 end++;
+            else
+                print("-");
+                queue[end] = null;
+                end++;
+                queue[end] = null;
+                end++;
+            endif;
+            
+            if i < level_count - 1 then
+                print(" ");
             endif;
         endfor;
 

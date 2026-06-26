@@ -11,6 +11,8 @@ void ReturnNode::compile_dot(ostream& os) const {
 
 // Código
 void ReturnNode::compile_code(ostream& os) const {
+  this->get_type();
+
   References* references = References::get_instance();
   os << "return";
   if (this->type == ReturnNodeType::EXPRESSION) {
