@@ -105,6 +105,7 @@
         | <type> LEFT_BRACKET RIGHT_BRACKET
         | TYPE_POINTER LT <type> GT
         | TYPE_OPTION LT <type> GT
+        | TYPE_RANGE LT <type> GT
         | <name> 
 <assign> -> <access> ATTR <expr>
           | <access> ATTR <array_allocation>
@@ -225,6 +226,8 @@
 <!-- Alocações -->
 <array_allocation> -> NEW <type> LEFT_BRACKET <expr> RIGHT_BRACKET
                     | NEW <type> LEFT_BRACKET <expr> RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
+                    | NEW <type> LEFT_BRACKET RIGHT_BRACKET
+                    | NEW <type> LEFT_BRACKET RIGHT_BRACKET LEFT_BRACE <array_allocation_values> RIGHT_BRACE
 <array_allocation_values> -> <array_allocation_values> COMMA <expr> 
                            | <expr>
 <struct_allocation> -> NEW <name> LEFT_BRACE <struct_allocation_values> RIGHT_BRACE
