@@ -4,7 +4,7 @@ Uma linguagem compilada produzida durante a disciplina de Engenharia de Linguage
 
 ## Instruções para execução
 
-Atualmente o ambiente de execução só foi testado para linux, mais especificamente o ZorinOS, derivada do Ubuntu (24.04).
+Atualmente o ambiente de execução só foi testado amplamente para linux, mais especificamente o ZorinOS, derivada do Ubuntu (24.04). Entretanto, testes também foram realizados no Windows.
 
 Instale:
 - make (4.3)
